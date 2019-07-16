@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toStartOf="@+id/ivReport"
         app:layout_constraintStart_toEndOf="@+id/tvFactCheck"
         app:layout_constraintTop_toBottomOf="@+id/ivArticlePreview"
-        app:srcCompat="colorLiberal" />
+        app:srcCompat="@color/colorLiberal" />
 
     <ImageView
         android:id="@+id/ivArticlePreview"
