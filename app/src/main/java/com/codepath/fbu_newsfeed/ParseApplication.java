@@ -2,6 +2,7 @@ package com.codepath.fbu_newsfeed;
 
 import android.app.Application;
 
+import com.codepath.fbu_newsfeed.Models.Article;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -23,6 +24,8 @@ public class ParseApplication extends Application {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.networkInterceptors().add(httpLoggingInterceptor);
+
+        ParseObject.registerSubclass(Article.class);
 
         // set applicationId, and server server based on the values in the Heroku settings.
         // clientKey is not needed unless explicitly configured
