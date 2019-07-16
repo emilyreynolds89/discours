@@ -4,10 +4,10 @@ import java.lang.reflect.Type;
 
 public class Reactor {
     private User user_id;
-    private Shares share_id;
+    private Share share_id;
     private Type type;
 
-    public Reactor(User user_id, Shares share_id, Type type) {
+    public Reactor(User user_id, Share share_id, Type type) {
         this.user_id = user_id;
         this.share_id = share_id;
         this.type = type;
@@ -21,11 +21,11 @@ public class Reactor {
         this.user_id = user_id;
     }
 
-    public Shares getShare_id() {
+    public Share getShare_id() {
         return share_id;
     }
 
-    public void setShare_id(Shares share_id) {
+    public void setShare_id(Share share_id) {
         this.share_id = share_id;
     }
 

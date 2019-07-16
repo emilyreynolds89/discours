@@ -1,12 +1,12 @@
 package com.codepath.fbu_newsfeed.Models;
 
-public class Shares {
+public class Share {
 
     private User user_id;
     private Article article_id;
     private String caption;
 
-    public Shares(User user_id, Article article_id, String caption) {
+    public Share(User user_id, Article article_id, String caption) {
         this.user_id = user_id;
         this.article_id = article_id;
         this.caption = caption;
