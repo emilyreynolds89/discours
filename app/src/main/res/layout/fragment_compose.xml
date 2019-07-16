@@ -15,37 +15,61 @@
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="9dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginRight="23dp"
+        app:layout_constraintEnd_toStartOf="@+id/ivReport"
         app:layout_constraintStart_toEndOf="@+id/tvFactCheck"
         app:layout_constraintTop_toBottomOf="@+id/ivArticlePreview"
-        app:srcCompat="@color/colorAccent" />
-
-    <TextView
-        android:id="@+id/tvURL"
-        android:layout_width="0dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="18dp"
-        android:layout_marginRight="18dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:srcCompat="colorLiberal" />
 
     <ImageView
         android:id="@+id/ivArticlePreview"
         android:layout_width="380dp"
         android:layout_height="259dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="9dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvURL"
+        app:layout_constraintTop_toBottomOf="@+id/etURL"
         tools:srcCompat="@tools:sample/backgrounds/scenic[5]" />
+
+    <EditText
+        android:id="@+id/etURL"
+        android:layout_width="271dp"
+        android:layout_height="47dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="42dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginRight="52dp"
+        android:layout_marginBottom="9dp"
+        android:ems="10"
+        android:hint="URL"
+        app:layout_constraintBottom_toTopOf="@+id/ivArticlePreview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.857"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etCaption"
+        android:layout_width="325dp"
+        android:layout_height="131dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="27dp"
+        android:layout_marginLeft="27dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="27dp"
+        android:layout_marginRight="27dp"
+        android:layout_marginBottom="37dp"
+        android:ems="10"
+        android:hint="Add Caption"
+        app:layout_constraintBottom_toTopOf="@+id/btShareArticle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivBias" />
 
     <TextView
         android:id="@+id/tvFactCheck"
@@ -54,7 +78,10 @@
         android:layout_marginStart="188dp"
         android:layout_marginLeft="188dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
         android:text="Fact Check"
+        app:layout_constraintEnd_toStartOf="@+id/ivBias"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivArticlePreview" />
 
@@ -72,33 +99,17 @@
         app:layout_constraintTop_toBottomOf="@+id/ivArticlePreview"
         app:srcCompat="@android:color/white" />
 
-    <TextView
-        android:id="@+id/tvCaption"
-        android:layout_width="361dp"
-        android:layout_height="113dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="18dp"
-        android:layout_marginRight="18dp"
-        android:text="Add a Caption"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivBias" />
-
     <Button
         android:id="@+id/btShareArticle"
         android:layout_width="276dp"
         android:layout_height="58dp"
         android:layout_marginStart="59dp"
         android:layout_marginLeft="59dp"
-        android:layout_marginTop="56dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:layout_marginBottom="83dp"
         android:text="Share Article"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCaption" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
