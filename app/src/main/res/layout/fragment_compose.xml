@@ -70,7 +70,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivBias"
         app:layout_constraintTop_toBottomOf="@+id/ivArticlePreview"
-        app:srcCompat="#000000" />
+        app:srcCompat="@android:color/white" />
 
     <TextView
         android:id="@+id/tvCaption"
