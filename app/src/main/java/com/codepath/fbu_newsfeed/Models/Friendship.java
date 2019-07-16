@@ -1,4 +1,4 @@
-package com.codepath.fbu_newsfeed;
+package com.codepath.fbu_newsfeed.Models;
 
 public class Friendship {
     private int UserID_1;

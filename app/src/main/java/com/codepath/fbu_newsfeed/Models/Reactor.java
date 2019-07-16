@@ -1,4 +1,4 @@
-package com.codepath.fbu_newsfeed;
+package com.codepath.fbu_newsfeed.Models;
 
 import java.lang.reflect.Type;
 
