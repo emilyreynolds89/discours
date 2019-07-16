@@ -4,8 +4,8 @@ public class Tag {
 
     Title title;
 
-    public Tag(Title t) {
-        title = t;
+    public Tag(Title title) {
+        this.title = title;
     }
 
     enum Title  {
@@ -16,7 +16,7 @@ public class Tag {
         return title;
     }
 
-    public void setTitle(Title t) {
-        title = t;
+    public void setTitle(Title title) {
+        this.title = title;
     }
 }
