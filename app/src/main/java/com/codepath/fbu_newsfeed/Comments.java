@@ -1,37 +1,37 @@
 package com.codepath.fbu_newsfeed;
 
 public class Comments {
-    private String Text;
-    private int user_ID;
-    private int share_ID;
+    private String text;
+    private User user_id;
+    private Shares share_id;
 
-    public Comments(String text, int user_ID, int share_ID) {
-        Text = text;
-        this.user_ID = user_ID;
-        this.share_ID = share_ID;
+    public Comments(String text, User user_id, Shares share_id) {
+        this.text = text;
+        this.user_id = user_id;
+        this.share_id = share_id;
     }
 
     public String getText() {
-        return Text;
+        return text;
     }
 
     public void setText(String text) {
-        Text = text;
+        this.text = text;
     }
 
-    public int getUser_ID() {
-        return user_ID;
+    public User getUser_id() {
+        return user_id;
     }
 
-    public void setUser_ID(int user_ID) {
-        this.user_ID = user_ID;
+    public void setUser_id(User user_id) {
+        this.user_id = user_id;
     }
 
-    public int getShare_ID() {
-        return share_ID;
+    public Shares getShare_id() {
+        return share_id;
     }
 
-    public void setShare_ID(int share_ID) {
-        this.share_ID = share_ID;
+    public void setShare_id(Shares share_id) {
+        this.share_id = share_id;
     }
 }

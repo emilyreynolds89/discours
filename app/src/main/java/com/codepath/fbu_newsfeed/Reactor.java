@@ -3,30 +3,30 @@ package com.codepath.fbu_newsfeed;
 import java.lang.reflect.Type;
 
 public class Reactor {
-    private int user_ID;
-    private int share_ID;
+    private User user_id;
+    private Shares share_id;
     private Type type;
 
-    public Reactor(int user_ID, int share_ID, Type type) {
-        this.user_ID = user_ID;
-        this.share_ID = share_ID;
+    public Reactor(User user_id, Shares share_id, Type type) {
+        this.user_id = user_id;
+        this.share_id = share_id;
         this.type = type;
     }
 
-    public int getUser_ID() {
-        return user_ID;
+    public User getUser_id() {
+        return user_id;
     }
 
-    public void setUser_ID(int user_ID) {
-        this.user_ID = user_ID;
+    public void setUser_id(User user_id) {
+        this.user_id = user_id;
     }
 
-    public int getShare_ID() {
-        return share_ID;
+    public Shares getShare_id() {
+        return share_id;
     }
 
-    public void setShare_ID(int share_ID) {
-        this.share_ID = share_ID;
+    public void setShare_id(Shares share_id) {
+        this.share_id = share_id;
     }
 
     public Type getType() {

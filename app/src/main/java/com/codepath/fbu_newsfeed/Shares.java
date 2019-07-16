@@ -28,7 +28,7 @@ public class Shares {
     public void setArticle_id(Article article_id) {
         this.article_id = article_id;
     }
-    
+
 
     public String getCaption() {
         return caption;
