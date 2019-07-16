@@ -3,26 +3,26 @@ package com.codepath.fbu_newsfeed;
 import java.io.File;
 
 public class User {
-    private String Username;
+    private String username;
     private String fullName;
-    private String Email;
-    private String Password;
+    private String email;
+    private String password;
     private File profileImage;
 
     public User(String username, String fullName, String email, String password, File profileImage) {
-        Username = username;
+        this.username = username;
         this.fullName = fullName;
-        Email = email;
-        Password = password;
+        this.email = email;
+        this.password = password;
         this.profileImage = profileImage;
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
     public void setUsername(String username) {
-        Username = username;
+        this.username = username;
     }
 
     public String getFullName() {
@@ -34,19 +34,19 @@ public class User {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
     }
 
     public File getProfileImage() {
