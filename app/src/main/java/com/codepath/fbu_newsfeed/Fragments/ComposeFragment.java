@@ -81,17 +81,15 @@ public class ComposeFragment extends Fragment {
                 final String caption = etCaption.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
 
-                shareArticle(user, caption, url, imageFile, title, summary, factCheck, bias, source);
+                shareArticle(caption, article);
             }
         });
 
     }
 
-    private void shareArticle(ParseUser user, String caption, String url, ParseFile imageFile, String title, String summary, String factCheck, Article.Bias bias, String source) {
-        final Article newArticle = new Article(url, title, imageFile, summary, bias, factCheck, source);
-        newArticle.saveInBackground();
-
-        final Share share = new Share(user, newArticle, caption);
+    private void shareArticle(String caption, Article article) {
+        //final Share share = new Share(user, newArticle, caption);
+        final Share share = new Share(ParseUser.getCurrentUser(), article, caption);
         share.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
