@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
+import com.codepath.fbu_newsfeed.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
@@ -29,10 +31,14 @@ import butterknife.Unbinder;
 public class FeedFragment extends Fragment {
     private final String TAG = "FeedFragment";
 
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     @BindView(R.id.rvShares) RecyclerView rvShares;
+
     ArrayList<Share> shares;
     ShareAdapter shareAdapter;
     private Unbinder unbinder;
+
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
@@ -52,7 +58,32 @@ public class FeedFragment extends Fragment {
         rvShares.setLayoutManager(linearLayoutManager);
         rvShares.setAdapter(shareAdapter);
 
-        queryShares();
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                shareAdapter.clear();
+                queryShares(0);
+                scrollListener.resetState();
+                swipeContainer.setRefreshing(false);
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        queryShares(0);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                queryShares(page);
+            }
+        };
+
+        rvShares.addOnScrollListener(scrollListener);
+
     }
 
     @Override
@@ -61,10 +92,12 @@ public class FeedFragment extends Fragment {
         unbinder.unbind();
     }
 
-    private void queryShares() {
+    private void queryShares(int offset) {
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.include("user");
         query.include("article");
+        query.setLimit(Share.LIMIT);
+        query.setSkip(offset * Share.LIMIT);
         query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<Share>() {
             @Override
