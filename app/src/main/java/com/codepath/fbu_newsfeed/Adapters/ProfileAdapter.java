@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
@@ -32,8 +33,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Share share = shares.get(position);
-        ParseFile img = share.getImage();
         String imgUrl = "";
+        ParseFile img = share.getImage();
         if (img != null) {
             imgUrl = img.getUrl();
         }
@@ -46,7 +47,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         public ViewHolder(View itemView) {
             super(itemView);
             profileImage = itemView.findViewById(R.id.profilePic);
-
         }
     }
 }

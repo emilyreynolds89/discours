@@ -3,6 +3,7 @@ package com.codepath.fbu_newsfeed.Models;
 import android.text.format.DateUtils;
 
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -12,6 +13,7 @@ public class Share extends ParseObject {
     public static final String KEY_USER = "user";
     public static final String KEY_ARTICLE = "article";
     public static final String KEY_CAPTION = "caption";
+    public static final String KEY_IMAGE = "image";
 
     private ParseUser user;
     private Article article;
@@ -36,6 +38,9 @@ public class Share extends ParseObject {
     public void setUser(ParseUser user) {
         this.user = user;
         put(KEY_USER, user);
+    }
+    public ParseFile getImage() {
+        return getParseFile(KEY_IMAGE);
     }
 
 
