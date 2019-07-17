@@ -14,6 +14,7 @@ public class Share extends ParseObject {
     public static final String KEY_ARTICLE = "article";
     public static final String KEY_CAPTION = "caption";
     public static final String KEY_IMAGE = "image";
+    public static final int LIMIT = 20;
 
     private ParseUser user;
     private Article article;
