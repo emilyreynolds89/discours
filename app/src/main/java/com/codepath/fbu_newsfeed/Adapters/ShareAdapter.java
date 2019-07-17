@@ -1,9 +1,11 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,9 +13,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -47,9 +54,16 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         final ParseUser user = share.getUser();
 
         holder.tvUsername.setText(user.getUsername());
-        // TODO: set profile image
+
+        if (user.getParseFile("profileImage") != null) {
+            Glide.with(context).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.ivProfileImage);
+        }
+
         holder.tvTimestamp.setText(share.getRelativeTime());
-        // TODO: set article image
+        ParseFile image = article.getImage();
+        if (image != null ) {
+            Glide.with(context).load(image.getUrl()).into(holder.ivArticleImage);
+        }
         holder.tvArticleTitle.setText(article.getTitle());
         holder.tvArticleSummary.setText(article.getSummary());
 
@@ -60,6 +74,15 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         // TODO: connect listener to information button
 
         holder.tvCaption.setText(share.getCaption());
+
+        holder.btnDiscussion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("share_id", share.getObjectId());
+                context.startActivity(intent);
+            }
+        });
 
     }
 
@@ -79,7 +102,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
@@ -95,15 +118,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.ivBias) ImageView ivBias;
         @BindView(R.id.ibInfomation) ImageButton ibInformation;
         @BindView(R.id.tvCaption) TextView tvCaption;
+        @BindView(R.id.btnDiscussion) Button btnDiscussion;
 
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
-        @Override
-        public void onClick(View view) {
-            // TO DO: send intent to start detail activity
-        }
     }
 }

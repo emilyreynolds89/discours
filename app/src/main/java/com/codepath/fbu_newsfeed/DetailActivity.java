@@ -1,5 +1,6 @@
 package com.codepath.fbu_newsfeed;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -8,12 +9,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -21,6 +31,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class DetailActivity extends AppCompatActivity {
     public static final String TAG = "DetailActivity";
@@ -60,9 +71,30 @@ public class DetailActivity extends AppCompatActivity {
         queryShare();
 
         tvUsername.setText(user.getUsername());
-        // TODO: set profile image
+
+        if (user.getParseFile("profileImage") != null) {
+            Glide.with(this).load(user.getParseFile("profileImage").getUrl())
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            Log.e("IMAGE_EXCEPTION", "Exception " + e.toString());
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            Log.d(TAG, "Sometimes the image is not loaded and this text is not displayed");
+                            return false;                        }
+                    })
+                    .apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
+        }
+
+
         tvTimestamp.setText(share.getRelativeTime());
-        // TODO: set article image
+        ParseFile image = article.getImage();
+        if (image != null ) {
+            Glide.with(this).load(image.getUrl()).into(ivArticleImage);
+        }
         tvArticleTitle.setText(article.getTitle());
         tvArticleSummary.setText(article.getSummary());
 
