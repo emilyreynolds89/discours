@@ -4,8 +4,6 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 
-import java.io.File;
-
 @ParseClassName("Article")
 public class Article extends ParseObject {
 
@@ -50,7 +48,7 @@ public class Article extends ParseObject {
         put(KEY_SOURCE, source);
     }
 
-    enum Bias {
+    public enum Bias {
         LIBERAL, SLIGHTLY_LIBERAL, MODERATE, SLIGHTLY_CONSERVATIVE, CONSERVATIVE;
     }
 
