@@ -13,6 +13,7 @@ import com.codepath.fbu_newsfeed.Fragments.FeedFragment;
 import com.codepath.fbu_newsfeed.Fragments.TrendsFragment;
 import com.codepath.fbu_newsfeed.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 public class HomeActivity extends AppCompatActivity {
     private final String TAG ="HomeActivity";
