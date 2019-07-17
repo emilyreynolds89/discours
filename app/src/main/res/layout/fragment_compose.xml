@@ -23,10 +23,12 @@
         android:id="@+id/ivArticlePreview"
         android:layout_width="350dp"
         android:layout_height="250dp"
+        android:scaleType="fitXY"
+        android:tint="#40636262"
         app:layout_constraintEnd_toEndOf="@+id/etURL"
         app:layout_constraintStart_toStartOf="@+id/etURL"
         app:layout_constraintTop_toBottomOf="@+id/etURL"
-        tools:srcCompat="@tools:sample/backgrounds/scenic[5]" />
+        tools:srcCompat="@drawable/news_placeholder" />
 
     <EditText
         android:id="@+id/etURL"
@@ -143,6 +145,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:background="@color/colorModerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvArticleTitle" />
