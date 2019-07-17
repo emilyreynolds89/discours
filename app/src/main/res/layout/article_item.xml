@@ -80,9 +80,9 @@
         android:textColor="@color/colorHeadlineText"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/ivArtcleImage"
-        app:layout_constraintStart_toStartOf="@+id/ivArtcleImage"
-        app:layout_constraintTop_toBottomOf="@+id/ivArtcleImage" />
+        app:layout_constraintEnd_toEndOf="@+id/ivArticleImage"
+        app:layout_constraintStart_toStartOf="@+id/ivArticleImage"
+        app:layout_constraintTop_toBottomOf="@+id/ivArticleImage" />
 
     <TextView
         android:id="@+id/tvArticleSummary"
