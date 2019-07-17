@@ -4,8 +4,10 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 
+import java.io.Serializable;
+
 @ParseClassName("Article")
-public class Article extends ParseObject {
+public class Article extends ParseObject implements Serializable {
 
     public static final String KEY_URL = "URL";
     public static final String KEY_TITLE = "title";
