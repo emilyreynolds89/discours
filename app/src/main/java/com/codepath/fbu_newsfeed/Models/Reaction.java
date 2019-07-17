@@ -1,39 +1,29 @@
 package com.codepath.fbu_newsfeed.Models;
 
-import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-@ParseClassName("Comment")
-public class Comment extends ParseObject {
-    public static final String KEY_TEXT = "text";
+@ParseClassName("Reaction")
+public class Reaction extends ParseObject {
     public static final String KEY_USER = "user";
     public static final String KEY_SHARE = "share";
+    public static final String KEY_TYPE = "type";
 
-    private String text;
-    private User user;
+    private ParseUser user;
     private Share share;
+    private String type;
 
-    public Comment() {
+    public Reaction() {
         super();
     }
 
-    public Comment(String text, User user, Share share) {
+    public Reaction(ParseUser user, Share share, String type) {
         super();
-        this.text = text;
-        put(KEY_TEXT, text);
+
         this.user = user;
         this.share = share;
-    }
-
-    public String getText() {
-        return getString(KEY_TEXT);
-    }
-
-    public void setText(String text) {
-        this.text = text;
-        put(KEY_TEXT, text);
+        this.type = type;
     }
 
     public ParseUser getUser() {
@@ -41,14 +31,25 @@ public class Comment extends ParseObject {
     }
 
     public void setUser(ParseUser user) {
+        this.user = user;
         put(KEY_USER, user);
     }
 
     public Share getShare() {
-        return (Share) getParseObject(KEY_SHARE);
-    } // can we cast this to Share?
+        return (Share) getParseObject(KEY_SHARE) ;
+    }
 
     public void setShare(Share share) {
+        this.share = share;
         put(KEY_SHARE, share);
+    }
+
+    public String getType() {
+        return getString(KEY_TYPE);
+    }
+
+    public void setType(String type) {
+        this.type = type;
+        put(KEY_TYPE, type);
     }
 }

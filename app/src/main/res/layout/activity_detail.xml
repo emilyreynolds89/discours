@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context=".DetailActivity">
 
     <ImageView
         android:id="@+id/ivProfileImage"
@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
 
     <ImageView
-        android:id="@+id/ivArtcleImage"
+        android:id="@+id/ivArticleImage"
         android:layout_width="350dp"
         android:layout_height="250dp"
         android:layout_marginTop="10dp"
@@ -80,9 +80,9 @@
         android:textColor="@color/colorHeadlineText"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-        app:layout_constraintStart_toStartOf="@+id/viewArticle"
-        app:layout_constraintTop_toBottomOf="@+id/ivArtcleImage" />
+        app:layout_constraintEnd_toEndOf="@+id/ivArticleImage"
+        app:layout_constraintStart_toStartOf="@+id/ivArticleImage"
+        app:layout_constraintTop_toBottomOf="@+id/ivArticleImage" />
 
     <TextView
         android:id="@+id/tvArticleSummary"
@@ -215,23 +215,70 @@
         app:layout_constraintStart_toStartOf="@+id/viewArticle"
         app:layout_constraintTop_toBottomOf="@+id/ibReactionLike" />
 
-    <Button
-        android:id="@+id/btnDiscussion"
-        android:layout_width="180dp"
-        android:layout_height="30dp"
+    <View
+        android:id="@+id/lineView"
+        android:layout_width="60dp"
+        android:layout_height="2dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:background="@color/colorAccentBold"
-        android:fontFamily="sans-serif-medium"
-        android:text="View Discussion"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
+        android:background="@color/colorModerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCaption" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvComments"
+        android:layout_width="357dp"
+        android:layout_height="114dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineView" />
+
+    <EditText
+        android:id="@+id/etComment"
+        android:layout_width="230dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="Write a new comment"
+        android:inputType="textPersonName"
+        android:textColor="@color/colorBaseText"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/viewArticle"
+        app:layout_constraintTop_toBottomOf="@+id/rvComments"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorAccentBold"
+        android:fontFamily="sans-serif-medium"
+        android:text="Submit"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/etComment"
+        app:layout_constraintTop_toBottomOf="@+id/rvComments"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
