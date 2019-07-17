@@ -281,7 +281,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="16dp"
-        android:background="@color/colorAccentBold"
+        android:background="@drawable/rounded_accent_button"
         android:fontFamily="sans-serif-medium"
         android:text="Submit"
         android:textColor="#FFFFFF"
