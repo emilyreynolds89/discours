@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.codepath.fbu_newsfeed.Adapters.ProfileAdapter;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Share;
@@ -55,7 +56,7 @@ public class ProfileFragment extends Fragment {
         tvUsername = view.findViewById(R.id.tvUsername);
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         mShare = new ArrayList<>();
-
+        //ProfileAdapter profileAdapter = new ProfileAdapter(mShare);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +71,7 @@ public class ProfileFragment extends Fragment {
         startActivity(intent);
 
     }
-    protected void queryPosts() {
+    private void queryPosts() {
         ParseQuery<Share> postQuery = new ParseQuery<>(Share.class);
         postQuery.include(Share.KEY_USER);
         postQuery.setLimit(20);
@@ -84,7 +85,7 @@ public class ProfileFragment extends Fragment {
                     return;
                 }
                 mShare.addAll(posts);
-                adapter.notifyDataSetChanged();
+                //adapter.notifyDataSetChanged();
             }
         });
     }

@@ -4,6 +4,7 @@ import android.text.format.DateUtils;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 @ParseClassName("Share")
@@ -59,5 +60,20 @@ public class Share extends ParseObject {
 
     public String getRelativeTime() {
         return (String) DateUtils.getRelativeTimeSpanString(getCreatedAt().getTime());
+    }
+    public static class Query extends ParseQuery<Share> {
+        public Query() {
+            super(Share.class);
+        }
+
+        public Query getTop(){
+            setLimit(20);
+            return this;
+        }
+
+        public Query withUser(){
+            include("user");
+            return this;
+        }
     }
 }
