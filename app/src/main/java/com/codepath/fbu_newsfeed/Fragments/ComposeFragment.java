@@ -26,6 +26,8 @@ import com.parse.SaveCallback;
 
 public class ComposeFragment extends Fragment {
 
+    Article article;
+
     EditText etUrl;
     ImageView ivArticlePreview;
     TextView tvArticleTitle;
@@ -38,6 +40,7 @@ public class ComposeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //article = (Article) getArguments().getSerializable("article");
         return inflater.inflate(R.layout.fragment_compose, container, false);
     }
 
@@ -54,7 +57,8 @@ public class ComposeFragment extends Fragment {
         etCaption = view.findViewById(R.id.etCaption);
         btnShare = view.findViewById(R.id.btShareArticle);
 
-        Article article = (Article) getActivity().getIntent().getSerializableExtra("article");
+        //Article article = (Article) getActivity().getIntent().getSerializableExtra("article");
+        //Article article = (Article) getArguments().getSerializable("article");
 
         final String factCheck = article.getTruth();
         final Article.Bias bias = article.getBias();
