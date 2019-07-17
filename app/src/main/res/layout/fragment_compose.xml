@@ -64,8 +64,8 @@
         android:hint="Add Caption"
         app:layout_constraintBottom_toTopOf="@+id/btShareArticle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.964"
+        app:layout_constraintStart_toEndOf="@id/tvFactCheck"
         app:layout_constraintTop_toBottomOf="@+id/ivBias" />
 
     <TextView
