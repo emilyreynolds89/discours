@@ -15,6 +15,15 @@ import java.util.List;
 public class User extends ParseUser {
     public static final String KEY_FULLNAME = "fullName";
     public static final String KEY_PROFILEIMAGE = "profileImage";
+    public static final String KEY_BIO = "bio";
+    public static final String KEY_USERNAME = "username";
+
+    public String getUsers() {
+        return getString(KEY_USERNAME);
+    }
+    public void setUsers(String userName) {
+        put(KEY_USERNAME, userName);
+    }
 
     public void setFullName(String fullName) {
         put(KEY_FULLNAME, fullName);
