@@ -49,4 +49,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             profileImage = itemView.findViewById(R.id.profilePic);
         }
     }
+
+    @Override
+    public int getItemCount() {
+        return 0;
+    }
 }

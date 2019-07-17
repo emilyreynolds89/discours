@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp">
 
-    <view
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewArticle"
         class="androidx.constraintlayout.widget.ConstraintLayout"
-        id="@+id/view"
         android:layout_width="370dp"
-        android:layout_height="370dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="match_parent"
         android:background="@drawable/border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/ivArtcleImageTrends"
-        android:layout_width="350dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-        app:layout_constraintStart_toStartOf="@+id/viewArticle"
-        app:layout_constraintTop_toTopOf="@+id/viewArticle"
-        app:srcCompat="@android:color/black" />
+        <ImageView
+            android:id="@+id/ivArtcleImageTrends"
+            android:layout_width="350dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+            app:layout_constraintStart_toStartOf="@+id/viewArticle"
+            app:layout_constraintTop_toTopOf="@+id/viewArticle"
+            app:srcCompat="@android:color/black" />
 
-    <TextView
-        android:id="@+id/tvArticleTitleTrends"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="serif"
-        android:text="Title"
-        android:textColor="@color/colorHeadlineText"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-        app:layout_constraintStart_toStartOf="@+id/viewArticle"
-        app:layout_constraintTop_toBottomOf="@+id/ivArtcleImage" />
+        <TextView
+            android:id="@+id/tvArticleSummaryTrends"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="serif"
+            android:text="Article summary"
+            android:textColor="@color/colorLightText"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+            app:layout_constraintStart_toStartOf="@+id/viewArticle"
+            app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleTrends" />
 
-    <TextView
-        android:id="@+id/tvArticleSummaryTrends"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="serif"
-        android:text="Article summary"
-        android:textColor="@color/colorLightText"
-        android:textSize="12dp"
-        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-        app:layout_constraintStart_toStartOf="@+id/viewArticle"
-        app:layout_constraintTop_toBottomOf="@+id/tvArticleTitle" />
+        <TextView
+            android:id="@+id/tvArticleTitleTrends"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="serif"
+            android:text="Title"
+            android:textColor="@color/colorHeadlineText"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+            app:layout_constraintStart_toStartOf="@+id/viewArticle"
+            app:layout_constraintTop_toBottomOf="@+id/ivArtcleImageTrends" />
 
-    <TextView
-        android:id="@+id/tvSourceTrends"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="8dp"
-        android:fontFamily="serif"
-        android:text="Source"
-        android:textColor="@color/colorLightText"
-        android:textSize="8sp"
-        app:layout_constraintBottom_toBottomOf="@+id/viewArticle"
-        app:layout_constraintEnd_toEndOf="@+id/tvArticleSummary"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tvArticleSummary"
-        app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/tvSourceTrends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="serif"
+            android:text="Source"
+            android:textColor="@color/colorLightText"
+            android:textSize="8sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvArticleSummaryTrends"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tvArticleSummaryTrends"
+            app:layout_constraintTop_toBottomOf="@+id/tvArticleSummaryTrends" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

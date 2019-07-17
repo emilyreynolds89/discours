@@ -12,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
-import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
 import com.parse.ParseFile;
 
 import java.io.Serializable;
@@ -87,6 +87,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
             ParseFile image = article.getImage();
             if (image != null ) {
+                System.out.println(image.getUrl());
                 Glide.with(context).load(image.getUrl()).into(ivArticleImage);
             }
         }
