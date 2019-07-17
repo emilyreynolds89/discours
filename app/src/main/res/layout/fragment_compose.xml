@@ -13,8 +13,8 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
         app:layout_constraintEnd_toStartOf="@+id/ivReport"
         app:layout_constraintTop_toBottomOf="@+id/view"
         app:srcCompat="@color/colorSlightlyLiberal" />
@@ -100,8 +100,8 @@
 
     <Button
         android:id="@+id/btShareArticle"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_width="240dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
@@ -110,6 +110,7 @@
         android:layout_marginBottom="32dp"
         android:background="@color/colorAccentBold"
         android:text="Share Article"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -138,7 +139,7 @@
         android:id="@+id/view"
         class="androidx.constraintlayout.widget.ConstraintLayout"
         id="@+id/view2"
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="2dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
