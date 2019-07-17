@@ -13,8 +13,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
 import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Share;
@@ -64,17 +68,21 @@ public class ProfileFragment extends Fragment {
         tvUsername.setText(user.getString(User.KEY_USERNAME));
         tvFullName.setText(user.getString(User.KEY_FULLNAME));
         tvBio.setText(user.getString(User.KEY_BIO));
-        tvArticleCount.setText(String.valueOf(getArticleCount(user)));
+        tvArticleCount.setText(getArticleCount(user));
+
+        if (user.getParseFile("profileImage") != null) {
+            Glide.with(getContext()).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
+        }
 
 
         mShare = new ArrayList<>();
 
         // TODO: connect ShareAdapter to recyclerview
         shareAdapter = new ShareAdapter(mShare);
-        rvProfilePosts.setAdapter(adapter);
+        rvProfilePosts.setAdapter(shareAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        rvProfilePosts.setLayoutManager(linearLayoutManager);
 
-
-        //ProfileAdapter profileAdapter = new ProfileAdapter(mShare);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,12 +91,14 @@ public class ProfileFragment extends Fragment {
         });
         queryShares();
     }
+
     private void logOut() {
         ParseUser.logOut();
         Intent intent = new Intent(getActivity().getApplication(), LoginActivity.class);
         startActivity(intent);
 
     }
+
     private void queryShares() {
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.include("user");
@@ -108,16 +118,16 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    public int getArticleCount(ParseUser user) {
+    public String getArticleCount(ParseUser user) {
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
-        query.whereEqualTo("user", user.getObjectId());
+        query.whereEqualTo("user", user);
         try {
             List<Share> results = query.find();
             Log.d("User", user.getUsername() + " has shared " + results.size() + " articles");
-            return results.size();
+            return results.size() + " Articles";
         } catch(Exception e) {
             Log.d("User", "Error: " + e.getMessage());
-            return -1;
+            return "error";
         }
 
     }

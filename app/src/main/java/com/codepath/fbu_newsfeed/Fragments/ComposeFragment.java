@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
+import com.codepath.fbu_newsfeed.fragments.FeedFragment;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -58,7 +59,7 @@ public class ComposeFragment extends Fragment {
         btnShare = view.findViewById(R.id.btShareArticle);
 
         //Article article = (Article) getActivity().getIntent().getSerializableExtra("article");
-        article = (Article) getArguments().getSerializable("article");
+        //article = (Article) getArguments().getSerializable("article");
 
         final String factCheck = article.getTruth();
         final Article.Bias bias = article.getBias();
@@ -96,7 +97,7 @@ public class ComposeFragment extends Fragment {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("ComposeFragment", "Share article success");
-                    //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new FeedFragment()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new FeedFragment()).commit();
                 } else {
                     Log.e("ComposeFragment", "Error in sharing article");
                     e.printStackTrace();

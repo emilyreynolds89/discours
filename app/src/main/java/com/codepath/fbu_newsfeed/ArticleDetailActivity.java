@@ -13,11 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.parse.ParseFile;
 
 import butterknife.BindView;
+import java.io.Serializable;
 
 public class ArticleDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -63,13 +63,14 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
         btnShare.setOnClickListener(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         return true;
     }
 
@@ -83,12 +84,9 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
                 startActivity(i);
                 break;
             case R.id.btnShare:
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("article", article);
-                ComposeFragment composeFragment = new ComposeFragment();
-                composeFragment.setArguments(bundle);
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, composeFragment).commit();
+                Intent intent = new Intent(ArticleDetailActivity.this, HomeActivity.class);
+                intent.putExtra("article", (Serializable) article);
+                startActivity(intent);
 
                 break;
         }

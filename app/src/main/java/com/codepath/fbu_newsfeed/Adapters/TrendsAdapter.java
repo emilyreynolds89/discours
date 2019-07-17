@@ -74,13 +74,6 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             if (position != RecyclerView.NO_POSITION) {
                 Article article = articles.get(position);
 
-                /*Bundle bundle = new Bundle();
-                bundle.putSerializable("article", article);
-                ComposeFragment composeFragment = new ComposeFragment();
-                composeFragment.setArguments(bundle);
-*/
-
-
                 Intent intent = new Intent(context, ArticleDetailActivity.class);
                 intent.putExtra("article", (Serializable) article);
                 context.startActivity(intent);

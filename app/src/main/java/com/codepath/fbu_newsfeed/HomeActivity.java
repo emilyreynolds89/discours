@@ -1,5 +1,6 @@
 package com.codepath.fbu_newsfeed;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,11 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
-import com.codepath.fbu_newsfeed.fragments.FeedFragment;
 import com.codepath.fbu_newsfeed.Fragments.TrendsFragment;
+import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.fragments.FeedFragment;
 import com.codepath.fbu_newsfeed.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.ParseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,13 +65,29 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.action_home);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            Article article = (Article) intent.getSerializableExtra("article");
+
+            if (article != null) {
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("article", article);
+                ComposeFragment composeFragment = new ComposeFragment();
+                composeFragment.setArguments(bundle);
+
+                fragmentManager.beginTransaction().replace(R.id.flContainer, composeFragment).commit();
+            }
+        }
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         return true;
     }
 }
