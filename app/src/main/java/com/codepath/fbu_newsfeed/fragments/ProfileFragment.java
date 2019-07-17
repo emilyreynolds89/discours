@@ -70,6 +70,9 @@ public class ProfileFragment extends Fragment {
         tvBio.setText(user.getString(User.KEY_BIO));
         tvArticleCount.setText(getArticleCount(user));
 
+        if (user.getParseFile("profileImage") != null) {
+            Glide.with(getContext()).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
+        }
 
 
         mShare = new ArrayList<>();
