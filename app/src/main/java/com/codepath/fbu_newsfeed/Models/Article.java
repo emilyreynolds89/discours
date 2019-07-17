@@ -15,20 +15,23 @@ public class Article extends ParseObject {
     public static final String KEY_SUMMARY = "summary";
     public static final String KEY_BIAS = "bias";
     public static final String KEY_TRUTH = "truth";
+    public static final String KEY_SOURCE = "source";
 
     private String url;
     private String title;
     private ParseFile image;
     private String summary;
     private Bias bias;
-    private Float truth;
+    private String truth;
     private Tag tag;
+    private String source;
 
     public Article() {
         super();
     }
 
-    public Article(String url, String title, ParseFile image, String summary, Bias bias, Float truth) {
+    public Article(String url, String title, ParseFile image,
+                   String summary, Bias bias, String truth, String source) {
         super();
         this.url = url;
         put(KEY_URL, url);
@@ -43,6 +46,8 @@ public class Article extends ParseObject {
         this.truth = truth;
         put(KEY_TRUTH, truth);
         //this.tag = tag;
+        this.source = source;
+        put(KEY_SOURCE, source);
     }
 
     enum Bias {
@@ -100,13 +105,21 @@ public class Article extends ParseObject {
     }
 
 
-    public Float getTruth() {
-        return truth;
+    public String getTruth() {
+        return getString(KEY_TRUTH);
     }
 
-    public void setTruth(Float truth) {
+    public void setTruth(String truth) {
         this.truth = truth;
         put(KEY_TRUTH, truth);
+    }
+
+    public String getSource() {
+        return getString(KEY_SOURCE);
+    }
+
+    public void setSource(String source) {
+        put(KEY_SOURCE, source);
     }
 
 //
