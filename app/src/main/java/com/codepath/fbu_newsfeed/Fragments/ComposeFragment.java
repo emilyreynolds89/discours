@@ -89,7 +89,7 @@ public class ComposeFragment extends Fragment {
 
     private void shareArticle(String caption, Article article) {
         //final Share share = new Share(user, newArticle, caption);
-        final Share share = new Share(ParseUser.getCurrentUser(), article, caption);
+        Share share = new Share(ParseUser.getCurrentUser(), article, caption);
         share.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
