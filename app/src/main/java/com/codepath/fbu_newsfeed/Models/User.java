@@ -4,8 +4,6 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
-import java.io.File;
-
 @ParseClassName("_User")
 public class User extends ParseUser {
     public static final String KEY_FULLNAME = "fullName";
