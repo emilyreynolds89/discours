@@ -15,8 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
 import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
 import com.parse.ParseUser;
@@ -30,6 +32,8 @@ import static com.codepath.fbu_newsfeed.DetailActivity.TAG;
 import static com.parse.ParseObject.KEY_CREATED_AT;
 
 public class ProfileFragment extends Fragment {
+    ParseUser user;
+    protected ShareAdapter adapter;
     private ImageView ivProfileImage;
     private TextView tvUsername;
     private TextView tvFullName;
@@ -37,15 +41,17 @@ public class ProfileFragment extends Fragment {
     private TextView tvArticleCount;
     private Button btnLogout;
     private RecyclerView rvProfilePosts;
-    private List<Share> mShare;
+    private ArrayList<Share> mShare;
+    ShareAdapter shareAdapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_feed, container, false);
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        user = ParseUser.getCurrentUser();
         rvProfilePosts = view.findViewById(R.id.rvProfilePosts);
         btnLogout = view.findViewById(R.id.btnLogout);
         tvArticleCount = view.findViewById(R.id.tvArticleCount);
@@ -53,7 +59,21 @@ public class ProfileFragment extends Fragment {
         tvFullName = view.findViewById(R.id.tvFullName);
         tvUsername = view.findViewById(R.id.tvUsername);
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
+
+        // TODO: set textviews
+        tvUsername.setText(user.getString(User.KEY_USERNAME));
+        tvFullName.setText(user.getString(User.KEY_FULLNAME));
+        tvBio.setText(user.getString(User.KEY_BIO));
+        tvArticleCount.setText(String.valueOf(getArticleCount(user)));
+
+
         mShare = new ArrayList<>();
+
+        // TODO: connect ShareAdapter to recyclerview
+        shareAdapter = new ShareAdapter(mShare);
+        rvProfilePosts.setAdapter(adapter);
+
+
         //ProfileAdapter profileAdapter = new ProfileAdapter(mShare);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +81,7 @@ public class ProfileFragment extends Fragment {
                 logOut();
             }
         });
-        queryPosts();
+        queryShares();
     }
     private void logOut() {
         ParseUser.logOut();
@@ -69,21 +89,21 @@ public class ProfileFragment extends Fragment {
         startActivity(intent);
 
     }
-    private void queryPosts() {
-        ParseQuery<Share> postQuery = new ParseQuery<>(Share.class);
-        postQuery.include(Share.KEY_USER);
-        postQuery.setLimit(20);
-        postQuery.addDescendingOrder(KEY_CREATED_AT);
-        postQuery.findInBackground(new FindCallback<Share>() {
+    private void queryShares() {
+        ParseQuery<Share> query = ParseQuery.getQuery("Share");
+        query.include("user");
+        query.include("article");
+        query.orderByDescending("createdAt");
+        query.whereEqualTo("user", ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<Share>() {
             @Override
-            public void done(List<Share> posts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error with query");
-                    e.printStackTrace();
-                    return;
+            public void done(List<Share> shareList, ParseException e) {
+                if (e == null) {
+                    Log.d(TAG, "Got " + shareList.size() + " shares");
+                    shareAdapter.addAll(shareList);
+                } else {
+                    Log.d(TAG, "Error: " + e.getMessage());
                 }
-                mShare.addAll(posts);
-                //adapter.notifyDataSetChanged();
             }
         });
     }

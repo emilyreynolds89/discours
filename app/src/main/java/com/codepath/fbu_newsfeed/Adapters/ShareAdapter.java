@@ -27,7 +27,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     public static ArrayList<Share> shares;
     public static Context context;
 
-    public ShareAdapter(ArrayList<Share> shares) { this.shares = shares; }
+    public ShareAdapter(ArrayList<Share> shares) {
+        this.shares = shares;
+    }
 
     @NonNull
     @Override
