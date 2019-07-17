@@ -27,7 +27,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     public static ArrayList<Share> shares;
     public static Context context;
 
-    public ShareAdapter(ArrayList<Share> shares) { shares = shares; }
+    public ShareAdapter(ArrayList<Share> shares) { this.shares = shares; }
 
     @NonNull
     @Override
@@ -65,18 +65,13 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        if (shares != null) {
-            return shares.size();
-        } else {
-            return 0;
-        }
+        return shares.size();
     }
 
     public void addAll(List<Share> list) {
-        if (shares != null) {
-            shares.addAll(list);
-            notifyDataSetChanged();
-        }
+        shares.addAll(list);
+        notifyDataSetChanged();
+
     }
 
     public void clear() {
