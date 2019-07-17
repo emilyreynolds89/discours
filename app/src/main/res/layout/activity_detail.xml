@@ -280,5 +280,23 @@
         app:layout_constraintTop_toBottomOf="@+id/rvComments"
         app:layout_constraintVertical_bias="0.0" />
 
+    <TextView
+        android:id="@+id/tvSource"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="serif"
+        android:text="Source"
+        android:textColor="@color/colorLightText"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="@+id/viewArticle"
+        app:layout_constraintEnd_toEndOf="@+id/tvArticleSummary"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvArticleSummary"
+        app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary"
+        app:layout_constraintVertical_bias="0.0" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
