@@ -3,7 +3,9 @@ package com.codepath.fbu_newsfeed.Models;
 import android.text.format.DateUtils;
 
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 @ParseClassName("Share")
@@ -11,6 +13,7 @@ public class Share extends ParseObject {
     public static final String KEY_USER = "user";
     public static final String KEY_ARTICLE = "article";
     public static final String KEY_CAPTION = "caption";
+    public static final String KEY_IMAGE = "image";
 
     private ParseUser user;
     private Article article;
@@ -36,6 +39,9 @@ public class Share extends ParseObject {
         this.user = user;
         put(KEY_USER, user);
     }
+    public ParseFile getImage() {
+        return getParseFile(KEY_IMAGE);
+    }
 
 
     public Article getArticle() {
@@ -59,5 +65,20 @@ public class Share extends ParseObject {
 
     public String getRelativeTime() {
         return (String) DateUtils.getRelativeTimeSpanString(getCreatedAt().getTime());
+    }
+    public static class Query extends ParseQuery<Share> {
+        public Query() {
+            super(Share.class);
+        }
+
+        public Query getTop(){
+            setLimit(20);
+            return this;
+        }
+
+        public Query withUser(){
+            include("user");
+            return this;
+        }
     }
 }
