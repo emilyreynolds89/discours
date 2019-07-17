@@ -88,4 +88,18 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    public int getArticleCount(ParseUser user) {
+        ParseQuery<Share> query = ParseQuery.getQuery("Share");
+        query.whereEqualTo("user", user.getObjectId());
+        try {
+            List<Share> results = query.find();
+            Log.d("User", user.getUsername() + " has shared " + results.size() + " articles");
+            return results.size();
+        } catch(Exception e) {
+            Log.d("User", "Error: " + e.getMessage());
+            return -1;
+        }
+
+    }
+
 }
