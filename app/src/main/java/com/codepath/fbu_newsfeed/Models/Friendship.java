@@ -1,40 +1,89 @@
 package com.codepath.fbu_newsfeed.Models;
 
-public class Friendship {
-    private int UserID_1;
-    private int UserID_2;
+import com.parse.Parse;
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+
+@ParseClassName("Friendship")
+public class Friendship extends ParseObject {
+    public static final String KEY_USER1 = "user1";
+    public static final String KEY_USER2 = "user2";
+    public static final String KEY_STATE = "state";
+
+    private ParseUser user1;
+    private ParseUser user2;
     private State state;
 
-    private Friendship(int UserID_1, int UserID_2, State stete) {
-        this.UserID_1 = UserID_1;
-        this.UserID_2 = UserID_2;
+    public Friendship() {
+        super();
     }
 
-    public int getUserID_1() {
-        return UserID_1;
+    public Friendship(ParseUser user1, ParseUser user2, State state) {
+        super();
+        this.user1 = user1;
+        this.user2 = user2;
     }
 
-    public int getUserID_2() {
-        return UserID_2;
+    public ParseUser getUser1() {
+        return getParseUser(KEY_USER1);
     }
 
-    public void setUserID_1(int userID_1) {
-        UserID_1 = userID_1;
+    public ParseUser getUser2() {
+        return getParseUser(KEY_USER2);
     }
 
-    public void setUserID_2(int userID_2) {
-        UserID_2 = userID_2;
+    public void setUser1(ParseUser user) {
+        user1 = user;
+        put(KEY_USER1, user);
+    }
+
+    public void setUser2(ParseUser user) {
+        user2 = user;
+        put(KEY_USER2, user);
     }
 
     enum State {
-        Requested, Accepeted;
+        Requested, Accepted;
     }
 
     public State getState() {
-        return state;
+        return stateIntToEnum((int) getNumber(KEY_STATE));
     }
 
     public void setState(State state) {
         this.state = state;
+        put(KEY_STATE, stateEnumToInt(state));
+    }
+
+    public boolean isInvolved(ParseUser user ) {
+        return user.getObjectId().equals(getUser1().getObjectId()) || user.getObjectId().equals(getUser2().getObjectId());
+    }
+
+    public boolean isUser1(ParseUser user) {
+        return user.getObjectId().equals(getUser1().getObjectId()) ;
+    }
+
+    private int stateEnumToInt(State state) {
+        switch(state) {
+            case Requested:
+                return 1;
+            case Accepted:
+                return 2;
+            default:
+                return 1;
+        }
+    }
+
+    private State stateIntToEnum(int i) {
+        switch(i) {
+            case 1:
+                return State.Requested;
+            case 2:
+                return State.Accepted;
+            default:
+                return State.Requested;
+
+        }
     }
 }

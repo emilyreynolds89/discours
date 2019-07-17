@@ -1,40 +1,57 @@
 package com.codepath.fbu_newsfeed.Models;
 
-public class Share {
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
 
-    private User user_id;
-    private Article article_id;
+@ParseClassName("Share")
+public class Share extends ParseObject {
+    public static final String KEY_USER = "user";
+    public static final String KEY_ARTICLE = "article";
+    public static final String KEY_CAPTION = "caption";
+
+    private ParseUser user;
+    private Article article;
     private String caption;
 
-    public Share(User user_id, Article article_id, String caption) {
-        this.user_id = user_id;
-        this.article_id = article_id;
+    public Share() {
+        super();
+    }
+
+    public Share(ParseUser user, Article article, String caption) {
+        super();
+
+        this.user = user;
+        this.article = article;
         this.caption = caption;
     }
 
-    public User getUser_id() {
-        return user_id;
+    public ParseUser getUser() {
+        return getParseUser(KEY_USER);
     }
 
-    public void setUser_id(User user_id) {
-        this.user_id = user_id;
+    public void setUser(ParseUser user) {
+        this.user = user;
+        put(KEY_USER, user);
     }
 
 
-    public Article getArticle_id() {
-        return article_id;
+    public Article getArticle() {
+        return (Article) getParseObject(KEY_ARTICLE);
     }
 
-    public void setArticle_id(Article article_id) {
-        this.article_id = article_id;
+    public void setArticle(Article article) {
+        this.article = article;
+        put(KEY_ARTICLE, article);
     }
 
 
     public String getCaption() {
-        return caption;
+        return getString(KEY_CAPTION);
     }
 
     public void setCaption(String caption) {
         this.caption = caption;
+        put(KEY_CAPTION, caption);
     }
 }

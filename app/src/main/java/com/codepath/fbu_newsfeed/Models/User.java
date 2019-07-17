@@ -1,59 +1,30 @@
 package com.codepath.fbu_newsfeed.Models;
 
+import com.parse.ParseClassName;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+
 import java.io.File;
 
-public class User {
-    private String username;
-    private String fullName;
-    private String email;
-    private String password;
-    private File profileImage;
+@ParseClassName("_User")
+public class User extends ParseUser {
+    public static final String KEY_FULLNAME = "fullName";
+    public static final String KEY_PROFILEIMAGE = "profileImage";
 
-    public User(String username, String fullName, String email, String password, File profileImage) {
-        this.username = username;
-        this.fullName = fullName;
-        this.email = email;
-        this.password = password;
-        this.profileImage = profileImage;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFullName(String fullName) {
+        put(KEY_FULLNAME, fullName);
     }
 
     public String getFullName() {
-        return fullName;
+        return getString(KEY_FULLNAME);
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setProfileImage(ParseFile file) {
+        put(KEY_PROFILEIMAGE, file);
     }
 
-    public String getEmail() {
-        return email;
+    public ParseFile getProfileImage() {
+        return getParseFile(KEY_PROFILEIMAGE);
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public File getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(File profileImage) {
-        this.profileImage = profileImage;
-    }
 }
