@@ -1,5 +1,6 @@
 package com.codepath.fbu_newsfeed;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,9 +10,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.parse.ParseFile;
+
+import java.io.Serializable;
 
 public class ArticleDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,12 +64,9 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
             case R.id.btnLink:
                 break;
             case R.id.btnShare:
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("article", article);
-                ComposeFragment composeFragment = new ComposeFragment();
-                composeFragment.setArguments(bundle);
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, composeFragment).commit();
+                Intent intent = new Intent(ArticleDetailActivity.this, HomeActivity.class);
+                intent.putExtra("article", (Serializable) article);
+                startActivity(intent);
 
                 break;
         }

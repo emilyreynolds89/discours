@@ -58,7 +58,7 @@ public class ComposeFragment extends Fragment {
         btnShare = view.findViewById(R.id.btShareArticle);
 
         //Article article = (Article) getActivity().getIntent().getSerializableExtra("article");
-        article = (Article) getArguments().getSerializable("article");
+        //article = (Article) getArguments().getSerializable("article");
 
         final String factCheck = article.getTruth();
         final Article.Bias bias = article.getBias();
