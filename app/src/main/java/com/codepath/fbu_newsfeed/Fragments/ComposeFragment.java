@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
@@ -33,11 +34,6 @@ public class ComposeFragment extends Fragment {
     ImageButton ibReport;
     EditText etCaption;
     Button btnShare;
-
-    ParseFile imageFile;
-    String title;
-    String summary;
-    String source;
 
     @Nullable
     @Override
@@ -58,8 +54,20 @@ public class ComposeFragment extends Fragment {
         etCaption = view.findViewById(R.id.etCaption);
         btnShare = view.findViewById(R.id.btShareArticle);
 
-        final String factCheck = tvFactCheck.getText().toString();
-        final Article.Bias bias = Article.Bias.LIBERAL;
+        Article article = (Article) getActivity().getIntent().getSerializableExtra("article");
+
+        final String factCheck = article.getTruth();
+        final Article.Bias bias = article.getBias();
+        final ParseFile imageFile = article.getImage();
+        final String title = article.getTitle();
+        final String summary = article.getSummary();
+        final String source = article.getSource();
+
+        tvFactCheck.setText(factCheck);
+        tvArticleTitle.setText(title);
+        if(imageFile != null) {
+            Glide.with(getContext()).load(imageFile.getUrl()).into(ivArticlePreview);
+        }
 
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override

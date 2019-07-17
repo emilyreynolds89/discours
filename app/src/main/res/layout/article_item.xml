@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
 
     <ImageView
-        android:id="@+id/ivArtcleImage"
+        android:id="@+id/ivArticleImage"
         android:layout_width="350dp"
         android:layout_height="250dp"
         android:layout_marginTop="10dp"
@@ -82,7 +82,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/viewArticle"
         app:layout_constraintStart_toStartOf="@+id/viewArticle"
-        app:layout_constraintTop_toBottomOf="@+id/ivArtcleImage" />
+        app:layout_constraintTop_toBottomOf="@+id/ivArticleImage" />
 
     <TextView
         android:id="@+id/tvArticleSummary"

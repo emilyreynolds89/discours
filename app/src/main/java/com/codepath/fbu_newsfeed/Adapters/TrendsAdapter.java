@@ -2,6 +2,7 @@ package com.codepath.fbu_newsfeed.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -32,12 +33,14 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
     @NonNull
     @Override
     public TrendsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        View view = LayoutInflater.from(context).inflate(R.layout.trend_article_item, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TrendsAdapter.ViewHolder holder, int position) {
-
+        Article article = articles.get(position);
+        holder.bind(article);
     }
 
     @Override
