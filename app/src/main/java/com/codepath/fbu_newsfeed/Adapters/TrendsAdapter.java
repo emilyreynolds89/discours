@@ -1,7 +1,6 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.ParseFile;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder> {
@@ -74,9 +71,16 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             if (position != RecyclerView.NO_POSITION) {
                 Article article = articles.get(position);
 
-                Intent intent = new Intent(context, ComposeFragment.class);
+                /*Bundle bundle = new Bundle();
+                bundle.putSerializable("article", article);
+                ComposeFragment composeFragment = new ComposeFragment();
+                composeFragment.setArguments(bundle);
+*/
+
+
+                /*Intent intent = new Intent(context, HomeActivity.class);
                 intent.putExtra("article", (Serializable) article);
-                context.startActivity(intent);
+                context.startActivity(intent);*/
             }
         }
 
@@ -101,5 +105,6 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
         articles.addAll(newArticles);
         notifyDataSetChanged();
     }
+
 
 }

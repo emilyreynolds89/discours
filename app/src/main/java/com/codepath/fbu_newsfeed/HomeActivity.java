@@ -3,7 +3,6 @@ package com.codepath.fbu_newsfeed;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -58,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         bottomNavigationView.setSelectedItemId(R.id.action_home);
+
 
     }
 }
