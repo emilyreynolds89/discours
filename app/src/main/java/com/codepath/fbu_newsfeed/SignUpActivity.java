@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.codepath.fbu_newsfeed.Models.User;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -56,12 +57,12 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        ParseUser user = new ParseUser();
+        ParseUser user = new User();
 
-        user.put("fullName", name);
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
+        user.put("fullName", name);
 
         user.signUpInBackground(new SignUpCallback() {
             @Override
