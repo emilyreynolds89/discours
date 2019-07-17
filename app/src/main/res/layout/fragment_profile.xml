@@ -79,13 +79,13 @@
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/rvProfilePosts"
-        app:layout_constraintEnd_toStartOf="@+id/btFriends"
+        app:layout_constraintEnd_toStartOf="@+id/btnLogout"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
         app:layout_constraintTop_toBottomOf="@+id/tvBio" />
 
     <Button
-        android:id="@+id/btFriends"
+        android:id="@+id/btnLogout"
         android:layout_width="140dp"
         android:layout_height="28sp"
         android:layout_marginTop="12dp"
@@ -93,7 +93,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:background="@color/colorAccentBold"
-        android:text="Friend Requested"
+        android:text="Logout"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="12sp"
