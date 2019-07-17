@@ -15,9 +15,6 @@
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="9dp"
-        android:layout_marginEnd="23dp"
-        android:layout_marginRight="23dp"
-        app:layout_constraintEnd_toStartOf="@+id/ivReport"
         app:layout_constraintStart_toEndOf="@+id/tvFactCheck"
         app:layout_constraintTop_toBottomOf="@+id/ivArticlePreview"
         app:srcCompat="@color/colorLiberal" />
@@ -97,7 +94,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivBias"
         app:layout_constraintTop_toBottomOf="@+id/ivArticlePreview"
-        app:srcCompat="@android:color/white" />
+        app:srcCompat="@android:color/white"
+        tools:srcCompat="@drawable/questionmark_icon" />
 
     <Button
         android:id="@+id/btShareArticle"
