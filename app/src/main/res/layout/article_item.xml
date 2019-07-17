@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="8dp">
 
     <ImageView
         android:id="@+id/ivProfileImage"
@@ -94,6 +95,7 @@
             app:layout_constraintEnd_toEndOf="@+id/viewArticle"
             app:layout_constraintStart_toStartOf="@+id/viewArticle"
             app:layout_constraintTop_toBottomOf="@+id/tvArticleTitle" />
+
         <TextView
             android:id="@+id/tvSource"
             android:layout_width="wrap_content"
@@ -112,7 +114,6 @@
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
     <ImageButton
@@ -250,8 +251,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCaption" />
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
