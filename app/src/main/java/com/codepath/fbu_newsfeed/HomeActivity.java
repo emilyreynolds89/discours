@@ -9,7 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
 import com.codepath.fbu_newsfeed.Fragments.FeedFragment;
+import com.codepath.fbu_newsfeed.Fragments.TrendsFragment;
+import com.codepath.fbu_newsfeed.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -32,14 +35,18 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment fragment = new FeedFragment();
                 switch (menuItem.getItemId()) {
-                    case R.id.action_compose:
-                        //fragment = new ComposeFragment();
-                        break;
                     case R.id.action_home:
                         fragment = new FeedFragment();
                         break;
+                    case R.id.action_trending:
+                        fragment = new TrendsFragment();
+                        break;
+                    case R.id.action_compose:
+                        fragment = new ComposeFragment();
+                        break;
+                    // TODO: notifications fragment
                     case R.id.action_profile:
-                        //fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser().getObjectId());
+                        fragment = new ProfileFragment();
                         break;
                     default:
                         break;
