@@ -40,7 +40,7 @@ public class ComposeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //article = (Article) getArguments().getSerializable("article");
+        article = (Article) getArguments().getSerializable("article");
         return inflater.inflate(R.layout.fragment_compose, container, false);
     }
 
@@ -58,7 +58,7 @@ public class ComposeFragment extends Fragment {
         btnShare = view.findViewById(R.id.btShareArticle);
 
         //Article article = (Article) getActivity().getIntent().getSerializableExtra("article");
-        //Article article = (Article) getArguments().getSerializable("article");
+        article = (Article) getArguments().getSerializable("article");
 
         final String factCheck = article.getTruth();
         final Article.Bias bias = article.getBias();
