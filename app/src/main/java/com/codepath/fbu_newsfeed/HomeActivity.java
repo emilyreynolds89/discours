@@ -11,7 +11,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
+import com.codepath.fbu_newsfeed.fragments.ComposeFragment;
+import com.codepath.fbu_newsfeed.fragments.CreateFragment;
 import com.codepath.fbu_newsfeed.fragments.TrendsFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.fragments.FeedFragment;
@@ -48,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
                         fragment = new TrendsFragment();
                         break;
                     case R.id.action_compose:
-                        fragment = new ComposeFragment();
+                        fragment = new CreateFragment();
                         break;
                     // TODO: notifications fragment
                     case R.id.action_profile:

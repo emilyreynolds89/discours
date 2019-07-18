@@ -37,7 +37,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class DetailActivity extends AppCompatActivity {
     public static final String TAG = "DetailActivity";
@@ -47,7 +46,7 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
     @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
     @BindView(R.id.ivArticleImage) ImageView ivArticleImage;
-    @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
+    @BindView(R.id.tvArticleTitleCreate) TextView tvArticleTitle;
     @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
     @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
     @BindView(R.id.ibReactionDislike) ImageButton ibReactionDislike;
@@ -55,7 +54,7 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.ibReactionSad) ImageButton ibReactionSad;
     @BindView(R.id.ibReactionAngry) ImageButton ibReactionAngry;
     @BindView(R.id.tvFactRating) TextView tvFactRating;
-    @BindView(R.id.ivBias) ImageView ivBias;
+    @BindView(R.id.ivBiasCreate) ImageView ivBias;
     @BindView(R.id.ibInfomation) ImageButton ibInformation;
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.rvComments) RecyclerView rvComments;
