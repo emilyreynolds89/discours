@@ -1,4 +1,4 @@
-package com.codepath.fbu_newsfeed.fragments;
+package com.codepath.fbu_newsfeed.Fragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -98,6 +98,7 @@ public class FeedFragment extends Fragment {
     private void queryShares(int offset) {
 
         List<ParseUser> friends = getFriends();
+        friends.add(ParseUser.getCurrentUser());
 
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.include("user");

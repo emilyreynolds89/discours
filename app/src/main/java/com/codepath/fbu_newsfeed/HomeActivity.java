@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
 import com.codepath.fbu_newsfeed.Fragments.TrendsFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
-import com.codepath.fbu_newsfeed.fragments.FeedFragment;
+import com.codepath.fbu_newsfeed.Fragments.FeedFragment;
 import com.codepath.fbu_newsfeed.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
