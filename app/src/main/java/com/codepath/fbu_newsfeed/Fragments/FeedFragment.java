@@ -96,6 +96,7 @@ public class FeedFragment extends Fragment {
     private void queryShares(int offset) {
 
         List<ParseUser> friends = getFriends();
+        friends.add(ParseUser.getCurrentUser());
 
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.include("user");
