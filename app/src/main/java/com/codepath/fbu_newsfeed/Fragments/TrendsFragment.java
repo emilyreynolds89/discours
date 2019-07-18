@@ -118,3 +118,5 @@ public class TrendsFragment extends Fragment {
         queryArticles(false);
     }
 }
+
+

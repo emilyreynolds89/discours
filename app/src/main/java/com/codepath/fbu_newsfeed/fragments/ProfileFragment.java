@@ -23,6 +23,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
 import com.codepath.fbu_newsfeed.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.LoginActivity;
+import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
@@ -30,9 +31,13 @@ import com.parse.FindCallback;
 import com.parse.ParseUser;
 import com.parse.ParseQuery;
 import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -134,12 +139,28 @@ public class ProfileFragment extends Fragment {
         } else {
             btnLogout.setVisibility(View.INVISIBLE);
             btnRequest.setVisibility(View.VISIBLE);
-            btnRequest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    requestFriend(user);
+
+            if (isFriends()) {
+                btnRequest.setText("Friends!");
+            } else if (sentRequest()) {
+                btnRequest.setText("Requested");
+            } else if (canAccept()) {
+                btnRequest.setText("Accept request");
+                btnRequest.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        acceptRequest(user);
+                    }
+                });
+            } else {
+                    btnRequest.setText("Request friend");
+                    btnRequest.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            requestFriend(user);
+                        }
+                    });
                 }
-            });
         }
 
         queryShares(true);
@@ -151,8 +172,37 @@ public class ProfileFragment extends Fragment {
         unbinder.unbind();
     }
 
-    private void requestFriend(ParseUser potentialFriend) {
-        // TODO: request friend functionality
+    private void requestFriend(final ParseUser potentialFriend) {
+        Friendship friendship = new Friendship(ParseUser.getCurrentUser(), potentialFriend, Friendship.State.Requested);
+        friendship.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d(TAG, "Friend request sent to " + potentialFriend.getObjectId());
+                    btnRequest.setOnClickListener(null);
+                    btnRequest.setText("Requested");
+                } else {
+                    Log.d(TAG, "Friend request failed", e);
+                }
+            }
+        });
+    }
+
+    private void acceptRequest(final ParseUser requestingUser) {
+        ParseQuery<Friendship> query = ParseQuery.getQuery("Friendship");
+        query.whereEqualTo("user2",  ParseUser.getCurrentUser());
+        query.whereEqualTo("user1", user);
+        try {
+            List<Friendship> results = query.find();
+            if (results.size() > 0) {
+                Friendship friendship = results.get(0);
+                friendship.setState(Friendship.State.Accepted);
+                friendship.save();
+                btnRequest.setText("Friends!");
+                btnRequest.setOnClickListener(null);
+            }
+        } catch (Exception e) {
+        }
     }
 
     private void logOut() {
@@ -186,6 +236,60 @@ public class ProfileFragment extends Fragment {
                 if (!refresh) scrollListener.resetState();
             }
         });
+    }
+
+    // if the current user has requested this user to be their friend
+    private boolean sentRequest() {
+        ParseQuery<Friendship> query = ParseQuery.getQuery("Friendship");
+        query.whereEqualTo("user1",  ParseUser.getCurrentUser());
+        query.whereEqualTo("user2", user);
+        try {
+            List<Friendship> results = query.find();
+            return results.size() > 0;
+        } catch(Exception e) {
+            Log.d("User", "Error: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private boolean isFriends() {
+        ParseQuery<Friendship> query1 = ParseQuery.getQuery("Friendship");
+        query1.whereEqualTo("user1", ParseUser.getCurrentUser());
+        query1.whereEqualTo("user2", user);
+        query1.whereEqualTo("state", Friendship.stateEnumToInt(Friendship.State.Accepted));
+
+        ParseQuery<Friendship> query2 = ParseQuery.getQuery("Friendship");
+        query2.whereEqualTo("user2", ParseUser.getCurrentUser());
+        query2.whereEqualTo("user1", user);
+        query2.whereEqualTo("state", Friendship.stateEnumToInt(Friendship.State.Accepted));
+
+        List<ParseQuery<Friendship>> queries = new ArrayList<ParseQuery<Friendship>>();
+        queries.add(query1);
+        queries.add(query2);
+        ParseQuery<Friendship> mainQuery = ParseQuery.or(queries);
+
+        try {
+            List<Friendship> result = mainQuery.find();
+            return result.size() > 0;
+        } catch(Exception e) {
+            Log.d("User", "Error: " + e.getMessage());
+            return false;
+        }
+
+    }
+
+    // if this user has requested the current user to be their friend
+    private boolean canAccept() {
+        ParseQuery<Friendship> query = ParseQuery.getQuery("Friendship");
+        query.whereEqualTo("user2",  ParseUser.getCurrentUser());
+        query.whereEqualTo("user1", user);
+        try {
+            List<Friendship> results = query.find();
+            return results.size() > 0;
+        } catch(Exception e) {
+            Log.d("User", "Error: " + e.getMessage());
+            return false;
+        }
     }
 
     private ParseUser getUser(String user_id) throws ParseException {
