@@ -19,9 +19,11 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.ArticleDetailActivity;
 import com.codepath.fbu_newsfeed.DetailActivity;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
+import com.codepath.fbu_newsfeed.fragments.ProfileFragment;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -80,6 +82,23 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         holder.tvCaption.setText(share.getCaption());
 
+
+
+        holder.tvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUser(user);
+            }
+        });
+
+        holder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUser(user);
+            }
+        });
+
+
         holder.viewArticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,6 +133,10 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     public void clear() {
         shares.clear();
         notifyDataSetChanged();
+    }
+
+    private void goToUser(ParseUser user) {
+        ((HomeActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).commit();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

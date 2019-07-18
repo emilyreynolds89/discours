@@ -17,6 +17,7 @@ import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.fragments.FeedFragment;
 import com.codepath.fbu_newsfeed.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     // TODO: notifications fragment
                     case R.id.action_profile:
-                        fragment = new ProfileFragment();
+                        fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser().getObjectId());
                         break;
                     default:
                         break;

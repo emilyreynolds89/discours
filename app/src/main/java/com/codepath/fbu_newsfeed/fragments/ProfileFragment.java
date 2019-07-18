@@ -46,14 +46,14 @@ public class ProfileFragment extends Fragment {
 
     ParseUser user;
 
-    private @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
-    private @BindView(R.id.tvUsername) TextView tvUsername;
-    private @BindView(R.id.tvFullName) TextView tvFullName;
-    private @BindView(R.id.tvBio) TextView tvBio;
-    private @BindView(R.id.tvArticleCount) TextView tvArticleCount;
-    private @BindView(R.id.btnLogout) Button btnLogout;
-    private @BindView(R.id.btnRequest) Button btnRequest;
-    private @BindView(R.id.rvProfilePosts) RecyclerView rvProfilePosts;
+    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.tvUsername) TextView tvUsername;
+    @BindView(R.id.tvFullName) TextView tvFullName;
+    @BindView(R.id.tvBio) TextView tvBio;
+    @BindView(R.id.tvArticleCount) TextView tvArticleCount;
+    @BindView(R.id.btnLogout) Button btnLogout;
+    @BindView(R.id.btnRequest) Button btnRequest;
+    @BindView(R.id.rvProfilePosts) RecyclerView rvProfilePosts;
 
     private ArrayList<Share> mShare;
     ShareAdapter shareAdapter;
@@ -92,7 +92,7 @@ public class ProfileFragment extends Fragment {
         tvUsername.setText(user.getString(User.KEY_USERNAME));
         tvFullName.setText(user.getString(User.KEY_FULLNAME));
         tvBio.setText(user.getString(User.KEY_BIO));
-        tvArticleCount.setText(getArticleCount(user));
+        tvArticleCount.setText(getArticleCount());
 
         if (user.getParseFile("profileImage") != null) {
             Glide.with(getContext()).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
@@ -132,7 +132,7 @@ public class ProfileFragment extends Fragment {
                 }
             });
         } else {
-            btnLogout.setVisibility(View.GONE);
+            btnLogout.setVisibility(View.INVISIBLE);
             btnRequest.setVisibility(View.VISIBLE);
             btnRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -174,7 +174,7 @@ public class ProfileFragment extends Fragment {
         query.include("user");
         query.include("article");
         query.orderByDescending("createdAt");
-        query.whereEqualTo("user", ParseUser.getCurrentUser());
+        query.whereEqualTo("user", user);
         if(refresh) query.setLimit(20);
         query.findInBackground(new FindCallback<Share>() {
             @Override
@@ -194,7 +194,7 @@ public class ProfileFragment extends Fragment {
         return query.getFirst();
     }
 
-    private String getArticleCount(ParseUser user) {
+    private String getArticleCount() {
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.whereEqualTo("user", user);
         try {
