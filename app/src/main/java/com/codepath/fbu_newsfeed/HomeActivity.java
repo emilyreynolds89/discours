@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
-import com.codepath.fbu_newsfeed.Fragments.TrendsFragment;
+import com.codepath.fbu_newsfeed.fragments.TrendsFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.fragments.FeedFragment;
 import com.codepath.fbu_newsfeed.fragments.ProfileFragment;

@@ -15,11 +15,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
+import com.codepath.fbu_newsfeed.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
@@ -37,7 +39,6 @@ import static com.parse.ParseObject.KEY_CREATED_AT;
 
 public class ProfileFragment extends Fragment {
     ParseUser user;
-    protected ShareAdapter adapter;
     private ImageView ivProfileImage;
     private TextView tvUsername;
     private TextView tvFullName;
@@ -47,6 +48,8 @@ public class ProfileFragment extends Fragment {
     private RecyclerView rvProfilePosts;
     private ArrayList<Share> mShare;
     ShareAdapter shareAdapter;
+    protected SwipeRefreshLayout swipeContainer;
+    protected EndlessRecyclerViewScrollListener scrollListener;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -83,37 +86,60 @@ public class ProfileFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvProfilePosts.setLayoutManager(linearLayoutManager);
 
+        swipeContainer = view.findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchTimelineAsync();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadNextData();
+            }
+        };
+
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 logOut();
             }
         });
-        queryShares();
+        queryShares(true);
     }
 
     private void logOut() {
         ParseUser.logOut();
         Intent intent = new Intent(getActivity().getApplication(), LoginActivity.class);
         startActivity(intent);
-
     }
 
-    private void queryShares() {
+    public void fetchTimelineAsync() {
+        shareAdapter.clear();
+        queryShares(true);
+        swipeContainer.setRefreshing(false);
+    }
+    private void queryShares(final boolean refresh) {
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.include("user");
         query.include("article");
         query.orderByDescending("createdAt");
         query.whereEqualTo("user", ParseUser.getCurrentUser());
+        if(refresh) query.setLimit(20);
         query.findInBackground(new FindCallback<Share>() {
             @Override
             public void done(List<Share> shareList, ParseException e) {
                 if (e == null) {
                     Log.d(TAG, "Got " + shareList.size() + " shares");
                     shareAdapter.addAll(shareList);
-                } else {
-                    Log.d(TAG, "Error: " + e.getMessage());
                 }
+                if (!refresh) scrollListener.resetState();
             }
         });
     }
@@ -130,6 +156,9 @@ public class ProfileFragment extends Fragment {
             return "error";
         }
 
+    }
+    public void loadNextData() {
+        queryShares(false);
     }
 
 }

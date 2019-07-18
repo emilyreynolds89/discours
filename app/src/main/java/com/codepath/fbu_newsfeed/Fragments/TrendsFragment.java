@@ -1,4 +1,4 @@
-package com.codepath.fbu_newsfeed.Fragments;
+package com.codepath.fbu_newsfeed.fragments;
 
 import android.os.Bundle;
 import android.util.Log;

@@ -48,12 +48,15 @@
 
     <TextView
         android:id="@+id/tvBio"
-        android:layout_width="240dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="48dp"
         android:text="TextView"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvFullName"
         app:layout_constraintTop_toBottomOf="@+id/tvFullName" />
 
     <TextView
@@ -66,13 +69,15 @@
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/btnLogout"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvBio"
         app:layout_constraintTop_toBottomOf="@+id/tvBio" />
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="140dp"
         android:layout_height="28sp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@color/colorAccentBold"
         android:text="Logout"
@@ -82,14 +87,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBio" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProfilePosts"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogout" />
+        app:layout_constraintTop_toBottomOf="@+id/btnLogout">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProfilePosts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.507"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogout" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
