@@ -145,8 +145,20 @@ public class DetailActivity extends AppCompatActivity {
 
         tvCaption.setText("@" + share.getUser().getUsername() + ": " + share.getCaption());
 
+        tvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUser(user);
+            }
+        });
 
-        // TODO: comment composition functionality
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUser(user);
+            }
+        });
+
 
         viewArticle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,6 +207,12 @@ public class DetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         return true;
+    }
+
+    private void goToUser(ParseUser user) {
+        Intent intent = new Intent(DetailActivity.this, HomeActivity.class);
+        intent.putExtra("user_id", user.getObjectId());
+        startActivity(intent);
     }
 
     private void queryShare() {
