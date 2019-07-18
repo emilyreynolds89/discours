@@ -78,7 +78,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         // TODO: set bias image
         // TODO: connect listener to information button
 
-        holder.tvCaption.setText(share.getCaption());
+        String captionUsername = "@" + user.getUsername() + ": ";
+        holder.tvCaption.setText(captionUsername + share.getCaption());
 
         holder.viewArticle.setOnClickListener(new View.OnClickListener() {
             @Override
