@@ -62,4 +62,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             tvTimeComment.setText(comment.getRelativeTime());
         }
     }
+
+    public void clear() {
+        comments.clear();
+        notifyDataSetChanged();
+    }
 }
