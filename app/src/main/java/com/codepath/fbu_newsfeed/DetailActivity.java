@@ -80,7 +80,6 @@ public class DetailActivity extends AppCompatActivity {
     CommentAdapter commentAdapter;
 
     protected SwipeRefreshLayout swipeContainer;
-    protected EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,15 +106,6 @@ public class DetailActivity extends AppCompatActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadNextData();
-            }
-        };
-
-        rvComments.addOnScrollListener(scrollListener);
 
         queryShare();
 
@@ -153,7 +143,7 @@ public class DetailActivity extends AppCompatActivity {
         // TODO: set bias image
         // TODO: connect listener to information button
 
-        tvCaption.setText(share.getCaption());
+        tvCaption.setText("@" + share.getUser().getUsername() + ": " + share.getCaption());
 
 
         // TODO: comment composition functionality
@@ -174,13 +164,17 @@ public class DetailActivity extends AppCompatActivity {
                 if (message == null) {
                     Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
                 } else {
-                    Comment addedComment = new Comment(message, (User) user, share);
+                    Comment addedComment = new Comment(message, (User) ParseUser.getCurrentUser(), share);
                     addedComment.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
                                 Log.d("DetailActivity", "Success in saving comment");
-                                queryComments(true);
+                                fetchTimelineAsync();
+                                etComment.setText("");
+                                etComment.clearFocus();
+                                etComment.setEnabled(false);
+                                return;
                             } else {
                                 Log.e("DetailActivity", "Error in creating comment");
                                 e.printStackTrace();
@@ -235,8 +229,6 @@ public class DetailActivity extends AppCompatActivity {
                 }
                 comments.addAll(newComments);
                 commentAdapter.notifyDataSetChanged();
-
-                if (!refresh) scrollListener.resetState();
             }
         });
     }
@@ -247,7 +239,4 @@ public class DetailActivity extends AppCompatActivity {
         swipeContainer.setRefreshing(false);
     }
 
-    public void loadNextData() {
-        queryComments(false);
-    }
 }

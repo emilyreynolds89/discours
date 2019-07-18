@@ -25,7 +25,9 @@ public class Comment extends ParseObject {
         this.text = text;
         put(KEY_TEXT, text);
         this.user = user;
+        put(KEY_USER, user);
         this.share = share;
+        put(KEY_SHARE, share);
     }
 
     public String getText() {
