@@ -28,8 +28,13 @@ public class Share extends ParseObject {
         super();
 
         this.user = user;
+        put(KEY_USER, user);
+
         this.article = article;
+        put(KEY_ARTICLE, article);
+
         this.caption = caption;
+        put(KEY_CAPTION, caption);
     }
 
     public ParseUser getUser() {

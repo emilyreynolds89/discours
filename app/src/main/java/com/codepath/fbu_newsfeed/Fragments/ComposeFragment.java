@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
+import com.codepath.fbu_newsfeed.fragments.FeedFragment;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -80,23 +81,21 @@ public class ComposeFragment extends Fragment {
                 final String caption = etCaption.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
 
-                shareArticle(user, caption, url, imageFile, title, summary, factCheck, bias, source);
+                shareArticle(caption, article);
             }
         });
 
     }
 
-    private void shareArticle(ParseUser user, String caption, String url, ParseFile imageFile, String title, String summary, String factCheck, Article.Bias bias, String source) {
-        final Article newArticle = new Article(url, title, imageFile, summary, bias, factCheck, source);
-        newArticle.saveInBackground();
-
-        final Share share = new Share(user, newArticle, caption);
+    private void shareArticle(String caption, Article article) {
+        //final Share share = new Share(user, newArticle, caption);
+        Share share = new Share(ParseUser.getCurrentUser(), article, caption);
         share.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("ComposeFragment", "Share article success");
-                    //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new FeedFragment()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new FeedFragment()).commit();
                 } else {
                     Log.e("ComposeFragment", "Error in sharing article");
                     e.printStackTrace();

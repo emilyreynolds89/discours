@@ -2,10 +2,12 @@ package com.codepath.fbu_newsfeed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -16,10 +18,14 @@ import com.codepath.fbu_newsfeed.fragments.FeedFragment;
 import com.codepath.fbu_newsfeed.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class HomeActivity extends AppCompatActivity {
     private final String TAG ="HomeActivity";
 
-    public BottomNavigationView bottomNavigationView;
+    public @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
+    public @BindView(R.id.toolbar) Toolbar toolbar;
 
 
 
@@ -27,9 +33,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
         final FragmentManager fragmentManager = getSupportFragmentManager();
-
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -59,6 +64,8 @@ public class HomeActivity extends AppCompatActivity {
 
         bottomNavigationView.setSelectedItemId(R.id.action_home);
 
+        setSupportActionBar(toolbar);
+
         Intent intent = getIntent();
         if (intent != null) {
             Article article = (Article) intent.getSerializableExtra("article");
@@ -74,6 +81,13 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        return true;
     }
 }

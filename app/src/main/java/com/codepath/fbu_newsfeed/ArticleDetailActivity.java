@@ -3,20 +3,25 @@ package com.codepath.fbu_newsfeed;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.parse.ParseFile;
 
+import butterknife.BindView;
 import java.io.Serializable;
 
 public class ArticleDetailActivity extends AppCompatActivity implements View.OnClickListener {
+
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     ImageView ivArticleImageDetail;
     TextView tvArticleTitleDetail;
@@ -57,7 +62,18 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
         btnLink.setOnClickListener(this);
         btnShare.setOnClickListener(this);
 
+        setSupportActionBar(toolbar);
+
+
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        return true;
+    }
+
 
     @Override
     public void onClick(View view) {
