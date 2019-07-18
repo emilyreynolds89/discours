@@ -11,8 +11,8 @@ public class Friendship extends ParseObject {
     public static final String KEY_USER2 = "user2";
     public static final String KEY_STATE = "state";
 
-    private ParseUser user1;
-    private ParseUser user2;
+    private ParseUser user1; // NOTE: user1 is always the requester
+    private ParseUser user2; // NOTE: user2 is always the requested one
     private State state;
 
     public Friendship() {
@@ -22,7 +22,14 @@ public class Friendship extends ParseObject {
     public Friendship(ParseUser user1, ParseUser user2, State state) {
         super();
         this.user1 = user1;
+        put(KEY_USER1, user1);
+
         this.user2 = user2;
+        put(KEY_USER2, user2);
+
+        this.state = state;
+        put(KEY_STATE, stateEnumToInt(state));
+
     }
 
     public ParseUser getUser1() {
@@ -43,7 +50,7 @@ public class Friendship extends ParseObject {
         put(KEY_USER2, user);
     }
 
-    enum State {
+    public enum State {
         Requested, Accepted;
     }
 
@@ -64,7 +71,7 @@ public class Friendship extends ParseObject {
         return user.getObjectId().equals(getUser1().getObjectId()) ;
     }
 
-    private int stateEnumToInt(State state) {
+    public static int stateEnumToInt(State state) {
         switch(state) {
             case Requested:
                 return 1;
@@ -75,7 +82,7 @@ public class Friendship extends ParseObject {
         }
     }
 
-    private State stateIntToEnum(int i) {
+    public static State stateIntToEnum(int i) {
         switch(i) {
             case 1:
                 return State.Requested;

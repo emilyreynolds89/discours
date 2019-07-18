@@ -1,4 +1,4 @@
-package com.codepath.fbu_newsfeed.fragments;
+package com.codepath.fbu_newsfeed.Fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -118,3 +118,5 @@ public class TrendsFragment extends Fragment {
         queryArticles(false);
     }
 }
+
+

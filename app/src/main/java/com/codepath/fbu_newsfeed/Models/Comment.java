@@ -1,6 +1,7 @@
 package com.codepath.fbu_newsfeed.Models;
 
-import com.parse.Parse;
+import android.text.format.DateUtils;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -24,7 +25,9 @@ public class Comment extends ParseObject {
         this.text = text;
         put(KEY_TEXT, text);
         this.user = user;
+        put(KEY_USER, user);
         this.share = share;
+        put(KEY_SHARE, share);
     }
 
     public String getText() {
@@ -50,5 +53,9 @@ public class Comment extends ParseObject {
 
     public void setShare(Share share) {
         put(KEY_SHARE, share);
+    }
+
+    public String getRelativeTime() {
+        return (String) DateUtils.getRelativeTimeSpanString(getCreatedAt().getTime());
     }
 }

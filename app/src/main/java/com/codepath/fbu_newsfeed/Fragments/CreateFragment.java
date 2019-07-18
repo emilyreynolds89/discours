@@ -1,4 +1,4 @@
-package com.codepath.fbu_newsfeed.fragments;
+package com.codepath.fbu_newsfeed.Fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
@@ -28,7 +27,6 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CreateFragment extends Fragment {

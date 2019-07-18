@@ -1,4 +1,4 @@
-package com.codepath.fbu_newsfeed.fragments;
+package com.codepath.fbu_newsfeed.Fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
-import com.codepath.fbu_newsfeed.fragments.FeedFragment;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;

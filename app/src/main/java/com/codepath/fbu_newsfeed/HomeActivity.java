@@ -11,13 +11,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.codepath.fbu_newsfeed.fragments.ComposeFragment;
-import com.codepath.fbu_newsfeed.fragments.CreateFragment;
-import com.codepath.fbu_newsfeed.fragments.TrendsFragment;
+import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
+import com.codepath.fbu_newsfeed.Fragments.CreateFragment;
+import com.codepath.fbu_newsfeed.Fragments.TrendsFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
-import com.codepath.fbu_newsfeed.fragments.FeedFragment;
-import com.codepath.fbu_newsfeed.fragments.ProfileFragment;
+import com.codepath.fbu_newsfeed.Fragments.FeedFragment;
+import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +54,7 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     // TODO: notifications fragment
                     case R.id.action_profile:
-                        fragment = new ProfileFragment();
+                        fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser().getObjectId());
                         break;
                     default:
                         break;
@@ -70,15 +71,19 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             Article article = (Article) intent.getSerializableExtra("article");
+            String user_id = intent.getStringExtra("user_id");
 
             if (article != null) {
-
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("article", article);
                 ComposeFragment composeFragment = new ComposeFragment();
                 composeFragment.setArguments(bundle);
 
                 fragmentManager.beginTransaction().replace(R.id.flContainer, composeFragment).commit();
+            } else if (user_id != null) {
+                Fragment newProfileFragment = ProfileFragment.newInstance(user_id);
+
+                fragmentManager.beginTransaction().replace(R.id.flContainer, newProfileFragment).commit();
             }
         }
 
