@@ -5,27 +5,27 @@
     <item
         android:id="@+id/action_home"
         android:checkable="false"
-        android:icon="@drawable/instagram_home_outline_24"
+        android:icon="@drawable/action_home"
         android:title="Home"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_trending"
-        android:icon="@drawable/search_outline"
+        android:icon="@drawable/action_trending"
         android:title="Trending"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_compose"
-        android:icon="@drawable/instagram_new_post_outline_24"
+        android:icon="@drawable/action_compose"
         android:title="Compose"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_notification"
-        android:icon="@drawable/ufi_heart"
+        android:icon="@drawable/action_notification"
         android:title="Notifications"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_profile"
-        android:icon="@drawable/instagram_user_outline_24"
+        android:icon="@drawable/action_profile"
         android:title="Profile"
         app:showAsAction="always" />
 
