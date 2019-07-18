@@ -11,12 +11,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -25,19 +28,24 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.User;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class DetailActivity extends AppCompatActivity {
     public static final String TAG = "DetailActivity";
@@ -69,13 +77,35 @@ public class DetailActivity extends AppCompatActivity {
     ParseUser user;
 
     ArrayList<Comment> comments;
-    //CommentAdapter commentAdapter;
+    CommentAdapter commentAdapter;
+
+    protected SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
+
+        comments = new ArrayList<>();
+        commentAdapter = new CommentAdapter(getBaseContext(), comments);
+
+        rvComments.setAdapter(commentAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
+        rvComments.setLayoutManager(linearLayoutManager);
+
+        swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchTimelineAsync();
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         queryShare();
 
@@ -113,10 +143,8 @@ public class DetailActivity extends AppCompatActivity {
         // TODO: set bias image
         // TODO: connect listener to information button
 
-        tvCaption.setText(share.getCaption());
+        tvCaption.setText("@" + share.getUser().getUsername() + ": " + share.getCaption());
 
-        // set up comments recycler view
-        //comments = new ArrayList<>();
 
         // TODO: comment composition functionality
 
@@ -129,7 +157,36 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String message = etComment.getText().toString();
+                if (message == null) {
+                    Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
+                } else {
+                    Comment addedComment = new Comment(message, (User) ParseUser.getCurrentUser(), share);
+                    addedComment.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.d("DetailActivity", "Success in saving comment");
+                                fetchTimelineAsync();
+                                etComment.setText("");
+                                etComment.clearFocus();
+                                etComment.setEnabled(false);
+                                return;
+                            } else {
+                                Log.e("DetailActivity", "Error in creating comment");
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
         setSupportActionBar(toolbar);
+        queryComments(true);
     }
 
     @Override
@@ -154,4 +211,32 @@ public class DetailActivity extends AppCompatActivity {
             Log.d(TAG, "Error: " + e.getMessage());
         }
     }
+
+    private void queryComments(final boolean refresh) {
+        ParseQuery<Comment> commentQuery = ParseQuery.getQuery(Comment.class);
+        commentQuery.include(Comment.KEY_SHARE);
+        commentQuery.include(Comment.KEY_TEXT);
+        commentQuery.include(Comment.KEY_USER);
+        commentQuery.whereEqualTo(Comment.KEY_SHARE, share);
+
+        commentQuery.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> newComments, ParseException e) {
+                if (e != null) {
+                    Log.e("DetailActivity", "Error in comment query");
+                    e.printStackTrace();
+                    return;
+                }
+                comments.addAll(newComments);
+                commentAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void fetchTimelineAsync() {
+        commentAdapter.clear();
+        queryComments(true);
+        swipeContainer.setRefreshing(false);
+    }
+
 }

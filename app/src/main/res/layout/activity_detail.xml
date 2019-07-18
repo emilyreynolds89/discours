@@ -11,286 +11,334 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ImageView
-        android:id="@+id/ivProfileImage"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="20dp"
-        android:adjustViewBounds="false"
-        app:layout_constraintStart_toStartOf="@+id/viewArticle"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:srcCompat="@android:color/black" />
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/commentConstraintLayout"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="username"
-        android:textColor="#3B3B3B"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
 
-    <TextView
-        android:id="@+id/tvTimeStamp"
-        android:layout_width="60dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="4dp"
-        android:gravity="right|center_vertical"
-        android:text="h"
-        android:textColor="#626262"
-        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/tvUsername"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            <ImageView
+                android:id="@+id/ivProfileImage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="false"
+                app:layout_constraintStart_toStartOf="@+id/viewArticle"
+                app:layout_constraintTop_toTopOf="@id/constraintContainer"
+                app:srcCompat="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="14dp"
+                android:text="username"
+                android:textColor="#3B3B3B"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
+                app:layout_constraintTop_toTopOf="@id/constraintContainer" />
+
+            <TextView
+                android:id="@+id/tvTimeStamp"
+                android:layout_width="60dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginRight="4dp"
+                android:gravity="right|center_vertical"
+                android:text="h"
+                android:textColor="#626262"
+                app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvUsername"
+                app:layout_constraintTop_toTopOf="@id/constraintContainer" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/viewArticle"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/border"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvUsername">
+
+                <ImageView
+                    android:id="@+id/ivArticleImage"
+                    android:layout_width="350dp"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+                    app:layout_constraintStart_toStartOf="@+id/viewArticle"
+                    app:layout_constraintTop_toTopOf="@+id/viewArticle"
+                    app:srcCompat="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/tvArticleTitle"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="serif"
+                    android:text="Title"
+                    android:textColor="@color/colorHeadlineText"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+                    app:layout_constraintStart_toStartOf="@+id/viewArticle"
+                    app:layout_constraintTop_toBottomOf="@+id/ivArticleImage" />
+
+                <TextView
+                    android:id="@+id/tvArticleSummary"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="serif"
+                    android:text="Article summary"
+                    android:textColor="@color/colorLightText"
+                    android:textSize="12dp"
+                    app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+                    app:layout_constraintStart_toStartOf="@+id/viewArticle"
+                    app:layout_constraintTop_toBottomOf="@+id/tvArticleTitle" />
+
+                <TextView
+                    android:id="@+id/tvSource"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="serif"
+                    android:text="Source"
+                    android:textColor="@color/colorLightText"
+                    android:textSize="8sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/viewArticle"
+                    app:layout_constraintEnd_toEndOf="@+id/tvArticleSummary"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/tvArticleSummary"
+                    app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageButton
+                android:id="@+id/ibReactionLike"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="8dp"
+                android:background="#00FFFFFF"
+                android:scaleType="fitXY"
+                app:layout_constraintStart_toStartOf="@+id/viewArticle"
+                app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+                app:srcCompat="@drawable/ufi_heart" />
+
+            <ImageButton
+                android:id="@+id/ibReactionDislike"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginTop="8dp"
+                android:background="#00FFFFFF"
+                android:scaleType="fitXY"
+                app:layout_constraintStart_toEndOf="@+id/ibReactionLike"
+                app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+                app:srcCompat="@drawable/ufi_heart" />
+
+            <ImageButton
+                android:id="@+id/ibReactionHappy"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginTop="8dp"
+                android:background="#00FFFFFF"
+                android:scaleType="fitXY"
+                app:layout_constraintStart_toEndOf="@+id/ibReactionDislike"
+                app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+                app:srcCompat="@drawable/ufi_heart" />
+
+            <ImageButton
+                android:id="@+id/ibReactionSad"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginTop="8dp"
+                android:background="#00FFFFFF"
+                android:scaleType="fitXY"
+                app:layout_constraintStart_toEndOf="@+id/ibReactionHappy"
+                app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+                app:srcCompat="@drawable/ufi_heart" />
+
+            <ImageButton
+                android:id="@+id/ibReactionAngry"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginTop="8dp"
+                android:background="#00FFFFFF"
+                android:scaleType="fitXY"
+                app:layout_constraintStart_toEndOf="@+id/ibReactionSad"
+                app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+                app:srcCompat="@drawable/ufi_heart" />
+
+            <TextView
+                android:id="@+id/tvFactRating"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginLeft="36dp"
+                android:layout_marginTop="10dp"
+                android:gravity="right|center_vertical"
+                android:text="TextView"
+                android:textAllCaps="true"
+                android:textColor="@color/colorHeadlineText"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/ibReactionAngry"
+                app:layout_constraintTop_toBottomOf="@+id/viewArticle" />
+
+            <ImageView
+                android:id="@+id/ivBias"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toEndOf="@+id/tvFactRating"
+                app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+                app:srcCompat="@color/colorSlightlyLiberal" />
+
+            <ImageButton
+                android:id="@+id/ibInfomation"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:background="#00FFFFFF"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/ivBias"
+                app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+                app:srcCompat="@drawable/questionmark_icon" />
+
+            <TextView
+                android:id="@+id/tvCaption"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="TextView"
+                android:textAllCaps="false"
+                android:textColor="@color/colorBaseText"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+                app:layout_constraintStart_toStartOf="@+id/viewArticle"
+                app:layout_constraintTop_toBottomOf="@+id/ibReactionLike" />
+
+            <View
+                android:id="@+id/lineView"
+                android:layout_width="60dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@color/colorModerate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvCaption" />
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeContainer"
+                android:layout_width="357dp"
+                android:layout_height="114dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lineView">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvComments"
+                    android:layout_width="357dp"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineView" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/viewArticle"
-        android:layout_width="370dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/border"
+        android:id="@+id/commentConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsername">
+        app:layout_constraintTop_toBottomOf="@+id/scrollView">
 
-        <ImageView
-            android:id="@+id/ivArticleImage"
-            android:layout_width="350dp"
-            android:layout_height="250dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-            app:layout_constraintStart_toStartOf="@+id/viewArticle"
-            app:layout_constraintTop_toTopOf="@+id/viewArticle"
-            app:srcCompat="@android:color/black" />
+        <EditText
+            android:id="@+id/etComment"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="16dp"
+            android:ems="10"
+            android:hint="Write a new comment"
+            android:inputType="textPersonName"
+            android:textColor="@color/colorBaseText"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/commentConstraintLayout" />
 
-        <TextView
-            android:id="@+id/tvArticleTitle"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="10dp"
-            android:fontFamily="serif"
-            android:text="Title"
-            android:textColor="@color/colorHeadlineText"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-            app:layout_constraintStart_toStartOf="@+id/viewArticle"
-            app:layout_constraintTop_toBottomOf="@+id/ivArticleImage" />
-
-        <TextView
-            android:id="@+id/tvArticleSummary"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:fontFamily="serif"
-            android:text="Article summary"
-            android:textColor="@color/colorLightText"
-            android:textSize="12dp"
-            app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-            app:layout_constraintStart_toStartOf="@+id/viewArticle"
-            app:layout_constraintTop_toBottomOf="@+id/tvArticleTitle" />
-
-        <TextView
-            android:id="@+id/tvSource"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="serif"
-            android:text="Source"
-            android:textColor="@color/colorLightText"
-            android:textSize="8sp"
-            app:layout_constraintBottom_toBottomOf="@+id/viewArticle"
-            app:layout_constraintEnd_toEndOf="@+id/tvArticleSummary"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/tvArticleSummary"
-            app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rounded_accent_button"
+            android:fontFamily="sans-serif-medium"
+            android:text="Submit"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/etComment"
+            app:layout_constraintTop_toTopOf="@+id/etComment"
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageButton
-        android:id="@+id/ibReactionLike"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginTop="8dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitXY"
-        app:layout_constraintStart_toStartOf="@+id/viewArticle"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-        app:srcCompat="@drawable/ufi_heart" />
-
-    <ImageButton
-        android:id="@+id/ibReactionDislike"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="8dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitXY"
-        app:layout_constraintStart_toEndOf="@+id/ibReactionLike"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-        app:srcCompat="@drawable/ufi_heart" />
-
-    <ImageButton
-        android:id="@+id/ibReactionHappy"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="8dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitXY"
-        app:layout_constraintStart_toEndOf="@+id/ibReactionDislike"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-        app:srcCompat="@drawable/ufi_heart" />
-
-    <ImageButton
-        android:id="@+id/ibReactionSad"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="8dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitXY"
-        app:layout_constraintStart_toEndOf="@+id/ibReactionHappy"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-        app:srcCompat="@drawable/ufi_heart" />
-
-    <ImageButton
-        android:id="@+id/ibReactionAngry"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="8dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitXY"
-        app:layout_constraintStart_toEndOf="@+id/ibReactionSad"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-        app:srcCompat="@drawable/ufi_heart" />
-
-    <TextView
-        android:id="@+id/tvFactRating"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginTop="10dp"
-        android:gravity="right|center_vertical"
-        android:text="TextView"
-        android:textAllCaps="true"
-        android:textColor="@color/colorHeadlineText"
-        android:textSize="12dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ibReactionAngry"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle" />
-
-    <ImageView
-        android:id="@+id/ivBias"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/tvFactRating"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-        app:srcCompat="@color/colorSlightlyLiberal" />
-
-    <ImageButton
-        android:id="@+id/ibInfomation"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="8dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/ivBias"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-        app:srcCompat="@drawable/questionmark_icon" />
-
-    <TextView
-        android:id="@+id/tvCaption"
-        android:layout_width="360dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        android:textAllCaps="false"
-        android:textColor="@color/colorBaseText"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-        app:layout_constraintStart_toStartOf="@+id/viewArticle"
-        app:layout_constraintTop_toBottomOf="@+id/ibReactionLike" />
-
-    <View
-        android:id="@+id/lineView"
-        android:layout_width="60dp"
-        android:layout_height="2dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@color/colorModerate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCaption" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvComments"
-        android:layout_width="357dp"
-        android:layout_height="114dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineView" />
-
-    <EditText
-        android:id="@+id/etComment"
-        android:layout_width="230dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:hint="Write a new comment"
-        android:inputType="textPersonName"
-        android:textColor="@color/colorBaseText"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/viewArticle" />
-
-    <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/rounded_accent_button"
-        android:fontFamily="sans-serif-medium"
-        android:text="Submit"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/etComment"
-        app:layout_constraintTop_toTopOf="@+id/etComment" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
