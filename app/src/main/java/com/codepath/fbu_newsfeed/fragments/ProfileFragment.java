@@ -34,40 +34,61 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 import static com.codepath.fbu_newsfeed.DetailActivity.TAG;
 import static com.parse.ParseObject.KEY_CREATED_AT;
 
 public class ProfileFragment extends Fragment {
+    public static final String TAG = "ProfileFragment";
+
     ParseUser user;
-    private ImageView ivProfileImage;
-    private TextView tvUsername;
-    private TextView tvFullName;
-    private TextView tvBio;
-    private TextView tvArticleCount;
-    private Button btnLogout;
-    private RecyclerView rvProfilePosts;
+
+    private @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    private @BindView(R.id.tvUsername) TextView tvUsername;
+    private @BindView(R.id.tvFullName) TextView tvFullName;
+    private @BindView(R.id.tvBio) TextView tvBio;
+    private @BindView(R.id.tvArticleCount) TextView tvArticleCount;
+    private @BindView(R.id.btnLogout) Button btnLogout;
+    private @BindView(R.id.btnRequest) Button btnRequest;
+    private @BindView(R.id.rvProfilePosts) RecyclerView rvProfilePosts;
+
     private ArrayList<Share> mShare;
     ShareAdapter shareAdapter;
-    protected SwipeRefreshLayout swipeContainer;
+    protected @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     protected EndlessRecyclerViewScrollListener scrollListener;
+
+    private Unbinder unbinder;
+
+    public static ProfileFragment newInstance(String user_id) {
+        ProfileFragment fragment = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putString("user_id", user_id);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        user = ParseUser.getCurrentUser();
-        rvProfilePosts = view.findViewById(R.id.rvProfilePosts);
-        btnLogout = view.findViewById(R.id.btnLogout);
-        tvArticleCount = view.findViewById(R.id.tvArticleCount);
-        tvBio = view.findViewById(R.id.tvBio);
-        tvFullName = view.findViewById(R.id.tvFullName);
-        tvUsername = view.findViewById(R.id.tvUsername);
-        ivProfileImage = view.findViewById(R.id.ivProfileImage);
+        String user_id = getArguments().getString("user_id");
+        try {
+            user = getUser(user_id);
+            Log.d(TAG, "we're getting this user: " + user_id);
+        } catch (Exception e) {
+            Log.e(TAG, "Error getting user, showing current user", e);
+            user = ParseUser.getCurrentUser();
+        }
 
-        // TODO: set textviews
         tvUsername.setText(user.getString(User.KEY_USERNAME));
         tvFullName.setText(user.getString(User.KEY_FULLNAME));
         tvBio.setText(user.getString(User.KEY_BIO));
@@ -80,13 +101,11 @@ public class ProfileFragment extends Fragment {
 
         mShare = new ArrayList<>();
 
-        // TODO: connect ShareAdapter to recyclerview
         shareAdapter = new ShareAdapter(mShare);
         rvProfilePosts.setAdapter(shareAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvProfilePosts.setLayoutManager(linearLayoutManager);
 
-        swipeContainer = view.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -105,17 +124,42 @@ public class ProfileFragment extends Fragment {
             }
         };
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logOut();
-            }
-        });
+        if (user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+            btnLogout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    logOut();
+                }
+            });
+        } else {
+            btnLogout.setVisibility(View.GONE);
+            btnRequest.setVisibility(View.VISIBLE);
+            btnRequest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    requestFriend(user);
+                }
+            });
+        }
+
         queryShares(true);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    private void requestFriend(ParseUser potentialFriend) {
+        // TODO: request friend functionality
+    }
+
     private void logOut() {
-        ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            ParseUser.logOut();
+        }
         Intent intent = new Intent(getActivity().getApplication(), LoginActivity.class);
         startActivity(intent);
     }
@@ -144,7 +188,13 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    public String getArticleCount(ParseUser user) {
+    private ParseUser getUser(String user_id) throws ParseException {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("objectId", user_id);
+        return query.getFirst();
+    }
+
+    private String getArticleCount(ParseUser user) {
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.whereEqualTo("user", user);
         try {
