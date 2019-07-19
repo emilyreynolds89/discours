@@ -67,9 +67,11 @@ public class SearchActivity extends AppCompatActivity {
     private void fetchUsers(String query) {
         ParseQuery<ParseUser> usernameQuery = ParseUser.getQuery();
         usernameQuery.whereStartsWith(User.KEY_USERNAME, query);
+        usernameQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
 
         ParseQuery<ParseUser> fullNameQuery = ParseUser.getQuery();
         fullNameQuery.whereStartsWith(User.KEY_FULLNAME, query);
+        fullNameQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
 
         List<ParseQuery<ParseUser>> queries = new ArrayList<>();
         queries.add(usernameQuery);
@@ -79,7 +81,6 @@ public class SearchActivity extends AppCompatActivity {
         try {
             List<ParseUser> result = mainQuery.find();
             userAdapter.addAll(result);
-            // TODO: add to adapter and display results
         } catch(Exception e) {
             Log.d(TAG, "Error searching users " + e.getMessage());
         }

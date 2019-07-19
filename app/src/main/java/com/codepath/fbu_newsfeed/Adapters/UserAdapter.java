@@ -1,6 +1,7 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+import com.codepath.fbu_newsfeed.DetailActivity;
+import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
@@ -43,12 +50,32 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull UserAdapter.ViewHolder holder, int position) {
         final ParseUser user = users.get(position);
         holder.tvFullName.setText(user.getString(User.KEY_FULLNAME));
-        holder.tvUsername.setText(user.getUsername());
+        holder.tvUsername.setText("@" + user.getUsername());
 
-        // TODO: load profile image
+        if (user.getParseFile("profileImage") != null) {
+            Glide.with(context).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.ivProfileImage);
+        }
 
-        // TODO: set click listeners
+        holder.tvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUser(user);
+            }
+        });
 
+        holder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUser(user);
+            }
+        });
+
+    }
+
+    private void goToUser(ParseUser user) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        intent.putExtra("user_id", user.getObjectId());
+        context.startActivity(intent);
     }
 
     @Override

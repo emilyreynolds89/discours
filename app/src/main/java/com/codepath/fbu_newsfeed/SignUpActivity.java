@@ -74,7 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
                     finish();
                 } else {
                     Log.e("SignUp", "Error in new user sign up");
-                    Toast.makeText(SignUpActivity.this, "Error in sign up", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUpActivity.this, "Error in sign up: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
