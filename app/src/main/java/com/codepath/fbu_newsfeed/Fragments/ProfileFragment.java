@@ -104,7 +104,7 @@ public class ProfileFragment extends Fragment {
         ArrayList<Share> mShare = new ArrayList<>();
 
         this.shareAdapter = new ShareAdapter(mShare);
-        rvProfilePosts.setAdapter(shareAdapter);
+        rvProfilePosts.setAdapter(this.shareAdapter);
         this.shareAdapter.clear();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvProfilePosts.setLayoutManager(linearLayoutManager);
