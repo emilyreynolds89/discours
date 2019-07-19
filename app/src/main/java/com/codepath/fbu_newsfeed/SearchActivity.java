@@ -3,14 +3,19 @@ package com.codepath.fbu_newsfeed;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.SearchView;
 
+import com.codepath.fbu_newsfeed.Adapters.TabAdapter;
 import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
+import com.codepath.fbu_newsfeed.Fragments.ArticleSearchFragment;
+import com.codepath.fbu_newsfeed.Fragments.UserSearchFragment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.User;
+import com.google.android.material.tabs.TabLayout;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -23,11 +28,9 @@ import butterknife.ButterKnife;
 public class SearchActivity extends AppCompatActivity {
     private static final String TAG = "SearchActivity";
 
-    @BindView(R.id.searchView) SearchView searchView;
-    @BindView(R.id.rvResults) RecyclerView rvResults;
-
-    ArrayList<ParseUser> userResults;
-    UserAdapter userAdapter;
+    private TabAdapter tabAdapter;
+    @BindView(R.id.tabLayout) TabLayout tabLayout;
+    @BindView(R.id.viewPager) ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,54 +38,14 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
 
-        userResults = new ArrayList<>();
-        userAdapter = new UserAdapter(new ArrayList<ParseUser>());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rvResults.setLayoutManager(linearLayoutManager);
-        rvResults.setAdapter(userAdapter);
+        tabAdapter = new TabAdapter(getSupportFragmentManager());
+        tabAdapter.addFragment(new UserSearchFragment(), "Users");
+        tabAdapter.addFragment(new ArticleSearchFragment(), "Articles");
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                userAdapter.clear();
+        viewPager.setAdapter(tabAdapter);
+        tabLayout.setupWithViewPager(viewPager);
 
-
-                fetchUsers(s);
-
-                searchView.clearFocus();
-                searchView.setQuery("", false);
-                searchView.setIconified(true);
-
-                return true;
-
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
     }
 
-    private void fetchUsers(String query) {
-        ParseQuery<ParseUser> usernameQuery = ParseUser.getQuery();
-        usernameQuery.whereStartsWith(User.KEY_USERNAME, query);
-        usernameQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
 
-        ParseQuery<ParseUser> fullNameQuery = ParseUser.getQuery();
-        fullNameQuery.whereStartsWith(User.KEY_FULLNAME, query);
-        fullNameQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-
-        List<ParseQuery<ParseUser>> queries = new ArrayList<>();
-        queries.add(usernameQuery);
-        queries.add(fullNameQuery);
-        ParseQuery<ParseUser> mainQuery = ParseQuery.or(queries);
-
-        try {
-            List<ParseUser> result = mainQuery.find();
-            userAdapter.addAll(result);
-        } catch(Exception e) {
-            Log.d(TAG, "Error searching users " + e.getMessage());
-        }
-    }
 }
