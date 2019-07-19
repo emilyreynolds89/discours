@@ -18,6 +18,7 @@ public class Article extends ParseObject implements Serializable {
     public static final String KEY_BIAS = "bias";
     public static final String KEY_TRUTH = "truth";
     public static final String KEY_SOURCE = "source";
+    public static final String KEY_TAG = "tag";
     public static final int LIMIT = 20;
     public static final String KEY_CREATED_AT = "createdAt";
     public static final int liberalColor = Color.parseColor("#3385FF");
@@ -40,7 +41,7 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public Article(String url, String title, ParseFile image,
-                   String summary, Bias bias, String truth, String source) {
+                   String summary, Bias bias, String truth, String source, Tag tag) {
         super();
         this.url = url;
         put(KEY_URL, url);
@@ -54,7 +55,8 @@ public class Article extends ParseObject implements Serializable {
         put(KEY_BIAS, biasEnumToInt(bias));
         this.truth = truth;
         put(KEY_TRUTH, truth);
-        //this.tag = tag;
+        this.tag = tag;
+        put(KEY_TAG, tag);
         this.source = source;
         put(KEY_SOURCE, source);
     }
@@ -133,14 +135,14 @@ public class Article extends ParseObject implements Serializable {
         put(KEY_SOURCE, source);
     }
 
-//
-//    public Tag getTag() {
-//        return tag;
-//    }
-//
-//    public void setTag(Tag tag) {
-//        this.tag = tag;
-//    }
+
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        put(KEY_TAG, tag);
+    }
 
     private Bias biasIntToEnum(int i) {
         Bias res;

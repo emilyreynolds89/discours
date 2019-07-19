@@ -147,6 +147,19 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         tvFactRating.setText(article.getTruth());
         // TODO: set bias image
+        int biasValue = article.getIntBias();
+        switch (biasValue) {
+            case 1:  ivBias.setColorFilter(Article.liberalColor);
+                break;
+            case 2:  ivBias.setColorFilter(Article.slightlyLiberalColor);
+                break;
+            case 3:  ivBias.setColorFilter(Article.moderateColor);
+                break;
+            case 4:  ivBias.setColorFilter(Article.slightlyConservativeColor);
+                break;
+            case 5:  ivBias.setColorFilter(Article.conservativeColor);
+                break;
+        }
         // TODO: connect listener to information button
 
         tvCaption.setText("@" + share.getUser().getUsername() + ": " + share.getCaption());
