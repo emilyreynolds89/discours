@@ -1,5 +1,7 @@
 package com.codepath.fbu_newsfeed.Models;
 
+import android.graphics.Color;
+
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -18,6 +20,11 @@ public class Article extends ParseObject implements Serializable {
     public static final String KEY_SOURCE = "source";
     public static final int LIMIT = 20;
     public static final String KEY_CREATED_AT = "createdAt";
+    public static final int liberalColor = Color.parseColor("#3385FF");
+    public static final int slightlyLiberalColor = Color.parseColor("#ABCDFF");
+    public static final int moderateColor = Color.parseColor("#E0E0E0");
+    public static final int slightlyConservativeColor = Color.parseColor("#FFA7A7");
+    public static final int conservativeColor = Color.parseColor("#FF6C6C");
 
     private String url;
     private String title;
@@ -100,6 +107,8 @@ public class Article extends ParseObject implements Serializable {
     public Bias getBias() {
         return biasIntToEnum((int) getNumber(KEY_BIAS));
     }
+
+    public int getIntBias() { return (int) getNumber(KEY_BIAS); }
 
     public void setBias(Bias bias) {
         this.bias = bias;
