@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -56,14 +57,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             Glide.with(context).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.ivProfileImage);
         }
 
-        holder.tvUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToUser(user);
-            }
-        });
-
-        holder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+        holder.layoutUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToUser(user);
@@ -75,6 +69,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private void goToUser(ParseUser user) {
         Intent intent = new Intent(context, HomeActivity.class);
         intent.putExtra("user_id", user.getObjectId());
+
         context.startActivity(intent);
     }
 
@@ -98,6 +93,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.tvFullName) TextView tvFullName;
+        @BindView(R.id.layoutUser) ConstraintLayout layoutUser;
 
         public ViewHolder(View view) {
             super(view);
