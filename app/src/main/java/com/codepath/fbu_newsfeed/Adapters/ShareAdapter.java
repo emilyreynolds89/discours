@@ -107,6 +107,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         }
         holder.tvArticleTitle.setText(article.getTitle());
         holder.tvArticleSummary.setText(article.getSummary());
+        holder.tvSource.setText(article.getSource());
+        holder.tvTag.setText(article.getTag());
+
 
         holder.ibReactionLike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -316,6 +319,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.ibInformationTrends) ImageButton ibInformation;
         @BindView(R.id.tvCaption) TextView tvCaption;
         @BindView(R.id.btnDiscussion) Button btnDiscussion;
+        @BindView(R.id.tvSource) TextView tvSource;
+        @BindView(R.id.tvTag) TextView tvTag;
+
 
         public ViewHolder(View view) {
             super(view);

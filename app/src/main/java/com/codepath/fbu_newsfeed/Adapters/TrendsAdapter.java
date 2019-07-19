@@ -58,6 +58,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
         TextView tvSummary;
         TextView tvSource;
         TextView tvFactRatingTrends;
+        TextView tvTagTrends;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -69,6 +70,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             tvSummary = itemView.findViewById(R.id.tvArticleSummaryTrends);
             tvSource = itemView.findViewById(R.id.tvSourceTrends);
             tvFactRatingTrends = itemView.findViewById(R.id.tvFactRatingTrends);
+            tvTagTrends = itemView.findViewById(R.id.tvTagTrends);
 
             itemView.setOnClickListener(this);
 
@@ -92,6 +94,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             tvSummary.setText(article.getSummary());
             tvSource.setText(article.getSource());
             tvFactRatingTrends.setText(article.getTruth());
+            tvTagTrends.setText(article.getTag());
 
             int biasValue = article.getIntBias();
             switch (biasValue) {

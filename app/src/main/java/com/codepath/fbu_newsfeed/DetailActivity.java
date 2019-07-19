@@ -76,7 +76,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.rvComments) RecyclerView rvComments;
     @BindView(R.id.etComment) EditText etComment;
     @BindView(R.id.btnSubmit) Button btnSubmit;
-
+    @BindView(R.id.tvTag) TextView tvTag;
+    @BindView(R.id.tvSource) TextView tvSource;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     Share share;
@@ -163,7 +164,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
         tvArticleTitle.setText(article.getTitle());
         tvArticleSummary.setText(article.getSummary());
-
+        tvTag.setText(article.getTag());
+        tvSource.setText(article.getSource());
         tvFactRating.setText(article.getTruth());
 
         int biasValue = article.getIntBias();

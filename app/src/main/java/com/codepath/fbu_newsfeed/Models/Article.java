@@ -33,7 +33,7 @@ public class Article extends ParseObject implements Serializable {
     private String summary;
     private Bias bias;
     private String truth;
-    private Tag tag;
+    private String tag;
     private String source;
 
     public Article() {
@@ -41,7 +41,7 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public Article(String url, String title, ParseFile image,
-                   String summary, Bias bias, String truth, String source, Tag tag) {
+                   String summary, Bias bias, String truth, String source, String tag) {
         super();
         this.url = url;
         put(KEY_URL, url);
@@ -136,11 +136,11 @@ public class Article extends ParseObject implements Serializable {
     }
 
 
-    public Tag getTag() {
-        return tag;
+    public String getTag() {
+        return getString(KEY_TAG);
     }
 
-    public void setTag(Tag tag) {
+    public void setTag(String tag) {
         put(KEY_TAG, tag);
     }
 
