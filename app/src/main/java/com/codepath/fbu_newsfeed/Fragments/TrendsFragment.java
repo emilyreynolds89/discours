@@ -67,16 +67,16 @@ public class TrendsFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadNextData();
+                loadNextData(page);
             }
         };
 
         rvTrends.addOnScrollListener(scrollListener);
-        queryArticles(true);
+        queryArticles(true, 0);
 
     }
 
-    protected void queryArticles(final boolean refresh) {
+    protected void queryArticles(final boolean refresh, int offset) {
         final ParseQuery<Article> articleQuery = new ParseQuery<Article>(Article.class);
         articleQuery.include(Article.KEY_IMAGE);
         articleQuery.include(Article.KEY_SOURCE);
@@ -85,6 +85,8 @@ public class TrendsFragment extends Fragment {
         articleQuery.include(Article.KEY_BIAS);
         articleQuery.include(Article.KEY_TRUTH);
         articleQuery.include(Article.KEY_URL);
+        articleQuery.setLimit(Article.LIMIT);
+        articleQuery.setSkip(offset * Article.LIMIT);
         if(refresh) articleQuery.setLimit(20);
 
         articleQuery.findInBackground(new FindCallback<Article>() {
@@ -110,11 +112,11 @@ public class TrendsFragment extends Fragment {
 
     public void fetchTimelineAsync() {
         adapter.clear();
-        queryArticles(true);
+        queryArticles(true, 0);
         swipeContainer.setRefreshing(false);
     }
 
-    public void loadNextData() {
-        queryArticles(false);
+    public void loadNextData(int page) {
+        queryArticles(false, page);
     }
 }

@@ -126,10 +126,15 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
         @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
         @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
+        @BindView(R.id.tvLike) TextView tvLike;
         @BindView(R.id.ibReactionDislike) ImageButton ibReactionDislike;
+        @BindView(R.id.tvDislike) TextView tvDislike;
         @BindView(R.id.ibReactionHappy) ImageButton ibReactionHappy;
+        @BindView(R.id.tvHappy) TextView tvHappy;
         @BindView(R.id.ibReactionSad) ImageButton ibReactionSad;
+        @BindView(R.id.tvSad) TextView tvSad;
         @BindView(R.id.ibReactionAngry) ImageButton ibReactionAngry;
+        @BindView(R.id.tvAngry) TextView tvAngry;
         @BindView(R.id.tvFactRating) TextView tvFactRating;
         @BindView(R.id.ivBias) ImageView ivBias;
         @BindView(R.id.ibInfomation) ImageButton ibInformation;
@@ -142,4 +147,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         }
 
     }
+
+
 }

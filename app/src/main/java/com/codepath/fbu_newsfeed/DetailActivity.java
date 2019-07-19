@@ -47,7 +47,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String TAG = "DetailActivity";
 
     @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
@@ -58,10 +58,15 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
     @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
     @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
+    @BindView(R.id.tvLike) TextView tvLike;
     @BindView(R.id.ibReactionDislike) ImageButton ibReactionDislike;
+    @BindView(R.id.tvDislike) TextView tvDislike;
     @BindView(R.id.ibReactionHappy) ImageButton ibReactionHappy;
+    @BindView(R.id.tvHappy) TextView tvHappy;
     @BindView(R.id.ibReactionSad) ImageButton ibReactionSad;
+    @BindView(R.id.tvSad) TextView tvSad;
     @BindView(R.id.ibReactionAngry) ImageButton ibReactionAngry;
+    @BindView(R.id.tvAngry) TextView tvAngry;
     @BindView(R.id.tvFactRating) TextView tvFactRating;
     @BindView(R.id.ivBias) ImageView ivBias;
     @BindView(R.id.ibInfomation) ImageButton ibInformation;
@@ -137,8 +142,6 @@ public class DetailActivity extends AppCompatActivity {
         tvArticleTitle.setText(article.getTitle());
         tvArticleSummary.setText(article.getSummary());
 
-        // TODO: connect listeners to reactions
-
         tvFactRating.setText(article.getTruth());
         // TODO: set bias image
         // TODO: connect listener to information button
@@ -148,18 +151,33 @@ public class DetailActivity extends AppCompatActivity {
 
         // TODO: comment composition functionality
 
-        viewArticle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
-                intent.putExtra("article", (Serializable) article);
-                startActivity(intent);
-            }
-        });
+        ibReactionLike.setOnClickListener(this);
+        ibReactionDislike.setOnClickListener(this);
+        ibReactionHappy.setOnClickListener(this);
+        ibReactionSad.setOnClickListener(this);
+        ibReactionAngry.setOnClickListener(this);
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        viewArticle.setOnClickListener(this);
+        btnSubmit.setOnClickListener(this);
+
+        setSupportActionBar(toolbar);
+        queryComments(true);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ibReactionLike:
+                break;
+            case R.id.ibReactionDislike:
+                break;
+            case R.id.ibReactionHappy:
+                break;
+            case R.id.ibReactionSad:
+                break;
+            case R.id.ibReactionAngry:
+                break;
+            case R.id.btnSubmit:
                 String message = etComment.getText().toString();
                 if (message == null) {
                     Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
@@ -182,11 +200,14 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     });
                 }
-            }
-        });
+                break;
+            case R.id.viewArticle:
+                Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
+                intent.putExtra("article", (Serializable) article);
+                startActivity(intent);
+                break;
+        }
 
-        setSupportActionBar(toolbar);
-        queryComments(true);
     }
 
     @Override
