@@ -102,6 +102,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
 
+        queryShare();
+
         comments = new ArrayList<>();
         commentAdapter = new CommentAdapter(getBaseContext(), comments);
 
@@ -127,14 +129,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
-        queryShare();
-
-        queryReactions("LIKE");
-        queryReactions("DISLIKE");
-        queryReactions("HAPPY");
-        queryReactions("SAD");
-        queryReactions("ANGRY");
 
 
         tvUsername.setText(user.getUsername());
@@ -200,6 +194,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
+        queryReactions("LIKE");
+        queryReactions("DISLIKE");
+        queryReactions("HAPPY");
+        queryReactions("SAD");
+        queryReactions("ANGRY");
 
         ibReactionLike.setOnClickListener(this);
         ibReactionDislike.setOnClickListener(this);
