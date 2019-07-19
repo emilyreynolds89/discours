@@ -10,6 +10,7 @@ import android.widget.SearchView;
 
 import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Models.Friendship;
+import com.codepath.fbu_newsfeed.Models.User;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -35,7 +36,7 @@ public class SearchActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         userResults = new ArrayList<>();
-        userAdapter = new UserAdapter();
+        userAdapter = new UserAdapter(new ArrayList<ParseUser>());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvResults.setLayoutManager(linearLayoutManager);
         rvResults.setAdapter(userAdapter);
@@ -43,6 +44,9 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                userAdapter.clear();
+
+
                 fetchUsers(s);
 
                 searchView.clearFocus();
@@ -62,10 +66,10 @@ public class SearchActivity extends AppCompatActivity {
 
     private void fetchUsers(String query) {
         ParseQuery<ParseUser> usernameQuery = ParseUser.getQuery();
-        usernameQuery.whereFullText("username", query);
+        usernameQuery.whereStartsWith(User.KEY_USERNAME, query);
 
         ParseQuery<ParseUser> fullNameQuery = ParseUser.getQuery();
-        fullNameQuery.whereFullText("fullName", query);
+        fullNameQuery.whereStartsWith(User.KEY_FULLNAME, query);
 
         List<ParseQuery<ParseUser>> queries = new ArrayList<>();
         queries.add(usernameQuery);

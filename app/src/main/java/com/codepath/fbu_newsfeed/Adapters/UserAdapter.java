@@ -26,6 +26,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public static ArrayList<ParseUser> users;
     public static Context context;
 
+    public UserAdapter(ArrayList<ParseUser> users) { this.users = users; }
+
     @NonNull
     @Override
     public UserAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
