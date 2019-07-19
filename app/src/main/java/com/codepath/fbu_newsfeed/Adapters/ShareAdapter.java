@@ -78,6 +78,19 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         holder.tvFactRating.setText(article.getTruth());
         // TODO: set bias image
+        int biasValue = article.getIntBias();
+        switch (biasValue) {
+            case 1:  holder.ivBias.setColorFilter(Article.liberalColor);
+                break;
+            case 2:  holder.ivBias.setColorFilter(Article.slightlyLiberalColor);
+                break;
+            case 3:  holder.ivBias.setColorFilter(Article.moderateColor);
+                break;
+            case 4:  holder.ivBias.setColorFilter(Article.slightlyConservativeColor);
+                break;
+            case 5:  holder.ivBias.setColorFilter(Article.conservativeColor);
+                break;
+        }
         // TODO: connect listener to information button
 
         String captionUsername = "@" + user.getUsername() + ": ";
@@ -160,7 +173,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.tvAngry) TextView tvAngry;
         @BindView(R.id.tvFactRating) TextView tvFactRating;
         @BindView(R.id.ivBiasCreate) ImageView ivBias;
-        @BindView(R.id.ibInfomation) ImageButton ibInformation;
+        @BindView(R.id.ibInformationTrends) ImageButton ibInformation;
         @BindView(R.id.tvCaption) TextView tvCaption;
         @BindView(R.id.btnDiscussion) Button btnDiscussion;
 
