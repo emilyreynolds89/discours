@@ -119,7 +119,7 @@ public class ProfileFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadNextData();
+                queryShares(true, page);
             }
         };
 
@@ -157,7 +157,7 @@ public class ProfileFragment extends Fragment {
                 }
         }
 
-        queryShares(true);
+        queryShares(true, 0);
     }
 
     @Override
@@ -210,16 +210,17 @@ public class ProfileFragment extends Fragment {
 
     public void fetchTimelineAsync() {
         shareAdapter.clear();
-        queryShares(true);
+        queryShares(true, 0);
         swipeContainer.setRefreshing(false);
     }
-    private void queryShares(final boolean refresh) {
+    private void queryShares(final boolean refresh, int offset) {
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.include("user");
         query.include("article");
+        query.setLimit(Share.LIMIT);
+        query.setSkip(offset * Share.LIMIT);
         query.orderByDescending("createdAt");
         query.whereEqualTo("user", user);
-        if(refresh) query.setLimit(20);
         query.findInBackground(new FindCallback<Share>() {
             @Override
             public void done(List<Share> shareList, ParseException e) {
@@ -304,9 +305,6 @@ public class ProfileFragment extends Fragment {
             return "error";
         }
 
-    }
-    public void loadNextData() {
-        queryShares(false);
     }
 
 }
