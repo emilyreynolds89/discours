@@ -51,9 +51,9 @@ public class ComposeFragment extends Fragment {
 
         etUrl = view.findViewById(R.id.etURL);
         ivArticlePreview  = view.findViewById(R.id.ivArticlePreviewCreate);
-        tvArticleTitle = view.findViewById(R.id.tvArticleTitleCreate);
+        tvArticleTitle = view.findViewById(R.id.tvArticleTitle);
         tvFactCheck = view.findViewById(R.id.tvFactCheckCreate);
-        ivBias = view.findViewById(R.id.ivBiasCreate);
+        ivBias = view.findViewById(R.id.ivBias);
         ibReport = view.findViewById(R.id.ibReportCreate);
         etCaption = view.findViewById(R.id.etCaptionCreate);
         btnShare = view.findViewById(R.id.btShareArticleCreate);

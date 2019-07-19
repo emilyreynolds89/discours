@@ -165,7 +165,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvArticleSummary.setText(article.getSummary());
 
         tvFactRating.setText(article.getTruth());
-        // TODO: set bias image
+
         // TODO: connect listener to information button
 
         tvCaption.setText("@" + share.getUser().getUsername() + ": " + share.getCaption());
