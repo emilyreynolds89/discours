@@ -26,11 +26,6 @@ public class Share extends ParseObject implements Serializable {
     private ParseUser user;
     private Article article;
     private String caption;
-    private int likeCount;
-    private int dislikeCount;
-    private int happyCount;
-    private int sadCount;
-    private int angryCount;
 
     public Share() {
         super();
@@ -90,22 +85,27 @@ public class Share extends ParseObject implements Serializable {
     public int incrementCount(String type) {
         switch (type) {
             case "LIKE":
+                int likeCount = getCount("LIKE");
                 likeCount += 1;
                 put(KEY_LIKE_COUNT, likeCount);
                 return likeCount;
             case "DISLIKE":
+                int dislikeCount = getCount("DISLIKE");
                 dislikeCount += 1;
                 put(KEY_DISLIKE_COUNT, dislikeCount);
                 return dislikeCount;
             case "HAPPY":
+                int happyCount = getCount("HAPPY");
                 happyCount += 1;
                 put(KEY_HAPPY_COUNT, happyCount);
                 return happyCount;
             case "SAD":
+                int sadCount = getCount("SAD");
                 sadCount += 1;
                 put(KEY_SAD_COUNT, sadCount);
                 return sadCount;
             case "ANGRY":
+                int angryCount = getCount("ANGRY");
                 angryCount += 1;
                 put(KEY_ANGRY_COUNT, angryCount);
                 return angryCount;
@@ -117,22 +117,27 @@ public class Share extends ParseObject implements Serializable {
     public int decrementCount(String type) {
         switch (type) {
             case "LIKE":
+                int likeCount = getCount("LIKE");
                 likeCount -= 1;
                 put(KEY_LIKE_COUNT, likeCount);
                 return likeCount;
             case "DISLIKE":
+                int dislikeCount = getCount("DISLIKE");
                 dislikeCount -= 1;
                 put(KEY_DISLIKE_COUNT, dislikeCount);
                 return dislikeCount;
             case "HAPPY":
+                int happyCount = getCount("HAPPY");
                 happyCount -= 1;
                 put(KEY_HAPPY_COUNT, happyCount);
                 return happyCount;
             case "SAD":
+                int sadCount = getCount("SAD");
                 sadCount -= 1;
                 put(KEY_SAD_COUNT, sadCount);
                 return sadCount;
             case "ANGRY":
+                int angryCount = getCount("ANGRY");
                 angryCount -= 1;
                 put(KEY_ANGRY_COUNT, angryCount);
                 return angryCount;
