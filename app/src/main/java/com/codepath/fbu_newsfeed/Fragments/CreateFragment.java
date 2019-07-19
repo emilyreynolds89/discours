@@ -60,9 +60,9 @@ public class CreateFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         spArticleListCreate = view.findViewById(R.id.spArticleListCreate);
         ivArticlePreviewCreate  = view.findViewById(R.id.ivArticlePreviewCreate);
-        tvArticleTitleCreate = view.findViewById(R.id.tvArticleTitleCreate);
+        tvArticleTitleCreate = view.findViewById(R.id.tvArticleTitle);
         tvFactCheckCreate = view.findViewById(R.id.tvFactCheckCreate);
-        ivBiasCreate = view.findViewById(R.id.ivBiasCreate);
+        ivBiasCreate = view.findViewById(R.id.ivBias);
         ibReportCreate = view.findViewById(R.id.ibReportCreate);
         etCaptionCreate = view.findViewById(R.id.etCaptionCreate);
         btnShareCreate = view.findViewById(R.id.btShareArticleCreate);
