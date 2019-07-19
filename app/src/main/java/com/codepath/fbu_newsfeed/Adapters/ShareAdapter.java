@@ -173,7 +173,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.tvAngry) TextView tvAngry;
         @BindView(R.id.tvFactRating) TextView tvFactRating;
         @BindView(R.id.ivBiasCreate) ImageView ivBias;
-        @BindView(R.id.ibInfomation) ImageButton ibInformation;
+        @BindView(R.id.ibInformationTrends) ImageButton ibInformation;
         @BindView(R.id.tvCaption) TextView tvCaption;
         @BindView(R.id.btnDiscussion) Button btnDiscussion;
 

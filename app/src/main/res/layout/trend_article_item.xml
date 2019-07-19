@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp">
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="45dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewArticle"
@@ -72,6 +72,48 @@
             app:layout_constraintTop_toBottomOf="@+id/tvArticleSummaryTrends" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tvFactRatingTrends"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="35dp"
+        android:gravity="right|center_vertical"
+        android:text="TextView"
+        android:textColor="@color/colorHeadlineText"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/ivBiasTrends"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewArticle" />
+
+    <ImageView
+        android:id="@+id/ivBiasTrends"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toStartOf="@+id/ibInformationTrends"
+        app:layout_constraintStart_toEndOf="@+id/tvFactRatingTrends"
+        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+        app:srcCompat="@color/colorSlightlyLiberal" />
+
+    <ImageButton
+        android:id="@+id/ibInformationTrends"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="60dp"
+        android:background="#00FFFFFF"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivBiasTrends"
+        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+        app:srcCompat="@drawable/questionmark_icon" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -71,7 +71,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.tvAngry) TextView tvAngry;
     @BindView(R.id.tvFactRating) TextView tvFactRating;
     @BindView(R.id.ivBias) ImageView ivBias;
-    @BindView(R.id.ibInfomation) ImageButton ibInformation;
+    @BindView(R.id.ibInformationTrends) ImageButton ibInformation;
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.rvComments) RecyclerView rvComments;
     @BindView(R.id.etComment) EditText etComment;
