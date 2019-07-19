@@ -78,6 +78,21 @@
             app:layout_constraintTop_toBottomOf="@+id/tvArticleSummaryDetail"
             app:layout_constraintVertical_bias="0.0" />
 
+        <TextView
+            android:id="@+id/tvTagDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="serif"
+            android:text="Tag"
+            android:textColor="@color/colorBaseText"
+            android:textSize="8sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvArticleSummaryDetail"
+            app:layout_constraintTop_toBottomOf="@+id/tvArticleSummaryDetail" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
