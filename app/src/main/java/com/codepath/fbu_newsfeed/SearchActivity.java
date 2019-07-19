@@ -1,12 +1,14 @@
 package com.codepath.fbu_newsfeed;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.SearchView;
 
+import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -23,11 +25,20 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.searchView) SearchView searchView;
     @BindView(R.id.rvResults) RecyclerView rvResults;
 
+    ArrayList<ParseUser> userResults;
+    UserAdapter userAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+
+        userResults = new ArrayList<>();
+        userAdapter = new UserAdapter();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvResults.setLayoutManager(linearLayoutManager);
+        rvResults.setAdapter(userAdapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -56,13 +67,14 @@ public class SearchActivity extends AppCompatActivity {
         ParseQuery<ParseUser> fullNameQuery = ParseUser.getQuery();
         fullNameQuery.whereFullText("fullName", query);
 
-        List<ParseQuery<ParseUser>> queries = new ArrayList<ParseQuery<>>();
+        List<ParseQuery<ParseUser>> queries = new ArrayList<>();
         queries.add(usernameQuery);
         queries.add(fullNameQuery);
         ParseQuery<ParseUser> mainQuery = ParseQuery.or(queries);
 
         try {
             List<ParseUser> result = mainQuery.find();
+            userAdapter.addAll(result);
             // TODO: add to adapter and display results
         } catch(Exception e) {
             Log.d(TAG, "Error searching users " + e.getMessage());
