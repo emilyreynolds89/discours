@@ -88,7 +88,7 @@ public class UserSearchFragment extends Fragment {
 
     private void fetchUsers(String query) {
         ParseQuery<ParseUser> usernameQuery = ParseUser.getQuery();
-        usernameQuery.whereStartsWith(User.KEY_USERNAME, query);
+        usernameQuery.whereStartsWith(User.KEY_USERNAME, query); // these String fields are not indexed
         usernameQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
 
         ParseQuery<ParseUser> fullNameQuery = ParseUser.getQuery();
