@@ -43,7 +43,7 @@ import butterknife.ButterKnife;
 
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     private static final String TAG = "ShareAdapter";
-    public static ArrayList<Share> shares;
+    public ArrayList<Share> shares;
     public static Context context;
 
 //    ArrayList<Reaction> reactionsLike;
@@ -124,8 +124,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     int count = createReaction("LIKE", share);
                     holder.tvLike.setText(Integer.toString(count));
                 }
-
-
 
 //                queryReactions("LIKE", share);
 //                int userPositionLike = userReacted(reactionsLike, currentUser);
