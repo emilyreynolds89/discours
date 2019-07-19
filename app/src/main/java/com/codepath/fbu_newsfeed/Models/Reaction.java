@@ -1,16 +1,8 @@
 package com.codepath.fbu_newsfeed.Models;
 
-import android.util.Log;
-
-import com.parse.FindCallback;
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @ParseClassName("Reaction")
 public class Reaction extends ParseObject {
@@ -33,8 +25,11 @@ public class Reaction extends ParseObject {
         super();
 
         this.user = user;
+        put(KEY_USER, user);
         this.share = share;
+        put(KEY_SHARE, share);
         this.type = type;
+        put(KEY_TYPE, type);
     }
 
     public ParseUser getUser() {
@@ -62,32 +57,6 @@ public class Reaction extends ParseObject {
     public void setType(String type) {
         this.type = type;
         put(KEY_TYPE, type);
-    }
-
-    public static ArrayList<Reaction> queryReactions(Share share, String type) {
-        ParseQuery<Reaction> queryReaction = new ParseQuery<Reaction>(Reaction.class);
-        queryReaction.include(KEY_USER);
-        queryReaction.include(KEY_SHARE);
-        queryReaction.include(KEY_TYPE);
-        queryReaction.whereEqualTo(KEY_SHARE, share);
-        queryReaction.whereEqualTo(KEY_TYPE, type);
-
-        final ArrayList<Reaction> reactions = new ArrayList<>();
-
-        queryReaction.findInBackground(new FindCallback<Reaction>() {
-            @Override
-            public void done(List<Reaction> newReactions, ParseException e) {
-                if (e == null) {
-                    Log.e("Reaction", "Error in loading reaction count");
-                    e.printStackTrace();
-                    return;
-                } else {
-                    reactions.addAll(newReactions);
-                }
-            }
-        });
-
-        return reactions;
     }
 
 }
