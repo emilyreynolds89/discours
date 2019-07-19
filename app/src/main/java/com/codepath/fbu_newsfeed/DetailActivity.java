@@ -87,6 +87,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     ArrayList<Comment> comments;
     CommentAdapter commentAdapter;
 
+    ArrayList<Reaction> reactionsLike;
+    ArrayList<Reaction> reactionsDislike;
+    ArrayList<Reaction> reactionsHappy;
+    ArrayList<Reaction> reactionsSad;
+    ArrayList<Reaction> reactionsAngry;
+
     protected SwipeRefreshLayout swipeContainer;
 
     @Override
@@ -97,6 +103,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         comments = new ArrayList<>();
         commentAdapter = new CommentAdapter(getBaseContext(), comments);
+
+        reactionsLike = new ArrayList<>();
+        reactionsDislike = new ArrayList<>();
+        reactionsHappy = new ArrayList<>();
+        reactionsSad = new ArrayList<>();
+        reactionsAngry = new ArrayList<>();
 
         rvComments.setAdapter(commentAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
@@ -116,6 +128,13 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 android.R.color.holo_red_light);
 
         queryShare();
+
+        queryReactions("LIKE");
+        queryReactions("DISLIKE");
+        queryReactions("HAPPY");
+        queryReactions("SAD");
+        queryReactions("ANGRY");
+
 
         tvUsername.setText(user.getUsername());
 
@@ -216,24 +235,87 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         setSupportActionBar(toolbar);
         queryComments(true);
+
+        tvLike.setText(Integer.toString(reactionsLike.size()));
+        tvDislike.setText(Integer.toString(reactionsDislike.size()));
+        tvHappy.setText(Integer.toString(reactionsHappy.size()));
+        tvSad.setText(Integer.toString(reactionsSad.size()));
+        tvAngry.setText(Integer.toString(reactionsAngry.size()));
+
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ibReactionLike:
-                ArrayList<Reaction> reactions = Reaction.queryReactions(share, "LIKE");
-                // check if user if in reactions list
-                // if is, remove and decrement
-                // if not, add reaction and increment count
+                queryReactions("LIKE");
+                int userPositionLike = userReacted(reactionsLike, currentUser);
+                if (userPositionLike != -1) {
+                    Reaction userReaction = reactionsLike.get(userPositionLike);
+                    reactionsLike.remove(userPositionLike);
+                    userReaction.deleteInBackground();
+                } else {
+                    Reaction newUserReaction = new Reaction(currentUser, share, "LIKE");
+                    reactionsLike.add(newUserReaction);
+                    newUserReaction.saveInBackground();
+                }
+                tvLike.setText(Integer.toString(reactionsLike.size()));
                 break;
             case R.id.ibReactionDislike:
+                queryReactions("DISLIKE");
+                int userPositionDislike = userReacted(reactionsDislike, currentUser);
+                if (userPositionDislike != -1) {
+                    Reaction userReaction = reactionsDislike.get(userPositionDislike);
+                    reactionsDislike.remove(userPositionDislike);
+                    userReaction.deleteInBackground();
+                } else {
+                    Reaction newUserReaction = new Reaction(currentUser, share, "DISLIKE");
+                    reactionsDislike.add(newUserReaction);
+                    newUserReaction.saveInBackground();
+                }
+                tvDislike.setText(Integer.toString(reactionsDislike.size()));
                 break;
             case R.id.ibReactionHappy:
+                queryReactions("HAPPY");
+                int userPositionHappy = userReacted(reactionsHappy, currentUser);
+                if (userPositionHappy != -1) {
+                    Reaction userReaction = reactionsHappy.get(userPositionHappy);
+                    reactionsHappy.remove(userPositionHappy);
+                    userReaction.deleteInBackground();
+                } else {
+                    Reaction newUserReaction = new Reaction(currentUser, share, "HAPPY");
+                    reactionsHappy.add(newUserReaction);
+                    newUserReaction.saveInBackground();
+                }
+                tvHappy.setText(Integer.toString(reactionsHappy.size()));
                 break;
             case R.id.ibReactionSad:
+                queryReactions("SAD");
+                int userPositionSad = userReacted(reactionsSad, currentUser);
+                if (userPositionSad != -1) {
+                    Reaction userReaction = reactionsSad.get(userPositionSad);
+                    reactionsSad.remove(userPositionSad);
+                    userReaction.deleteInBackground();
+                } else {
+                    Reaction newUserReaction = new Reaction(currentUser, share, "SAD");
+                    reactionsSad.add(newUserReaction);
+                    newUserReaction.saveInBackground();
+                }
+                tvSad.setText(Integer.toString(reactionsSad.size()));
                 break;
             case R.id.ibReactionAngry:
+                queryReactions("ANGRY");
+                int userPositionAngry = userReacted(reactionsAngry, currentUser);
+                if (userPositionAngry != -1) {
+                    Reaction userReaction = reactionsAngry.get(userPositionAngry);
+                    reactionsAngry.remove(userPositionAngry);
+                    userReaction.deleteInBackground();
+                } else {
+                    Reaction newUserReaction = new Reaction(currentUser, share, "ANGRY");
+                    reactionsAngry.add(newUserReaction);
+                    newUserReaction.saveInBackground();
+                }
+                tvAngry.setText(Integer.toString(reactionsAngry.size()));
                 break;
             case R.id.viewArticle:
                 Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
@@ -320,10 +402,64 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
+    private void queryReactions(final String type) {
+        ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
+        reactionQuery.include(Reaction.KEY_TYPE);
+        reactionQuery.include(Reaction.KEY_SHARE);
+        reactionQuery.include(Reaction.KEY_USER);
+        reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
+        reactionQuery.whereEqualTo(Reaction.KEY_TYPE, type);
+
+        reactionQuery.findInBackground(new FindCallback<Reaction>() {
+            @Override
+            public void done(List<Reaction> newReactions, ParseException e) {
+                if (e != null) {
+                    Log.e("DetailActivity", "Error in reactions query");
+                    e.printStackTrace();
+                    return;
+                }
+                switch (type) {
+                    case "LIKE":
+                        reactionsLike.clear();
+                        reactionsLike.addAll(newReactions);
+                        break;
+                    case "DISLIKE":
+                        reactionsDislike.clear();
+                        reactionsDislike.addAll(newReactions);
+                        break;
+                    case "HAPPY":
+                        reactionsHappy.clear();
+                        reactionsHappy.addAll(newReactions);
+                        break;
+                    case "SAD":
+                        reactionsSad.clear();
+                        reactionsSad.addAll(newReactions);
+                        break;
+                    case "ANGRY":
+                        reactionsAngry.clear();
+                        reactionsAngry.addAll(newReactions);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        });
+    }
+
     public void fetchTimelineAsync() {
         commentAdapter.clear();
         queryComments(true);
         swipeContainer.setRefreshing(false);
+    }
+
+    public int userReacted(ArrayList<Reaction> reactions, User user) {
+        for (Reaction r : reactions) {
+            if (r.getUser().getObjectId().equals(user.getObjectId())) {
+                return reactions.indexOf(r);
+            }
+        }
+        return -1;
     }
 
 }
