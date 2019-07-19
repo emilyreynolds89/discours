@@ -14,11 +14,21 @@ public class Share extends ParseObject {
     public static final String KEY_ARTICLE = "article";
     public static final String KEY_CAPTION = "caption";
     public static final String KEY_IMAGE = "image";
+    public static final String KEY_LIKE_COUNT = "likeCount";
+    public static final String KEY_DISLIKE_COUNT = "dislikeCount";
+    public static final String KEY_HAPPY_COUNT = "happyCount";
+    public static final String KEY_SAD_COUNT = "sadCount";
+    public static final String KEY_ANGRY_COUNT = "angryCount";
     public static final int LIMIT = 20;
 
     private ParseUser user;
     private Article article;
     private String caption;
+    private int likeCount;
+    private int dislikeCount;
+    private int happyCount;
+    private int sadCount;
+    private int angryCount;
 
     public Share() {
         super();
@@ -35,6 +45,12 @@ public class Share extends ParseObject {
 
         this.caption = caption;
         put(KEY_CAPTION, caption);
+
+        put(KEY_LIKE_COUNT, 0);
+        put(KEY_DISLIKE_COUNT, 0);
+        put(KEY_HAPPY_COUNT, 0);
+        put(KEY_SAD_COUNT, 0);
+        put(KEY_ANGRY_COUNT, 0);
     }
 
     public ParseUser getUser() {
@@ -67,6 +83,77 @@ public class Share extends ParseObject {
     public void setCaption(String caption) {
         this.caption = caption;
         put(KEY_CAPTION, caption);
+    }
+
+    public int incrementCount(String type) {
+        switch (type) {
+            case "LIKE":
+                likeCount += 1;
+                put(KEY_LIKE_COUNT, likeCount);
+                return likeCount;
+            case "DISLIKE":
+                dislikeCount += 1;
+                put(KEY_DISLIKE_COUNT, dislikeCount);
+                return dislikeCount;
+            case "HAPPY":
+                happyCount += 1;
+                put(KEY_HAPPY_COUNT, happyCount);
+                return happyCount;
+            case "SAD":
+                sadCount += 1;
+                put(KEY_SAD_COUNT, sadCount);
+                return sadCount;
+            case "ANGRY":
+                angryCount += 1;
+                put(KEY_ANGRY_COUNT, angryCount);
+                return angryCount;
+            default:
+                return 0;
+        }
+    }
+
+    public int decrementCount(String type) {
+        switch (type) {
+            case "LIKE":
+                likeCount -= 1;
+                put(KEY_LIKE_COUNT, likeCount);
+                return likeCount;
+            case "DISLIKE":
+                dislikeCount -= 1;
+                put(KEY_DISLIKE_COUNT, dislikeCount);
+                return dislikeCount;
+            case "HAPPY":
+                happyCount -= 1;
+                put(KEY_HAPPY_COUNT, happyCount);
+                return happyCount;
+            case "SAD":
+                sadCount -= 1;
+                put(KEY_SAD_COUNT, sadCount);
+                return sadCount;
+            case "ANGRY":
+                angryCount -= 1;
+                put(KEY_ANGRY_COUNT, angryCount);
+                return angryCount;
+            default:
+                return 0;
+        }
+    }
+
+    public int getCount(String type) {
+        switch (type) {
+            case "LIKE":
+                return (int) getNumber(KEY_LIKE_COUNT);
+            case "DISLIKE":
+                return (int) getNumber(KEY_DISLIKE_COUNT);
+            case "HAPPY":
+                return (int) getNumber(KEY_HAPPY_COUNT);
+            case "SAD":
+                return (int) getNumber(KEY_SAD_COUNT);
+            case "ANGRY":
+                return (int) getNumber(KEY_ANGRY_COUNT);
+            default:
+                return 0;
+        }
     }
 
     public String getRelativeTime() {

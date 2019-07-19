@@ -47,11 +47,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     public Share share;
 
-    ArrayList<Reaction> reactionsLike = new ArrayList<>();
-    ArrayList<Reaction> reactionsDislike = new ArrayList<>();
-    ArrayList<Reaction> reactionsHappy = new ArrayList<>();
-    ArrayList<Reaction> reactionsSad = new ArrayList<>();
-    ArrayList<Reaction> reactionsAngry = new ArrayList<>();
+    ArrayList<Reaction> reactionsLike;
+    ArrayList<Reaction> reactionsDislike;
+    ArrayList<Reaction> reactionsHappy;
+    ArrayList<Reaction> reactionsSad;
+    ArrayList<Reaction> reactionsAngry;
 
     public ShareAdapter(ArrayList<Share> shares) {
         this.shares = shares;
@@ -76,17 +76,23 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         final User currentUser = (User) user;
 
-        /*reactionsLike = new ArrayList<>();
+        reactionsLike = new ArrayList<>();
         reactionsDislike = new ArrayList<>();
         reactionsHappy = new ArrayList<>();
         reactionsSad = new ArrayList<>();
-        reactionsAngry = new ArrayList<>();*/
+        reactionsAngry = new ArrayList<>();
 
         queryReactions("LIKE");
         queryReactions("DISLIKE");
         queryReactions("HAPPY");
         queryReactions("SAD");
         queryReactions("ANGRY");
+
+        holder.tvLike.setText(Integer.toString(share.getCount("LIKE")));
+        holder.tvDislike.setText(Integer.toString(share.getCount("DISLIKE")));
+        holder.tvHappy.setText(Integer.toString(share.getCount("HAPPY")));
+        holder.tvSad.setText(Integer.toString(share.getCount("SAD")));
+        holder.tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
 
         holder.tvUsername.setText(user.getUsername());
 
@@ -110,13 +116,15 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 if (userPositionLike != -1) {
                     Reaction userReaction = reactionsLike.get(userPositionLike);
                     reactionsLike.remove(userPositionLike);
+                    share.decrementCount("LIKE");
                     userReaction.deleteInBackground();
                 } else {
                     Reaction newUserReaction = new Reaction(currentUser, share, "LIKE");
                     reactionsLike.add(newUserReaction);
+                    share.incrementCount("LIKE");
                     newUserReaction.saveInBackground();
                 }
-                holder.tvLike.setText(Integer.toString(reactionsLike.size()));
+                holder.tvLike.setText(Integer.toString(share.getCount("LIKE")));
             }
         });
 
@@ -128,13 +136,15 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 if (userPositionDislike != -1) {
                     Reaction userReaction = reactionsDislike.get(userPositionDislike);
                     reactionsDislike.remove(userPositionDislike);
+                    share.decrementCount("DISLIKE");
                     userReaction.deleteInBackground();
                 } else {
                     Reaction newUserReaction = new Reaction(currentUser, share, "DISLIKE");
                     reactionsDislike.add(newUserReaction);
+                    share.incrementCount("DISLIKE");
                     newUserReaction.saveInBackground();
                 }
-                holder.tvDislike.setText(Integer.toString(reactionsDislike.size()));
+                holder.tvDislike.setText(Integer.toString(share.getCount("DISLIKE")));
             }
         });
 
@@ -146,13 +156,15 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 if (userPositionHappy != -1) {
                     Reaction userReaction = reactionsHappy.get(userPositionHappy);
                     reactionsHappy.remove(userPositionHappy);
+                    share.decrementCount("HAPPY");
                     userReaction.deleteInBackground();
                 } else {
                     Reaction newUserReaction = new Reaction(currentUser, share, "HAPPY");
                     reactionsHappy.add(newUserReaction);
+                    share.incrementCount("HAPPY");
                     newUserReaction.saveInBackground();
                 }
-                holder.tvHappy.setText(Integer.toString(reactionsHappy.size()));
+                holder.tvHappy.setText(Integer.toString(share.getCount("HAPPY")));
             }
         });
 
@@ -164,13 +176,15 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 if (userPositionSad != -1) {
                     Reaction userReaction = reactionsSad.get(userPositionSad);
                     reactionsSad.remove(userPositionSad);
+                    share.decrementCount("SAD");
                     userReaction.deleteInBackground();
                 } else {
                     Reaction newUserReaction = new Reaction(currentUser, share, "SAD");
                     reactionsSad.add(newUserReaction);
+                    share.incrementCount("SAD");
                     newUserReaction.saveInBackground();
                 }
-                holder.tvSad.setText(Integer.toString(reactionsSad.size()));
+                holder.tvSad.setText(Integer.toString(share.getCount("SAD")));
             }
         });
 
@@ -182,13 +196,15 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 if (userPositionAngry != -1) {
                     Reaction userReaction = reactionsAngry.get(userPositionAngry);
                     reactionsAngry.remove(userPositionAngry);
+                    share.decrementCount("ANGRY");
                     userReaction.deleteInBackground();
                 } else {
                     Reaction newUserReaction = new Reaction(currentUser, share, "ANGRY");
                     reactionsAngry.add(newUserReaction);
+                    share.incrementCount("ANGRY");
                     newUserReaction.saveInBackground();
                 }
-                holder.tvAngry.setText(Integer.toString(reactionsAngry.size()));
+                holder.tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
             }
         });
 
