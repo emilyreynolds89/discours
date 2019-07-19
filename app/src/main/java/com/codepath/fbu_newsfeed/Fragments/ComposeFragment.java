@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
-import com.codepath.fbu_newsfeed.fragments.FeedFragment;
+
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -50,13 +50,13 @@ public class ComposeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         etUrl = view.findViewById(R.id.etURL);
-        ivArticlePreview  = view.findViewById(R.id.ivArticlePreview);
-        tvArticleTitle = view.findViewById(R.id.tvArticleTitle);
-        tvFactCheck = view.findViewById(R.id.tvFactCheck);
-        ivBias = view.findViewById(R.id.ivBias);
-        ibReport = view.findViewById(R.id.ibReport);
-        etCaption = view.findViewById(R.id.etCaption);
-        btnShare = view.findViewById(R.id.btShareArticle);
+        ivArticlePreview  = view.findViewById(R.id.ivArticlePreviewCreate);
+        tvArticleTitle = view.findViewById(R.id.tvArticleTitleCreate);
+        tvFactCheck = view.findViewById(R.id.tvFactCheckCreate);
+        ivBias = view.findViewById(R.id.ivBiasCreate);
+        ibReport = view.findViewById(R.id.ibReportCreate);
+        etCaption = view.findViewById(R.id.etCaptionCreate);
+        btnShare = view.findViewById(R.id.btShareArticleCreate);
 
         //Article article = (Article) getActivity().getIntent().getSerializableExtra("article");
         //article = (Article) getArguments().getSerializable("article");

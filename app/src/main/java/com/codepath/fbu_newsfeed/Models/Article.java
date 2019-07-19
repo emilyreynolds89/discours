@@ -17,6 +17,7 @@ public class Article extends ParseObject implements Serializable {
     public static final String KEY_TRUTH = "truth";
     public static final String KEY_SOURCE = "source";
     public static final int LIMIT = 20;
+    public static final String KEY_CREATED_AT = "createdAt";
 
     private String url;
     private String title;

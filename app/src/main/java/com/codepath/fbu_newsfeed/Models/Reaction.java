@@ -64,7 +64,7 @@ public class Reaction extends ParseObject {
         put(KEY_TYPE, type);
     }
 
-    public ArrayList<Reaction> queryReactions(Share share, String type) {
+    public static ArrayList<Reaction> queryReactions(Share share, String type) {
         ParseQuery<Reaction> queryReaction = new ParseQuery<Reaction>(Reaction.class);
         queryReaction.include(KEY_USER);
         queryReaction.include(KEY_SHARE);

@@ -19,9 +19,11 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.ArticleDetailActivity;
 import com.codepath.fbu_newsfeed.DetailActivity;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
+import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -81,6 +83,23 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         String captionUsername = "@" + user.getUsername() + ": ";
         holder.tvCaption.setText(captionUsername + share.getCaption());
 
+
+
+        holder.tvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUser(user);
+            }
+        });
+
+        holder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUser(user);
+            }
+        });
+
+
         holder.viewArticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,13 +136,17 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    private void goToUser(ParseUser user) {
+        ((HomeActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).commit();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
         @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
         @BindView(R.id.ivArticleImage) ImageView ivArticleImage;
-        @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
+        @BindView(R.id.tvArticleTitleCreate) TextView tvArticleTitle;
         @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
         @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
         @BindView(R.id.tvLike) TextView tvLike;
@@ -136,7 +159,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.ibReactionAngry) ImageButton ibReactionAngry;
         @BindView(R.id.tvAngry) TextView tvAngry;
         @BindView(R.id.tvFactRating) TextView tvFactRating;
-        @BindView(R.id.ivBias) ImageView ivBias;
+        @BindView(R.id.ivBiasCreate) ImageView ivBias;
         @BindView(R.id.ibInfomation) ImageButton ibInformation;
         @BindView(R.id.tvCaption) TextView tvCaption;
         @BindView(R.id.btnDiscussion) Button btnDiscussion;

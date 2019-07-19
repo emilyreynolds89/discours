@@ -63,6 +63,7 @@
                 app:layout_constraintStart_toEndOf="@+id/tvUsername"
                 app:layout_constraintTop_toTopOf="@id/constraintContainer" />
 
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/viewArticle"
                 android:layout_width="370dp"
@@ -178,6 +179,7 @@
                 app:layout_constraintStart_toEndOf="@+id/ibReactionHappy"
                 app:layout_constraintTop_toBottomOf="@+id/viewArticle"
                 app:srcCompat="@drawable/ufi_heart" />
+
 
             <ImageButton
                 android:id="@+id/ibReactionAngry"

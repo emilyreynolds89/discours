@@ -31,6 +31,8 @@ import com.bumptech.glide.request.target.Target;
 import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
+import com.codepath.fbu_newsfeed.Models.Friendship;
+import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.parse.FindCallback;
@@ -80,6 +82,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     Share share;
     Article article;
     ParseUser user;
+    User currentUser = (User) ParseUser.getCurrentUser();
 
     ArrayList<Comment> comments;
     CommentAdapter commentAdapter;
@@ -148,8 +151,20 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         tvCaption.setText("@" + share.getUser().getUsername() + ": " + share.getCaption());
 
+        tvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUser(user);
+            }
+        });
 
-        // TODO: comment composition functionality
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUser(user);
+            }
+        });
+
 
         ibReactionLike.setOnClickListener(this);
         ibReactionDislike.setOnClickListener(this);
@@ -158,7 +173,46 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         ibReactionAngry.setOnClickListener(this);
 
         viewArticle.setOnClickListener(this);
-        btnSubmit.setOnClickListener(this);
+        //btnSubmit.setOnClickListener(this);
+
+        if (isFriends() || user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+            etComment.setVisibility(View.VISIBLE);
+            btnSubmit.setVisibility(View.VISIBLE);
+            rvComments.setVisibility(View.VISIBLE);
+            btnSubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String message = etComment.getText().toString();
+                    if (message == null) {
+                        Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
+                    } else {
+                        Comment addedComment = new Comment(message, (User) ParseUser.getCurrentUser(), share);
+                        addedComment.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Log.d("DetailActivity", "Success in saving comment");
+                                    fetchTimelineAsync();
+                                    etComment.setText("");
+                                    etComment.clearFocus();
+                                    etComment.setEnabled(false);
+                                    return;
+                                } else {
+                                    Log.e("DetailActivity", "Error in creating comment");
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            etComment.setVisibility(View.INVISIBLE);
+            btnSubmit.setVisibility(View.INVISIBLE);
+            rvComments.setVisibility(View.GONE);
+            btnSubmit.setOnClickListener(null);
+
+        }
 
         setSupportActionBar(toolbar);
         queryComments(true);
@@ -168,6 +222,10 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ibReactionLike:
+                ArrayList<Reaction> reactions = Reaction.queryReactions(share, "LIKE");
+                // check if user if in reactions list
+                // if is, remove and decrement
+                // if not, add reaction and increment count
                 break;
             case R.id.ibReactionDislike:
                 break;
@@ -176,30 +234,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.ibReactionSad:
                 break;
             case R.id.ibReactionAngry:
-                break;
-            case R.id.btnSubmit:
-                String message = etComment.getText().toString();
-                if (message == null) {
-                    Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
-                } else {
-                    Comment addedComment = new Comment(message, (User) ParseUser.getCurrentUser(), share);
-                    addedComment.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                Log.d("DetailActivity", "Success in saving comment");
-                                fetchTimelineAsync();
-                                etComment.setText("");
-                                etComment.clearFocus();
-                                etComment.setEnabled(false);
-                                return;
-                            } else {
-                                Log.e("DetailActivity", "Error in creating comment");
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
                 break;
             case R.id.viewArticle:
                 Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
@@ -216,6 +250,38 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         return true;
+    }
+
+    private void goToUser(ParseUser user) {
+        Intent intent = new Intent(DetailActivity.this, HomeActivity.class);
+        intent.putExtra("user_id", user.getObjectId());
+        startActivity(intent);
+    }
+
+    private boolean isFriends() {
+        ParseQuery<Friendship> query1 = ParseQuery.getQuery("Friendship");
+        query1.whereEqualTo("user1", ParseUser.getCurrentUser());
+        query1.whereEqualTo("user2", user);
+        query1.whereEqualTo("state", Friendship.stateEnumToInt(Friendship.State.Accepted));
+
+        ParseQuery<Friendship> query2 = ParseQuery.getQuery("Friendship");
+        query2.whereEqualTo("user2", ParseUser.getCurrentUser());
+        query2.whereEqualTo("user1", user);
+        query2.whereEqualTo("state", Friendship.stateEnumToInt(Friendship.State.Accepted));
+
+        List<ParseQuery<Friendship>> queries = new ArrayList<ParseQuery<Friendship>>();
+        queries.add(query1);
+        queries.add(query2);
+        ParseQuery<Friendship> mainQuery = ParseQuery.or(queries);
+
+        try {
+            List<Friendship> result = mainQuery.find();
+            return result.size() > 0;
+        } catch(Exception e) {
+            Log.d("User", "Error: " + e.getMessage());
+            return false;
+        }
+
     }
 
     private void queryShare() {

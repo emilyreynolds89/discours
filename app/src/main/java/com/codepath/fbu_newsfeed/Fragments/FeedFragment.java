@@ -1,4 +1,4 @@
-package com.codepath.fbu_newsfeed.fragments;
+package com.codepath.fbu_newsfeed.Fragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,13 +13,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
 import com.codepath.fbu_newsfeed.EndlessRecyclerViewScrollListener;
+import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,9 +94,14 @@ public class FeedFragment extends Fragment {
     }
 
     private void queryShares(int offset) {
+
+        List<ParseUser> friends = getFriends();
+        friends.add(ParseUser.getCurrentUser());
+
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.include("user");
         query.include("article");
+        query.whereContainedIn("user", friends);
         query.setLimit(Share.LIMIT);
         query.setSkip(offset * Share.LIMIT);
         query.orderByDescending("createdAt");
@@ -110,5 +116,41 @@ public class FeedFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private List<ParseUser> getFriends() {
+
+        ParseQuery<Friendship> query1 = ParseQuery.getQuery("Friendship");
+        query1.whereEqualTo("user1", ParseUser.getCurrentUser());
+        query1.whereEqualTo("state", Friendship.stateEnumToInt(Friendship.State.Accepted));
+
+        ParseQuery<Friendship> query2 = ParseQuery.getQuery("Friendship");
+        query2.whereEqualTo("user2", ParseUser.getCurrentUser());
+        query2.whereEqualTo("state", Friendship.stateEnumToInt(Friendship.State.Accepted));
+
+        List<ParseQuery<Friendship>> queries = new ArrayList<ParseQuery<Friendship>>();
+        queries.add(query1);
+        queries.add(query2);
+        ParseQuery<Friendship> mainQuery = ParseQuery.or(queries);
+
+        try {
+            List<Friendship> result = mainQuery.find();
+            Log.d(TAG, "Found " + result.size() + " friendships");
+            List<ParseUser> friends = new ArrayList<>();
+            for (int i = 0; i < result.size(); i++) {
+                Friendship friendship = result.get(i);
+                if (friendship.isUser1(ParseUser.getCurrentUser())) {
+                    friends.add(friendship.getUser2());
+                } else {
+                    friends.add(friendship.getUser1());
+                }
+                Log.d(TAG, "Found " + friends.size() + " friends");
+                return friends;
+            }
+        } catch(Exception e) {
+            Log.d(TAG, "Error retrieving friends: " + e.getMessage());
+
+        }
+        return new ArrayList<>();
     }
 }
