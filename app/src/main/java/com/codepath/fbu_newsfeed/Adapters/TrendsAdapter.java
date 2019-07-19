@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,17 +51,26 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        ImageButton ibInformationTrends;
+        ImageView ivBiasTrends;
         ImageView ivArticleImage;
         TextView tvTitle;
         TextView tvSummary;
         TextView tvSource;
+        TextView tvFactRatingTrends;
+        TextView tvTagTrends;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            ibInformationTrends = itemView.findViewById(R.id.ibInformationTrends);
+            ivBiasTrends = itemView.findViewById(R.id.ivBiasTrends);
             ivArticleImage = itemView.findViewById(R.id.ivArtcleImageTrends);
             tvTitle = itemView.findViewById(R.id.tvArticleTitleTrends);
             tvSummary = itemView.findViewById(R.id.tvArticleSummaryTrends);
             tvSource = itemView.findViewById(R.id.tvSourceTrends);
+            tvFactRatingTrends = itemView.findViewById(R.id.tvFactRatingTrends);
+            tvTagTrends = itemView.findViewById(R.id.tvTagTrends);
 
             itemView.setOnClickListener(this);
 
@@ -83,6 +93,22 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             tvTitle.setText(article.getTitle());
             tvSummary.setText(article.getSummary());
             tvSource.setText(article.getSource());
+            tvFactRatingTrends.setText(article.getTruth());
+            tvTagTrends.setText(article.getTag());
+
+            int biasValue = article.getIntBias();
+            switch (biasValue) {
+                case 1:  ivBiasTrends.setColorFilter(Article.liberalColor);
+                    break;
+                case 2:  ivBiasTrends.setColorFilter(Article.slightlyLiberalColor);
+                    break;
+                case 3:  ivBiasTrends.setColorFilter(Article.moderateColor);
+                    break;
+                case 4:  ivBiasTrends.setColorFilter(Article.slightlyConservativeColor);
+                    break;
+                case 5:  ivBiasTrends.setColorFilter(Article.conservativeColor);
+                    break;
+            }
 
             ParseFile image = article.getImage();
             if (image != null ) {

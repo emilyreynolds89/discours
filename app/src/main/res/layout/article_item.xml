@@ -69,7 +69,7 @@
             app:srcCompat="@android:color/black" />
 
         <TextView
-            android:id="@+id/tvArticleTitleCreate"
+            android:id="@+id/tvArticleTitle"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -93,7 +93,7 @@
             android:textSize="12dp"
             app:layout_constraintEnd_toEndOf="@+id/viewArticle"
             app:layout_constraintStart_toStartOf="@+id/viewArticle"
-            app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleCreate" />
+            app:layout_constraintTop_toBottomOf="@+id/tvArticleTitle" />
 
         <TextView
             android:id="@+id/tvSource"
@@ -111,6 +111,21 @@
             app:layout_constraintStart_toStartOf="@+id/tvArticleSummary"
             app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary"
             app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="serif"
+            android:text="Tag"
+            android:textColor="@color/colorBaseText"
+            android:textSize="8sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvArticleSummary"
+            app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -254,7 +269,7 @@
         app:layout_constraintTop_toBottomOf="@+id/viewArticle" />
 
     <ImageView
-        android:id="@+id/ivBiasCreate"
+        android:id="@+id/ivBias"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="12dp"
@@ -265,7 +280,7 @@
         app:srcCompat="@color/colorSlightlyLiberal" />
 
     <ImageButton
-        android:id="@+id/ibInfomation"
+        android:id="@+id/ibInformationTrends"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="12dp"
@@ -275,7 +290,7 @@
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="@+id/viewArticle"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/ivBiasCreate"
+        app:layout_constraintStart_toEndOf="@+id/ivBias"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
         app:srcCompat="@drawable/questionmark_icon" />
 

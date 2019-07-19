@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/ivBiasCreate"
+        android:id="@+id/ivBias"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginTop="16dp"
@@ -28,7 +28,7 @@
         android:layout_marginBottom="16dp"
         android:scaleType="centerCrop"
         android:tint="#40636262"
-        app:layout_constraintBottom_toTopOf="@+id/tvArticleTitleCreate"
+        app:layout_constraintBottom_toTopOf="@+id/tvArticleTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spArticleListCreate"
         tools:srcCompat="@drawable/news_placeholder" />
@@ -64,7 +64,7 @@
         android:textColor="@color/colorHeadlineText"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/ivBiasCreate"
+        app:layout_constraintEnd_toStartOf="@+id/ivBias"
         app:layout_constraintHorizontal_bias="0.992"
         app:layout_constraintStart_toStartOf="@+id/ivArticlePreviewCreate"
         app:layout_constraintTop_toBottomOf="@+id/view" />
@@ -99,7 +99,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etCaptionCreate" />
 
     <TextView
-        android:id="@+id/tvArticleTitleCreate"
+        android:id="@+id/tvArticleTitle"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -130,7 +130,7 @@
         android:background="@color/colorModerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleCreate" />
+        app:layout_constraintTop_toBottomOf="@+id/tvArticleTitle" />
 
     <Spinner
         android:id="@+id/spArticleListCreate"

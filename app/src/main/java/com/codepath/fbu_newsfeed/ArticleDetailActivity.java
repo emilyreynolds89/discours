@@ -16,8 +16,9 @@ import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.parse.ParseFile;
 
-import butterknife.BindView;
 import java.io.Serializable;
+
+import butterknife.BindView;
 
 public class ArticleDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -27,6 +28,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
     TextView tvArticleTitleDetail;
     TextView tvArticleSummaryDetail;
     TextView tvArticleSourceDetail;
+    TextView tvTagDetail;
     Button btnLink;
     Button btnShare;
 
@@ -43,6 +45,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
         tvArticleTitleDetail = findViewById(R.id.tvArticleTitleDetail);
         tvArticleSummaryDetail = findViewById(R.id.tvArticleSummaryDetail);
         tvArticleSourceDetail = findViewById(R.id.tvSourceDetail);
+        tvTagDetail = findViewById(R.id.tvTagDetail);
         btnLink = findViewById(R.id.btnLink);
         btnShare = findViewById(R.id.btnShare);
 
@@ -51,6 +54,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
         tvArticleTitleDetail.setText(article.getTitle());
         tvArticleSummaryDetail.setText(article.getSummary());
         tvArticleSourceDetail.setText(article.getSource());
+        tvTagDetail.setText(article.getTag());
 
         url = article.getUrl();
 
