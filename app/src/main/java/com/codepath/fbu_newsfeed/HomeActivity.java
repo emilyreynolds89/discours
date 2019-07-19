@@ -2,6 +2,7 @@ package com.codepath.fbu_newsfeed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -38,6 +39,10 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
+        Intent intent = getIntent();
+
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -68,7 +73,6 @@ public class HomeActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        Intent intent = getIntent();
         if (intent != null) {
             Article article = (Article) intent.getSerializableExtra("article");
             String user_id = intent.getStringExtra("user_id");
@@ -80,7 +84,9 @@ public class HomeActivity extends AppCompatActivity {
                 composeFragment.setArguments(bundle);
 
                 fragmentManager.beginTransaction().replace(R.id.flContainer, composeFragment).commit();
-            } else if (user_id != null) {
+            }
+
+            if (user_id != null) {
                 Fragment newProfileFragment = ProfileFragment.newInstance(user_id);
 
                 fragmentManager.beginTransaction().replace(R.id.flContainer, newProfileFragment).commit();
@@ -95,5 +101,10 @@ public class HomeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

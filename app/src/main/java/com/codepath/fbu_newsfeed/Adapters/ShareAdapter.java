@@ -45,8 +45,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     public static ArrayList<Share> shares;
     public static Context context;
 
-    public Share share;
-
     ArrayList<Reaction> reactionsLike;
     ArrayList<Reaction> reactionsDislike;
     ArrayList<Reaction> reactionsHappy;
@@ -70,11 +68,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull final ShareAdapter.ViewHolder holder, int position) {
-        share = shares.get(position);
+        final Share share = shares.get(position);
         final Article article = share.getArticle();
         final ParseUser user = share.getUser();
 
-        final User currentUser = (User) user;
+        final User currentUser = (User) ParseUser.getCurrentUser();
 
         reactionsLike = new ArrayList<>();
         reactionsDislike = new ArrayList<>();
@@ -82,11 +80,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         reactionsSad = new ArrayList<>();
         reactionsAngry = new ArrayList<>();
 
-        queryReactions("LIKE");
-        queryReactions("DISLIKE");
-        queryReactions("HAPPY");
-        queryReactions("SAD");
-        queryReactions("ANGRY");
+        queryReactions("LIKE", share);
+        queryReactions("DISLIKE", share);
+        queryReactions("HAPPY", share);
+        queryReactions("SAD", share);
+        queryReactions("ANGRY", share);
 
         holder.tvLike.setText(Integer.toString(share.getCount("LIKE")));
         holder.tvDislike.setText(Integer.toString(share.getCount("DISLIKE")));
@@ -114,7 +112,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.ibReactionLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                queryReactions("LIKE");
+                queryReactions("LIKE", share);
                 int userPositionLike = userReacted(reactionsLike, currentUser);
                 if (userPositionLike != -1) {
                     Reaction userReaction = reactionsLike.get(userPositionLike);
@@ -134,7 +132,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.ibReactionDislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                queryReactions("DISLIKE");
+                queryReactions("DISLIKE", share);
                 int userPositionDislike = userReacted(reactionsDislike, currentUser);
                 if (userPositionDislike != -1) {
                     Reaction userReaction = reactionsDislike.get(userPositionDislike);
@@ -154,7 +152,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.ibReactionHappy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                queryReactions("HAPPY");
+                queryReactions("HAPPY", share);
                 int userPositionHappy = userReacted(reactionsHappy, currentUser);
                 if (userPositionHappy != -1) {
                     Reaction userReaction = reactionsHappy.get(userPositionHappy);
@@ -174,7 +172,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.ibReactionSad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                queryReactions("SAD");
+                queryReactions("SAD", share);
                 int userPositionSad = userReacted(reactionsSad, currentUser);
                 if (userPositionSad != -1) {
                     Reaction userReaction = reactionsSad.get(userPositionSad);
@@ -194,7 +192,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.ibReactionAngry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                queryReactions("ANGRY");
+                queryReactions("ANGRY", share);
                 int userPositionAngry = userReacted(reactionsAngry, currentUser);
                 if (userPositionAngry != -1) {
                     Reaction userReaction = reactionsAngry.get(userPositionAngry);
@@ -212,7 +210,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         });
 
         holder.tvFactRating.setText(article.getTruth());
-        // TODO: set bias image
+
         int biasValue = article.getIntBias();
         switch (biasValue) {
             case 1:  holder.ivBias.setColorFilter(Article.liberalColor);
@@ -330,7 +328,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     }
 
-    private void queryReactions(final String type) {
+    private void queryReactions(final String type, Share share) {
         ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
         reactionQuery.include(Reaction.KEY_TYPE);
         reactionQuery.include(Reaction.KEY_SHARE);
