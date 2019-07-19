@@ -73,6 +73,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         }
         holder.tvArticleTitle.setText(article.getTitle());
         holder.tvArticleSummary.setText(article.getSummary());
+        holder.tvSource.setText(article.getSource());
 
         // TODO: connect listeners to reactions
 
@@ -176,6 +177,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.ibInformationTrends) ImageButton ibInformation;
         @BindView(R.id.tvCaption) TextView tvCaption;
         @BindView(R.id.btnDiscussion) Button btnDiscussion;
+        @BindView(R.id.tvSource) TextView tvSource;
 
         public ViewHolder(View view) {
             super(view);
