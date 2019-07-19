@@ -139,20 +139,43 @@
                 android:scaleType="fitXY"
                 app:layout_constraintStart_toStartOf="@+id/viewArticle"
                 app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-                app:srcCompat="@drawable/ufi_heart" />
+                app:srcCompat="@drawable/like" />
+
+            <TextView
+                android:id="@+id/tvLike"
+                android:layout_width="16dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="#"
+                android:textColor="@color/colorLightText"
+                android:textSize="8sp"
+                app:layout_constraintStart_toStartOf="@+id/ibReactionLike"
+                app:layout_constraintTop_toBottomOf="@+id/ibReactionLike" />
 
             <ImageButton
                 android:id="@+id/ibReactionDislike"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginStart="22dp"
-                android:layout_marginLeft="22dp"
                 android:layout_marginTop="8dp"
                 android:background="#00FFFFFF"
                 android:scaleType="fitXY"
                 app:layout_constraintStart_toEndOf="@+id/ibReactionLike"
                 app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-                app:srcCompat="@drawable/ufi_heart" />
+                app:srcCompat="@drawable/dislike" />
+
+            <TextView
+                android:id="@+id/tvDislike"
+                android:layout_width="16dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="#"
+                android:textColor="@color/colorLightText"
+                android:textSize="8sp"
+                app:layout_constraintStart_toStartOf="@+id/ibReactionDislike"
+                app:layout_constraintTop_toBottomOf="@+id/ibReactionDislike" />
 
             <ImageButton
                 android:id="@+id/ibReactionHappy"
@@ -165,7 +188,19 @@
                 android:scaleType="fitXY"
                 app:layout_constraintStart_toEndOf="@+id/ibReactionDislike"
                 app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-                app:srcCompat="@drawable/ufi_heart" />
+                app:srcCompat="@drawable/happiness" />
+
+            <TextView
+                android:id="@+id/tvHappy"
+                android:layout_width="16dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="#"
+                android:textColor="@color/colorLightText"
+                android:textSize="8sp"
+                app:layout_constraintStart_toStartOf="@+id/ibReactionHappy"
+                app:layout_constraintTop_toBottomOf="@+id/ibReactionHappy" />
 
             <ImageButton
                 android:id="@+id/ibReactionSad"
@@ -178,8 +213,19 @@
                 android:scaleType="fitXY"
                 app:layout_constraintStart_toEndOf="@+id/ibReactionHappy"
                 app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-                app:srcCompat="@drawable/ufi_heart" />
+                app:srcCompat="@drawable/embarrassed" />
 
+            <TextView
+                android:id="@+id/tvSad"
+                android:layout_width="16dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="#"
+                android:textColor="@color/colorLightText"
+                android:textSize="8sp"
+                app:layout_constraintStart_toStartOf="@+id/ibReactionSad"
+                app:layout_constraintTop_toBottomOf="@+id/ibReactionSad" />
 
             <ImageButton
                 android:id="@+id/ibReactionAngry"
@@ -192,7 +238,19 @@
                 android:scaleType="fitXY"
                 app:layout_constraintStart_toEndOf="@+id/ibReactionSad"
                 app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-                app:srcCompat="@drawable/ufi_heart" />
+                app:srcCompat="@drawable/angry" />
+
+            <TextView
+                android:id="@+id/tvAngry"
+                android:layout_width="16dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="#"
+                android:textColor="@color/colorLightText"
+                android:textSize="8sp"
+                app:layout_constraintStart_toStartOf="@+id/ibReactionAngry"
+                app:layout_constraintTop_toBottomOf="@+id/ibReactionAngry" />
 
             <TextView
                 android:id="@+id/tvFactRating"
@@ -240,14 +298,14 @@
                 android:id="@+id/tvCaption"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:text="TextView"
                 android:textAllCaps="false"
                 android:textColor="@color/colorBaseText"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="@+id/viewArticle"
                 app:layout_constraintStart_toStartOf="@+id/viewArticle"
-                app:layout_constraintTop_toBottomOf="@+id/ibReactionLike" />
+                app:layout_constraintTop_toBottomOf="@+id/tvLike" />
 
             <View
                 android:id="@+id/lineView"
