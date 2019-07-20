@@ -27,9 +27,6 @@ import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
-import com.parse.FindCallback;
-import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -90,8 +87,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.tvArticleSummary.setText(article.getSummary());
         holder.tvSource.setText(article.getSource());
         holder.tvTag.setText(article.getTag());
-
-
 
 //        reactionsLike = new ArrayList<>();
 //        reactionsDislike = new ArrayList<>();
@@ -182,7 +177,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     holder.tvHappy.setText(Integer.toString(count));
                 }
 
-
 //                queryReactions("HAPPY", share);
 //                int userPositionHappy = userReacted(reactionsHappy, currentUser);
 //                if (userPositionHappy != -1) {
@@ -212,9 +206,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     holder.tvSad.setText(Integer.toString(count));
                 }
 
-
-
-
 //                queryReactions("SAD", share);
 //                int userPositionSad = userReacted(reactionsSad, currentUser);
 //                if (userPositionSad != -1) {
@@ -243,8 +234,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     int count = createReaction("ANGRY", share);
                     holder.tvAngry.setText(Integer.toString(count));
                 }
-
-
 
 //                queryReactions("ANGRY", share);
 //                int userPositionAngry = userReacted(reactionsAngry, currentUser);
@@ -313,7 +302,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("share_id", share.getObjectId());
+                //intent.putExtra("share_id", share.getObjectId());
+                intent.putExtra("share", (Serializable) share);
                 context.startActivity(intent);
             }
         });
