@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
+import com.codepath.fbu_newsfeed.EditProfileActivity;
 import com.codepath.fbu_newsfeed.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Friendship;
@@ -33,6 +35,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +55,7 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.tvArticleCount) TextView tvArticleCount;
     @BindView(R.id.btnLogout) Button btnLogout;
     @BindView(R.id.btnRequest) Button btnRequest;
+    @BindView(R.id.btnEdit) ImageButton btnEdit;
     @BindView(R.id.rvProfilePosts) RecyclerView rvProfilePosts;
 
     private ShareAdapter shareAdapter;
@@ -131,6 +135,13 @@ public class ProfileFragment extends Fragment {
         };
 
         if (user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+            btnEdit.setVisibility(View.VISIBLE);
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goToEdit();
+                }
+            });
             btnLogout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -138,6 +149,7 @@ public class ProfileFragment extends Fragment {
                 }
             });
         } else {
+            btnEdit.setVisibility(View.INVISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnRequest.setVisibility(View.VISIBLE);
 
@@ -216,7 +228,14 @@ public class ProfileFragment extends Fragment {
         startActivity(intent);
     }
 
-    public void fetchTimelineAsync() {
+    private void goToEdit() {
+        User currentUser = (User) ParseUser.getCurrentUser();
+        Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+        intent.putExtra("user", (Serializable) currentUser);
+        startActivity(intent);
+    }
+
+    private void fetchTimelineAsync() {
 
         queryShares(true, 0);
         swipeContainer.setRefreshing(false);

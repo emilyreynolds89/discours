@@ -126,4 +126,16 @@
             app:layout_constraintTop_toBottomOf="@+id/btnLogout" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <ImageButton
+        android:id="@+id/btnEdit"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@android:color/transparent"
+        android:cropToPadding="false"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/edit" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
