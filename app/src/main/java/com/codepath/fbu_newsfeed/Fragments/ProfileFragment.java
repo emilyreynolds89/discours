@@ -23,7 +23,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
 import com.codepath.fbu_newsfeed.EditProfileActivity;
-import com.codepath.fbu_newsfeed.EndlessRecyclerViewScrollListener;
+import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Share;
@@ -229,9 +229,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private void goToEdit() {
-        User currentUser = (User) ParseUser.getCurrentUser();
         Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-        intent.putExtra("user", (Serializable) currentUser);
+        intent.putExtra("user_id", ParseUser.getCurrentUser().getObjectId());
         startActivity(intent);
     }
 
