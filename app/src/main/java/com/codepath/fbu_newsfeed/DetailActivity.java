@@ -29,6 +29,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
+import com.codepath.fbu_newsfeed.Adapters.RecommendAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
@@ -75,6 +76,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.ibInformationTrends) ImageButton ibInformation;
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.rvComments) RecyclerView rvComments;
+    @BindView(R.id.rvRecommend) RecyclerView rvRecommend;
     @BindView(R.id.etComment) EditText etComment;
     @BindView(R.id.btnSubmit) Button btnSubmit;
     @BindView(R.id.tvTag) TextView tvTag;
@@ -87,7 +89,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     User currentUser = (User) ParseUser.getCurrentUser();
 
     ArrayList<Comment> comments;
+    ArrayList<Article> articles;
     CommentAdapter commentAdapter;
+    RecommendAdapter recommendAdapter;
 
     protected SwipeRefreshLayout swipeContainer;
 
@@ -100,11 +104,18 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         queryShare();
 
         comments = new ArrayList<>();
+        articles = new ArrayList<>();
         commentAdapter = new CommentAdapter(getBaseContext(), comments);
+        recommendAdapter = new RecommendAdapter(getBaseContext(), articles);
 
         rvComments.setAdapter(commentAdapter);
+        rvRecommend.setAdapter(recommendAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
+        LinearLayoutManager linearLayoutManagerRecommend = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+
         rvComments.setLayoutManager(linearLayoutManager);
+        rvRecommend.setLayoutManager(linearLayoutManagerRecommend);
+
 
         swipeContainer = findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -119,6 +130,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+        queryRecommended();
 
         tvUsername.setText(user.getUsername());
 
@@ -189,6 +201,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvSad.setText(Integer.toString(share.getCount("SAD")));
         tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
 
+
         ibReactionLike.setOnClickListener(this);
         ibReactionDislike.setOnClickListener(this);
         ibReactionHappy.setOnClickListener(this);
@@ -196,6 +209,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         ibReactionAngry.setOnClickListener(this);
 
         viewArticle.setOnClickListener(this);
+        //btnSubmit.setOnClickListener(this);
 
         if (isFriends() || user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             etComment.setVisibility(View.VISIBLE);
@@ -431,6 +445,29 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             Log.d(TAG, "Error finding reactions: " + e.getMessage());
             return null;
         }
+    }
+
+    private void queryRecommended() {
+        ParseQuery<Article> recommendQuery = ParseQuery.getQuery(Article.class);
+        recommendQuery.include(Article.KEY_TITLE);
+        recommendQuery.include(Article.KEY_IMAGE);
+        recommendQuery.findInBackground(new FindCallback<Article>() {
+            @Override
+            public void done(List<Article> newArticles, ParseException e) {
+                if (e != null) {
+                    Log.e("TrendsQuery", "Error with query");
+                    e.printStackTrace();
+                    return;
+                }
+                articles.addAll(newArticles);
+
+                for (int i = 0; i < articles.size(); i++) {
+                    Article article = articles.get(i);
+                    Log.d("TrendsQuery", "Article: " + article.getTitle());
+                }
+                recommendAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     public void fetchTimelineAsync() {
