@@ -12,6 +12,7 @@ import android.widget.SearchView;
 import com.codepath.fbu_newsfeed.Adapters.TabAdapter;
 import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Fragments.ArticleSearchFragment;
+import com.codepath.fbu_newsfeed.Fragments.TagSearchFragment;
 import com.codepath.fbu_newsfeed.Fragments.UserSearchFragment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.User;
@@ -41,6 +42,7 @@ public class SearchActivity extends AppCompatActivity {
         tabAdapter = new TabAdapter(getSupportFragmentManager());
         tabAdapter.addFragment(new UserSearchFragment(), "Users");
         tabAdapter.addFragment(new ArticleSearchFragment(), "Articles");
+        tabAdapter.addFragment(new TagSearchFragment(), "Tags");
 
         viewPager.setAdapter(tabAdapter);
         tabLayout.setupWithViewPager(viewPager);
