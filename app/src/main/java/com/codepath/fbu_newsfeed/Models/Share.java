@@ -8,12 +8,19 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
+
 @ParseClassName("Share")
-public class Share extends ParseObject {
+public class Share extends ParseObject implements Serializable {
     public static final String KEY_USER = "user";
     public static final String KEY_ARTICLE = "article";
     public static final String KEY_CAPTION = "caption";
     public static final String KEY_IMAGE = "image";
+    public static final String KEY_LIKE_COUNT = "likeCount";
+    public static final String KEY_DISLIKE_COUNT = "dislikeCount";
+    public static final String KEY_HAPPY_COUNT = "happyCount";
+    public static final String KEY_SAD_COUNT = "sadCount";
+    public static final String KEY_ANGRY_COUNT = "angryCount";
     public static final int LIMIT = 20;
 
     private ParseUser user;
@@ -35,6 +42,12 @@ public class Share extends ParseObject {
 
         this.caption = caption;
         put(KEY_CAPTION, caption);
+
+        put(KEY_LIKE_COUNT, 0);
+        put(KEY_DISLIKE_COUNT, 0);
+        put(KEY_HAPPY_COUNT, 0);
+        put(KEY_SAD_COUNT, 0);
+        put(KEY_ANGRY_COUNT, 0);
     }
 
     public ParseUser getUser() {
@@ -67,6 +80,87 @@ public class Share extends ParseObject {
     public void setCaption(String caption) {
         this.caption = caption;
         put(KEY_CAPTION, caption);
+    }
+
+    public int incrementCount(String type) {
+        switch (type) {
+            case "LIKE":
+                int likeCount = getCount("LIKE");
+                likeCount += 1;
+                put(KEY_LIKE_COUNT, likeCount);
+                return likeCount;
+            case "DISLIKE":
+                int dislikeCount = getCount("DISLIKE");
+                dislikeCount += 1;
+                put(KEY_DISLIKE_COUNT, dislikeCount);
+                return dislikeCount;
+            case "HAPPY":
+                int happyCount = getCount("HAPPY");
+                happyCount += 1;
+                put(KEY_HAPPY_COUNT, happyCount);
+                return happyCount;
+            case "SAD":
+                int sadCount = getCount("SAD");
+                sadCount += 1;
+                put(KEY_SAD_COUNT, sadCount);
+                return sadCount;
+            case "ANGRY":
+                int angryCount = getCount("ANGRY");
+                angryCount += 1;
+                put(KEY_ANGRY_COUNT, angryCount);
+                return angryCount;
+            default:
+                return 0;
+        }
+    }
+
+    public int decrementCount(String type) {
+        switch (type) {
+            case "LIKE":
+                int likeCount = getCount("LIKE");
+                likeCount -= 1;
+                put(KEY_LIKE_COUNT, likeCount);
+                return likeCount;
+            case "DISLIKE":
+                int dislikeCount = getCount("DISLIKE");
+                dislikeCount -= 1;
+                put(KEY_DISLIKE_COUNT, dislikeCount);
+                return dislikeCount;
+            case "HAPPY":
+                int happyCount = getCount("HAPPY");
+                happyCount -= 1;
+                put(KEY_HAPPY_COUNT, happyCount);
+                return happyCount;
+            case "SAD":
+                int sadCount = getCount("SAD");
+                sadCount -= 1;
+                put(KEY_SAD_COUNT, sadCount);
+                return sadCount;
+            case "ANGRY":
+                int angryCount = getCount("ANGRY");
+                angryCount -= 1;
+                put(KEY_ANGRY_COUNT, angryCount);
+                return angryCount;
+            default:
+                return 0;
+        }
+    }
+
+    public int getCount(String type) {
+        switch (type) {
+            case "LIKE":
+                return (int) getNumber(KEY_LIKE_COUNT);
+            case "DISLIKE":
+                return (int) getNumber(KEY_DISLIKE_COUNT);
+            case "HAPPY":
+                return (int) getNumber(KEY_HAPPY_COUNT);
+            case "SAD":
+                return (int) getNumber(KEY_SAD_COUNT);
+            case "ANGRY":
+                return (int) getNumber(KEY_ANGRY_COUNT);
+            default:
+                return 0;
+        }
     }
 
     public String getRelativeTime() {

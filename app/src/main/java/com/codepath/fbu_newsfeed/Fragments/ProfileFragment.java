@@ -54,8 +54,7 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.btnRequest) Button btnRequest;
     @BindView(R.id.rvProfilePosts) RecyclerView rvProfilePosts;
 
-    private ArrayList<Share> mShare;
-    ShareAdapter shareAdapter;
+    private ShareAdapter shareAdapter;
     protected @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     protected EndlessRecyclerViewScrollListener scrollListener;
 
@@ -79,7 +78,11 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         String user_id = getArguments().getString("user_id");
+
+        Log.d(TAG, "get profile for: " + user_id);
         try {
             user = getUser(user_id);
             Log.d(TAG, "we're getting this user: " + user_id);
@@ -98,17 +101,21 @@ public class ProfileFragment extends Fragment {
         }
 
 
-        mShare = new ArrayList<>();
+        ArrayList<Share> mShare = new ArrayList<>();
 
-        shareAdapter = new ShareAdapter(mShare);
-        rvProfilePosts.setAdapter(shareAdapter);
+        this.shareAdapter = new ShareAdapter(mShare);
+        rvProfilePosts.setAdapter(this.shareAdapter);
+        this.shareAdapter.clear();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvProfilePosts.setLayoutManager(linearLayoutManager);
+
+        queryShares(true, 0);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 fetchTimelineAsync();
+                scrollListener.resetState();
             }
         });
         // Configure the refreshing colors
@@ -119,7 +126,7 @@ public class ProfileFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                queryShares(true, page);
+                queryShares(false, page);
             }
         };
 
@@ -157,12 +164,13 @@ public class ProfileFragment extends Fragment {
                 }
         }
 
-        queryShares(true, 0);
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         unbinder.unbind();
     }
 
@@ -209,23 +217,30 @@ public class ProfileFragment extends Fragment {
     }
 
     public void fetchTimelineAsync() {
-        shareAdapter.clear();
+
         queryShares(true, 0);
         swipeContainer.setRefreshing(false);
     }
     private void queryShares(final boolean refresh, int offset) {
+        Log.d(TAG, "this should only be getting shares from user: " + this.user.getObjectId());
+
+        if (refresh) {
+            shareAdapter.clear();
+        }
+
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
+        query.whereEqualTo("user", this.user);
         query.include("user");
         query.include("article");
         query.setLimit(Share.LIMIT);
         query.setSkip(offset * Share.LIMIT);
         query.orderByDescending("createdAt");
-        query.whereEqualTo("user", user);
         query.findInBackground(new FindCallback<Share>() {
             @Override
             public void done(List<Share> shareList, ParseException e) {
                 if (e == null) {
                     Log.d(TAG, "Got " + shareList.size() + " shares");
+
                     shareAdapter.addAll(shareList);
                 }
                 if (!refresh) scrollListener.resetState();

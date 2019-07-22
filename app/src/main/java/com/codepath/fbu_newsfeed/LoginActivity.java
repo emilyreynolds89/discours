@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -68,7 +69,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     finish();
                 } else {
-                    Log.e("LoginActivity", "Log in error");
+                    Log.e("LoginActivity", "Log in error: " + e.getMessage());
+                    Toast.makeText(LoginActivity.this, "Login error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
