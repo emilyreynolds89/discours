@@ -6,37 +6,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.graphics.Matrix;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.codepath.fbu_newsfeed.Models.User;
-import com.codepath.fbu_newsfeed.Helpers.BitmapScaler;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -44,14 +31,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -90,7 +70,7 @@ public class EditProfileActivity extends AppCompatActivity {
             mUser = ParseUser.getCurrentUser();
         }
 
-        tvUsername.setText(mUser.getString(User.KEY_USERNAME));
+        tvUsername.setText("@" + mUser.getString(User.KEY_USERNAME));
         tvFullName.setText(mUser.getString(User.KEY_FULLNAME));
 
         currentImage = mUser.getParseFile("profileImage");
@@ -165,16 +145,6 @@ public class EditProfileActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             try {
                 final Uri imageUri = data.getData();
-                File photoFile = getPhotoFileUri(imageUri.toString());
-               // Bitmap rawTakenImage = BitmapScaler.rotateBitmapOrientation(imageUri.toString());
-               // Bitmap resizedTakenImage = BitmapScaler.scaleToFitWidth(rawTakenImage, 110);
-
-//                try {
-//                    writeResizedFileToDisk(resizedTakenImage);
-//                } catch (Exception e) {
-//                    Log.e(TAG, "Error writing resized file to disk", e);
-//                }
-
                 Glide.with(this).asBitmap().load(imageUri).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -203,37 +173,6 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "You haven't picked Image",Toast.LENGTH_LONG).show();
         }
     }
-    public File getPhotoFileUri(String fileName) {
-        // Get safe storage directory for photos
-        // Use `getExternalFilesDir` on Context to access package-specific directories.
-        // This way, we don't need to request external read/write runtime permissions.
-        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
-            Log.d(TAG, "failed to create directory");
-        }
-
-        // Return the file target for the photo based on filename
-        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
-
-        return file;
-    }
-//
-//    private void writeResizedFileToDisk(Bitmap resizedBitmap) throws Exception {
-//        // Configure byte output stream
-//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//// Compress the image further
-//        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-//// Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
-//        File resizedFile = getPhotoFileUri(photoFileName + "_resized");
-//        resizedFile.createNewFile();
-//        FileOutputStream fos = new FileOutputStream(resizedFile);
-//// Write the bytes of the bitmap to file
-//        fos.write(bytes.toByteArray());
-//        fos.close();
-//    }
-
 
     private ParseUser getUser(String user_id) throws ParseException {
         ParseQuery<ParseUser> query = ParseUser.getQuery();

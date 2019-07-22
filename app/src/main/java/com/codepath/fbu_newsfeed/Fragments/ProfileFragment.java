@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment {
             user = ParseUser.getCurrentUser();
         }
 
-        tvUsername.setText(user.getString(User.KEY_USERNAME));
+        tvUsername.setText("@" + user.getString(User.KEY_USERNAME));
         tvFullName.setText(user.getString(User.KEY_FULLNAME));
         tvBio.setText(user.getString(User.KEY_BIO));
         tvArticleCount.setText(getArticleCount());
