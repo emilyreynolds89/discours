@@ -67,7 +67,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             User sender = notification.getSendUser();
             String username = sender.getUsername();
             tvUsernameNotif.setText(username);
-            tvDescriptionNotif.setText(username + notification.notificationText(notification.getType()));
+            tvDescriptionNotif.setText("@" + username + notification.notificationText(notification.getType()));
 
             ParseFile image = notification.getShare().getArticle().getImage();
             if (image != null ) {
