@@ -13,15 +13,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
 import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +42,10 @@ public class TagSearchFragment extends Fragment {
 
     ArrayList<Article> articleResults;
     TrendsAdapter trendsAdapter;
+
+    ArrayList<String> tagList;
+    ArrayAdapter<String> tagAdapter;
+
 
     @Nullable
     @Override
@@ -56,9 +66,27 @@ public class TagSearchFragment extends Fragment {
         rvResults.setLayoutManager(linearLayoutManager);
         rvResults.setAdapter(trendsAdapter);
 
+        tagList = new ArrayList<>();
 
-        // TODO: query when tag is selected
+        queryTags();
 
+        tagAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, tagList);
+        tagAdapter.setDropDownViewResource(R.layout.spinner_item);
+        tagSelector.setAdapter(tagAdapter);
+
+        tagSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                trendsAdapter.clear();
+                queryArticlesByTag(tagList.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+
+        });
 
     }
 
@@ -67,4 +95,34 @@ public class TagSearchFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    private void queryArticlesByTag(String tag) {
+        ParseQuery<Article> query = ParseQuery.getQuery("Article");
+        query.whereEqualTo(Article.KEY_TAG, tag);
+        query.findInBackground(new FindCallback<Article>() {
+            @Override
+            public void done(List<Article> objects, ParseException e) {
+                trendsAdapter.addAll(objects);
+            }
+        });
+    }
+
+    private void queryTags() {
+        ParseQuery<Article> query = ParseQuery.getQuery("Article");
+        query.setLimit(Article.LIMIT);
+        query.findInBackground(new FindCallback<Article>() {
+            @Override
+            public void done(List<Article> articles, ParseException e) {
+                for (int i = 0; i < articles.size(); i++) {
+                    String tag = articles.get(i).getTag();
+                    if (!tagList.contains(tag)) {
+                        tagList.add(tag);
+                    }
+                }
+                tagAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+
 }
