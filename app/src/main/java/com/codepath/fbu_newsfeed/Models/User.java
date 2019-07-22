@@ -9,10 +9,11 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
 import java.util.List;
 
 @ParseClassName("_User")
-public class User extends ParseUser {
+public class User extends ParseUser implements Serializable {
     public static final String KEY_FULLNAME = "fullName";
     public static final String KEY_PROFILEIMAGE = "profileImage";
     public static final String KEY_BIO = "bio";
