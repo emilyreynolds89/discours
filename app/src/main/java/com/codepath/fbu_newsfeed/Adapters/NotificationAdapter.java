@@ -11,11 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
-import com.parse.ParseFile;
 
 import java.util.List;
 
@@ -69,15 +67,19 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             tvUsernameNotif.setText(username);
             tvDescriptionNotif.setText("@" + username + notification.notificationText(notification.getType()));
 
-            ParseFile image = notification.getShare().getArticle().getImage();
+            /*ParseFile image = notification.getShare().getArticle().getImage();
             if (image != null ) {
                 Glide.with(context).load(image.getUrl()).into(ivImageNotif);
-            }
+            }*/
         }
     }
 
     public void clear() {
         notifications.clear();
         notifyDataSetChanged();
+    }
+
+    public void addAll(List<Notification> newNotifications) {
+        notifications.addAll(newNotifications);
     }
 }
