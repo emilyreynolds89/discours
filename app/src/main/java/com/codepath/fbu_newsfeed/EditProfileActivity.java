@@ -1,12 +1,17 @@
 package com.codepath.fbu_newsfeed;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,8 +27,14 @@ import android.graphics.Matrix;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.Helpers.BitmapScaler;
 import com.parse.GetCallback;
@@ -52,6 +63,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
     ParseUser mUser;
     ParseFile currentImage;
+    Bitmap currentImageBitmap;
+
     public String photoFileName = "photo.jpg";
 
     @BindView(R.id.tvFullName) TextView tvFullName;
@@ -153,8 +166,6 @@ public class EditProfileActivity extends AppCompatActivity {
             try {
                 final Uri imageUri = data.getData();
                 File photoFile = getPhotoFileUri(imageUri.toString());
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                // Bitmap rawTakenImage = BitmapScaler.rotateBitmapOrientation(imageUri.toString());
                // Bitmap resizedTakenImage = BitmapScaler.scaleToFitWidth(rawTakenImage, 110);
 
@@ -164,13 +175,25 @@ public class EditProfileActivity extends AppCompatActivity {
 //                    Log.e(TAG, "Error writing resized file to disk", e);
 //                }
 
-                Glide.with(this).load(selectedImage).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
+                Glide.with(this).asBitmap().load(imageUri).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        ivProfileImage.setImageBitmap(resource);
 
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                byte[] scaledData = bos.toByteArray();
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        resource.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                        byte[] scaledData = bos.toByteArray();
+                        currentImage = new ParseFile(scaledData);
 
-                currentImage = new ParseFile(scaledData);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
+
+
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
