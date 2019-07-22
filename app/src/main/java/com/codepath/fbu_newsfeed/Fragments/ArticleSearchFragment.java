@@ -91,6 +91,7 @@ public class ArticleSearchFragment extends Fragment {
     private void fetchArticles(String query) {
         ParseQuery<Article> titleQuery = ParseQuery.getQuery("Article");
         titleQuery.whereFullText(Article.KEY_TITLE, query);
+        titleQuery.setLimit(Article.LIMIT);
 
 //        MongoDB can't OR text queries
 //
