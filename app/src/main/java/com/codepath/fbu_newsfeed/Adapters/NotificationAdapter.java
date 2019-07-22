@@ -13,9 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Models.Notification;
+import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 
 import java.util.List;
 
@@ -69,10 +72,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             tvUsernameNotif.setText(username);
             tvDescriptionNotif.setText("@" + username + notification.notificationText(notification.getType()));
 
-            ParseFile image = notification.getShare().getArticle().getImage();
-            if (image != null ) {
-                Glide.with(context).load(image.getUrl()).into(ivImageNotif);
+            try {
+                Share share = getShare(notification.getShare().getObjectId());
+                ParseFile image = share.getArticle().getImage();
+                if (image != null ) {
+                    Glide.with(context).load(image.getUrl()).into(ivImageNotif);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+
         }
     }
 
@@ -80,4 +89,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         notifications.clear();
         notifyDataSetChanged();
     }
+
+    public void addAll(List<Notification> newNotifications) {
+        notifications.addAll(newNotifications);
+    }
+
+    public Share getShare(String shareId) throws ParseException {
+        ParseQuery<Share> query = ParseQuery.getQuery(Share.class);
+        query.include(Share.KEY_ARTICLE);
+        query.whereEqualTo("objectId", shareId);
+        return query.getFirst();
+    }
+
 }
