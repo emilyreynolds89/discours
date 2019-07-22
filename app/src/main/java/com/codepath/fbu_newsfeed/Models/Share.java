@@ -8,8 +8,10 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
+
 @ParseClassName("Share")
-public class Share extends ParseObject {
+public class Share extends ParseObject implements Serializable {
     public static final String KEY_USER = "user";
     public static final String KEY_ARTICLE = "article";
     public static final String KEY_CAPTION = "caption";

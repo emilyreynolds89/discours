@@ -65,7 +65,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             super(itemView);
             ibInformationTrends = itemView.findViewById(R.id.ibInformationTrends);
             ivBiasTrends = itemView.findViewById(R.id.ivBiasTrends);
-            ivArticleImage = itemView.findViewById(R.id.ivArtcleImageTrends);
+            ivArticleImage = itemView.findViewById(R.id.ivArticleImageTrends);
             tvTitle = itemView.findViewById(R.id.tvArticleTitleTrends);
             tvSummary = itemView.findViewById(R.id.tvArticleSummaryTrends);
             tvSource = itemView.findViewById(R.id.tvSourceTrends);

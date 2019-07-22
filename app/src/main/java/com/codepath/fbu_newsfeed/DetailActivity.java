@@ -29,9 +29,11 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
+import com.codepath.fbu_newsfeed.Adapters.RecommendAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
+import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
@@ -74,6 +76,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.ibInformationTrends) ImageButton ibInformation;
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.rvComments) RecyclerView rvComments;
+    @BindView(R.id.rvRecommend) RecyclerView rvRecommend;
     @BindView(R.id.etComment) EditText etComment;
     @BindView(R.id.btnSubmit) Button btnSubmit;
     @BindView(R.id.tvTag) TextView tvTag;
@@ -86,13 +89,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     User currentUser = (User) ParseUser.getCurrentUser();
 
     ArrayList<Comment> comments;
+    ArrayList<Article> articles;
     CommentAdapter commentAdapter;
-
-    ArrayList<Reaction> reactionsLike;
-    ArrayList<Reaction> reactionsDislike;
-    ArrayList<Reaction> reactionsHappy;
-    ArrayList<Reaction> reactionsSad;
-    ArrayList<Reaction> reactionsAngry;
+    RecommendAdapter recommendAdapter;
 
     protected SwipeRefreshLayout swipeContainer;
 
@@ -102,18 +101,21 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
 
-        comments = new ArrayList<>();
-        commentAdapter = new CommentAdapter(getBaseContext(), comments);
+        queryShare();
 
-        reactionsLike = new ArrayList<>();
-        reactionsDislike = new ArrayList<>();
-        reactionsHappy = new ArrayList<>();
-        reactionsSad = new ArrayList<>();
-        reactionsAngry = new ArrayList<>();
+        comments = new ArrayList<>();
+        articles = new ArrayList<>();
+        commentAdapter = new CommentAdapter(getBaseContext(), comments);
+        recommendAdapter = new RecommendAdapter(getBaseContext(), articles);
 
         rvComments.setAdapter(commentAdapter);
+        rvRecommend.setAdapter(recommendAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
+        LinearLayoutManager linearLayoutManagerRecommend = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+
         rvComments.setLayoutManager(linearLayoutManager);
+        rvRecommend.setLayoutManager(linearLayoutManagerRecommend);
+
 
         swipeContainer = findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -128,14 +130,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        queryShare();
-
-        queryReactions("LIKE");
-        queryReactions("DISLIKE");
-        queryReactions("HAPPY");
-        queryReactions("SAD");
-        queryReactions("ANGRY");
-
+        queryRecommended();
 
         tvUsername.setText(user.getUsername());
 
@@ -200,6 +195,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
+        tvLike.setText(Integer.toString(share.getCount("LIKE")));
+        tvDislike.setText(Integer.toString(share.getCount("DISLIKE")));
+        tvHappy.setText(Integer.toString(share.getCount("HAPPY")));
+        tvSad.setText(Integer.toString(share.getCount("SAD")));
+        tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
+
 
         ibReactionLike.setOnClickListener(this);
         ibReactionDislike.setOnClickListener(this);
@@ -238,6 +239,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                                 }
                             }
                         });
+
+                        createNotification("COMMENT", share);
                     }
                 }
             });
@@ -252,87 +255,76 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         setSupportActionBar(toolbar);
         queryComments(true);
 
-        tvLike.setText(Integer.toString(reactionsLike.size()));
-        tvDislike.setText(Integer.toString(reactionsDislike.size()));
-        tvHappy.setText(Integer.toString(reactionsHappy.size()));
-        tvSad.setText(Integer.toString(reactionsSad.size()));
-        tvAngry.setText(Integer.toString(reactionsAngry.size()));
-
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ibReactionLike:
-                queryReactions("LIKE");
-                int userPositionLike = userReacted(reactionsLike, currentUser);
-                if (userPositionLike != -1) {
-                    Reaction userReaction = reactionsLike.get(userPositionLike);
-                    reactionsLike.remove(userPositionLike);
-                    userReaction.deleteInBackground();
+                Reaction likeReaction = getReaction("LIKE", share, currentUser);
+                if (likeReaction != null) {
+                    int count = destroyReaction(likeReaction, "LIKE", share);
+                    tvLike.setText(Integer.toString(count));
                 } else {
-                    Reaction newUserReaction = new Reaction(currentUser, share, "LIKE");
-                    reactionsLike.add(newUserReaction);
-                    newUserReaction.saveInBackground();
+                    int count = createReaction("LIKE", share);
+                    tvLike.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
-                tvLike.setText(Integer.toString(reactionsLike.size()));
                 break;
+
             case R.id.ibReactionDislike:
-                queryReactions("DISLIKE");
-                int userPositionDislike = userReacted(reactionsDislike, currentUser);
-                if (userPositionDislike != -1) {
-                    Reaction userReaction = reactionsDislike.get(userPositionDislike);
-                    reactionsDislike.remove(userPositionDislike);
-                    userReaction.deleteInBackground();
+                Reaction dislikeReaction = getReaction("DISLIKE", share, currentUser);
+                if (dislikeReaction != null) {
+                    int count = destroyReaction(dislikeReaction, "DISLIKE", share);
+                    tvDislike.setText(Integer.toString(count));
                 } else {
-                    Reaction newUserReaction = new Reaction(currentUser, share, "DISLIKE");
-                    reactionsDislike.add(newUserReaction);
-                    newUserReaction.saveInBackground();
+                    int count = createReaction("DISLIKE", share);
+                    tvDislike.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
-                tvDislike.setText(Integer.toString(reactionsDislike.size()));
                 break;
+
             case R.id.ibReactionHappy:
-                queryReactions("HAPPY");
-                int userPositionHappy = userReacted(reactionsHappy, currentUser);
-                if (userPositionHappy != -1) {
-                    Reaction userReaction = reactionsHappy.get(userPositionHappy);
-                    reactionsHappy.remove(userPositionHappy);
-                    userReaction.deleteInBackground();
+                Reaction happyReaction = getReaction("HAPPY", share, currentUser);
+                if (happyReaction != null) {
+                    int count = destroyReaction(happyReaction, "HAPPY", share);
+                    tvHappy.setText(Integer.toString(count));
                 } else {
-                    Reaction newUserReaction = new Reaction(currentUser, share, "HAPPY");
-                    reactionsHappy.add(newUserReaction);
-                    newUserReaction.saveInBackground();
+                    int count = createReaction("HAPPY", share);
+                    tvHappy.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
-                tvHappy.setText(Integer.toString(reactionsHappy.size()));
                 break;
+
             case R.id.ibReactionSad:
-                queryReactions("SAD");
-                int userPositionSad = userReacted(reactionsSad, currentUser);
-                if (userPositionSad != -1) {
-                    Reaction userReaction = reactionsSad.get(userPositionSad);
-                    reactionsSad.remove(userPositionSad);
-                    userReaction.deleteInBackground();
+                Reaction sadReaction = getReaction("SAD", share, currentUser);
+                if (sadReaction != null) {
+                    int count = destroyReaction(sadReaction, "SAD", share);
+                    tvSad.setText(Integer.toString(count));
                 } else {
-                    Reaction newUserReaction = new Reaction(currentUser, share, "SAD");
-                    reactionsSad.add(newUserReaction);
-                    newUserReaction.saveInBackground();
+                    int count = createReaction("SAD", share);
+                    tvSad.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
-                tvSad.setText(Integer.toString(reactionsSad.size()));
                 break;
+
             case R.id.ibReactionAngry:
-                queryReactions("ANGRY");
-                int userPositionAngry = userReacted(reactionsAngry, currentUser);
-                if (userPositionAngry != -1) {
-                    Reaction userReaction = reactionsAngry.get(userPositionAngry);
-                    reactionsAngry.remove(userPositionAngry);
-                    userReaction.deleteInBackground();
+                Reaction angryReaction = getReaction("ANGRY", share, currentUser);
+                if (angryReaction != null) {
+                    int count = destroyReaction(angryReaction, "ANGRY", share);
+                    tvAngry.setText(Integer.toString(count));
                 } else {
-                    Reaction newUserReaction = new Reaction(currentUser, share, "ANGRY");
-                    reactionsAngry.add(newUserReaction);
-                    newUserReaction.saveInBackground();
+                    int count = createReaction("ANGRY", share);
+                    tvAngry.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
-                tvAngry.setText(Integer.toString(reactionsAngry.size()));
                 break;
+
             case R.id.viewArticle:
                 Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
                 intent.putExtra("article", (Serializable) article);
@@ -383,18 +375,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void queryShare() {
-        String shareId = getIntent().getStringExtra("share_id");
-        ParseQuery<Share> query = ParseQuery.getQuery(Share.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
-        query.include("user");
-        query.include("article");
-        try {
-            share = query.get(shareId);
-            user = share.getUser();
-            article = share.getArticle();
-        } catch(Exception e) {
-            Log.d(TAG, "Error: " + e.getMessage());
-        }
+        share = (Share) getIntent().getSerializableExtra("share");
+        user = share.getUser();
+        article = share.getArticle();
     }
 
     private void queryComments(final boolean refresh) {
@@ -418,47 +401,71 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void queryReactions(final String type) {
+    private void createNotification(String type, Share share) {
+        Log.d(TAG, "Creating notification of type: " + type);
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share);
+        notification.saveInBackground();
+    }
+
+    private int createReaction(String type, Share share) {
+        Log.d(TAG, "Creating reaction of type: " + type);
+        Reaction newReaction = new Reaction(ParseUser.getCurrentUser(), share, type);
+        newReaction.saveInBackground();
+        int count = share.incrementCount(type);
+        share.saveInBackground();
+        return count;
+    }
+
+    private int destroyReaction(Reaction reaction, String type, Share share) {
+        Log.d(TAG, "Destroying reaction of type: " + type);
+        reaction.deleteInBackground();
+        int count = share.decrementCount(type);
+        share.saveInBackground();
+        return count;
+    }
+
+    private Reaction getReaction(final String type, Share share, ParseUser user) {
         ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
-        reactionQuery.include(Reaction.KEY_TYPE);
+
         reactionQuery.include(Reaction.KEY_SHARE);
         reactionQuery.include(Reaction.KEY_USER);
+
         reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
+        reactionQuery.whereEqualTo(Reaction.KEY_USER, user);
         reactionQuery.whereEqualTo(Reaction.KEY_TYPE, type);
 
-        reactionQuery.findInBackground(new FindCallback<Reaction>() {
+        try {
+            List<Reaction> result = reactionQuery.find();
+            if (result.size() > 0 ) {
+                return result.get(0);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error finding reactions: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private void queryRecommended() {
+        ParseQuery<Article> recommendQuery = ParseQuery.getQuery(Article.class);
+        recommendQuery.include(Article.KEY_TITLE);
+        recommendQuery.include(Article.KEY_IMAGE);
+        recommendQuery.findInBackground(new FindCallback<Article>() {
             @Override
-            public void done(List<Reaction> newReactions, ParseException e) {
+            public void done(List<Article> newArticles, ParseException e) {
                 if (e != null) {
-                    Log.e("DetailActivity", "Error in reactions query");
+                    Log.e("TrendsQuery", "Error with query");
                     e.printStackTrace();
                     return;
                 }
-                switch (type) {
-                    case "LIKE":
-                        reactionsLike.clear();
-                        reactionsLike.addAll(newReactions);
-                        break;
-                    case "DISLIKE":
-                        reactionsDislike.clear();
-                        reactionsDislike.addAll(newReactions);
-                        break;
-                    case "HAPPY":
-                        reactionsHappy.clear();
-                        reactionsHappy.addAll(newReactions);
-                        break;
-                    case "SAD":
-                        reactionsSad.clear();
-                        reactionsSad.addAll(newReactions);
-                        break;
-                    case "ANGRY":
-                        reactionsAngry.clear();
-                        reactionsAngry.addAll(newReactions);
-                        break;
-                    default:
-                        break;
-                }
+                articles.addAll(newArticles);
 
+                for (int i = 0; i < articles.size(); i++) {
+                    Article article = articles.get(i);
+                    Log.d("TrendsQuery", "Article: " + article.getTitle());
+                }
+                recommendAdapter.notifyDataSetChanged();
             }
         });
     }
