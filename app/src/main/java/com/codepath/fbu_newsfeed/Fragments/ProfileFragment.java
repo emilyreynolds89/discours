@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -28,6 +30,7 @@ import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
+import com.codepath.fbu_newsfeed.Models.UserReport;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
 import com.parse.ParseUser;
@@ -206,7 +209,9 @@ public class ProfileFragment extends Fragment {
 
 
     private void reportUser() {
-        // TODO: launch report fragment
+        FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        ReportUserFragment userReportDialog = ReportUserFragment.newInstance(user.getObjectId());
+        userReportDialog.show(fm, "fragment_user_report");
     }
 
 
