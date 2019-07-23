@@ -30,7 +30,6 @@ import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
-import com.codepath.fbu_newsfeed.Models.UserReport;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
 import com.parse.ParseUser;
@@ -38,7 +37,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +49,7 @@ public class ProfileFragment extends Fragment {
 
     ParseUser user;
 
-    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvFullName) TextView tvFullName;
     @BindView(R.id.tvBio) TextView tvBio;

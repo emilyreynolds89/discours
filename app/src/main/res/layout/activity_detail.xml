@@ -25,7 +25,7 @@
             android:layout_height="0dp">
 
             <ImageView
-                android:id="@+id/ivProfileImage"
+                android:id="@+id/ivProfileImageNotif"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="4dp"
@@ -45,7 +45,7 @@
                 android:textColor="#3B3B3B"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
+                app:layout_constraintStart_toEndOf="@+id/ivProfileImageNotif"
                 app:layout_constraintTop_toTopOf="@id/constraintContainer" />
 
             <TextView

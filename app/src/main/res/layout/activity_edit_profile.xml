@@ -7,7 +7,7 @@
     tools:context=".EditProfileActivity">
 
     <ImageView
-        android:id="@+id/ivProfileImage"
+        android:id="@+id/ivProfileImageNotif"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_marginStart="24dp"
@@ -27,8 +27,8 @@
         android:textColor="@color/colorBaseText"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
-        app:layout_constraintTop_toTopOf="@+id/ivProfileImage" />
+        app:layout_constraintStart_toEndOf="@+id/ivProfileImageNotif"
+        app:layout_constraintTop_toTopOf="@+id/ivProfileImageNotif" />
 
     <TextView
         android:id="@+id/tvUsername"
@@ -63,9 +63,9 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_accent_button"
         android:text="Upload"
-        app:layout_constraintEnd_toEndOf="@+id/ivProfileImage"
-        app:layout_constraintStart_toStartOf="@+id/ivProfileImage"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfileImage" />
+        app:layout_constraintEnd_toEndOf="@+id/ivProfileImageNotif"
+        app:layout_constraintStart_toStartOf="@+id/ivProfileImageNotif"
+        app:layout_constraintTop_toBottomOf="@+id/ivProfileImageNotif" />
 
     <Button
         android:id="@+id/btnSubmit"

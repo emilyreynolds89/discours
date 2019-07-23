@@ -56,7 +56,7 @@ import butterknife.ButterKnife;
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String TAG = "DetailActivity";
 
-    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
     @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
@@ -250,7 +250,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                             }
                         });
 
-                        createNotification("COMMENT", share);
+                        createNotification("COMMENT", share, message);
                     }
                 }
             });
@@ -279,7 +279,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     int count = createReaction("LIKE", share);
                     tvLike.setText(Integer.toString(count));
 
-                    createNotification("REACTION", share);
+                    createNotification("REACTION", share, "LIKE");
                 }
                 break;
 
@@ -292,7 +292,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     int count = createReaction("DISLIKE", share);
                     tvDislike.setText(Integer.toString(count));
 
-                    createNotification("REACTION", share);
+                    createNotification("REACTION", share, "DISLIKE");
                 }
                 break;
 
@@ -305,7 +305,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     int count = createReaction("HAPPY", share);
                     tvHappy.setText(Integer.toString(count));
 
-                    createNotification("REACTION", share);
+                    createNotification("REACTION", share, "HAPPY");
                 }
                 break;
 
@@ -318,7 +318,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     int count = createReaction("SAD", share);
                     tvSad.setText(Integer.toString(count));
 
-                    createNotification("REACTION", share);
+                    createNotification("REACTION", share, "SAD");
                 }
                 break;
 
@@ -331,7 +331,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     int count = createReaction("ANGRY", share);
                     tvAngry.setText(Integer.toString(count));
 
-                    createNotification("REACTION", share);
+                    createNotification("REACTION", share, "ANGRY");
                 }
                 break;
 
@@ -424,9 +424,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void createNotification(String type, Share share) {
+    private void createNotification(String type, Share share, String typeText) {
         Log.d(TAG, "Creating notification of type: " + type);
-        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share);
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share, typeText);
         notification.saveInBackground();
     }
 

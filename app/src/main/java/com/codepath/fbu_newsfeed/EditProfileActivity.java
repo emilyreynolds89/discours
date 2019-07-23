@@ -49,7 +49,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.tvFullName) TextView tvFullName;
     @BindView(R.id.tvUsername) TextView tvUsername;
-    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
     @BindView(R.id.etBio) EditText etBio;
     @BindView(R.id.btnUpload) Button btnUpload;
     @BindView(R.id.btnSubmit) Button btnSubmit;

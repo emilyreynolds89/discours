@@ -106,7 +106,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     int count = createReaction("LIKE", share);
                     holder.tvLike.setText(Integer.toString(count));
 
-                    createNotification("REACTION", share);
+                    createNotification("REACTION", share, "LIKE");
                 }
 
 
@@ -124,7 +124,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     int count = createReaction("DISLIKE", share);
                     holder.tvDislike.setText(Integer.toString(count));
 
-                    createNotification("REACTION", share);
+                    createNotification("REACTION", share, "DISLIKE");
                 }
 
 
@@ -142,7 +142,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     int count = createReaction("HAPPY", share);
                     holder.tvHappy.setText(Integer.toString(count));
 
-                    createNotification("REACTION", share);
+                    createNotification("REACTION", share, "HAPPY");
                 }
 
             }
@@ -159,7 +159,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     int count = createReaction("SAD", share);
                     holder.tvSad.setText(Integer.toString(count));
 
-                    createNotification("REACTION", share);
+                    createNotification("REACTION", share, "SAD");
                 }
 
             }
@@ -176,7 +176,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     int count = createReaction("ANGRY", share);
                     holder.tvAngry.setText(Integer.toString(count));
 
-                    createNotification("REACTION", share);
+                    createNotification("REACTION", share, "ANGRY");
                 }
 
 
@@ -295,7 +295,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+        @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
         @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
@@ -351,9 +351,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         }
     }
 
-    private void createNotification(String type, Share share) {
+    private void createNotification(String type, Share share, String typeText) {
         Log.d(TAG, "Creating notification of type: " + type);
-        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share);
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share, typeText);
         notification.saveInBackground();
     }
 

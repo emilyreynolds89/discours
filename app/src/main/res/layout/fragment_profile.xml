@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/ivProfileImage"
+        android:id="@+id/ivProfileImageNotif"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_marginStart="12dp"
@@ -31,7 +31,7 @@
         android:textColor="@color/colorBaseText"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
+        app:layout_constraintStart_toEndOf="@+id/ivProfileImageNotif"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
