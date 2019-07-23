@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -30,6 +32,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Adapters.RecommendAdapter;
+import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
@@ -73,7 +76,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.tvAngry) TextView tvAngry;
     @BindView(R.id.tvFactRating) TextView tvFactRating;
     @BindView(R.id.ivBias) ImageView ivBias;
-    @BindView(R.id.ibInformationTrends) ImageButton ibInformation;
+    @BindView(R.id.ibInformation) ImageButton ibInformation;
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.rvComments) RecyclerView rvComments;
     @BindView(R.id.rvRecommend) RecyclerView rvRecommend;
@@ -208,6 +211,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         ibReactionSad.setOnClickListener(this);
         ibReactionAngry.setOnClickListener(this);
 
+        ibInformation.setOnClickListener(this);
+
         viewArticle.setOnClickListener(this);
         //btnSubmit.setOnClickListener(this);
 
@@ -325,11 +330,18 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 break;
 
+            case R.id.ibInformation:
+                Log.d(TAG, "Clicked information");
+                showInformationDialog();
+                break;
+
             case R.id.viewArticle:
                 Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
                 intent.putExtra("article", (Serializable) article);
                 startActivity(intent);
                 break;
+
+
         }
 
     }
@@ -340,6 +352,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         return true;
+    }
+
+    private void showInformationDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
+        informationDialog.show(fm, "fragment_information");
     }
 
     private void goToUser(ParseUser user) {

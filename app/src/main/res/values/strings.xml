@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">fbu-newsfeed</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bias_explanation">We calculate bias by doing X, Y and Z.</string>
+
+    <string name="truth_explanation">We calculate truth by doing A, B, and C.</string>
 </resources>

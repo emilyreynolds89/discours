@@ -7,7 +7,7 @@ public class Fact {
     public Fact(TruthLevel truthLevel) { this.truthLevel = truthLevel; }
 
     enum TruthLevel {
-        TRUE, M0STLY_TRUE, MIXTURE, MOSTLY_FALSE, FALSE, UNPROVEN;
+        TRUE, MOSTLY_TRUE, MIXTURE, MOSTLY_FALSE, FALSE, UNPROVEN;
     }
 
     public TruthLevel getTruthLevel() {
