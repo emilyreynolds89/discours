@@ -214,7 +214,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         ibInformation.setOnClickListener(this);
 
         viewArticle.setOnClickListener(this);
-        //btnSubmit.setOnClickListener(this);
 
         if (isFriends() || user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             etComment.setVisibility(View.VISIBLE);
@@ -466,9 +465,28 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void queryRecommended() {
-        ParseQuery<Article> recommendQuery = ParseQuery.getQuery(Article.class);
+        final ParseQuery<Article> recommendQuery = ParseQuery.getQuery(Article.class);
         recommendQuery.include(Article.KEY_TITLE);
         recommendQuery.include(Article.KEY_IMAGE);
+
+        recommendQuery.whereContains(Article.KEY_TAG, article.getTag());
+        int biasValue = article.getIntBias();
+        switch (biasValue) {
+            case 1:
+            case 2:
+                recommendQuery.whereGreaterThanOrEqualTo(Article.KEY_BIAS, 2);
+                recommendQuery.whereLessThanOrEqualTo(Article.KEY_BIAS, 4);
+                recommendQuery.orderByDescending(Article.KEY_BIAS);
+                break;
+            case 3:  recommendQuery.addDescendingOrder(Article.KEY_CREATED_AT);
+                break;
+            case 4:
+            case 5:
+                recommendQuery.whereGreaterThanOrEqualTo(Article.KEY_BIAS, 2);
+                recommendQuery.whereLessThanOrEqualTo(Article.KEY_BIAS, 4);
+                recommendQuery.orderByAscending(Article.KEY_BIAS);
+                break;
+        }
         recommendQuery.findInBackground(new FindCallback<Article>() {
             @Override
             public void done(List<Article> newArticles, ParseException e) {
@@ -477,6 +495,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     e.printStackTrace();
                     return;
                 }
+
                 articles.addAll(newArticles);
 
                 for (int i = 0; i < articles.size(); i++) {
