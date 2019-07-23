@@ -1,6 +1,7 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
@@ -20,6 +22,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
@@ -41,8 +44,26 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position) {
-        Notification notification = notifications.get(position);
+        final Notification notification = notifications.get(position);
+        Share share = null;
+        try {
+            share = getShare(notification.getShare().getObjectId());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         holder.bind(notification);
+
+        final Share finalShare = share;
+        holder.btnViewNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (finalShare != null) {
+                    Intent intent = new Intent(context, DetailActivity.class);
+                    intent.putExtra("share", (Serializable) finalShare);
+                    context.startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override

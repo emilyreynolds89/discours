@@ -233,7 +233,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailActivity.class);
-                //intent.putExtra("share_id", share.getObjectId());
                 intent.putExtra("share", (Serializable) share);
                 context.startActivity(intent);
             }

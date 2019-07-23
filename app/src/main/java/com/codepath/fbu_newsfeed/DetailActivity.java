@@ -17,7 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -88,7 +87,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
     Share share;
     Article article;
-    ParseUser user;
+    User user;
     User currentUser = (User) ParseUser.getCurrentUser();
 
     ArrayList<Comment> comments;
@@ -135,6 +134,13 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         queryRecommended();
 
+        String username = "username";
+        try {
+            username = user.fetchIfNeeded().getUsername();
+        } catch (ParseException e){
+            Log.e(TAG, "Error in retrieving username from user");
+            e.printStackTrace();
+        }
         tvUsername.setText(user.getUsername());
 
         if (user.getParseFile("profileImage") != null) {
@@ -393,7 +399,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
     private void queryShare() {
         share = (Share) getIntent().getSerializableExtra("share");
-        user = share.getUser();
+        user = (User) share.getUser();
         article = share.getArticle();
     }
 
