@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,6 +22,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.ArticleDetailActivity;
 import com.codepath.fbu_newsfeed.DetailActivity;
+import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
@@ -236,6 +239,13 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             }
         });
 
+        holder.ibInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Clicked information");
+                showInformationDialog();
+            }
+        });
     }
 
 
@@ -278,6 +288,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         return count;
     }
 
+    private void showInformationDialog() {
+        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
+        informationDialog.show(fm, "fragment_information");
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
@@ -299,7 +315,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.tvAngry) TextView tvAngry;
         @BindView(R.id.tvFactRating) TextView tvFactRating;
         @BindView(R.id.ivBias) ImageView ivBias;
-        @BindView(R.id.ibInformationTrends) ImageButton ibInformation;
+        @BindView(R.id.ibInformation) ImageButton ibInformation;
         @BindView(R.id.tvCaption) TextView tvCaption;
         @BindView(R.id.btnDiscussion) Button btnDiscussion;
         @BindView(R.id.tvSource) TextView tvSource;

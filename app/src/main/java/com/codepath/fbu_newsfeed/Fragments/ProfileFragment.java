@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -28,6 +30,7 @@ import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
+import com.codepath.fbu_newsfeed.Models.UserReport;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
 import com.parse.ParseUser;
@@ -56,6 +59,7 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.btnLogout) Button btnLogout;
     @BindView(R.id.btnRequest) Button btnRequest;
     @BindView(R.id.btnEdit) ImageButton btnEdit;
+    @BindView(R.id.btnReport) ImageButton btnReport;
     @BindView(R.id.rvProfilePosts) RecyclerView rvProfilePosts;
 
     private ShareAdapter shareAdapter;
@@ -135,7 +139,16 @@ public class ProfileFragment extends Fragment {
         };
 
         if (user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+            // if profile is for current user
             btnEdit.setVisibility(View.VISIBLE);
+            btnReport.setVisibility(View.GONE);
+
+            btnReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    reportUser();
+                }
+            });
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -150,8 +163,16 @@ public class ProfileFragment extends Fragment {
             });
         } else {
             btnEdit.setVisibility(View.INVISIBLE);
+            btnReport.setVisibility(View.VISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnRequest.setVisibility(View.VISIBLE);
+
+            btnReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    reportUser();
+                }
+            });
 
             if (isFriends()) {
                 btnRequest.setText("Friends!");
@@ -185,6 +206,14 @@ public class ProfileFragment extends Fragment {
 
         unbinder.unbind();
     }
+
+
+    private void reportUser() {
+        FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        ReportUserFragment userReportDialog = ReportUserFragment.newInstance(user.getObjectId());
+        userReportDialog.show(fm, "fragment_user_report");
+    }
+
 
     private void requestFriend(final ParseUser potentialFriend) {
         Friendship friendship = new Friendship(ParseUser.getCurrentUser(), potentialFriend, Friendship.State.Requested);

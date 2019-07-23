@@ -63,7 +63,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ibInformationTrends = itemView.findViewById(R.id.ibInformationTrends);
+            ibInformationTrends = itemView.findViewById(R.id.ibInformation);
             ivBiasTrends = itemView.findViewById(R.id.ivBiasTrends);
             ivArticleImage = itemView.findViewById(R.id.ivArticleImageTrends);
             tvTitle = itemView.findViewById(R.id.tvArticleTitleTrends);

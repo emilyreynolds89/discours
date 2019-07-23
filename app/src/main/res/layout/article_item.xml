@@ -281,7 +281,7 @@
         app:srcCompat="@color/colorSlightlyLiberal" />
 
     <ImageButton
-        android:id="@+id/ibInformationTrends"
+        android:id="@+id/ibInformation"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="12dp"
