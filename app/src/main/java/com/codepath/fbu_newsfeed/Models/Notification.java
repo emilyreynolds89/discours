@@ -16,7 +16,7 @@ public class Notification extends ParseObject {
 
     User sendUser;
     User receiveUser;
-    String type; // LIKE or COMMENT
+    String type; // REACTION or COMMENT
     Share share;
 
     public Notification() {
@@ -25,10 +25,18 @@ public class Notification extends ParseObject {
 
     public Notification(String type, User sender, User receiver, Share share) {
         super();
+
         this.type = type;
+        put(KEY_TYPE, type);
+
         this.sendUser = sender;
+        put(KEY_SEND_USER, sender);
+
         this.receiveUser = receiver;
+        put(KEY_RECEIVE_USER, receiver);
+
         this.share = share;
+        put(KEY_SHARE, share);
     }
 
 
@@ -70,8 +78,8 @@ public class Notification extends ParseObject {
 
 
     public String notificationText(String type) {
-        if (type.equals("LIKE")) {
-            return " liked your post";
+        if (type.equals("REACTION")) {
+            return " reacted to your post";
         } else {
             return " commented on your post";
         }

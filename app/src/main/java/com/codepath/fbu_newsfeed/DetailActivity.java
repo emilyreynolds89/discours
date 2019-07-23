@@ -33,6 +33,7 @@ import com.codepath.fbu_newsfeed.Adapters.RecommendAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
+import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
@@ -237,6 +238,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                                 }
                             }
                         });
+
+                        createNotification("COMMENT", share);
                     }
                 }
             });
@@ -264,6 +267,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
                     int count = createReaction("LIKE", share);
                     tvLike.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
                 break;
 
@@ -275,6 +280,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
                     int count = createReaction("DISLIKE", share);
                     tvDislike.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
                 break;
 
@@ -286,6 +293,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
                     int count = createReaction("HAPPY", share);
                     tvHappy.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
                 break;
 
@@ -297,6 +306,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
                     int count = createReaction("SAD", share);
                     tvSad.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
                 break;
 
@@ -308,6 +319,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
                     int count = createReaction("ANGRY", share);
                     tvAngry.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
                 break;
 
@@ -385,6 +398,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 commentAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private void createNotification(String type, Share share) {
+        Log.d(TAG, "Creating notification of type: " + type);
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share);
+        notification.saveInBackground();
     }
 
     private int createReaction(String type, Share share) {

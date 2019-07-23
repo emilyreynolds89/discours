@@ -23,6 +23,7 @@ import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
@@ -42,12 +43,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     private static final String TAG = "ShareAdapter";
     public ArrayList<Share> shares;
     public static Context context;
-
-//    ArrayList<Reaction> reactionsLike;
-//    ArrayList<Reaction> reactionsDislike;
-//    ArrayList<Reaction> reactionsHappy;
-//    ArrayList<Reaction> reactionsSad;
-//    ArrayList<Reaction> reactionsAngry;
 
     public ShareAdapter(ArrayList<Share> shares) {
         this.shares = shares;
@@ -88,17 +83,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.tvSource.setText(article.getSource());
         holder.tvTag.setText(article.getTag());
 
-//        reactionsLike = new ArrayList<>();
-//        reactionsDislike = new ArrayList<>();
-//        reactionsHappy = new ArrayList<>();
-//        reactionsSad = new ArrayList<>();
-//        reactionsAngry = new ArrayList<>();
-//
-//        queryReactions("LIKE", share);
-//        queryReactions("DISLIKE", share);
-//        queryReactions("HAPPY", share);
-//        queryReactions("SAD", share);
-//        queryReactions("ANGRY", share);
 
         holder.tvLike.setText(Integer.toString(share.getCount("LIKE")));
         holder.tvDislike.setText(Integer.toString(share.getCount("DISLIKE")));
@@ -118,22 +102,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 } else {
                     int count = createReaction("LIKE", share);
                     holder.tvLike.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
 
-//                queryReactions("LIKE", share);
-//                int userPositionLike = userReacted(reactionsLike, currentUser);
-//                if (userPositionLike != -1) {
-//                    Reaction userReaction = reactionsLike.get(userPositionLike);
-//                    reactionsLike.remove(userPositionLike);
-//                    share.decrementCount("LIKE");
-//                    userReaction.deleteInBackground();
-//                } else {
-//                    Reaction newUserReaction = new Reaction(currentUser, share, "LIKE");
-//                    reactionsLike.add(newUserReaction);
-//                    share.incrementCount("LIKE");
-//                    newUserReaction.saveInBackground();
-//                }
-//                holder.tvLike.setText(Integer.toString(share.getCount("LIKE")));
+
             }
         });
 
@@ -147,21 +120,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 } else {
                     int count = createReaction("DISLIKE", share);
                     holder.tvDislike.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
-//                queryReactions("DISLIKE", share);
-//                int userPositionDislike = userReacted(reactionsDislike, currentUser);
-//                if (userPositionDislike != -1) {
-//                    Reaction userReaction = reactionsDislike.get(userPositionDislike);
-//                    reactionsDislike.remove(userPositionDislike);
-//                    share.decrementCount("DISLIKE");
-//                    userReaction.deleteInBackground();
-//                } else {
-//                    Reaction newUserReaction = new Reaction(currentUser, share, "DISLIKE");
-//                    reactionsDislike.add(newUserReaction);
-//                    share.incrementCount("DISLIKE");
-//                    newUserReaction.saveInBackground();
-//                }
-//                holder.tvDislike.setText(Integer.toString(share.getCount("DISLIKE")));
+
+
             }
         });
 
@@ -175,22 +138,10 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 } else {
                     int count = createReaction("HAPPY", share);
                     holder.tvHappy.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
 
-//                queryReactions("HAPPY", share);
-//                int userPositionHappy = userReacted(reactionsHappy, currentUser);
-//                if (userPositionHappy != -1) {
-//                    Reaction userReaction = reactionsHappy.get(userPositionHappy);
-//                    reactionsHappy.remove(userPositionHappy);
-//                    share.decrementCount("HAPPY");
-//                    userReaction.deleteInBackground();
-//                } else {
-//                    Reaction newUserReaction = new Reaction(currentUser, share, "HAPPY");
-//                    reactionsHappy.add(newUserReaction);
-//                    share.incrementCount("HAPPY");
-//                    newUserReaction.saveInBackground();
-//                }
-//                holder.tvHappy.setText(Integer.toString(share.getCount("HAPPY")));
             }
         });
 
@@ -204,22 +155,10 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 } else {
                     int count = createReaction("SAD", share);
                     holder.tvSad.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
 
-//                queryReactions("SAD", share);
-//                int userPositionSad = userReacted(reactionsSad, currentUser);
-//                if (userPositionSad != -1) {
-//                    Reaction userReaction = reactionsSad.get(userPositionSad);
-//                    reactionsSad.remove(userPositionSad);
-//                    share.decrementCount("SAD");
-//                    userReaction.deleteInBackground();
-//                } else {
-//                    Reaction newUserReaction = new Reaction(currentUser, share, "SAD");
-//                    reactionsSad.add(newUserReaction);
-//                    share.incrementCount("SAD");
-//                    newUserReaction.saveInBackground();
-//                }
-//                holder.tvSad.setText(Integer.toString(share.getCount("SAD")));
             }
         });
 
@@ -233,22 +172,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 } else {
                     int count = createReaction("ANGRY", share);
                     holder.tvAngry.setText(Integer.toString(count));
+
+                    createNotification("REACTION", share);
                 }
 
-//                queryReactions("ANGRY", share);
-//                int userPositionAngry = userReacted(reactionsAngry, currentUser);
-//                if (userPositionAngry != -1) {
-//                    Reaction userReaction = reactionsAngry.get(userPositionAngry);
-//                    reactionsAngry.remove(userPositionAngry);
-//                    share.decrementCount("ANGRY");
-//                    userReaction.deleteInBackground();
-//                } else {
-//                    Reaction newUserReaction = new Reaction(currentUser, share, "ANGRY");
-//                    reactionsAngry.add(newUserReaction);
-//                    share.incrementCount("ANGRY");
-//                    newUserReaction.saveInBackground();
-//                }
-//                holder.tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
+
             }
         });
 
@@ -307,12 +235,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 context.startActivity(intent);
             }
         });
-//
-//        holder.tvLike.setText(Integer.toString(reactionsLike.size()));
-//        holder.tvDislike.setText(Integer.toString(reactionsDislike.size()));
-//        holder.tvHappy.setText(Integer.toString(reactionsHappy.size()));
-//        holder.tvSad.setText(Integer.toString(reactionsSad.size()));
-//        holder.tvAngry.setText(Integer.toString(reactionsAngry.size()));
 
     }
 
@@ -414,61 +336,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         }
     }
 
-
-
-//    private void queryReactions(final String type, Share share) {
-//        ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
-//        reactionQuery.include(Reaction.KEY_TYPE);
-//        reactionQuery.include(Reaction.KEY_SHARE);
-//        reactionQuery.include(Reaction.KEY_USER);
-//        reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
-//        reactionQuery.whereEqualTo(Reaction.KEY_TYPE, type);
-//
-//        reactionQuery.findInBackground(new FindCallback<Reaction>() {
-//            @Override
-//            public void done(List<Reaction> newReactions, ParseException e) {
-//                if (e != null) {
-//                    Log.e("DetailActivity", "Error in reactions query");
-//                    e.printStackTrace();
-//                    return;
-//                }
-//                switch (type) {
-//                    case "LIKE":
-//                        reactionsLike.clear();
-//                        reactionsLike.addAll(newReactions);
-//                        break;
-//                    case "DISLIKE":
-//                        reactionsDislike.clear();
-//                        reactionsDislike.addAll(newReactions);
-//                        break;
-//                    case "HAPPY":
-//                        reactionsHappy.clear();
-//                        reactionsHappy.addAll(newReactions);
-//                        break;
-//                    case "SAD":
-//                        reactionsSad.clear();
-//                        reactionsSad.addAll(newReactions);
-//                        break;
-//                    case "ANGRY":
-//                        reactionsAngry.clear();
-//                        reactionsAngry.addAll(newReactions);
-//                        break;
-//                    default:
-//                        break;
-//                }
-//
-//            }
-//        });
-//    }
-
-//    public int userReacted(ArrayList<Reaction> reactions, User user) {
-//        for (Reaction r : reactions) {
-//            if (r.getUser().getObjectId().equals(user.getObjectId())) {
-//                return reactions.indexOf(r);
-//            }
-//        }
-//        return -1;
-//    }
+    private void createNotification(String type, Share share) {
+        Log.d(TAG, "Creating notification of type: " + type);
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share);
+        notification.saveInBackground();
+    }
 
 
 }

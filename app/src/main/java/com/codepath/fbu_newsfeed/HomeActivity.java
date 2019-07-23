@@ -2,7 +2,6 @@ package com.codepath.fbu_newsfeed;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,10 +13,11 @@ import androidx.fragment.app.FragmentManager;
 
 import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
 import com.codepath.fbu_newsfeed.Fragments.CreateFragment;
+import com.codepath.fbu_newsfeed.Fragments.FeedFragment;
+import com.codepath.fbu_newsfeed.Fragments.NotificationFragment;
+import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.codepath.fbu_newsfeed.Fragments.TrendsFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
-import com.codepath.fbu_newsfeed.Fragments.FeedFragment;
-import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
@@ -58,6 +58,9 @@ public class HomeActivity extends AppCompatActivity {
                         fragment = new CreateFragment();
                         break;
                     // TODO: notifications fragment
+                    case R.id.action_notification:
+                        fragment = new NotificationFragment();
+                        break;
                     case R.id.action_profile:
                         fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser().getObjectId());
                         break;

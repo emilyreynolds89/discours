@@ -1,4 +1,4 @@
-package com.codepath.fbu_newsfeed;
+package com.codepath.fbu_newsfeed.Helpers;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
