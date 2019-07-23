@@ -10,6 +10,7 @@ import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
+import com.codepath.fbu_newsfeed.Models.UserReport;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -39,6 +40,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Share.class);
         ParseObject.registerSubclass(User.class);
         ParseObject.registerSubclass(Notification.class);
+        ParseObject.registerSubclass(UserReport.class);
 
         // set applicationId, and server server based on the values in the Heroku settings.
         // clientKey is not needed unless explicitly configured

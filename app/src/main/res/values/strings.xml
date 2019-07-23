@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">fbu-newsfeed</string>
+
+    <string name="bias_explanation">We calculate bias by doing X, Y and Z.</string>
+
+    <string name="truth_explanation">We calculate truth by doing A, B, and C.</string>
 </resources>

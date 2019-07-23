@@ -81,27 +81,34 @@ public class CreateFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 Log.d("CreateFragment", "Selected item at " + String.valueOf(position));
-                tvFactCheckCreate.setText(articles.get(position).getTruth());
-                tvArticleTitleCreate.setText(articles.get(position).getTitle());
-                ParseFile imageFile = articles.get(position).getImage();
+                if (!articleList.isEmpty()) {
+                    tvFactCheckCreate.setText(articles.get(position).getTruth());
+                    tvArticleTitleCreate.setText(articles.get(position).getTitle());
+                    ParseFile imageFile = articles.get(position).getImage();
 
-                int biasValue = articles.get(position).getIntBias();
-                switch (biasValue) {
-                    case 1:  ivBiasCreate.setColorFilter(Article.liberalColor);
-                        break;
-                    case 2:  ivBiasCreate.setColorFilter(Article.slightlyLiberalColor);
-                        break;
-                    case 3:  ivBiasCreate.setColorFilter(Article.moderateColor);
-                        break;
-                    case 4:  ivBiasCreate.setColorFilter(Article.slightlyConservativeColor);
-                        break;
-                    case 5:  ivBiasCreate.setColorFilter(Article.conservativeColor);
-                        break;
+                    int biasValue = articles.get(position).getIntBias();
+                    switch (biasValue) {
+                        case 1:
+                            ivBiasCreate.setColorFilter(Article.liberalColor);
+                            break;
+                        case 2:
+                            ivBiasCreate.setColorFilter(Article.slightlyLiberalColor);
+                            break;
+                        case 3:
+                            ivBiasCreate.setColorFilter(Article.moderateColor);
+                            break;
+                        case 4:
+                            ivBiasCreate.setColorFilter(Article.slightlyConservativeColor);
+                            break;
+                        case 5:
+                            ivBiasCreate.setColorFilter(Article.conservativeColor);
+                            break;
+                    }
+                    if (imageFile != null) {
+                        Glide.with(getContext()).load(imageFile.getUrl()).into(ivArticlePreviewCreate);
+                    }
+                    selectedArticle = articles.get(position);
                 }
-                if(imageFile != null) {
-                    Glide.with(getContext()).load(imageFile.getUrl()).into(ivArticlePreviewCreate);
-                }
-                selectedArticle = articles.get(position);
             }
 
             @Override

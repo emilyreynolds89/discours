@@ -95,10 +95,12 @@ public class UserSearchFragment extends Fragment {
         fullNameQuery.whereStartsWith(User.KEY_FULLNAME, query);
         fullNameQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
 
+
         List<ParseQuery<ParseUser>> queries = new ArrayList<>();
         queries.add(usernameQuery);
         queries.add(fullNameQuery);
         ParseQuery<ParseUser> mainQuery = ParseQuery.or(queries);
+        mainQuery.setLimit(20);
 
         try {
             List<ParseUser> result = mainQuery.find();
