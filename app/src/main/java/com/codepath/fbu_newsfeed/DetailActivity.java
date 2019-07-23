@@ -452,6 +452,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         recommendQuery.include(Article.KEY_IMAGE);
 
         recommendQuery.whereContains(Article.KEY_TAG, article.getTag());
+        recommendQuery.whereNotEqualTo(Article.KEY_TITLE, article.getTitle());
         int biasValue = article.getIntBias();
         switch (biasValue) {
             case 1:
