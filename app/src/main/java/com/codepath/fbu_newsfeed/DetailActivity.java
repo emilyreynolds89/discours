@@ -361,18 +361,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void queryShare() {
-        /*String shareId = getIntent().getStringExtra("share_id");
-        ParseQuery<Share> query = ParseQuery.getQuery(Share.class);
-        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
-        query.include("user");
-        query.include("article");
-        try {
-            share = query.get(shareId);
-            user = share.getUser();
-            article = share.getArticle();
-        } catch(Exception e) {
-            Log.d(TAG, "Error: " + e.getMessage());
-        }*/
         share = (Share) getIntent().getSerializableExtra("share");
         user = share.getUser();
         article = share.getArticle();
@@ -399,51 +387,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    /*private void queryReactions(final String type) {
-        ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
-        reactionQuery.include(Reaction.KEY_TYPE);
-        reactionQuery.include(Reaction.KEY_SHARE);
-        reactionQuery.include(Reaction.KEY_USER);
-        reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
-        reactionQuery.whereEqualTo(Reaction.KEY_TYPE, type);
-
-        reactionQuery.findInBackground(new FindCallback<Reaction>() {
-            @Override
-            public void done(List<Reaction> newReactions, ParseException e) {
-                if (e != null) {
-                    Log.e("DetailActivity", "Error in reactions query");
-                    e.printStackTrace();
-                    return;
-                }
-                switch (type) {
-                    case "LIKE":
-                        reactionsLike.clear();
-                        reactionsLike.addAll(newReactions);
-                        break;
-                    case "DISLIKE":
-                        reactionsDislike.clear();
-                        reactionsDislike.addAll(newReactions);
-                        break;
-                    case "HAPPY":
-                        reactionsHappy.clear();
-                        reactionsHappy.addAll(newReactions);
-                        break;
-                    case "SAD":
-                        reactionsSad.clear();
-                        reactionsSad.addAll(newReactions);
-                        break;
-                    case "ANGRY":
-                        reactionsAngry.clear();
-                        reactionsAngry.addAll(newReactions);
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-        });
-    }
-*/
     private int createReaction(String type, Share share) {
         Log.d(TAG, "Creating reaction of type: " + type);
         Reaction newReaction = new Reaction(ParseUser.getCurrentUser(), share, type);
@@ -485,9 +428,28 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void queryRecommended() {
-        ParseQuery<Article> recommendQuery = ParseQuery.getQuery(Article.class);
+        final ParseQuery<Article> recommendQuery = ParseQuery.getQuery(Article.class);
         recommendQuery.include(Article.KEY_TITLE);
         recommendQuery.include(Article.KEY_IMAGE);
+
+        recommendQuery.whereContains(Article.KEY_TAG, article.getTag());
+        int biasValue = article.getIntBias();
+        switch (biasValue) {
+            case 1:
+            case 2:
+                recommendQuery.whereGreaterThanOrEqualTo(Article.KEY_BIAS, 2);
+                recommendQuery.whereLessThanOrEqualTo(Article.KEY_BIAS, 4);
+                recommendQuery.orderByDescending(Article.KEY_BIAS);
+                break;
+            case 3:  recommendQuery.addDescendingOrder(Article.KEY_CREATED_AT);
+                break;
+            case 4:
+            case 5:
+                recommendQuery.whereGreaterThanOrEqualTo(Article.KEY_BIAS, 2);
+                recommendQuery.whereLessThanOrEqualTo(Article.KEY_BIAS, 4);
+                recommendQuery.orderByAscending(Article.KEY_BIAS);
+                break;
+        }
         recommendQuery.findInBackground(new FindCallback<Article>() {
             @Override
             public void done(List<Article> newArticles, ParseException e) {
@@ -496,6 +458,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     e.printStackTrace();
                     return;
                 }
+
                 articles.addAll(newArticles);
 
                 for (int i = 0; i < articles.size(); i++) {

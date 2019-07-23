@@ -1,6 +1,7 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.fbu_newsfeed.ArticleDetailActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.ParseFile;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -52,11 +55,21 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
             super(itemView);
             tvArticleTitleRecommend = itemView.findViewById(R.id.tvArticleTitleRecommend);
             ivArticleImageRecommend = itemView.findViewById(R.id.ivArticleImageRecommend);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
+            int position = getAdapterPosition();
 
+            if (position != RecyclerView.NO_POSITION) {
+                Article article = articles.get(position);
+
+                Intent intent = new Intent(context, ArticleDetailActivity.class);
+                intent.putExtra("article", (Serializable) article);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
         }
         public void bind(Article article) {
             tvArticleTitleRecommend.setText(article.getTitle());
