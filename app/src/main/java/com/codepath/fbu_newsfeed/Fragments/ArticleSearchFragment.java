@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ public class ArticleSearchFragment extends Fragment {
     private static final String TAG = "UserSearchFragment";
 
     @BindView(R.id.searchView) SearchView searchView;
+    @BindView(R.id.tvError) TextView tvError;
 
     @BindView(R.id.rvResults) RecyclerView rvResults;
     private Unbinder unbinder;
@@ -106,7 +108,14 @@ public class ArticleSearchFragment extends Fragment {
 
         try {
             List<Article> result = titleQuery.find();
-            trendsAdapter.addAll(result);
+            if (result.size() > 0) {
+                tvError.setVisibility(View.GONE);
+                rvResults.setVisibility(View.VISIBLE);
+                trendsAdapter.addAll(result);
+            } else {
+                rvResults.setVisibility(View.GONE);
+                tvError.setVisibility(View.VISIBLE);
+            }
         } catch(Exception e) {
             Toast.makeText(getContext(), "Error searching articles", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Error searching articles " + e.getMessage());
