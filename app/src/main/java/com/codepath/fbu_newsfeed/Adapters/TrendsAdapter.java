@@ -10,10 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.ArticleDetailActivity;
+import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.ParseFile;
@@ -53,6 +56,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
         ImageButton ibInformationTrends;
         ImageView ivBiasTrends;
+        ImageButton ibReportArticle;
         ImageView ivArticleImage;
         TextView tvTitle;
         TextView tvSummary;
@@ -65,6 +69,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             super(itemView);
             ibInformationTrends = itemView.findViewById(R.id.ibInformation);
             ivBiasTrends = itemView.findViewById(R.id.ivBiasTrends);
+            ibReportArticle = itemView.findViewById(R.id.ibReportArticle);
             ivArticleImage = itemView.findViewById(R.id.ivArticleImageTrends);
             tvTitle = itemView.findViewById(R.id.tvArticleTitleTrends);
             tvSummary = itemView.findViewById(R.id.tvArticleSummaryTrends);
@@ -72,6 +77,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             tvFactRatingTrends = itemView.findViewById(R.id.tvFactRatingTrends);
             tvTagTrends = itemView.findViewById(R.id.tvTagTrends);
 
+            ibReportArticle.setOnClickListener(this);
             itemView.setOnClickListener(this);
 
         }
@@ -83,9 +89,17 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             if (position != RecyclerView.NO_POSITION) {
                 Article article = articles.get(position);
 
-                Intent intent = new Intent(context, ArticleDetailActivity.class);
-                intent.putExtra("article", (Serializable) article);
-                context.startActivity(intent);
+                switch(view.getId()) {
+                    case R.id.ibReportArticle:
+                        reportArticle(article);
+                        break;
+                    default:
+                        Intent intent = new Intent(context, ArticleDetailActivity.class);
+                        intent.putExtra("article", (Serializable) article);
+                        context.startActivity(intent);
+                        break;
+                }
+
             }
         }
 
@@ -125,6 +139,12 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
     public void addAll(List<Article> newArticles) {
         articles.addAll(newArticles);
         notifyDataSetChanged();
+    }
+
+    private void reportArticle(Article article) {
+        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());
+        articleReportDialog.show(fm, "fragment_report");
     }
 
 

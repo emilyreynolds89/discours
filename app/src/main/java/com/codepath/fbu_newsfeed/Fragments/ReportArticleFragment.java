@@ -82,9 +82,9 @@ public class ReportArticleFragment extends DialogFragment {
         TYPE_LIST.add("Other");
 
         try {
-            article = getArticle(getArguments().getString("user_id"));
+            article = getArticle(getArguments().getString("article_id"));
         } catch(Exception e) {
-            Log.d(TAG, "Trouble retrieving user", e);
+            Log.d(TAG, "Trouble retrieving article", e);
             dismiss();
         }
 

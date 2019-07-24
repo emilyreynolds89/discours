@@ -32,6 +32,7 @@ import com.bumptech.glide.request.target.Target;
 import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Adapters.RecommendAdapter;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
+import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
@@ -63,6 +64,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.ivArticleImage) ImageView ivArticleImage;
     @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
     @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
+    @BindView(R.id.ibReportArticle) ImageButton ibReportArticle;
     @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
     @BindView(R.id.tvLike) TextView tvLike;
     @BindView(R.id.ibReactionDislike) ImageButton ibReactionDislike;
@@ -217,6 +219,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         ibReactionSad.setOnClickListener(this);
         ibReactionAngry.setOnClickListener(this);
 
+        ibReportArticle.setOnClickListener(this);
+
         ibInformation.setOnClickListener(this);
 
         viewArticle.setOnClickListener(this);
@@ -270,6 +274,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ibReportArticle:
+                reportArticle();
+                break;
             case R.id.ibReactionLike:
                 Reaction likeReaction = getReaction("LIKE", share, currentUser);
                 if (likeReaction != null) {
@@ -520,13 +527,10 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         swipeContainer.setRefreshing(false);
     }
 
-    public int userReacted(ArrayList<Reaction> reactions, User user) {
-        for (Reaction r : reactions) {
-            if (r.getUser().getObjectId().equals(user.getObjectId())) {
-                return reactions.indexOf(r);
-            }
-        }
-        return -1;
+    private void reportArticle() {
+        FragmentManager fm = getSupportFragmentManager();
+        ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());
+        articleReportDialog.show(fm, "fragment_report");
     }
 
 }
