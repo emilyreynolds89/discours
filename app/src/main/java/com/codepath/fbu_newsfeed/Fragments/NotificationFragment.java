@@ -86,9 +86,14 @@ public class NotificationFragment extends Fragment {
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
     private void queryNotifications(int offset) {
         ParseQuery<Notification> notificationQuery = ParseQuery.getQuery(Notification.class);
-        notificationQuery.include(Notification.KEY_TYPE);
         notificationQuery.include(Notification.KEY_SEND_USER);
         notificationQuery.include(Notification.KEY_RECEIVE_USER);
         notificationQuery.include(Notification.KEY_SHARE);
@@ -106,7 +111,6 @@ public class NotificationFragment extends Fragment {
                     return;
                 }
                 notificationAdapter.addAll(newNotifications);
-                notificationAdapter.notifyDataSetChanged();
             }
         });
     }
