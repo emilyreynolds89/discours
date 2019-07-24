@@ -271,28 +271,23 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ibReactionLike:
-                int count = react("LIKE", share, currentUser);
-                tvLike.setText(Integer.toString(count));
+                updateReactionText("LIKE", share, currentUser, tvLike);
                 break;
 
             case R.id.ibReactionDislike:
-                count = react("DISLIKE", share, currentUser);
-                tvDislike.setText(Integer.toString(count));
+                updateReactionText("LIKE", share, currentUser, tvDislike);
                 break;
 
             case R.id.ibReactionHappy:
-                count = react("HAPPY", share, currentUser);
-                tvHappy.setText(Integer.toString(count));
+                updateReactionText("LIKE", share, currentUser, tvHappy);
                 break;
 
             case R.id.ibReactionSad:
-                count = react("SAD", share, currentUser);
-                tvSad.setText(Integer.toString(count));
+                updateReactionText("LIKE", share, currentUser, tvSad);
                 break;
 
             case R.id.ibReactionAngry:
-                count = react("ANGRY", share, currentUser);
-                tvAngry.setText(Integer.toString(count));
+                updateReactionText("LIKE", share, currentUser, tvAngry);
                 break;
 
             case R.id.ibInformation:
@@ -384,7 +379,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private int react(String type, Share share, User currentUser) {
+    private void updateReactionText(String type, Share share, User currentUser, TextView textView) {
         Reaction reaction = getReaction(type, share, currentUser);
         int count;
         if (reaction != null) {
@@ -393,7 +388,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             count = createReaction(type, share);
             createNotification("REACTION", share, type);
         }
-        return count;
+        textView.setText(Integer.toString(count));
     }
 
     private void createNotification(String type, Share share, String typeText) {

@@ -98,40 +98,35 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.ibReactionLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int count = react("LIKE", share, currentUser);
-                holder.tvLike.setText(Integer.toString(count));
+                updateReactionText("LIKE", share, currentUser, holder.tvLike);
             }
         });
 
         holder.ibReactionDislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int count = react("DISLIKE", share, currentUser);
-                holder.tvDislike.setText(Integer.toString(count));
+                updateReactionText("DISLIKE", share, currentUser, holder.tvDislike);
             }
         });
 
         holder.ibReactionHappy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int count = react("HAPPY", share, currentUser);
-                holder.tvHappy.setText(Integer.toString(count));
+                updateReactionText("HAPPY", share, currentUser, holder.tvHappy);
             }
         });
 
         holder.ibReactionSad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int count = react("SAD", share, currentUser);
-                holder.tvSad.setText(Integer.toString(count));
+                updateReactionText("SAD", share, currentUser, holder.tvSad);
             }
         });
 
         holder.ibReactionAngry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int count = react("ANGRY", share, currentUser);
-                holder.tvAngry.setText(Integer.toString(count));
+                updateReactionText("ANGRY", share, currentUser, holder.tvAngry);
             }
         });
 
@@ -303,7 +298,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         }
     }
 
-    private int react(String type, Share share, User currentUser) {
+    private void updateReactionText(String type, Share share, User currentUser, TextView textView) {
         Reaction reaction = getReaction(type, share, currentUser);
         int count;
         if (reaction != null) {
@@ -312,7 +307,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             count = createReaction(type, share);
             createNotification("REACTION", share, type);
         }
-        return count;
+        textView.setText(Integer.toString(count));
     }
 
     private void createNotification(String type, Share share, String typeText) {
