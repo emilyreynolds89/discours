@@ -57,7 +57,7 @@ import butterknife.ButterKnife;
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String TAG = "DetailActivity";
 
-    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
     @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
@@ -254,7 +254,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                             }
                         });
 
-                        createNotification("COMMENT", share);
+                        createNotification("COMMENT", share, message);
                     }
                 }
             });
@@ -278,68 +278,23 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 reportArticle();
                 break;
             case R.id.ibReactionLike:
-                Reaction likeReaction = getReaction("LIKE", share, currentUser);
-                if (likeReaction != null) {
-                    int count = destroyReaction(likeReaction, "LIKE", share);
-                    tvLike.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("LIKE", share);
-                    tvLike.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
+                updateReactionText("LIKE", share, currentUser, tvLike);
                 break;
 
             case R.id.ibReactionDislike:
-                Reaction dislikeReaction = getReaction("DISLIKE", share, currentUser);
-                if (dislikeReaction != null) {
-                    int count = destroyReaction(dislikeReaction, "DISLIKE", share);
-                    tvDislike.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("DISLIKE", share);
-                    tvDislike.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
+                updateReactionText("LIKE", share, currentUser, tvDislike);
                 break;
 
             case R.id.ibReactionHappy:
-                Reaction happyReaction = getReaction("HAPPY", share, currentUser);
-                if (happyReaction != null) {
-                    int count = destroyReaction(happyReaction, "HAPPY", share);
-                    tvHappy.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("HAPPY", share);
-                    tvHappy.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
+                updateReactionText("LIKE", share, currentUser, tvHappy);
                 break;
 
             case R.id.ibReactionSad:
-                Reaction sadReaction = getReaction("SAD", share, currentUser);
-                if (sadReaction != null) {
-                    int count = destroyReaction(sadReaction, "SAD", share);
-                    tvSad.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("SAD", share);
-                    tvSad.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
+                updateReactionText("LIKE", share, currentUser, tvSad);
                 break;
 
             case R.id.ibReactionAngry:
-                Reaction angryReaction = getReaction("ANGRY", share, currentUser);
-                if (angryReaction != null) {
-                    int count = destroyReaction(angryReaction, "ANGRY", share);
-                    tvAngry.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("ANGRY", share);
-                    tvAngry.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
+                updateReactionText("LIKE", share, currentUser, tvAngry);
                 break;
 
             case R.id.ibInformation:
@@ -431,9 +386,21 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void createNotification(String type, Share share) {
+    private void updateReactionText(String type, Share share, User currentUser, TextView textView) {
+        Reaction reaction = getReaction(type, share, currentUser);
+        int count;
+        if (reaction != null) {
+            count = destroyReaction(reaction, type, share);
+        } else {
+            count = createReaction(type, share);
+            createNotification("REACTION", share, type);
+        }
+        textView.setText(Integer.toString(count));
+    }
+
+    private void createNotification(String type, Share share, String typeText) {
         Log.d(TAG, "Creating notification of type: " + type);
-        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share);
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share, typeText);
         notification.saveInBackground();
     }
 

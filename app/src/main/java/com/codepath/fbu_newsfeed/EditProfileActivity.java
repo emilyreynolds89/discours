@@ -1,12 +1,7 @@
 package com.codepath.fbu_newsfeed;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
-
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +12,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -49,7 +48,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.tvFullName) TextView tvFullName;
     @BindView(R.id.tvUsername) TextView tvUsername;
-    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
     @BindView(R.id.etBio) EditText etBio;
     @BindView(R.id.btnUpload) Button btnUpload;
     @BindView(R.id.btnSubmit) Button btnSubmit;
@@ -135,6 +134,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(this, HomeActivity.class);
         intent.putExtra("user_id", mUser.getObjectId());
         startActivity(intent);
+        finish();
     }
 
     @Override

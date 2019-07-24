@@ -12,6 +12,7 @@ public class Notification extends ParseObject {
     public static final String KEY_RECEIVE_USER = "receiveUser";
     public static final String KEY_TYPE = "type";
     public static final String KEY_SHARE = "share";
+    public static final String KEY_TYPE_TEXT = "typeText";
     public static final String KEY_CREATEDAT = "createdAt";
     public static final int LIMIT = 36;
 
@@ -19,12 +20,13 @@ public class Notification extends ParseObject {
     User receiveUser;
     String type; // REACTION or COMMENT
     Share share;
+    String typeText;
 
     public Notification() {
         super();
     }
 
-    public Notification(String type, User sender, User receiver, Share share) {
+    public Notification(String type, User sender, User receiver, Share share, String typeText) {
         super();
 
         this.type = type;
@@ -38,6 +40,9 @@ public class Notification extends ParseObject {
 
         this.share = share;
         put(KEY_SHARE, share);
+
+        this.typeText = typeText;
+        put(KEY_TYPE_TEXT, typeText);
     }
 
 
@@ -75,6 +80,15 @@ public class Notification extends ParseObject {
     public void setShare(Share share) {
         this.share = share;
         put(KEY_SHARE, share);
+    }
+
+    public String getTypeText() {
+        return getString(KEY_TYPE_TEXT);
+    }
+
+    public void setTypeText(String typeText) {
+        this.typeText = typeText;
+        put(KEY_TYPE_TEXT, typeText);
     }
 
 

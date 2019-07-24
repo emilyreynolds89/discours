@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Share;
@@ -51,10 +52,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         holder.bind(notification);
 
         final Share finalShare = share;
-        holder.btnViewNotif.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (finalShare != null) {
@@ -73,31 +75,40 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvUsernameNotif;
         TextView tvDescriptionNotif;
         ImageView ivImageNotif;
-        Button btnViewNotif;
+        ImageView ivProfileImageNotif;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvUsernameNotif = itemView.findViewById(R.id.tvUsernameNotif);
             tvDescriptionNotif = itemView.findViewById(R.id.tvDescriptionNotif);
             ivImageNotif = itemView.findViewById(R.id.ivImageNotif);
-            btnViewNotif = itemView.findViewById(R.id.btnViewNotif);
+            ivProfileImageNotif = itemView.findViewById(R.id.ivProfileImageNotif);
+
         }
 
         public void bind(Notification notification) {
             User sender = notification.getSendUser();
             String username = sender.getUsername();
-            tvUsernameNotif.setText(username);
-            tvDescriptionNotif.setText("@" + username + notification.notificationText(notification.getType()));
+            String typeText = notification.getTypeText();
+            tvDescriptionNotif.setText("@" + username + notification.notificationText(notification.getType()) + ": " + typeText);
 
             try {
                 Share share = getShare(notification.getShare().getObjectId());
                 ParseFile image = share.getArticle().getImage();
                 if (image != null ) {
                     Glide.with(context).load(image.getUrl()).into(ivImageNotif);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                User user = getUser(notification.getSendUser().getObjectId());
+                ParseFile image = user.getProfileImage();
+                if (image != null) {
+                    Glide.with(context).load(image.getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImageNotif);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -119,6 +130,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         ParseQuery<Share> query = ParseQuery.getQuery(Share.class);
         query.include(Share.KEY_ARTICLE);
         query.whereEqualTo("objectId", shareId);
+        return query.getFirst();
+    }
+
+    public User getUser(String userId) throws ParseException {
+        ParseQuery<User> query = ParseQuery.getQuery(User.class);
+        query.include(User.KEY_USERNAME);
+        query.include(User.KEY_PROFILEIMAGE);
+        query.include(User.KEY_FULLNAME);
+
+        query.whereEqualTo("objectId", userId);
         return query.getFirst();
     }
 

@@ -99,88 +99,35 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.ibReactionLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Reaction likeReaction = getReaction("LIKE", share, currentUser);
-                if (likeReaction != null) {
-                    int count = destroyReaction(likeReaction, "LIKE", share);
-                    holder.tvLike.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("LIKE", share);
-                    holder.tvLike.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-
-
+                updateReactionText("LIKE", share, currentUser, holder.tvLike);
             }
         });
 
         holder.ibReactionDislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Reaction dislikeReaction = getReaction("DISLIKE", share, currentUser);
-                if (dislikeReaction != null) {
-                    int count = destroyReaction(dislikeReaction, "DISLIKE", share);
-                    holder.tvDislike.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("DISLIKE", share);
-                    holder.tvDislike.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-
-
+                updateReactionText("DISLIKE", share, currentUser, holder.tvDislike);
             }
         });
 
         holder.ibReactionHappy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Reaction happyReaction = getReaction("HAPPY", share, currentUser);
-                if (happyReaction != null) {
-                    int count = destroyReaction(happyReaction, "HAPPY", share);
-                    holder.tvHappy.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("HAPPY", share);
-                    holder.tvHappy.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-
+                updateReactionText("HAPPY", share, currentUser, holder.tvHappy);
             }
         });
 
         holder.ibReactionSad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Reaction sadReaction = getReaction("SAD", share, currentUser);
-                if (sadReaction != null) {
-                    int count = destroyReaction(sadReaction, "SAD", share);
-                    holder.tvSad.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("SAD", share);
-                    holder.tvSad.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-
+                updateReactionText("SAD", share, currentUser, holder.tvSad);
             }
         });
 
         holder.ibReactionAngry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Reaction angryReaction = getReaction("ANGRY", share, currentUser);
-                if (angryReaction != null) {
-                    int count = destroyReaction(angryReaction, "ANGRY", share);
-                    holder.tvAngry.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("ANGRY", share);
-                    holder.tvAngry.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-
-
+                updateReactionText("ANGRY", share, currentUser, holder.tvAngry);
             }
         });
 
@@ -307,7 +254,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+        @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
         @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
@@ -364,9 +311,21 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         }
     }
 
-    private void createNotification(String type, Share share) {
+    private void updateReactionText(String type, Share share, User currentUser, TextView textView) {
+        Reaction reaction = getReaction(type, share, currentUser);
+        int count;
+        if (reaction != null) {
+            count = destroyReaction(reaction, type, share);
+        } else {
+            count = createReaction(type, share);
+            createNotification("REACTION", share, type);
+        }
+        textView.setText(Integer.toString(count));
+    }
+
+    private void createNotification(String type, Share share, String typeText) {
         Log.d(TAG, "Creating notification of type: " + type);
-        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share);
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share, typeText);
         notification.saveInBackground();
     }
 
