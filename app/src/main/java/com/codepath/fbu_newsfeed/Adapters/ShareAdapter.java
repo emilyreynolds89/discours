@@ -322,6 +322,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         int count;
         if (reaction != null) {
             count = destroyReaction(reaction, type, share);
+            deleteNotification("REACTION", share, type);
         } else {
             count = createReaction(type, share);
             createNotification("REACTION", share, type);
@@ -335,6 +336,35 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         if (ParseUser.getCurrentUser().getObjectId().equals(shareUser.getObjectId())) { return; }
         Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), shareUser, share, typeText);
         notification.saveInBackground();
+    }
+
+    private void deleteNotification(String type, Share share, String typeText) {
+        ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
+        query.include(Notification.KEY_RECEIVE_USER);
+        query.include(Notification.KEY_SEND_USER);
+        query.include(Notification.KEY_TYPE);
+        query.include(Notification.KEY_TYPE_TEXT);
+
+        query.whereEqualTo(Notification.KEY_TYPE, type);
+        query.whereEqualTo(Notification.KEY_TYPE_TEXT, typeText);
+        query.whereEqualTo(Notification.KEY_SEND_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Notification.KEY_RECEIVE_USER, share.getUser());
+
+        Notification notification;
+
+        try {
+            List<Notification> result = query.find();
+            if (result.size() > 0 ) {
+                notification = result.get(0);
+            } else {
+                return;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error finding reactions: " + e.getMessage());
+            return;
+        }
+
+        notification.deleteInBackground();
     }
 
 
