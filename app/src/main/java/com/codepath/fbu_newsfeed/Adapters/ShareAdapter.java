@@ -98,88 +98,40 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.ibReactionLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Reaction likeReaction = getReaction("LIKE", share, currentUser);
-                if (likeReaction != null) {
-                    int count = destroyReaction(likeReaction, "LIKE", share);
-                    holder.tvLike.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("LIKE", share);
-                    holder.tvLike.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share, "LIKE");
-                }
-
-
+                int count = react("LIKE", share, currentUser);
+                holder.tvLike.setText(Integer.toString(count));
             }
         });
 
         holder.ibReactionDislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Reaction dislikeReaction = getReaction("DISLIKE", share, currentUser);
-                if (dislikeReaction != null) {
-                    int count = destroyReaction(dislikeReaction, "DISLIKE", share);
-                    holder.tvDislike.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("DISLIKE", share);
-                    holder.tvDislike.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share, "DISLIKE");
-                }
-
-
+                int count = react("DISLIKE", share, currentUser);
+                holder.tvDislike.setText(Integer.toString(count));
             }
         });
 
         holder.ibReactionHappy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Reaction happyReaction = getReaction("HAPPY", share, currentUser);
-                if (happyReaction != null) {
-                    int count = destroyReaction(happyReaction, "HAPPY", share);
-                    holder.tvHappy.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("HAPPY", share);
-                    holder.tvHappy.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share, "HAPPY");
-                }
-
+                int count = react("HAPPY", share, currentUser);
+                holder.tvHappy.setText(Integer.toString(count));
             }
         });
 
         holder.ibReactionSad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Reaction sadReaction = getReaction("SAD", share, currentUser);
-                if (sadReaction != null) {
-                    int count = destroyReaction(sadReaction, "SAD", share);
-                    holder.tvSad.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("SAD", share);
-                    holder.tvSad.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share, "SAD");
-                }
-
+                int count = react("SAD", share, currentUser);
+                holder.tvSad.setText(Integer.toString(count));
             }
         });
 
         holder.ibReactionAngry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Reaction angryReaction = getReaction("ANGRY", share, currentUser);
-                if (angryReaction != null) {
-                    int count = destroyReaction(angryReaction, "ANGRY", share);
-                    holder.tvAngry.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("ANGRY", share);
-                    holder.tvAngry.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share, "ANGRY");
-                }
-
-
+                int count = react("ANGRY", share, currentUser);
+                holder.tvAngry.setText(Integer.toString(count));
             }
         });
 
@@ -349,6 +301,18 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             Log.d(TAG, "Error finding reactions: " + e.getMessage());
             return null;
         }
+    }
+
+    private int react(String type, Share share, User currentUser) {
+        Reaction reaction = getReaction(type, share, currentUser);
+        int count;
+        if (reaction != null) {
+            count = destroyReaction(reaction, type, share);
+        } else {
+            count = createReaction(type, share);
+            createNotification("REACTION", share, type);
+        }
+        return count;
     }
 
     private void createNotification(String type, Share share, String typeText) {
