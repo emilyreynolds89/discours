@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.ArticleReport;
 import com.codepath.fbu_newsfeed.Models.UserReport;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.ParseException;
@@ -30,30 +32,32 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ReportUserFragment extends DialogFragment {
-    public static final String TAG = "ReportUserFragment";
+public class ReportArticleFragment extends DialogFragment {
+    public static final String TAG = "ReportArticleFragment";
 
     public static ArrayList<String> TYPE_LIST;
     ArrayAdapter<String> typeAdapter;
 
-    @BindView(R.id.tvReportHeader) TextView tvReportHeader;
-    @BindView(R.id.spinnerType) Spinner spinnerType;
-    @BindView(R.id.etComment) EditText etComment;
-    @BindView(R.id.btnReport) Button btnReport;
-
-    ParseUser reporter;
-    ParseUser offender;
+    @BindView(R.id.tvReportHeader)
+    TextView tvReportHeader;
+    @BindView(R.id.spinnerType)
+    Spinner spinnerType;
+    @BindView(R.id.etComment)
+    EditText etComment;
+    @BindView(R.id.btnReport)
+    Button btnReport;
 
     private String reportType;
+    private Article article;
 
     private Unbinder unbinder;
 
-    public ReportUserFragment() {}
+    public ReportArticleFragment() {}
 
-    public static ReportUserFragment newInstance(String userId) {
-        ReportUserFragment frag = new ReportUserFragment();
+    public static ReportArticleFragment newInstance(String articleId) {
+        ReportArticleFragment frag = new ReportArticleFragment();
         Bundle args = new Bundle();
-        args.putString("user_id", userId);
+        args.putString("article_id", articleId);
         frag.setArguments(args);
         return frag;
     }
@@ -71,21 +75,20 @@ public class ReportUserFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         TYPE_LIST = new ArrayList<>();
-        TYPE_LIST.add("Fake Account");
-        TYPE_LIST.add("Posting Inappropriate Things");
-        TYPE_LIST.add("I Want to Help");
+        TYPE_LIST.add("False News");
+        TYPE_LIST.add("Inappropriate Content");
+        TYPE_LIST.add("Hate Speech");
+        TYPE_LIST.add("Spam");
         TYPE_LIST.add("Other");
 
-
-        reporter = ParseUser.getCurrentUser();
         try {
-            offender = getUser(getArguments().getString("user_id"));
+            article = getArticle(getArguments().getString("article_id"));
         } catch(Exception e) {
-            Log.d(TAG, "Trouble retrieving user", e);
+            Log.d(TAG, "Trouble retrieving article", e);
             dismiss();
         }
 
-        tvReportHeader.setText("Report @" + offender.getUsername());
+        tvReportHeader.setText("Report this article");
 
         typeAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, TYPE_LIST);
         typeAdapter.setDropDownViewResource(R.layout.spinner_item);
@@ -119,25 +122,25 @@ public class ReportUserFragment extends DialogFragment {
         unbinder.unbind();
     }
 
-    private ParseUser getUser(String user_id) throws ParseException {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("objectId", user_id);
+    private Article getArticle(String article_id) throws ParseException {
+        ParseQuery<Article> query = ParseQuery.getQuery("Article");
+        query.whereEqualTo("objectId", article_id);
         return query.getFirst();
     }
 
     private void submitReport() {
-        UserReport newReport = new UserReport(reporter, offender, reportType, etComment.getText().toString());
+        ArticleReport newReport = new ArticleReport(ParseUser.getCurrentUser(), article, reportType, etComment.getText().toString());
         newReport.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Toast.makeText(getContext(), "Submitted report!", Toast.LENGTH_SHORT).show();
-                    dismiss();
-                } else {
-                    Log.d(TAG, "Error submitting report", e);
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Toast.makeText(getContext(), "Submitted report!", Toast.LENGTH_SHORT).show();
+                        dismiss();
+                    } else {
+                        Log.d(TAG, "Error submitting report", e);
+                    }
                 }
-            }
-        });
+            });
 
 
     }

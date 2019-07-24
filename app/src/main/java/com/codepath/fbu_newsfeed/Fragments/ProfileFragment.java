@@ -26,6 +26,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
 import com.codepath.fbu_newsfeed.EditProfileActivity;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Share;
@@ -138,6 +139,7 @@ public class ProfileFragment extends Fragment {
 
         if (user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             // if profile is for current user
+
             btnEdit.setVisibility(View.VISIBLE);
             btnReport.setVisibility(View.GONE);
 

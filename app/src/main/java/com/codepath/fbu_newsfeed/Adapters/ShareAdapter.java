@@ -24,6 +24,7 @@ import com.codepath.fbu_newsfeed.ArticleDetailActivity;
 import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
+import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Notification;
@@ -145,11 +146,13 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             case 5:  holder.ivBias.setColorFilter(Article.conservativeColor);
                 break;
         }
-        // TODO: connect listener to information button
 
-        String captionUsername = "@" + user.getUsername() + ": ";
-        holder.tvCaption.setText(captionUsername + share.getCaption());
-
+        if (!share.getCaption().isEmpty()) {
+            String captionUsername = "@" + user.getUsername() + ": ";
+            holder.tvCaption.setText(captionUsername + share.getCaption());
+        } else {
+            holder.tvCaption.setVisibility(View.GONE);
+        }
 
 
         holder.tvUsername.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +195,13 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 showInformationDialog();
             }
         });
+
+        holder.ibReportArticle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reportArticle(article);
+            }
+        });
     }
 
 
@@ -213,7 +223,15 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     }
 
     private void goToUser(ParseUser user) {
+        if (user.equals(ParseUser.getCurrentUser()))
+            ((HomeActivity) context).bottomNavigationView.setSelectedItemId(R.id.action_profile);
         ((HomeActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).commit();
+    }
+
+    private void reportArticle(Article article) {
+        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());
+        articleReportDialog.show(fm, "fragment_report");
     }
 
 
@@ -249,6 +267,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.ivArticleImage) ImageView ivArticleImage;
         @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
         @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
+        @BindView(R.id.ibReportArticle) ImageButton ibReportArticle;
         @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
         @BindView(R.id.tvLike) TextView tvLike;
         @BindView(R.id.ibReactionDislike) ImageButton ibReactionDislike;
