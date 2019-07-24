@@ -33,13 +33,11 @@ import butterknife.Unbinder;
 
 public class TrendsFragment extends Fragment {
     @BindView(R.id.searchButton) Button searchBtn;
-
     @BindView(R.id.rvTrends) RecyclerView rvTrends;
-    protected TrendsAdapter adapter;
-    protected List<Article> articles;
-
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
+    protected TrendsAdapter adapter;
+    protected List<Article> articles;
     protected EndlessRecyclerViewScrollListener scrollListener;
 
     private Unbinder unbinder;
@@ -56,8 +54,6 @@ public class TrendsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        rvTrends = view.findViewById(R.id.rvTrends);
-
         articles = new ArrayList<>();
         adapter = new TrendsAdapter(getContext(), articles);
 
@@ -73,7 +69,6 @@ public class TrendsFragment extends Fragment {
             }
         });
 
-        swipeContainer = view.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

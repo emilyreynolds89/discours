@@ -26,6 +26,9 @@ import com.parse.ParseQuery;
 import java.io.Serializable;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
     static Context context;
@@ -75,17 +78,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvDescriptionNotif;
-        ImageView ivImageNotif;
-        ImageView ivProfileImageNotif;
+        @BindView(R.id.tvDescriptionNotif) TextView tvDescriptionNotif;
+        @BindView(R.id.ivImageNotif) ImageView ivImageNotif;
+        @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImageNotif;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            tvDescriptionNotif = itemView.findViewById(R.id.tvDescriptionNotif);
-            ivImageNotif = itemView.findViewById(R.id.ivImageNotif);
-            ivProfileImageNotif = itemView.findViewById(R.id.ivProfileImageNotif);
-
+            ButterKnife.bind(this, itemView);
         }
 
         public void bind(Notification notification) {

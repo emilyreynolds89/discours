@@ -14,6 +14,9 @@ import com.codepath.fbu_newsfeed.R;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
     static Context context;
@@ -44,16 +47,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvUsernameComment;
-        TextView tvComment;
-        TextView tvTimeComment;
+        @BindView(R.id.tvUsernameComment) TextView tvUsernameComment;
+        @BindView(R.id.tvComment) TextView tvComment;
+        @BindView(R.id.tvTimeComment) TextView tvTimeComment;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            tvUsernameComment = itemView.findViewById(R.id.tvUsernameComment);
-            tvComment = itemView.findViewById(R.id.tvComment);
-            tvTimeComment = itemView.findViewById(R.id.tvTimeComment);
+            ButterKnife.bind(this, itemView);
         }
 
         public void bind(Comment comment) {

@@ -24,22 +24,26 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class NotificationFragment extends Fragment {
 
     public static final String TAG = "NotificationFragment";
 
+    @BindView(R.id.rvNotifications) RecyclerView rvNotifications;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
+    private Unbinder unbinder;
+
     ArrayList<Notification> notifications;
     NotificationAdapter notificationAdapter;
-    RecyclerView rvNotifications;
-
-    SwipeRefreshLayout swipeContainer;
     EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
-        rvNotifications = view.findViewById(R.id.rvNotifications);
-        swipeContainer = view.findViewById(R.id.swipeContainer);
+        unbinder = ButterKnife.bind(this, view);
 
         return view;
     }

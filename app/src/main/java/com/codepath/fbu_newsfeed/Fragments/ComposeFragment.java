@@ -27,41 +27,37 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class ComposeFragment extends Fragment {
 
     Article article;
 
-    EditText etUrl;
-    ImageView ivArticlePreview;
-    TextView tvArticleTitle;
-    TextView tvFactCheck;
-    ImageView  ivBias;
-    ImageButton ibReport;
-    EditText etCaption;
-    Button btnShare;
+    @BindView(R.id.etURL) EditText etUrl;
+    @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreview;
+    @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
+    @BindView(R.id.tvFactCheckCreate) TextView tvFactCheck;
+    @BindView(R.id.ivBias) ImageView  ivBias;
+    @BindView(R.id.ibReportCreate) ImageButton ibReport;
+    @BindView(R.id.etCaptionCreate) EditText etCaption;
+    @BindView(R.id.btShareArticleCreate) Button btnShare;
+    private Unbinder unbinder;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         article = (Article) getArguments().getSerializable("article");
-        return inflater.inflate(R.layout.fragment_compose, container, false);
+        View view =  inflater.inflate(R.layout.fragment_compose, container, false);
+        unbinder = ButterKnife.bind(this, view);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        etUrl = view.findViewById(R.id.etURL);
-        ivArticlePreview  = view.findViewById(R.id.ivArticlePreviewCreate);
-        tvArticleTitle = view.findViewById(R.id.tvArticleTitle);
-        tvFactCheck = view.findViewById(R.id.tvFactCheckCreate);
-        ivBias = view.findViewById(R.id.ivBias);
-        ibReport = view.findViewById(R.id.ibReportCreate);
-        etCaption = view.findViewById(R.id.etCaptionCreate);
-        btnShare = view.findViewById(R.id.btShareArticleCreate);
-
-        //Article article = (Article) getActivity().getIntent().getSerializableExtra("article");
-        //article = (Article) getArguments().getSerializable("article");
 
         final String factCheck = article.getTruth();
         final Article.Bias bias = article.getBias();

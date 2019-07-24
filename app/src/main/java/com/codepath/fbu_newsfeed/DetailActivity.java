@@ -97,7 +97,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     CommentAdapter commentAdapter;
     RecommendAdapter recommendAdapter;
 
-    protected SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,8 +120,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         rvComments.setLayoutManager(linearLayoutManager);
         rvRecommend.setLayoutManager(linearLayoutManagerRecommend);
 
-
-        swipeContainer = findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

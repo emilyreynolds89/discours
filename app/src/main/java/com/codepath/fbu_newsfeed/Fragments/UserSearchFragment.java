@@ -32,7 +32,6 @@ public class UserSearchFragment extends Fragment {
     private static final String TAG = "UserSearchFragment";
 
     @BindView(R.id.searchView) SearchView searchView;
-
     @BindView(R.id.rvResults) RecyclerView rvResults;
     private Unbinder unbinder;
 

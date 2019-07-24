@@ -20,6 +20,9 @@ import com.parse.ParseFile;
 import java.io.Serializable;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.ViewHolder> {
     static Context context;
@@ -48,13 +51,13 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         return articles.size();
     }
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tvArticleTitleRecommend;
-        ImageView ivArticleImageRecommend;
+        @BindView(R.id.tvArticleTitleRecommend) TextView tvArticleTitleRecommend;
+        @BindView(R.id.ivArticleImageRecommend) ImageView ivArticleImageRecommend;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvArticleTitleRecommend = itemView.findViewById(R.id.tvArticleTitleRecommend);
-            ivArticleImageRecommend = itemView.findViewById(R.id.ivArticleImageRecommend);
+
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 

@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,15 +31,15 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
     public static final String TAG = "ArticleDetailActivity";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.ibReportArticleDetail)
-    ImageButton ibReportArticleDetail;
-    ImageView ivArticleImageDetail;
-    TextView tvArticleTitleDetail;
-    TextView tvArticleSummaryDetail;
-    TextView tvArticleSourceDetail;
-    TextView tvTagDetail;
-    Button btnLink;
-    Button btnShare;
+    @BindView(R.id.ivArtcleImageDetail) ImageView ivArticleImageDetail;
+    @BindView(R.id.tvArticleTitleDetail) TextView tvArticleTitleDetail;
+    @BindView(R.id.tvArticleSummaryDetail) TextView tvArticleSummaryDetail;
+    @BindView(R.id.tvSourceDetail) TextView tvArticleSourceDetail;
+    @BindView(R.id.tvTagDetail) TextView tvTagDetail;
+    @BindView(R.id.btnLink) Button btnLink;
+    @BindView(R.id.btnShare) Button btnShare;
+    @BindView(R.id.ibReportArticleDetail) ImageButton ibReportArticleDetail;
+
 
     Article article;
     String url;
@@ -49,14 +50,6 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_detail);
         ButterKnife.bind(this);
-
-        ivArticleImageDetail = findViewById(R.id.ivArtcleImageDetail);
-        tvArticleTitleDetail = findViewById(R.id.tvArticleTitleDetail);
-        tvArticleSummaryDetail = findViewById(R.id.tvArticleSummaryDetail);
-        tvArticleSourceDetail = findViewById(R.id.tvSourceDetail);
-        tvTagDetail = findViewById(R.id.tvTagDetail);
-        btnLink = findViewById(R.id.btnLink);
-        btnShare = findViewById(R.id.btnShare);
 
         article = (Article) getIntent().getSerializableExtra("article");
 
