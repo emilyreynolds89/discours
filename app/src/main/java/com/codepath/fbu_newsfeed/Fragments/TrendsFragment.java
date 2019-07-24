@@ -104,7 +104,7 @@ public class TrendsFragment extends Fragment {
         articleQuery.include(Article.KEY_URL);
         articleQuery.setLimit(Article.LIMIT);
         articleQuery.setSkip(offset * Article.LIMIT);
-        if(refresh) articleQuery.setLimit(20);
+        articleQuery.orderByDescending(Article.KEY_CREATED_AT);
 
         articleQuery.findInBackground(new FindCallback<Article>() {
             @Override
@@ -122,7 +122,7 @@ public class TrendsFragment extends Fragment {
                     Log.d("TrendsQuery", "Article: " + article.getTitle());
                 }
 
-                if (!refresh) scrollListener.resetState();
+                //if (!refresh) scrollListener.resetState();
             }
         });
     }
