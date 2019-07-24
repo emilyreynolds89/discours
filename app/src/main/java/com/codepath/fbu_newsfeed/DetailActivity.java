@@ -188,10 +188,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 break;
         }
 
-        // TODO: connect listener to information button
-
-        tvCaption.setText("@" + share.getUser().getUsername() + ": " + share.getCaption());
-
+        if (!share.getCaption().isEmpty()) {
+            tvCaption.setText("@" + share.getUser().getUsername() + ": " + share.getCaption());
+        } else {
+            tvCaption.setVisibility(View.GONE);
+        }
         tvUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

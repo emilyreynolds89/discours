@@ -147,8 +147,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 break;
         }
 
-        String captionUsername = "@" + user.getUsername() + ": ";
-        holder.tvCaption.setText(captionUsername + share.getCaption());
+        if (!share.getCaption().isEmpty()) {
+            String captionUsername = "@" + user.getUsername() + ": ";
+            holder.tvCaption.setText(captionUsername + share.getCaption());
+        } else {
+            holder.tvCaption.setVisibility(View.GONE);
+        }
 
 
         holder.tvUsername.setOnClickListener(new View.OnClickListener() {
