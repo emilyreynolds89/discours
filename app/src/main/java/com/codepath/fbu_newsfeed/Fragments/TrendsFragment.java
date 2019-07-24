@@ -111,6 +111,7 @@ public class TrendsFragment extends Fragment {
         articleQuery.include(Article.KEY_URL);
         articleQuery.setLimit(Article.LIMIT);
         articleQuery.setSkip(offset * Article.LIMIT);
+        articleQuery.orderByDescending(Article.KEY_CREATED_AT);
 
         articleQuery.findInBackground(new FindCallback<Article>() {
             @Override
@@ -123,6 +124,7 @@ public class TrendsFragment extends Fragment {
                     adapter.notifyDataSetChanged();
 
                 }
+
             }
         });
     }
