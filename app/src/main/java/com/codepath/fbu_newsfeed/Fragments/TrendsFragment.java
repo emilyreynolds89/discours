@@ -91,7 +91,7 @@ public class TrendsFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadNextData(page);
+                queryArticles(false, page);
             }
         };
 
@@ -111,7 +111,6 @@ public class TrendsFragment extends Fragment {
         articleQuery.include(Article.KEY_URL);
         articleQuery.setLimit(Article.LIMIT);
         articleQuery.setSkip(offset * Article.LIMIT);
-        if(refresh) articleQuery.setLimit(20);
 
         articleQuery.findInBackground(new FindCallback<Article>() {
             @Override
@@ -119,17 +118,11 @@ public class TrendsFragment extends Fragment {
                 if (e != null) {
                     Log.e("TrendsQuery", "Error with query");
                     e.printStackTrace();
-                    return;
-                }
-                articles.addAll(newArticles);
-                adapter.notifyDataSetChanged();
+                } else {
+                    articles.addAll(newArticles);
+                    adapter.notifyDataSetChanged();
 
-                for (int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
-                    Log.d("TrendsQuery", "Article: " + article.getTitle());
                 }
-
-                if (!refresh) scrollListener.resetState();
             }
         });
     }
@@ -140,9 +133,6 @@ public class TrendsFragment extends Fragment {
         swipeContainer.setRefreshing(false);
     }
 
-    public void loadNextData(int page) {
-        queryArticles(false, page);
-    }
 }
 
 

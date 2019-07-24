@@ -76,17 +76,16 @@
         app:layout_constraintStart_toStartOf="@+id/ivArticlePreviewCreate"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
-    <ImageButton
-        android:id="@+id/ibReportCreate"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="16dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="@+id/ivArticlePreviewCreate"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        app:srcCompat="@android:color/white"
-        tools:srcCompat="@drawable/questionmark_icon" />
+        <ImageButton
+            android:id="@+id/ibReportCreate"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="@+id/ivArticlePreviewCreate"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            tools:srcCompat="@drawable/questionmark_icon" />
 
     <Button
         android:id="@+id/btShareArticleCreate"
