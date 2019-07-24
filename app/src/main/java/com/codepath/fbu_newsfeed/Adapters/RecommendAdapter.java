@@ -25,8 +25,8 @@ import butterknife.ButterKnife;
 
 
 public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.ViewHolder> {
-    static Context context;
-    static List<Article> articles;
+    Context context;
+    List<Article> articles;
 
     public RecommendAdapter(Context context, List<Article> articles) {
         this.context = context;

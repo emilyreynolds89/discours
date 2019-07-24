@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +36,8 @@ import butterknife.Unbinder;
 public class TrendsFragment extends Fragment {
     public static final String TAG = "TrendsFragment";
 
-    @BindView(R.id.searchButton) Button searchBtn;
+    @BindView(R.id.searchView)
+    SearchView searchView;
     @BindView(R.id.rvTrends) RecyclerView rvTrends;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
@@ -60,6 +62,8 @@ public class TrendsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(1).setChecked(true);
 
+        searchView.clearFocus();
+        rvTrends.requestFocus();
 
         articles = new ArrayList<>();
         adapter = new TrendsAdapter(getContext(), articles);
@@ -68,13 +72,21 @@ public class TrendsFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTrends.setLayoutManager(linearLayoutManager);
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                getActivity().startActivity(intent);
+            public void onFocusChange(View view, boolean b) {
+                Log.d(TAG, "FOCUSED: " + b);
+
+                if (b) {
+                    Intent intent = new Intent(getActivity(), SearchActivity.class);
+                    getActivity().startActivity(intent);
+                    searchView.clearFocus();
+                    rvTrends.requestFocus();
+                }
+
             }
         });
+
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -98,6 +110,13 @@ public class TrendsFragment extends Fragment {
         rvTrends.addOnScrollListener(scrollListener);
         queryArticles(true, 0);
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        unbinder.unbind();
     }
 
     protected void queryArticles(final boolean refresh, int offset) {
