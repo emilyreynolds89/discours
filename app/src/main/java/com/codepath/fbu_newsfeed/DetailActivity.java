@@ -282,19 +282,19 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.ibReactionDislike:
-                updateReactionText("LIKE", share, currentUser, tvDislike);
+                updateReactionText("DISLIKE", share, currentUser, tvDislike);
                 break;
 
             case R.id.ibReactionHappy:
-                updateReactionText("LIKE", share, currentUser, tvHappy);
+                updateReactionText("HAPPY", share, currentUser, tvHappy);
                 break;
 
             case R.id.ibReactionSad:
-                updateReactionText("LIKE", share, currentUser, tvSad);
+                updateReactionText("SAD", share, currentUser, tvSad);
                 break;
 
             case R.id.ibReactionAngry:
-                updateReactionText("LIKE", share, currentUser, tvAngry);
+                updateReactionText("ANGRY", share, currentUser, tvAngry);
                 break;
 
             case R.id.ibInformation:

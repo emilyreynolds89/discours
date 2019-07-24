@@ -147,8 +147,8 @@ public class FeedFragment extends Fragment {
                     friends.add(friendship.getUser1());
                 }
                 Log.d(TAG, "Found " + friends.size() + " friends");
-                return friends;
             }
+            return friends;
         } catch(Exception e) {
             Log.d(TAG, "Error retrieving friends: " + e.getMessage());
 
