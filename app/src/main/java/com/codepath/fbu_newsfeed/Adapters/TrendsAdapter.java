@@ -21,6 +21,9 @@ import com.parse.ParseFile;
 import java.io.Serializable;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder> {
 
     static Context context;
@@ -51,27 +54,20 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageButton ibInformationTrends;
-        ImageView ivBiasTrends;
-        ImageView ivArticleImage;
-        TextView tvTitle;
-        TextView tvSummary;
-        TextView tvSource;
-        TextView tvFactRatingTrends;
-        TextView tvTagTrends;
+        @BindView(R.id.ibInformation) ImageButton ibInformationTrends;
+        @BindView(R.id.ivBiasTrends) ImageView ivBiasTrends;
+        @BindView(R.id.ivArticleImageTrends) ImageView ivArticleImage;
+        @BindView(R.id.tvArticleTitleTrends) TextView tvTitle;
+        @BindView(R.id.tvArticleSummaryTrends) TextView tvSummary;
+        @BindView(R.id.tvSourceTrends) TextView tvSource;
+        @BindView(R.id.tvFactRatingTrends) TextView tvFactRatingTrends;
+        @BindView(R.id.tvTagTrends) TextView tvTagTrends;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ibInformationTrends = itemView.findViewById(R.id.ibInformation);
-            ivBiasTrends = itemView.findViewById(R.id.ivBiasTrends);
-            ivArticleImage = itemView.findViewById(R.id.ivArticleImageTrends);
-            tvTitle = itemView.findViewById(R.id.tvArticleTitleTrends);
-            tvSummary = itemView.findViewById(R.id.tvArticleSummaryTrends);
-            tvSource = itemView.findViewById(R.id.tvSourceTrends);
-            tvFactRatingTrends = itemView.findViewById(R.id.tvFactRatingTrends);
-            tvTagTrends = itemView.findViewById(R.id.tvTagTrends);
 
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
 
         }

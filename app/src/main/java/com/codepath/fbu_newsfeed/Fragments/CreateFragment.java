@@ -32,40 +32,40 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 public class CreateFragment extends Fragment {
     protected List<Article> articles;
     protected List<String> articleList;
-    Spinner spArticleListCreate;
-    ImageView ivArticlePreviewCreate;
-    TextView tvArticleTitleCreate;
-    TextView tvFactCheckCreate;
-    ImageView  ivBiasCreate;
-    ImageButton ibReportCreate;
-    EditText etCaptionCreate;
-    Button btnShareCreate;
-    Article selectedArticle;
+
+    @BindView(R.id.spArticleListCreate) Spinner spArticleListCreate;
+    @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreviewCreate;
+    @BindView(R.id.tvArticleTitle) TextView tvArticleTitleCreate;
+    @BindView(R.id.tvFactCheckCreate) TextView tvFactCheckCreate;
+    @BindView(R.id.ivBias) ImageView  ivBiasCreate;
+    @BindView(R.id.ibReportCreate) ImageButton ibReportCreate;
+    @BindView(R.id.etCaptionCreate) EditText etCaptionCreate;
+    @BindView(R.id.btShareArticleCreate) Button btnShareCreate;
+    private Unbinder unbinder;
 
     ArrayAdapter<String> spinnerArrayAdapter;
+    Article selectedArticle;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_create, container, false);
+        View view = inflater.inflate(R.layout.fragment_create, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        spArticleListCreate = view.findViewById(R.id.spArticleListCreate);
-        ivArticlePreviewCreate  = view.findViewById(R.id.ivArticlePreviewCreate);
-        tvArticleTitleCreate = view.findViewById(R.id.tvArticleTitle);
-        tvFactCheckCreate = view.findViewById(R.id.tvFactCheckCreate);
-        ivBiasCreate = view.findViewById(R.id.ivBias);
-        ibReportCreate = view.findViewById(R.id.ibReportCreate);
-        etCaptionCreate = view.findViewById(R.id.etCaptionCreate);
-        btnShareCreate = view.findViewById(R.id.btShareArticleCreate);
 
         articles = new ArrayList<>();
         articleList = new ArrayList<>();

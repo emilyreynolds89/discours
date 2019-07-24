@@ -23,14 +23,13 @@ import butterknife.BindView;
 public class ArticleDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-
-    ImageView ivArticleImageDetail;
-    TextView tvArticleTitleDetail;
-    TextView tvArticleSummaryDetail;
-    TextView tvArticleSourceDetail;
-    TextView tvTagDetail;
-    Button btnLink;
-    Button btnShare;
+    @BindView(R.id.ivArtcleImageDetail) ImageView ivArticleImageDetail;
+    @BindView(R.id.tvArticleTitleDetail) TextView tvArticleTitleDetail;
+    @BindView(R.id.tvArticleSummaryDetail) TextView tvArticleSummaryDetail;
+    @BindView(R.id.tvSourceDetail) TextView tvArticleSourceDetail;
+    @BindView(R.id.tvTagDetail) TextView tvTagDetail;
+    @BindView(R.id.btnLink) Button btnLink;
+    @BindView(R.id.btnShare) Button btnShare;
 
     Article article;
     String url;
@@ -40,14 +39,6 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_detail);
-
-        ivArticleImageDetail = findViewById(R.id.ivArtcleImageDetail);
-        tvArticleTitleDetail = findViewById(R.id.tvArticleTitleDetail);
-        tvArticleSummaryDetail = findViewById(R.id.tvArticleSummaryDetail);
-        tvArticleSourceDetail = findViewById(R.id.tvSourceDetail);
-        tvTagDetail = findViewById(R.id.tvTagDetail);
-        btnLink = findViewById(R.id.btnLink);
-        btnShare = findViewById(R.id.btnShare);
 
         article = (Article) getIntent().getSerializableExtra("article");
 

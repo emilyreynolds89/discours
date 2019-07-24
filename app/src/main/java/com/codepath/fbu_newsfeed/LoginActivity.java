@@ -14,12 +14,14 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import butterknife.BindView;
+
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText usernameInput;
-    private EditText passwordInput;
-    private Button loginButton;
-    private Button signupButton;
+    @BindView(R.id.etUsername) EditText usernameInput;
+    @BindView(R.id.etPassword) EditText passwordInput;
+    @BindView(R.id.btnLogIn) Button loginButton;
+    @BindView(R.id.btnSignUp) Button signupButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +33,8 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser != null) {
             final Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
+            finish();
         }
-
-        usernameInput = findViewById(R.id.etUsername);
-        passwordInput = findViewById(R.id.etPassword);
-        loginButton = findViewById(R.id.btnLogIn);
-        signupButton = findViewById(R.id.btnSignUp);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
