@@ -117,9 +117,11 @@ public class EditProfileActivity extends AppCompatActivity {
                         public void done(ParseException e) {
                             if (e == null) {
                                 Log.d(TAG, "Updated user");
+                                Toast.makeText(EditProfileActivity.this, "Successfully updated profile", Toast.LENGTH_SHORT).show();
                                 goToProfile();
                             } else {
                                 Log.d(TAG, "Error updating user: " + e.getMessage());
+                                Toast.makeText(EditProfileActivity.this, "Error updating profile", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -170,7 +172,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
 
         } else {
-            Toast.makeText(this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You haven't picked an image",Toast.LENGTH_LONG).show();
         }
     }
 

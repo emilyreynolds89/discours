@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -107,7 +108,8 @@ public class ArticleSearchFragment extends Fragment {
             List<Article> result = titleQuery.find();
             trendsAdapter.addAll(result);
         } catch(Exception e) {
-            Log.d(TAG, "Error searching users " + e.getMessage());
+            Toast.makeText(getContext(), "Error searching articles", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Error searching articles " + e.getMessage());
         }
     }
 

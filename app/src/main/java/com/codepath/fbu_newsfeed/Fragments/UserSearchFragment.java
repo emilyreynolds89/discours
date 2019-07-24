@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -107,6 +108,7 @@ public class UserSearchFragment extends Fragment {
             userAdapter.addAll(result);
         } catch(Exception e) {
             Log.d(TAG, "Error searching users " + e.getMessage());
+            Toast.makeText(getContext(), "Error searching users", Toast.LENGTH_SHORT).show();
         }
     }
 

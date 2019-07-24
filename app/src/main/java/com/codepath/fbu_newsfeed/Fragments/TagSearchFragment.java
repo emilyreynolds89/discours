@@ -10,12 +10,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
 import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
@@ -113,13 +115,18 @@ public class TagSearchFragment extends Fragment {
         query.findInBackground(new FindCallback<Article>() {
             @Override
             public void done(List<Article> articles, ParseException e) {
-                for (int i = 0; i < articles.size(); i++) {
-                    String tag = articles.get(i).getTag();
-                    if (!tagList.contains(tag)) {
-                        tagList.add(tag);
+                if (e == null) {
+                    for (int i = 0; i < articles.size(); i++) {
+                        String tag = articles.get(i).getTag();
+                        if (!tagList.contains(tag)) {
+                            tagList.add(tag);
+                        }
                     }
+                    tagAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "Error searching by tag", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Error searching by tag", e);
                 }
-                tagAdapter.notifyDataSetChanged();
             }
         });
     }

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -101,6 +102,7 @@ public class ComposeFragment extends Fragment {
                 } else {
                     Log.e("ComposeFragment", "Error in sharing article");
                     e.printStackTrace();
+                    Toast.makeText(getContext(), "Error in sharing article", Toast.LENGTH_SHORT).show();
                 }
             }
         });

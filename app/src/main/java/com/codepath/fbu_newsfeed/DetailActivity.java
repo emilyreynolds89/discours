@@ -251,6 +251,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                                 } else {
                                     Log.e("DetailActivity", "Error in creating comment");
                                     e.printStackTrace();
+                                    Toast.makeText(DetailActivity.this, "Error in submitting comment", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -168,6 +169,8 @@ public class CreateFragment extends Fragment {
                 } else {
                     Log.e("ComposeFragment", "Error in sharing article");
                     e.printStackTrace();
+                    Toast.makeText(getContext(), "Error in sharing article", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });

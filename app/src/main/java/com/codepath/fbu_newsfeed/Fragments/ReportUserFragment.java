@@ -135,6 +135,7 @@ public class ReportUserFragment extends DialogFragment {
                     dismiss();
                 } else {
                     Log.d(TAG, "Error submitting report", e);
+                    Toast.makeText(getContext(), "Error submitting report", Toast.LENGTH_SHORT).show();
                 }
             }
         });
