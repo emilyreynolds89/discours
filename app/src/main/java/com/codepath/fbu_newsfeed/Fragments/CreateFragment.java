@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.HomeActivity;
@@ -50,7 +52,7 @@ public class CreateFragment extends Fragment {
     @BindView(R.id.tvArticleTitle) TextView tvArticleTitleCreate;
     @BindView(R.id.tvFactCheckCreate) TextView tvFactCheckCreate;
     @BindView(R.id.ivBias) ImageView  ivBiasCreate;
-    @BindView(R.id.ibReportCreate) ImageButton ibReportCreate;
+    @BindView(R.id.ibInformation) ImageButton ibInformation;
     @BindView(R.id.etCaptionCreate) EditText etCaptionCreate;
     @BindView(R.id.btShareArticleCreate) Button btnShareCreate;
     private Unbinder unbinder;
@@ -132,7 +134,23 @@ public class CreateFragment extends Fragment {
             }
         });
 
+
+        ibInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showInformationDialog();
+            }
+        });
+
+
     }
+
+    private void showInformationDialog() {
+        FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
+        informationDialog.show(fm, "fragment_information");
+    }
+
     protected void queryTitle(final boolean refresh) {
         final ParseQuery<Article> articleQuery = new ParseQuery<Article>(Article.class);
         if(refresh) articleQuery.setLimit(10);
