@@ -2,6 +2,7 @@ package com.codepath.fbu_newsfeed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -47,26 +48,36 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment fragment = new FeedFragment();
+                String fragmentTag = FeedFragment.TAG;
                 switch (menuItem.getItemId()) {
                     case R.id.action_home:
                         fragment = new FeedFragment();
+                        fragmentTag = FeedFragment.TAG;
                         break;
                     case R.id.action_trending:
                         fragment = new TrendsFragment();
+                        fragmentTag = TrendsFragment.TAG;
                         break;
                     case R.id.action_compose:
                         fragment = new CreateFragment();
+                        fragmentTag = CreateFragment.TAG;
                         break;
                     case R.id.action_notification:
                         fragment = new NotificationFragment();
+                        fragmentTag = NotificationFragment.TAG;
                         break;
                     case R.id.action_profile:
                         fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser().getObjectId());
+                        fragmentTag = ProfileFragment.TAG;
                         break;
                     default:
                         break;
                 }
-                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                if (fragmentTag != FeedFragment.TAG) {
+                    fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(fragmentTag).commit();
+                } else {
+                    fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                }
                 return true;
             }
         });
@@ -87,7 +98,7 @@ public class HomeActivity extends AppCompatActivity {
                 ComposeFragment composeFragment = new ComposeFragment();
                 composeFragment.setArguments(bundle);
 
-                fragmentManager.beginTransaction().replace(R.id.flContainer, composeFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.flContainer, composeFragment).addToBackStack(ComposeFragment.TAG).commit();
             }
 
             if (user_id != null) {
@@ -95,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
                     bottomNavigationView.setSelectedItemId(R.id.action_profile);
                 Fragment newProfileFragment = ProfileFragment.newInstance(user_id);
 
-                fragmentManager.beginTransaction().replace(R.id.flContainer, newProfileFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.flContainer, newProfileFragment).addToBackStack(ProfileFragment.TAG).commit();
             }
         }
 
@@ -109,8 +120,5 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
-        finish();
-    }
+
 }

@@ -40,6 +40,8 @@ import butterknife.Unbinder;
 
 
 public class CreateFragment extends Fragment {
+    public static final String TAG = "CreateFragment";
+
     protected List<Article> articles;
     protected List<String> articleList;
 
@@ -68,6 +70,8 @@ public class CreateFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(2).setChecked(true);
 
         articles = new ArrayList<>();
         articleList = new ArrayList<>();
@@ -165,7 +169,7 @@ public class CreateFragment extends Fragment {
                 if (e == null) {
                     Log.d("ComposeFragment", "Share article success");
                     ((HomeActivity) getActivity()).bottomNavigationView.setSelectedItemId(R.id.action_home);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new FeedFragment()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().remove(CreateFragment.this).commit();
                 } else {
                     Log.e("ComposeFragment", "Error in sharing article");
                     e.printStackTrace();

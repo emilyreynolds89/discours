@@ -18,7 +18,14 @@ import com.parse.SignUpCallback;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SignUpActivity extends AppCompatActivity {
+public class
+
+
+
+
+
+
+SignUpActivity extends AppCompatActivity {
 
     @BindView(R.id.etName) EditText nameInput;
     @BindView(R.id.etUsername) EditText usernameInput;

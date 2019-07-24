@@ -86,6 +86,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(4).setChecked(true);
 
         String user_id = getArguments().getString("user_id");
 

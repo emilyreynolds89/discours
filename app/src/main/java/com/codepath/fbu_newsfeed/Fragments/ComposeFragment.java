@@ -32,6 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ComposeFragment extends Fragment {
+    public static final String TAG = "ComposeFragment";
 
     Article article;
 
@@ -58,6 +59,7 @@ public class ComposeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(2).setChecked(true);
 
         final String factCheck = article.getTruth();
         final Article.Bias bias = article.getBias();
@@ -94,7 +96,7 @@ public class ComposeFragment extends Fragment {
                 if (e == null) {
                     Log.d("ComposeFragment", "Share article success");
                     ((HomeActivity) getActivity()).bottomNavigationView.setSelectedItemId(R.id.action_home);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new FeedFragment()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().remove(ComposeFragment.this).commit();
                 } else {
                     Log.e("ComposeFragment", "Error in sharing article");
                     e.printStackTrace();
