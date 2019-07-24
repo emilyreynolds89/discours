@@ -111,7 +111,6 @@ public class TagSearchFragment extends Fragment {
 
     private void queryTags() {
         ParseQuery<Article> query = ParseQuery.getQuery("Article");
-        query.setLimit(Article.LIMIT);
         query.findInBackground(new FindCallback<Article>() {
             @Override
             public void done(List<Article> articles, ParseException e) {
