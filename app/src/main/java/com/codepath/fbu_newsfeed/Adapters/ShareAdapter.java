@@ -331,7 +331,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     private void createNotification(String type, Share share, String typeText) {
         Log.d(TAG, "Creating notification of type: " + type);
-        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share, typeText);
+        User shareUser = (User) share.getUser();
+        if (ParseUser.getCurrentUser().getObjectId().equals(shareUser.getObjectId())) { return; }
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), shareUser, share, typeText);
         notification.saveInBackground();
     }
 

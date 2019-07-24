@@ -144,8 +144,8 @@
 
     <ImageButton
         android:id="@+id/ibReactionLike"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
@@ -167,9 +167,9 @@
 
     <ImageButton
         android:id="@+id/ibReactionDislike"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="22dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
@@ -191,10 +191,9 @@
 
     <ImageButton
         android:id="@+id/ibReactionHappy"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
@@ -216,10 +215,9 @@
 
     <ImageButton
         android:id="@+id/ibReactionSad"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
@@ -241,10 +239,9 @@
 
     <ImageButton
         android:id="@+id/ibReactionAngry"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
@@ -268,8 +265,7 @@
         android:id="@+id/tvFactRating"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginLeft="36dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:gravity="right|center_vertical"
         android:text="TextView"
