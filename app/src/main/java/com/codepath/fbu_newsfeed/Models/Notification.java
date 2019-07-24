@@ -14,7 +14,7 @@ public class Notification extends ParseObject {
     public static final String KEY_SHARE = "share";
     public static final String KEY_TYPE_TEXT = "typeText";
     public static final String KEY_CREATEDAT = "createdAt";
-    public static final int LIMIT = 36;
+    public static final int LIMIT = 30;
 
     User sendUser;
     User receiveUser;

@@ -15,12 +15,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.DetailActivity;
+import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.io.Serializable;
@@ -49,12 +52,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position) {
         final Notification notification = notifications.get(position);
-        Share share = null;
-        try {
-            share = getShare(notification.getShare().getObjectId());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Share share =  notification.getShare();
 
         holder.bind(notification);
 
@@ -93,25 +91,24 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             String typeText = notification.getTypeText();
             tvDescriptionNotif.setText("@" + username + notification.notificationText(notification.getType()) + ": " + typeText);
 
-            try {
-                Share share = getShare(notification.getShare().getObjectId());
-                ParseFile image = share.getArticle().getImage();
-                if (image != null ) {
-                    Glide.with(context).load(image.getUrl()).into(ivImageNotif);
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+                final Share share = notification.getShare();
 
-            try {
-                User user = getUser(notification.getSendUser().getObjectId());
-                ParseFile image = user.getProfileImage();
-                if (image != null) {
-                    Glide.with(context).load(image.getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImageNotif);
+                share.getArticle().fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(ParseObject object, ParseException e) {
+                        Article article = (Article) object;
+                        ParseFile image = article.getImage();
+                        if (image != null ) {
+                            Glide.with(context).load(image.getUrl()).into(ivImageNotif);
+                        }
+                    }
+                });
+
+                User user = notification.getSendUser();
+                ParseFile profileImage = user.getProfileImage();
+                if (profileImage != null) {
+                    Glide.with(context).load(profileImage.getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImageNotif);
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
 
         }
     }
@@ -123,23 +120,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public void addAll(List<Notification> newNotifications) {
         notifications.addAll(newNotifications);
+        notifyDataSetChanged();
     }
 
-    public Share getShare(String shareId) throws ParseException {
-        ParseQuery<Share> query = ParseQuery.getQuery(Share.class);
-        query.include(Share.KEY_ARTICLE);
-        query.whereEqualTo("objectId", shareId);
-        return query.getFirst();
-    }
-
-    public User getUser(String userId) throws ParseException {
-        ParseQuery<User> query = ParseQuery.getQuery(User.class);
-        query.include(User.KEY_USERNAME);
-        query.include(User.KEY_PROFILEIMAGE);
-        query.include(User.KEY_FULLNAME);
-
-        query.whereEqualTo("objectId", userId);
-        return query.getFirst();
-    }
 
 }
