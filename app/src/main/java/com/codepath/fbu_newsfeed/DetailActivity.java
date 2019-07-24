@@ -391,6 +391,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         int count;
         if (reaction != null) {
             count = destroyReaction(reaction, type, share);
+            deleteNotification("REACTION", share, type);
         } else {
             count = createReaction(type, share);
             createNotification("REACTION", share, type);
@@ -404,6 +405,25 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         if (ParseUser.getCurrentUser().getObjectId().equals(shareUser.getObjectId())) { return; }
         Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), shareUser, share, typeText);
         notification.saveInBackground();
+    }
+
+    private void deleteNotification(String type, Share share, String typeText) {
+        Log.d(TAG, "Deleting notification");
+        ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
+        query.whereEqualTo(Notification.KEY_TYPE, type);
+        query.whereEqualTo(Notification.KEY_TYPE, typeText);
+        query.whereEqualTo(Notification.KEY_SEND_USER, ParseUser.getCurrentUser());
+        User receiverUser = (User) share.getUser();
+        query.whereEqualTo(Notification.KEY_RECEIVE_USER, receiverUser);
+
+        try {
+            Notification notification = query.getFirst();
+            if (notification != null) {
+                notification.deleteInBackground();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private int createReaction(String type, Share share) {
