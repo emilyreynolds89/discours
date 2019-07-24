@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -230,7 +231,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             rvComments.setVisibility(View.VISIBLE);
             btnSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(final View view) {
                     String message = etComment.getText().toString();
                     if (message == null) {
                         Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
@@ -243,8 +244,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                                     Log.d("DetailActivity", "Success in saving comment");
                                     fetchTimelineAsync();
                                     etComment.setText("");
-                                    etComment.clearFocus();
-                                    etComment.setEnabled(false);
+                                    etComment.onEditorAction(EditorInfo.IME_ACTION_DONE);
                                     return;
                                 } else {
                                     Log.e("DetailActivity", "Error in creating comment");
