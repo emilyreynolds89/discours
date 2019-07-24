@@ -219,6 +219,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     }
 
     private void goToUser(ParseUser user) {
+        if (user.equals(ParseUser.getCurrentUser()))
+            ((HomeActivity) context).bottomNavigationView.setSelectedItemId(R.id.action_profile);
         ((HomeActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).commit();
     }
 

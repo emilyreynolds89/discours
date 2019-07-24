@@ -57,7 +57,6 @@ public class HomeActivity extends AppCompatActivity {
                     case R.id.action_compose:
                         fragment = new CreateFragment();
                         break;
-                    // TODO: notifications fragment
                     case R.id.action_notification:
                         fragment = new NotificationFragment();
                         break;
@@ -81,6 +80,8 @@ public class HomeActivity extends AppCompatActivity {
             String user_id = intent.getStringExtra("user_id");
 
             if (article != null) {
+                bottomNavigationView.setSelectedItemId(R.id.action_compose);
+
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("article", article);
                 ComposeFragment composeFragment = new ComposeFragment();
@@ -90,6 +91,8 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             if (user_id != null) {
+                if (user_id.equals(ParseUser.getCurrentUser().getObjectId()))
+                    bottomNavigationView.setSelectedItemId(R.id.action_profile);
                 Fragment newProfileFragment = ProfileFragment.newInstance(user_id);
 
                 fragmentManager.beginTransaction().replace(R.id.flContainer, newProfileFragment).commit();
