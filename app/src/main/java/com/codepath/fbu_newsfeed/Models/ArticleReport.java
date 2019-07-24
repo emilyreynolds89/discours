@@ -7,13 +7,15 @@ import com.parse.ParseUser;
 @ParseClassName("ArticleReport")
 public class ArticleReport extends ParseObject {
     public static final String KEY_REPORTER = "reporter";
+    public static final String KEY_ARTICLE = "article";
     public static final String KEY_TYPE = "type";
     public static final String KEY_COMMENT = "comment";
 
     public ArticleReport() {}
 
-    public ArticleReport(ParseUser reporter, String type, String comment) {
+    public ArticleReport(ParseUser reporter, Article article, String type, String comment) {
         super();
+        put(KEY_ARTICLE, article);
         put(KEY_REPORTER, reporter);
         put(KEY_TYPE, type);
         put(KEY_COMMENT, comment);
@@ -26,6 +28,10 @@ public class ArticleReport extends ParseObject {
     public void setReporter(ParseUser user) {
         put(KEY_REPORTER, user);
     }
+
+    public Article getArticle() { return (Article) getParseObject(KEY_ARTICLE); }
+
+    public void setArticle(Article article) { put(KEY_ARTICLE, article); }
 
     public String getType() {
         return getString(KEY_TYPE);
