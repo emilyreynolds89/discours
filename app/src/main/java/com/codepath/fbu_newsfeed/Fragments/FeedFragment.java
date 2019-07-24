@@ -31,7 +31,7 @@ import butterknife.Unbinder;
 
 
 public class FeedFragment extends Fragment {
-    private final String TAG = "FeedFragment";
+    public final static String TAG = "FeedFragment";
 
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     @BindView(R.id.rvShares) RecyclerView rvShares;
@@ -53,6 +53,7 @@ public class FeedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @NonNull Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(0).setChecked(true);
 
         shares = new ArrayList<Share>();
         shareAdapter = new ShareAdapter(shares);

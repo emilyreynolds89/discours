@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
 import com.codepath.fbu_newsfeed.SearchActivity;
@@ -32,6 +33,8 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class TrendsFragment extends Fragment {
+    public static final String TAG = "TrendsFragment";
+
     @BindView(R.id.searchButton) Button searchBtn;
     @BindView(R.id.rvTrends) RecyclerView rvTrends;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
@@ -54,6 +57,10 @@ public class TrendsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(1).setChecked(true);
+
+
         articles = new ArrayList<>();
         adapter = new TrendsAdapter(getContext(), articles);
 
