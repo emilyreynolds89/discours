@@ -29,8 +29,8 @@ import butterknife.ButterKnife;
 
 public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder> {
 
-    static Context context;
-    static List<Article> articles;
+    Context context;
+    List<Article> articles;
 
     public TrendsAdapter(Context context, List<Article> articles) {
         this.context = context;
