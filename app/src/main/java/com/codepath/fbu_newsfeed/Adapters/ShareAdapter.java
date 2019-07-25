@@ -96,72 +96,24 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
 
         // TODO: eliminate this repetition
-        holder.tvLike.setText(Integer.toString(share.getCount("LIKE")));
-        holder.tvDislike.setText(Integer.toString(share.getCount("DISLIKE")));
-        holder.tvHappy.setText(Integer.toString(share.getCount("HAPPY")));
-        holder.tvSad.setText(Integer.toString(share.getCount("SAD")));
-        holder.tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
+        for (int i = 0; i < Reaction.TYPES.length; i++) {
+            final String type = Reaction.TYPES[i];
+            final TextView tv = getTextViewFromReactionType(type, holder);
+            final ImageButton ib = getImageButtonFromReactionType(type, holder);
 
-        holder.ibReactionLike.setSelected(false);
-        holder.ibReactionDislike.setSelected(false);
-        holder.ibReactionHappy.setSelected(false);
-        holder.ibReactionSad.setSelected(false);
-        holder.ibReactionAngry.setSelected(false);
+            tv.setText(String.valueOf(share.getCount(type)));
 
-        if (reactionMap != null) {
-            Log.d(TAG, "REACTIONMAP: " + reactionMap.toString());
-            if (reactionMap.get("LIKE") != null) {
-                holder.ibReactionLike.setSelected(true);
-            }
-            if (reactionMap.get("DISLIKE") != null) {
-                holder.ibReactionDislike.setSelected(true);
-            }
-            if (reactionMap.get("HAPPY") != null) {
-                holder.ibReactionHappy.setSelected(true);
-            }
-            if (reactionMap.get("SAD") != null) {
-                holder.ibReactionSad.setSelected(true);
-            }
-            if (reactionMap.get("ANGRY") != null) {
-                holder.ibReactionAngry.setSelected(true);
-            }
+            ib.setSelected(false);
+            if (reactionMap != null && reactionMap.get(type) != null)
+                ib.setSelected(true);
+
+            ib.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    updateReactionText(type, share, currentUser, tv, ib);
+                }
+            });
         }
-
-
-        holder.ibReactionLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateReactionText("LIKE", share, currentUser, holder.tvLike, holder.ibReactionLike);
-            }
-        });
-
-        holder.ibReactionDislike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateReactionText("DISLIKE", share, currentUser, holder.tvDislike, holder.ibReactionDislike);
-            }
-        });
-
-        holder.ibReactionHappy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateReactionText("HAPPY", share, currentUser, holder.tvHappy, holder.ibReactionHappy);
-            }
-        });
-
-        holder.ibReactionSad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateReactionText("SAD", share, currentUser, holder.tvSad, holder.ibReactionSad);
-            }
-        });
-
-        holder.ibReactionAngry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateReactionText("ANGRY", share, currentUser, holder.tvAngry, holder.ibReactionAngry);
-            }
-        });
 
         holder.tvFactRating.setText(article.getTruth());
 
@@ -254,6 +206,42 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         notifyDataSetChanged();
         allReactions.clear();
     }
+
+
+    private TextView getTextViewFromReactionType(String type, ShareAdapter.ViewHolder holder) {
+        switch (type) {
+            case "LIKE":
+                return holder.tvLike;
+            case "DISLIKE":
+                return holder.tvDislike;
+            case "HAPPY":
+                return holder.tvHappy;
+            case "SAD":
+                return holder.tvSad;
+            case "ANGRY":
+                return holder.tvAngry;
+            default:
+                return null;
+        }
+    }
+
+    private ImageButton getImageButtonFromReactionType(String type, ShareAdapter.ViewHolder holder) {
+        switch (type) {
+            case "LIKE":
+                return holder.ibReactionLike;
+            case "DISLIKE":
+                return holder.ibReactionDislike;
+            case "HAPPY":
+                return holder.ibReactionHappy;
+            case "SAD":
+                return holder.ibReactionSad;
+            case "ANGRY":
+                return holder.ibReactionAngry;
+            default:
+                return null;
+        }
+    }
+
 
     private void goToUser(ParseUser user) {
         if (user.equals(ParseUser.getCurrentUser()))
