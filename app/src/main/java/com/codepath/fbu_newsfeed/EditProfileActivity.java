@@ -111,7 +111,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 if (e == null) {
                     Log.d(TAG, "Found user to submit");
                     user.put(User.KEY_BIO, bio);
-                    user.put(User.KEY_PROFILEIMAGE, image);
+                    if (image != null) {
+                        user.put(User.KEY_PROFILEIMAGE, image);
+                    }
                     user.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
