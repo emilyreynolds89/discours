@@ -25,6 +25,7 @@ import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
+import com.codepath.fbu_newsfeed.Helpers.ReactionHelper;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Notification;
@@ -94,8 +95,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.tvSource.setText(article.getSource());
         holder.tvTag.setText(article.getTag());
 
-
-        // TODO: eliminate this repetition
         for (int i = 0; i < Reaction.TYPES.length; i++) {
             final String type = Reaction.TYPES[i];
             final TextView tv = getTextViewFromReactionType(type, holder);
@@ -207,79 +206,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         allReactions.clear();
     }
 
-
-    private TextView getTextViewFromReactionType(String type, ShareAdapter.ViewHolder holder) {
-        switch (type) {
-            case "LIKE":
-                return holder.tvLike;
-            case "DISLIKE":
-                return holder.tvDislike;
-            case "HAPPY":
-                return holder.tvHappy;
-            case "SAD":
-                return holder.tvSad;
-            case "ANGRY":
-                return holder.tvAngry;
-            default:
-                return null;
-        }
-    }
-
-    private ImageButton getImageButtonFromReactionType(String type, ShareAdapter.ViewHolder holder) {
-        switch (type) {
-            case "LIKE":
-                return holder.ibReactionLike;
-            case "DISLIKE":
-                return holder.ibReactionDislike;
-            case "HAPPY":
-                return holder.ibReactionHappy;
-            case "SAD":
-                return holder.ibReactionSad;
-            case "ANGRY":
-                return holder.ibReactionAngry;
-            default:
-                return null;
-        }
-    }
-
-
-    private void goToUser(ParseUser user) {
-        if (user.equals(ParseUser.getCurrentUser()))
-            ((HomeActivity) context).bottomNavigationView.setSelectedItemId(R.id.action_profile);
-        ((HomeActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).addToBackStack(ProfileFragment.TAG).commit();
-    }
-
-    private void reportArticle(Article article) {
-        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
-        ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());
-        articleReportDialog.show(fm, "fragment_report");
-    }
-
-
-    private int createReaction(String type, Share share) {
-        Log.d(TAG, "Creating reaction of type: " + type);
-        Reaction newReaction = new Reaction(ParseUser.getCurrentUser(), share, type);
-        newReaction.saveInBackground();
-        int count = share.incrementCount(type);
-        share.saveInBackground();
-        return count;
-    }
-
-    private int destroyReaction(Reaction reaction, String type, Share share) {
-        Log.d(TAG, "Destroying reaction of type: " + type);
-        reaction.deleteInBackground();
-        int count = share.decrementCount(type);
-        share.saveInBackground();
-        return count;
-    }
-
-    private void showInformationDialog() {
-        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
-        InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
-        informationDialog.show(fm, "fragment_information");
-    }
-
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
         @BindView(R.id.tvUsername) TextView tvUsername;
@@ -342,35 +268,72 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     }
 
-    private Reaction getReaction(String type, Share share, ParseUser user) {
-        ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
 
-        reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
-        reactionQuery.whereEqualTo(Reaction.KEY_USER, user);
-        reactionQuery.whereEqualTo(Reaction.KEY_TYPE, type);
-
-        try {
-            List<Reaction> result = reactionQuery.find();
-            if (result.size() > 0 ) {
-                return result.get(0);
-            } else {
+    private TextView getTextViewFromReactionType(String type, ShareAdapter.ViewHolder holder) {
+        switch (type) {
+            case "LIKE":
+                return holder.tvLike;
+            case "DISLIKE":
+                return holder.tvDislike;
+            case "HAPPY":
+                return holder.tvHappy;
+            case "SAD":
+                return holder.tvSad;
+            case "ANGRY":
+                return holder.tvAngry;
+            default:
                 return null;
-            }
-        } catch (Exception e) {
-            Log.d(TAG, "Error finding reactions: " + e.getMessage());
-            return null;
         }
     }
 
+    private ImageButton getImageButtonFromReactionType(String type, ShareAdapter.ViewHolder holder) {
+        switch (type) {
+            case "LIKE":
+                return holder.ibReactionLike;
+            case "DISLIKE":
+                return holder.ibReactionDislike;
+            case "HAPPY":
+                return holder.ibReactionHappy;
+            case "SAD":
+                return holder.ibReactionSad;
+            case "ANGRY":
+                return holder.ibReactionAngry;
+            default:
+                return null;
+        }
+    }
+
+
+    private void goToUser(ParseUser user) {
+        if (user.equals(ParseUser.getCurrentUser()))
+            ((HomeActivity) context).bottomNavigationView.setSelectedItemId(R.id.action_profile);
+        ((HomeActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).addToBackStack(ProfileFragment.TAG).commit();
+    }
+
+    private void reportArticle(Article article) {
+        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());
+        articleReportDialog.show(fm, "fragment_report");
+    }
+
+
+    private void showInformationDialog() {
+        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
+        informationDialog.show(fm, "fragment_information");
+    }
+
+
+
     private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
-        Reaction reaction = getReaction(type, share, currentUser);
+        Reaction reaction = ReactionHelper.getReaction(type, share, currentUser);
         int count;
         if (reaction != null) {
-            count = destroyReaction(reaction, type, share);
+            count = ReactionHelper.destroyReaction(reaction, type, share);
             imageButton.setSelected(false);
             deleteNotification(Notification.REACTION, share, type);
         } else {
-            count = createReaction(type, share);
+            count = ReactionHelper.createReaction(type, share);
             imageButton.setSelected(true);
             createNotification(Notification.REACTION, share, type);
         }
