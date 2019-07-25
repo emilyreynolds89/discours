@@ -238,7 +238,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             super(view);
             ButterKnife.bind(this, view);
         }
-
     }
 
     private void getAllReactions() {
@@ -316,14 +315,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         articleReportDialog.show(fm, "fragment_report");
     }
 
-
     private void showInformationDialog() {
         FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
         InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
         informationDialog.show(fm, "fragment_information");
     }
-
-
 
     private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
         Reaction reaction = ReactionHelper.getReaction(type, share, currentUser);
@@ -350,10 +346,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     private void deleteNotification(String type, Share share, String typeText) {
         ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
-        query.include(Notification.KEY_RECEIVE_USER);
-        query.include(Notification.KEY_SEND_USER);
-        query.include(Notification.KEY_TYPE);
-        query.include(Notification.KEY_TYPE_TEXT);
 
         query.whereEqualTo(Notification.KEY_TYPE, type);
         query.whereEqualTo(Notification.KEY_TYPE_TEXT, typeText);

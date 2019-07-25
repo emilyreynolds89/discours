@@ -232,11 +232,43 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         ibReportArticle.setOnClickListener(this);
-
         ibInformation.setOnClickListener(this);
-
         viewArticle.setOnClickListener(this);
 
+        setUpFriendPermissions();
+        setSupportActionBar(toolbar);
+        queryComments(true);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ibReportArticle:
+                reportArticle();
+                break;
+            case R.id.ibInformation:
+                Log.d(TAG, "Clicked information");
+                showInformationDialog();
+                break;
+            case R.id.viewArticle:
+                Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
+                intent.putExtra("article", (Serializable) article);
+                startActivity(intent);
+                break;
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        return true;
+    }
+
+    private void setUpFriendPermissions() {
         if (isFriends() || user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             etComment.setVisibility(View.VISIBLE);
             btnSubmit.setVisibility(View.VISIBLE);
@@ -277,39 +309,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             btnSubmit.setOnClickListener(null);
 
         }
-
-        setSupportActionBar(toolbar);
-        queryComments(true);
-
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ibReportArticle:
-                reportArticle();
-                break;
-            case R.id.ibInformation:
-                Log.d(TAG, "Clicked information");
-                showInformationDialog();
-                break;
-            case R.id.viewArticle:
-                Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
-                intent.putExtra("article", (Serializable) article);
-                startActivity(intent);
-                break;
-
-
-        }
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        return true;
     }
 
     private void showInformationDialog() {
@@ -402,10 +401,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
     private void deleteNotification(String type, Share share, String typeText) {
         ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
-        query.include(Notification.KEY_RECEIVE_USER);
-        query.include(Notification.KEY_SEND_USER);
-        query.include(Notification.KEY_TYPE);
-        query.include(Notification.KEY_TYPE_TEXT);
+
 
         query.whereEqualTo(Notification.KEY_TYPE, type);
         query.whereEqualTo(Notification.KEY_TYPE_TEXT, typeText);
