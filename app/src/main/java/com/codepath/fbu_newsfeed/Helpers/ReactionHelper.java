@@ -7,7 +7,9 @@ import com.codepath.fbu_newsfeed.Models.Share;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReactionHelper {
     public static final String TAG = "ReactionHelper";
@@ -47,6 +49,25 @@ public class ReactionHelper {
             Log.d(TAG, "Error finding reactions: " + e.getMessage());
             return null;
         }
+    }
+    public static Map<String, Reaction> getReactions(Share share, ParseUser user) {
+        ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
+
+        reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
+        reactionQuery.whereEqualTo(Reaction.KEY_USER, user);
+
+        try {
+            Map<String, Reaction> map = new HashMap<>();
+            List<Reaction> result = reactionQuery.find();
+            for (int i = 0; i < result.size(); i++) {
+                map.put(result.get(i).getType(), result.get(i));
+            }
+            return map;
+        } catch (Exception e) {
+            Log.d(TAG, "Error finding reactions: " + e.getMessage());
+            return null;
+        }
+
     }
 
 }

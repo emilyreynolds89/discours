@@ -32,8 +32,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Adapters.RecommendAdapter;
+import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
+import com.codepath.fbu_newsfeed.Helpers.ReactionHelper;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
@@ -208,32 +210,26 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        tvLike.setText(Integer.toString(share.getCount("LIKE")));
-        tvDislike.setText(Integer.toString(share.getCount("DISLIKE")));
-        tvHappy.setText(Integer.toString(share.getCount("HAPPY")));
-        tvSad.setText(Integer.toString(share.getCount("SAD")));
-        tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
+        Map<String, Reaction> reactionMap = ReactionHelper.getReactions(share, ParseUser.getCurrentUser());
 
-        Map<String, Reaction> reactionMap = getReactions(share, ParseUser.getCurrentUser());
+        for (int i = 0; i < Reaction.TYPES.length; i++) {
+            final String type = Reaction.TYPES[i];
+            final TextView tv = getTextViewFromReactionType(type);
+            final ImageButton ib = getImageButtonFromReactionType(type);
 
-        if (reactionMap != null ) {
-            if (reactionMap.get("LIKE") != null)
-                ibReactionLike.setSelected(true);
-            if (reactionMap.get("DISLIKE") != null)
-                ibReactionDislike.setSelected(true);
-            if (reactionMap.get("HAPPY") != null)
-                ibReactionHappy.setSelected(true);
-            if (reactionMap.get("SAD") != null)
-                ibReactionSad.setSelected(true);
-            if (reactionMap.get("ANGRY") != null)
-                ibReactionAngry.setSelected(true);
+            tv.setText(String.valueOf(share.getCount(type)));
+
+            ib.setSelected(false);
+            if (reactionMap != null && reactionMap.get(type) != null)
+                ib.setSelected(true);
+
+            ib.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    updateReactionText(type, share, currentUser, tv, ib);
+                }
+            });
         }
-
-        ibReactionLike.setOnClickListener(this);
-        ibReactionDislike.setOnClickListener(this);
-        ibReactionHappy.setOnClickListener(this);
-        ibReactionSad.setOnClickListener(this);
-        ibReactionAngry.setOnClickListener(this);
 
         ibReportArticle.setOnClickListener(this);
 
@@ -293,31 +289,10 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.ibReportArticle:
                 reportArticle();
                 break;
-            case R.id.ibReactionLike:
-                updateReactionText("LIKE", share, currentUser, tvLike, ibReactionLike);
-                break;
-
-            case R.id.ibReactionDislike:
-                updateReactionText("DISLIKE", share, currentUser, tvDislike, ibReactionDislike);
-                break;
-
-            case R.id.ibReactionHappy:
-                updateReactionText("HAPPY", share, currentUser, tvHappy, ibReactionHappy);
-                break;
-
-            case R.id.ibReactionSad:
-                updateReactionText("SAD", share, currentUser, tvSad, ibReactionSad);
-                break;
-
-            case R.id.ibReactionAngry:
-                updateReactionText("ANGRY", share, currentUser, tvAngry, ibReactionAngry);
-                break;
-
             case R.id.ibInformation:
                 Log.d(TAG, "Clicked information");
                 showInformationDialog();
                 break;
-
             case R.id.viewArticle:
                 Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
                 intent.putExtra("article", (Serializable) article);
@@ -403,14 +378,14 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
-        Reaction reaction = getReaction(type, share, currentUser);
+        Reaction reaction = ReactionHelper.getReaction(type, share, currentUser);
         int count;
         if (reaction != null) {
-            count = destroyReaction(reaction, type, share);
+            count = ReactionHelper.destroyReaction(reaction, type, share);
             imageButton.setSelected(false);
             deleteNotification("REACTION", share, type);
         } else {
-            count = createReaction(type, share);
+            count = ReactionHelper.createReaction(type, share);
             imageButton.setSelected(true);
             createNotification("REACTION", share, type);
         }
@@ -454,67 +429,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         notification.deleteInBackground();
     }
 
-    private int createReaction(String type, Share share) {
-        Log.d(TAG, "Creating reaction of type: " + type);
-        Reaction newReaction = new Reaction(ParseUser.getCurrentUser(), share, type);
-        newReaction.saveInBackground();
-        int count = share.incrementCount(type);
-        share.saveInBackground();
-        return count;
-    }
-
-    private int destroyReaction(Reaction reaction, String type, Share share) {
-        Log.d(TAG, "Destroying reaction of type: " + type);
-        reaction.deleteInBackground();
-        int count = share.decrementCount(type);
-        share.saveInBackground();
-        return count;
-    }
-
-
-    private Map<String, Reaction> getReactions(Share share, ParseUser user) {
-        ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
-
-        reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
-        reactionQuery.whereEqualTo(Reaction.KEY_USER, user);
-
-        try {
-            Map<String, Reaction> map = new HashMap<>();
-            List<Reaction> result = reactionQuery.find();
-            for (int i = 0; i < result.size(); i++) {
-                map.put(result.get(i).getType(), result.get(i));
-            }
-            return map;
-        } catch (Exception e) {
-            Log.d(TAG, "Error finding reactions: " + e.getMessage());
-            return null;
-        }
-
-    }
-
-
-    private Reaction getReaction(final String type, Share share, ParseUser user) {
-        ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
-
-        reactionQuery.include(Reaction.KEY_SHARE);
-        reactionQuery.include(Reaction.KEY_USER);
-
-        reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
-        reactionQuery.whereEqualTo(Reaction.KEY_USER, user);
-        reactionQuery.whereEqualTo(Reaction.KEY_TYPE, type);
-
-        try {
-            List<Reaction> result = reactionQuery.find();
-            if (result.size() > 0 ) {
-                return result.get(0);
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            Log.d(TAG, "Error finding reactions: " + e.getMessage());
-            return null;
-        }
-    }
 
     private void queryRecommended() {
         final ParseQuery<Article> recommendQuery = ParseQuery.getQuery(Article.class);
@@ -564,6 +478,40 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         commentAdapter.clear();
         queryComments(true);
         swipeContainer.setRefreshing(false);
+    }
+
+    private TextView getTextViewFromReactionType(String type) {
+        switch (type) {
+            case "LIKE":
+                return tvLike;
+            case "DISLIKE":
+                return tvDislike;
+            case "HAPPY":
+                return tvHappy;
+            case "SAD":
+                return tvSad;
+            case "ANGRY":
+                return tvAngry;
+            default:
+                return null;
+        }
+    }
+
+    private ImageButton getImageButtonFromReactionType(String type) {
+        switch (type) {
+            case "LIKE":
+                return ibReactionLike;
+            case "DISLIKE":
+                return ibReactionDislike;
+            case "HAPPY":
+                return ibReactionHappy;
+            case "SAD":
+                return ibReactionSad;
+            case "ANGRY":
+                return ibReactionAngry;
+            default:
+                return null;
+        }
     }
 
     private void reportArticle() {
