@@ -150,6 +150,6 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/flag" />
+        app:srcCompat="@drawable/report" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

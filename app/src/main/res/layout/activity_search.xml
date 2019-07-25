@@ -41,6 +41,12 @@
             android:layout_height="wrap_content"
             android:text="Users" />
 
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabTags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tags" />
+
     </com.google.android.material.tabs.TabLayout>
 
 

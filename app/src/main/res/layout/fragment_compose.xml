@@ -98,7 +98,7 @@
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="@+id/ivArticlePreviewCreate"
         app:layout_constraintTop_toBottomOf="@+id/view"
-        app:srcCompat="@drawable/questionmark_icon" />
+        app:srcCompat="@drawable/question" />
 
     <Button
         android:id="@+id/btShareArticleCreate"

@@ -98,7 +98,7 @@
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/warning" />
+            app:srcCompat="@drawable/report" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -142,7 +142,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivBiasTrends"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-        app:srcCompat="@drawable/questionmark_icon" />
+        app:srcCompat="@drawable/question" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
