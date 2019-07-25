@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.DetailActivity;
+import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Share;
@@ -24,6 +26,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import java.io.Serializable;
 import java.util.List;
@@ -63,6 +66,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("share", (Serializable) finalShare);
                     context.startActivity(intent);
+                } else {
+                    goToUser(notification.getSendUser());
                 }
             }
         });
@@ -130,5 +135,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         notifyDataSetChanged();
     }
 
-
+    private void goToUser(ParseUser user) {
+        if (user.equals(ParseUser.getCurrentUser()))
+            ((HomeActivity) context).bottomNavigationView.setSelectedItemId(R.id.action_profile);
+        ((HomeActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).addToBackStack(ProfileFragment.TAG).commit();
+    }
 }
