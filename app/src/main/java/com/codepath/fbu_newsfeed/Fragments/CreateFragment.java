@@ -179,7 +179,7 @@ public class CreateFragment extends Fragment {
         });
     }
     private void shareCreate(String caption, Article article) {
-        //final Share share = new Share(user, newArticle, caption);
+        article.setCount(article.getCount() + 1);
         Share share = new Share(ParseUser.getCurrentUser(), article, caption);
         share.saveInBackground(new SaveCallback() {
             @Override
