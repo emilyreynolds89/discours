@@ -57,7 +57,7 @@ public class FeedFragment extends Fragment {
 
         shares = new ArrayList<Share>();
         shareAdapter = new ShareAdapter(shares);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvShares.setLayoutManager(linearLayoutManager);
         rvShares.setAdapter(shareAdapter);
 
@@ -86,6 +86,13 @@ public class FeedFragment extends Fragment {
         };
 
         rvShares.addOnScrollListener(scrollListener);
+
+        ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        });
 
     }
 

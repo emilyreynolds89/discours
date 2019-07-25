@@ -56,7 +56,7 @@ public class NotificationFragment extends Fragment {
 
         notifications = new ArrayList<Notification>();
         notificationAdapter = new NotificationAdapter(getContext(), notifications);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvNotifications.setLayoutManager(linearLayoutManager);
         rvNotifications.setAdapter(notificationAdapter);
 
@@ -85,6 +85,13 @@ public class NotificationFragment extends Fragment {
         };
 
         rvNotifications.addOnScrollListener(scrollListener);
+
+        ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        });
 
     }
 
