@@ -213,6 +213,19 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
 
 
+        if (getReaction("LIKE", share, currentUser) != null)
+            ibReactionLike.setSelected(true);
+        if (getReaction("DISLIKE", share, currentUser) != null)
+            ibReactionDislike.setSelected(true);
+        if (getReaction("HAPPY", share, currentUser) != null)
+            ibReactionHappy.setSelected(true);
+        if (getReaction("SAD", share, currentUser) != null)
+            ibReactionSad.setSelected(true);
+        if (getReaction("ANGRY", share, currentUser) != null)
+            ibReactionAngry.setSelected(true);
+
+
+
         ibReactionLike.setOnClickListener(this);
         ibReactionDislike.setOnClickListener(this);
         ibReactionHappy.setOnClickListener(this);
@@ -278,23 +291,23 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 reportArticle();
                 break;
             case R.id.ibReactionLike:
-                updateReactionText("LIKE", share, currentUser, tvLike);
+                updateReactionText("LIKE", share, currentUser, tvLike, ibReactionLike);
                 break;
 
             case R.id.ibReactionDislike:
-                updateReactionText("DISLIKE", share, currentUser, tvDislike);
+                updateReactionText("DISLIKE", share, currentUser, tvDislike, ibReactionDislike);
                 break;
 
             case R.id.ibReactionHappy:
-                updateReactionText("HAPPY", share, currentUser, tvHappy);
+                updateReactionText("HAPPY", share, currentUser, tvHappy, ibReactionHappy);
                 break;
 
             case R.id.ibReactionSad:
-                updateReactionText("SAD", share, currentUser, tvSad);
+                updateReactionText("SAD", share, currentUser, tvSad, ibReactionSad);
                 break;
 
             case R.id.ibReactionAngry:
-                updateReactionText("ANGRY", share, currentUser, tvAngry);
+                updateReactionText("ANGRY", share, currentUser, tvAngry, ibReactionAngry);
                 break;
 
             case R.id.ibInformation:
@@ -386,14 +399,16 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void updateReactionText(String type, Share share, User currentUser, TextView textView) {
+    private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
         Reaction reaction = getReaction(type, share, currentUser);
         int count;
         if (reaction != null) {
             count = destroyReaction(reaction, type, share);
+            imageButton.setSelected(false);
             deleteNotification("REACTION", share, type);
         } else {
             count = createReaction(type, share);
+            imageButton.setSelected(true);
             createNotification("REACTION", share, type);
         }
         textView.setText(Integer.toString(count));

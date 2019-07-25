@@ -46,7 +46,7 @@ import butterknife.ButterKnife;
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     private static final String TAG = "ShareAdapter";
     public ArrayList<Share> shares;
-    public static Context context;
+    public Context context;
 
     public ShareAdapter(ArrayList<Share> shares) {
         this.shares = shares;
@@ -88,46 +88,62 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.tvTag.setText(article.getTag());
 
 
+        // TODO: eliminate this repetition
         holder.tvLike.setText(Integer.toString(share.getCount("LIKE")));
         holder.tvDislike.setText(Integer.toString(share.getCount("DISLIKE")));
         holder.tvHappy.setText(Integer.toString(share.getCount("HAPPY")));
         holder.tvSad.setText(Integer.toString(share.getCount("SAD")));
         holder.tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
 
+        if (getReaction("LIKE", share, currentUser) != null) {
+            holder.ibReactionLike.setSelected(true);
+        }
+        if (getReaction("DISLIKE", share, currentUser) != null) {
+            holder.ibReactionDislike.setSelected(true);
+        }
+        if (getReaction("HAPPY", share, currentUser) != null) {
+            holder.ibReactionHappy.setSelected(true);
+        }
+        if (getReaction("SAD", share, currentUser) != null) {
+            holder.ibReactionSad.setSelected(true);
+        }
+        if (getReaction("ANGRY", share, currentUser) != null) {
+            holder.ibReactionAngry.setSelected(true);
+        }
 
 
         holder.ibReactionLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateReactionText("LIKE", share, currentUser, holder.tvLike);
+                updateReactionText("LIKE", share, currentUser, holder.tvLike, holder.ibReactionLike);
             }
         });
 
         holder.ibReactionDislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateReactionText("DISLIKE", share, currentUser, holder.tvDislike);
+                updateReactionText("DISLIKE", share, currentUser, holder.tvDislike, holder.ibReactionDislike);
             }
         });
 
         holder.ibReactionHappy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateReactionText("HAPPY", share, currentUser, holder.tvHappy);
+                updateReactionText("HAPPY", share, currentUser, holder.tvHappy, holder.ibReactionHappy);
             }
         });
 
         holder.ibReactionSad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateReactionText("SAD", share, currentUser, holder.tvSad);
+                updateReactionText("SAD", share, currentUser, holder.tvSad, holder.ibReactionSad);
             }
         });
 
         holder.ibReactionAngry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateReactionText("ANGRY", share, currentUser, holder.tvAngry);
+                updateReactionText("ANGRY", share, currentUser, holder.tvAngry, holder.ibReactionAngry);
             }
         });
 
@@ -294,7 +310,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     }
 
-    private Reaction getReaction(final String type, Share share, ParseUser user) {
+    private Reaction getReaction(String type, Share share, ParseUser user) {
         ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
 
         reactionQuery.include(Reaction.KEY_SHARE);
@@ -317,14 +333,16 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         }
     }
 
-    private void updateReactionText(String type, Share share, User currentUser, TextView textView) {
+    private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
         Reaction reaction = getReaction(type, share, currentUser);
         int count;
         if (reaction != null) {
             count = destroyReaction(reaction, type, share);
+            imageButton.setSelected(false);
             deleteNotification("REACTION", share, type);
         } else {
             count = createReaction(type, share);
+            imageButton.setSelected(true);
             createNotification("REACTION", share, type);
         }
         textView.setText(Integer.toString(count));
