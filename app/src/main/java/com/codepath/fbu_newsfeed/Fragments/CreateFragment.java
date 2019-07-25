@@ -1,10 +1,13 @@
 package com.codepath.fbu_newsfeed.Fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,14 +32,21 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class CreateFragment extends Fragment {
+    private static final String TAG = "Create Fragment";
     protected List<Article> articles;
     protected List<String> articleList;
     Spinner spArticleListCreate;
+    EditText etUrlCreate;
     ImageView ivArticlePreviewCreate;
     TextView tvArticleTitleCreate;
     TextView tvFactCheckCreate;
@@ -46,7 +56,48 @@ public class CreateFragment extends Fragment {
     Button btnShareCreate;
     Article selectedArticle;
 
+
     ArrayAdapter<String> spinnerArrayAdapter;
+
+
+    class Content extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String title;
+            String urlTest = params[0];
+            Log.d(TAG, "urlTest: " + urlTest);
+            try {
+                //Connect to the website
+                Document document = Jsoup.connect(urlTest).get();
+
+                //Get the logo source of the website
+                //Element img = document.select("img").first();
+                // Locate the src attribute
+                //String imgSrc = img.absUrl("src");
+                // Download image from URL
+                //InputStream input = new java.net.URL(imgSrc).openStream();
+                // Decode Bitmap
+                //Bitmap bitmap = BitmapFactory.decodeStream(input);
+
+                //Get the title of the website
+                title = document.title();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                title = "";
+            }
+            return title;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d(TAG, "TITLE: " + s);
+            tvArticleTitleCreate.setText(s);
+
+        }
+    }
+
 
     @Nullable
     @Override
@@ -55,10 +106,12 @@ public class CreateFragment extends Fragment {
 
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         spArticleListCreate = view.findViewById(R.id.spArticleListCreate);
+        etUrlCreate = view.findViewById(R.id.etURLCreate);
         ivArticlePreviewCreate  = view.findViewById(R.id.ivArticlePreviewCreate);
         tvArticleTitleCreate = view.findViewById(R.id.tvArticleTitle);
         tvFactCheckCreate = view.findViewById(R.id.tvFactCheckCreate);
@@ -69,8 +122,26 @@ public class CreateFragment extends Fragment {
 
         articles = new ArrayList<>();
         articleList = new ArrayList<>();
+        etUrlCreate.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH ||
+                        i == EditorInfo.IME_ACTION_DONE ||
+                        keyEvent != null &&
+                                keyEvent.getAction() == KeyEvent.ACTION_DOWN &&
+                                keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    if (keyEvent == null || !keyEvent.isShiftPressed()) {
+                        String url = etUrlCreate.getText().toString();
+                        new Content().execute(url);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
         queryTitle(true);
+
 
 
         spinnerArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, articleList);
@@ -83,7 +154,7 @@ public class CreateFragment extends Fragment {
                 Log.d("CreateFragment", "Selected item at " + String.valueOf(position));
                 if (!articleList.isEmpty()) {
                     tvFactCheckCreate.setText(articles.get(position).getTruth());
-                    tvArticleTitleCreate.setText(articles.get(position).getTitle());
+                    //tvArticleTitleCreate.setText(articles.get(position).getTitle());
                     ParseFile imageFile = articles.get(position).getImage();
 
                     int biasValue = articles.get(position).getIntBias();
@@ -116,6 +187,7 @@ public class CreateFragment extends Fragment {
                 return;
             }
         });
+
         btnShareCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

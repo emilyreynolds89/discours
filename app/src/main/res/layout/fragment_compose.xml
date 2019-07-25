@@ -25,13 +25,13 @@
         android:layout_height="200dp"
         android:scaleType="centerCrop"
         android:tint="#40636262"
-        app:layout_constraintEnd_toEndOf="@+id/etURL"
-        app:layout_constraintStart_toStartOf="@+id/etURL"
-        app:layout_constraintTop_toBottomOf="@+id/etURL"
+        app:layout_constraintEnd_toEndOf="@+id/etURLCreate"
+        app:layout_constraintStart_toStartOf="@+id/etURLCreate"
+        app:layout_constraintTop_toBottomOf="@+id/etURLCreate"
         tools:srcCompat="@drawable/news_placeholder" />
 
     <EditText
-        android:id="@+id/etURL"
+        android:id="@+id/etURLCreate"
         android:layout_width="350dp"
         android:layout_height="35dp"
         android:layout_centerHorizontal="true"

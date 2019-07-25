@@ -49,7 +49,7 @@ public class ComposeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        etUrl = view.findViewById(R.id.etURL);
+        etUrl = view.findViewById(R.id.etURLCreate);
         ivArticlePreview  = view.findViewById(R.id.ivArticlePreviewCreate);
         tvArticleTitle = view.findViewById(R.id.tvArticleTitle);
         tvFactCheck = view.findViewById(R.id.tvFactCheckCreate);
