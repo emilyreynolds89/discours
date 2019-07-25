@@ -1,9 +1,11 @@
 package com.codepath.fbu_newsfeed.Fragments;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -35,6 +37,7 @@ public class FeedFragment extends Fragment {
 
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     @BindView(R.id.rvShares) RecyclerView rvShares;
+    @BindView(R.id.tvNoContent) TextView tvNoContent;
 
     ArrayList<Share> shares;
     ShareAdapter shareAdapter;
@@ -61,6 +64,9 @@ public class FeedFragment extends Fragment {
         rvShares.setLayoutManager(linearLayoutManager);
         rvShares.setAdapter(shareAdapter);
 
+        queryShares(0);
+
+
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -75,8 +81,6 @@ public class FeedFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
-        queryShares(0);
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
@@ -105,6 +109,13 @@ public class FeedFragment extends Fragment {
     private void queryShares(int offset) {
 
         List<ParseUser> friends = getFriends();
+        if (friends.size() == 0) {
+            rvShares.setVisibility(View.INVISIBLE);
+            tvNoContent.setVisibility(View.VISIBLE);
+        } else {
+            rvShares.setVisibility(View.VISIBLE);
+            tvNoContent.setVisibility(View.INVISIBLE);
+        }
         friends.add(ParseUser.getCurrentUser());
 
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
