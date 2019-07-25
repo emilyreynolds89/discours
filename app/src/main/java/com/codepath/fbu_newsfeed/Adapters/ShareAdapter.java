@@ -38,18 +38,23 @@ import com.parse.ParseUser;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     private static final String TAG = "ShareAdapter";
+
     public ArrayList<Share> shares;
     public Context context;
+    Map<String, Map<String, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
 
     public ShareAdapter(ArrayList<Share> shares) {
         this.shares = shares;
+        allReactions = new HashMap<>();
     }
 
     @NonNull
@@ -70,6 +75,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         final ParseUser user = share.getUser();
 
         final User currentUser = (User) ParseUser.getCurrentUser();
+
+        Map<String, Reaction> reactionMap = allReactions.get(share.getObjectId());
 
         holder.tvUsername.setText(user.getUsername());
 
@@ -95,20 +102,29 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.tvSad.setText(Integer.toString(share.getCount("SAD")));
         holder.tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
 
-        if (getReaction("LIKE", share, currentUser) != null) {
-            holder.ibReactionLike.setSelected(true);
-        }
-        if (getReaction("DISLIKE", share, currentUser) != null) {
-            holder.ibReactionDislike.setSelected(true);
-        }
-        if (getReaction("HAPPY", share, currentUser) != null) {
-            holder.ibReactionHappy.setSelected(true);
-        }
-        if (getReaction("SAD", share, currentUser) != null) {
-            holder.ibReactionSad.setSelected(true);
-        }
-        if (getReaction("ANGRY", share, currentUser) != null) {
-            holder.ibReactionAngry.setSelected(true);
+        holder.ibReactionLike.setSelected(false);
+        holder.ibReactionDislike.setSelected(false);
+        holder.ibReactionHappy.setSelected(false);
+        holder.ibReactionSad.setSelected(false);
+        holder.ibReactionAngry.setSelected(false);
+
+        if (reactionMap != null) {
+            Log.d(TAG, "REACTIONMAP: " + reactionMap.toString());
+            if (reactionMap.get("LIKE") != null) {
+                holder.ibReactionLike.setSelected(true);
+            }
+            if (reactionMap.get("DISLIKE") != null) {
+                holder.ibReactionDislike.setSelected(true);
+            }
+            if (reactionMap.get("HAPPY") != null) {
+                holder.ibReactionHappy.setSelected(true);
+            }
+            if (reactionMap.get("SAD") != null) {
+                holder.ibReactionSad.setSelected(true);
+            }
+            if (reactionMap.get("ANGRY") != null) {
+                holder.ibReactionAngry.setSelected(true);
+            }
         }
 
 
@@ -230,12 +246,13 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     public void addAll(List<Share> list) {
         shares.addAll(list);
         notifyDataSetChanged();
-
+        getAllReactions();
     }
 
     public void clear() {
         shares.clear();
         notifyDataSetChanged();
+        allReactions.clear();
     }
 
     private void goToUser(ParseUser user) {
@@ -310,11 +327,35 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     }
 
-    private Reaction getReaction(String type, Share share, ParseUser user) {
+    private void getAllReactions() {
         ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
 
-        reactionQuery.include(Reaction.KEY_SHARE);
-        reactionQuery.include(Reaction.KEY_USER);
+        reactionQuery.whereEqualTo(Reaction.KEY_USER, ParseUser.getCurrentUser());
+        reactionQuery.whereContainedIn(Reaction.KEY_SHARE, shares);
+
+        try {
+            List<Reaction> result = reactionQuery.find();
+            Log.d(TAG, "We found this many reactions: " + result.size());
+            for (int i = 0; i < result.size(); i++) {
+                Reaction reaction = result.get(i);
+                Share share = reaction.getShare();
+                if (allReactions.containsKey(share)) {
+                    Map<String, Reaction> innerMap = allReactions.get(share.getObjectId());
+                    innerMap.put(reaction.getType(), reaction);
+                } else {
+                    Map<String, Reaction> innerMap = new HashMap<>();
+                    innerMap.put(reaction.getType(), reaction);
+                    allReactions.put(share.getObjectId(), innerMap);
+                }
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error finding reactions: " + e.getMessage());
+        }
+
+    }
+
+    private Reaction getReaction(String type, Share share, ParseUser user) {
+        ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
 
         reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
         reactionQuery.whereEqualTo(Reaction.KEY_USER, user);

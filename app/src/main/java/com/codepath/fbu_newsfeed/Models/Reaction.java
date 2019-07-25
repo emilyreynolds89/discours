@@ -8,6 +8,7 @@ import com.parse.ParseUser;
 public class Reaction extends ParseObject {
 
     // types are : LIKE, DISLIKE, HAPPY, SAD, ANGRY
+    public static final String TYPES[] = {"LIKE", "DISLIKE", "HAPPY", "SAD", "ANGRY"};
 
     public static final String KEY_USER = "user";
     public static final String KEY_SHARE = "share";
