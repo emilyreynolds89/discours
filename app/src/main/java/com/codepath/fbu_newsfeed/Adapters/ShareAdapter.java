@@ -322,10 +322,10 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         int count;
         if (reaction != null) {
             count = destroyReaction(reaction, type, share);
-            deleteNotification("REACTION", share, type);
+            deleteNotification(Notification.REACTION, share, type);
         } else {
             count = createReaction(type, share);
-            createNotification("REACTION", share, type);
+            createNotification(Notification.REACTION, share, type);
         }
         textView.setText(Integer.toString(count));
     }

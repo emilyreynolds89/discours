@@ -29,6 +29,7 @@ import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Friendship;
+import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
@@ -230,6 +231,7 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+        createFriendNotification(Notification.FRIEND_REQUEST, (User) potentialFriend, "accept on the user's profile page");
     }
 
     private void acceptRequest(final ParseUser requestingUser) {
@@ -368,6 +370,13 @@ public class ProfileFragment extends Fragment {
             return "error";
         }
 
+    }
+
+    private void createFriendNotification(String type, User potentialFriend, String typeText) {
+        Log.d(TAG, "Creating friend notification of type: " + type);
+        if (ParseUser.getCurrentUser().getObjectId().equals(potentialFriend.getObjectId())) { return; }
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), potentialFriend, typeText);
+        notification.saveInBackground();
     }
 
 }
