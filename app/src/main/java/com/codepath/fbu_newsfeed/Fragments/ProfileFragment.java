@@ -115,7 +115,7 @@ public class ProfileFragment extends Fragment {
         this.shareAdapter = new ShareAdapter(mShare);
         rvProfilePosts.setAdapter(this.shareAdapter);
         this.shareAdapter.clear();
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvProfilePosts.setLayoutManager(linearLayoutManager);
 
         queryShares(true, 0);
@@ -138,6 +138,13 @@ public class ProfileFragment extends Fragment {
                 queryShares(false, page);
             }
         };
+
+        ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        });
 
         if (user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             // if profile is for current user

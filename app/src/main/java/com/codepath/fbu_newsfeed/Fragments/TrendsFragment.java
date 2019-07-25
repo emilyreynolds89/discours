@@ -69,7 +69,7 @@ public class TrendsFragment extends Fragment {
         adapter = new TrendsAdapter(getContext(), articles);
 
         rvTrends.setAdapter(adapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTrends.setLayoutManager(linearLayoutManager);
 
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
@@ -109,6 +109,13 @@ public class TrendsFragment extends Fragment {
 
         rvTrends.addOnScrollListener(scrollListener);
         queryArticles(true, 0);
+
+        ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        });
 
     }
 
