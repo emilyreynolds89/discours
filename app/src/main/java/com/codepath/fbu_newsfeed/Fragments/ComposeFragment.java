@@ -38,7 +38,6 @@ public class ComposeFragment extends Fragment {
 
     Article article;
 
-    @BindView(R.id.etURL) EditText etUrl;
     @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreview;
     @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
     @BindView(R.id.tvFactCheckCreate) TextView tvFactCheck;
@@ -79,7 +78,6 @@ public class ComposeFragment extends Fragment {
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String url = etUrl.getText().toString();
                 final String caption = etCaption.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
 

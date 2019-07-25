@@ -1,5 +1,6 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -120,8 +121,8 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             }
 
             ParseFile image = article.getImage();
-            if (image != null ) {
-                Glide.with(context).load(image.getUrl()).into(ivArticleImage);
+            if (image != null && !(((Activity) context).isFinishing())) {
+                Glide.with(context.getApplicationContext()).load(image.getUrl()).into(ivArticleImage);
             }
         }
     }
