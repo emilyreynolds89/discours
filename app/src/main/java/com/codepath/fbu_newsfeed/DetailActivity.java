@@ -50,7 +50,9 @@ import com.parse.SaveCallback;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -212,19 +214,20 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvSad.setText(Integer.toString(share.getCount("SAD")));
         tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
 
+        Map<String, Reaction> reactionMap = getReactions(share, ParseUser.getCurrentUser());
 
-        if (getReaction("LIKE", share, currentUser) != null)
-            ibReactionLike.setSelected(true);
-        if (getReaction("DISLIKE", share, currentUser) != null)
-            ibReactionDislike.setSelected(true);
-        if (getReaction("HAPPY", share, currentUser) != null)
-            ibReactionHappy.setSelected(true);
-        if (getReaction("SAD", share, currentUser) != null)
-            ibReactionSad.setSelected(true);
-        if (getReaction("ANGRY", share, currentUser) != null)
-            ibReactionAngry.setSelected(true);
-
-
+        if (reactionMap != null ) {
+            if (reactionMap.get("LIKE") != null)
+                ibReactionLike.setSelected(true);
+            if (reactionMap.get("DISLIKE") != null)
+                ibReactionDislike.setSelected(true);
+            if (reactionMap.get("HAPPY") != null)
+                ibReactionHappy.setSelected(true);
+            if (reactionMap.get("SAD") != null)
+                ibReactionSad.setSelected(true);
+            if (reactionMap.get("ANGRY") != null)
+                ibReactionAngry.setSelected(true);
+        }
 
         ibReactionLike.setOnClickListener(this);
         ibReactionDislike.setOnClickListener(this);
@@ -467,6 +470,28 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         share.saveInBackground();
         return count;
     }
+
+
+    private Map<String, Reaction> getReactions(Share share, ParseUser user) {
+        ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
+
+        reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
+        reactionQuery.whereEqualTo(Reaction.KEY_USER, user);
+
+        try {
+            Map<String, Reaction> map = new HashMap<>();
+            List<Reaction> result = reactionQuery.find();
+            for (int i = 0; i < result.size(); i++) {
+                map.put(result.get(i).getType(), result.get(i));
+            }
+            return map;
+        } catch (Exception e) {
+            Log.d(TAG, "Error finding reactions: " + e.getMessage());
+            return null;
+        }
+
+    }
+
 
     private Reaction getReaction(final String type, Share share, ParseUser user) {
         ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
