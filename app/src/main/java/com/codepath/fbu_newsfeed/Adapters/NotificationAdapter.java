@@ -107,6 +107,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                         }
                     }
                 });
+            } else {
+                ivImageNotif.setVisibility(View.GONE);
             }
 
             User user = notification.getSendUser();

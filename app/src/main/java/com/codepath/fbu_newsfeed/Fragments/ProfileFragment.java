@@ -231,7 +231,7 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-        createFriendNotification(Notification.FRIEND_REQUEST, (User) potentialFriend, "accept on the user's profile page");
+        createFriendNotification(Notification.FRIEND_REQUEST, (User) potentialFriend);
     }
 
     private void acceptRequest(final ParseUser requestingUser) {
@@ -248,7 +248,9 @@ public class ProfileFragment extends Fragment {
                 btnRequest.setOnClickListener(null);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
+        createFriendNotification(Notification.ACCEPT_REQUEST, (User) requestingUser);
     }
 
     private void logOut() {
@@ -372,10 +374,9 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void createFriendNotification(String type, User potentialFriend, String typeText) {
+    private void createFriendNotification(String type, User friend) {
         Log.d(TAG, "Creating friend notification of type: " + type);
-        if (ParseUser.getCurrentUser().getObjectId().equals(potentialFriend.getObjectId())) { return; }
-        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), potentialFriend, typeText);
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), friend, type);
         notification.saveInBackground();
     }
 
