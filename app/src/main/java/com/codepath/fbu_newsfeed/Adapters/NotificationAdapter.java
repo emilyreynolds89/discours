@@ -2,6 +2,7 @@ package com.codepath.fbu_newsfeed.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -91,12 +93,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         public void bind(Notification notification) {
             User sender = notification.getSendUser();
-            String username = sender.getUsername();
+            String username = "<b>@" + sender.getUsername() + "</b>";
             String typeText = notification.getTypeText();
             if (notification.getType().equals(Notification.COMMENT) || notification.getType().equals(Notification.REACTION)) {
-                tvDescriptionNotif.setText("@" + username + notification.notificationText(notification.getType()) + ": " + typeText);
+                tvDescriptionNotif.setText(Html.fromHtml(username + notification.notificationText(notification.getType()) + ": " + typeText, HtmlCompat.FROM_HTML_MODE_LEGACY));
             } else {
-                tvDescriptionNotif.setText("@" + username + notification.notificationText(notification.getType()));
+                tvDescriptionNotif.setText(Html.fromHtml(username + notification.notificationText(notification.getType()), HtmlCompat.FROM_HTML_MODE_LEGACY));
             }
 
             final Share share = notification.getShare();

@@ -1,6 +1,7 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.R;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -36,8 +40,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull CommentAdapter.ViewHolder holder, int position) {
-        Comment comment = comments.get(position);
+        final Comment comment = comments.get(position);
         holder.bind(comment);
+
+        holder.tvUsernameComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, HomeActivity.class);
+                intent.putExtra("user_id", comment.getUser().getObjectId());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -66,5 +80,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void clear() {
         comments.clear();
         notifyDataSetChanged();
+    }
+
+    private void goToUser(ParseUser user) {
+        ((HomeActivity) context ).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).addToBackStack(ProfileFragment.TAG).commit();
     }
 }

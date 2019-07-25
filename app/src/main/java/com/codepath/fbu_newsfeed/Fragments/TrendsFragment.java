@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -137,7 +136,7 @@ public class TrendsFragment extends Fragment {
         articleQuery.include(Article.KEY_URL);
         articleQuery.setLimit(Article.LIMIT);
         articleQuery.setSkip(offset * Article.LIMIT);
-        articleQuery.orderByDescending(Article.KEY_CREATED_AT);
+        articleQuery.orderByDescending(Article.KEY_COUNT);
 
         articleQuery.findInBackground(new FindCallback<Article>() {
             @Override
