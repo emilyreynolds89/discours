@@ -154,7 +154,7 @@
                     android:scaleType="fitXY"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@drawable/warning" />
+                    app:srcCompat="@drawable/report" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -308,7 +308,6 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="12dp"
-                android:layout_marginLeft="12dp"
                 android:layout_marginTop="8dp"
                 android:background="#00FFFFFF"
                 android:scaleType="fitXY"
@@ -316,7 +315,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/ivBias"
                 app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-                app:srcCompat="@drawable/questionmark_icon" />
+                app:srcCompat="@drawable/question" />
 
             <TextView
                 android:id="@+id/tvCaption"
