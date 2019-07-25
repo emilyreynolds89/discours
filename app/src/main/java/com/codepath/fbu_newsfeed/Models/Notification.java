@@ -16,9 +16,14 @@ public class Notification extends ParseObject {
     public static final String KEY_CREATEDAT = "createdAt";
     public static final int LIMIT = 30;
 
+    public static final String REACTION = "REACTION";
+    public static final String COMMENT = "COMMENT";
+    public static final String FRIEND_REQUEST = "FRIEND_REQUEST";
+    public static final String ACCEPT_REQUEST = "ACCEPT_REQUEST";
+
     User sendUser;
     User receiveUser;
-    String type; // REACTION or COMMENT
+    String type; // REACTION, COMMENT, FRIEND_REQUEST, ACCEPT_REQUEST
     Share share;
     String typeText;
 
@@ -40,6 +45,23 @@ public class Notification extends ParseObject {
 
         this.share = share;
         put(KEY_SHARE, share);
+
+        this.typeText = typeText;
+        put(KEY_TYPE_TEXT, typeText);
+    }
+
+    // for friend notifications
+    public Notification(String type, User sender, User receiver, String typeText) {
+        super();
+
+        this.type = type;
+        put(KEY_TYPE, type);
+
+        this.sendUser = sender;
+        put(KEY_SEND_USER, sender);
+
+        this.receiveUser = receiver;
+        put(KEY_RECEIVE_USER, receiver);
 
         this.typeText = typeText;
         put(KEY_TYPE_TEXT, typeText);
@@ -93,10 +115,17 @@ public class Notification extends ParseObject {
 
 
     public String notificationText(String type) {
-        if (type.equals("REACTION")) {
-            return " reacted to your post";
-        } else {
-            return " commented on your post";
+        switch (type) {
+            case REACTION:
+                return " reacted to your post";
+            case COMMENT:
+                return " commented on your post";
+            case FRIEND_REQUEST:
+                return " sent you a friend request";
+            case ACCEPT_REQUEST:
+                return " accepted your friend request";
+            default:
+                return "";
         }
     }
 

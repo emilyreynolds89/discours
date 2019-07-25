@@ -24,7 +24,6 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import java.io.Serializable;
 import java.util.List;
@@ -89,26 +88,32 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             User sender = notification.getSendUser();
             String username = sender.getUsername();
             String typeText = notification.getTypeText();
-            tvDescriptionNotif.setText("@" + username + notification.notificationText(notification.getType()) + ": " + typeText);
+            if (notification.getType().equals(Notification.COMMENT) || notification.getType().equals(Notification.REACTION)) {
+                tvDescriptionNotif.setText("@" + username + notification.notificationText(notification.getType()) + ": " + typeText);
+            } else {
+                tvDescriptionNotif.setText("@" + username + notification.notificationText(notification.getType()));
+            }
 
-                final Share share = notification.getShare();
+            final Share share = notification.getShare();
 
+            if(share != null) {
                 share.getArticle().fetchIfNeededInBackground(new GetCallback<ParseObject>() {
                     @Override
                     public void done(ParseObject object, ParseException e) {
                         Article article = (Article) object;
                         ParseFile image = article.getImage();
-                        if (image != null ) {
+                        if (image != null) {
                             Glide.with(context).load(image.getUrl()).into(ivImageNotif);
                         }
                     }
                 });
+            }
 
-                User user = notification.getSendUser();
-                ParseFile profileImage = user.getProfileImage();
-                if (profileImage != null) {
-                    Glide.with(context).load(profileImage.getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImageNotif);
-                }
+            User user = notification.getSendUser();
+            ParseFile profileImage = user.getProfileImage();
+            if (profileImage != null) {
+                Glide.with(context).load(profileImage.getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImageNotif);
+            }
 
         }
     }

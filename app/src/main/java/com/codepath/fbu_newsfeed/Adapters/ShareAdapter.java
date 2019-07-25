@@ -339,11 +339,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         if (reaction != null) {
             count = destroyReaction(reaction, type, share);
             imageButton.setSelected(false);
-            deleteNotification("REACTION", share, type);
+            deleteNotification(Notification.REACTION, share, type);
         } else {
             count = createReaction(type, share);
             imageButton.setSelected(true);
-            createNotification("REACTION", share, type);
+            createNotification(Notification.REACTION, share, type);
         }
         textView.setText(Integer.toString(count));
     }
