@@ -13,6 +13,8 @@ public class User extends ParseUser implements Serializable {
     public static final String KEY_BIO = "bio";
     public static final String KEY_USERNAME = "username";
 
+    public static final int LIMIT = 30;
+
     public String getUsername() {
         return getString(KEY_USERNAME);
     }
