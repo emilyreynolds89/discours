@@ -14,6 +14,7 @@ import android.view.View;
 import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.Models.Friendship;
+import com.codepath.fbu_newsfeed.Models.User;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -58,7 +59,16 @@ public class FriendsListActivity extends AppCompatActivity {
         rvFriends.setLayoutManager(linearLayoutManager);
         rvFriends.setAdapter(userAdapter);
 
-        queryFriends(user);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(R.color.colorAccentBold, R.color.colorAccentDark);
+
+        queryFriends(user, 0);
 
         setSupportActionBar(toolbar);
 
@@ -69,6 +79,12 @@ public class FriendsListActivity extends AppCompatActivity {
             }
         });
 
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                queryFriends(user, page);
+            }
+        };
     }
 
     @Override
@@ -85,7 +101,7 @@ public class FriendsListActivity extends AppCompatActivity {
         return query.getFirst();
     }
 
-    private void queryFriends(ParseUser user) {
+    private void queryFriends(ParseUser user, int offset) {
         ParseQuery<Friendship> query1 = ParseQuery.getQuery("Friendship");
         query1.whereEqualTo(Friendship.KEY_USER1, user);
         query1.whereEqualTo(Friendship.KEY_STATE, Friendship.stateEnumToInt(Friendship.State.Accepted));
@@ -102,6 +118,8 @@ public class FriendsListActivity extends AppCompatActivity {
         ParseQuery<Friendship> mainQuery = ParseQuery.or(queries);
         mainQuery.include(Friendship.KEY_USER1);
         mainQuery.include(Friendship.KEY_USER2);
+        mainQuery.setLimit(User.LIMIT);
+        mainQuery.setSkip(User.LIMIT * offset);
 
         try {
             List<Friendship> result = mainQuery.find();
@@ -120,5 +138,12 @@ public class FriendsListActivity extends AppCompatActivity {
             Log.d(TAG, "Error retrieving friends: " + e.getMessage());
 
         }
+    }
+
+    private void refresh() {
+        userAdapter.clear();
+        queryFriends(user, 0);;
+        scrollListener.resetState();
+        swipeContainer.setRefreshing(false);
     }
 }
