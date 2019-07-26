@@ -5,6 +5,9 @@
     android:id="@+id/layoutUser"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:background="@android:color/white"
+    android:clickable="true"
     android:padding="16dp">
 
     <ImageView
@@ -19,7 +22,7 @@
         android:id="@+id/tvFullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:text="Full Name"
         android:textColor="@color/colorBaseText"
