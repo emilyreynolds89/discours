@@ -3,6 +3,7 @@ package com.codepath.fbu_newsfeed;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -195,7 +197,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         if (!share.getCaption().isEmpty()) {
-            tvCaption.setText("@" + share.getUser().getUsername() + ": " + share.getCaption());
+            String captionUsername = "<b>@" + share.getUser().getUsername() + ": </b>";
+            tvCaption.setText(Html.fromHtml(captionUsername + share.getCaption(), HtmlCompat.FROM_HTML_MODE_LEGACY));
         } else {
             tvCaption.setVisibility(View.GONE);
         }

@@ -3,6 +3,7 @@ package com.codepath.fbu_newsfeed.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -139,8 +141,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         }
 
         if (!share.getCaption().isEmpty()) {
-            String captionUsername = "@" + user.getUsername() + ": ";
-            holder.tvCaption.setText(captionUsername + share.getCaption());
+            String captionUsername = "<b>@" + user.getUsername() + ": </b>";
+
+            holder.tvCaption.setText(Html.fromHtml(captionUsername + share.getCaption(), HtmlCompat.FROM_HTML_MODE_LEGACY));
         } else {
             holder.tvCaption.setVisibility(View.GONE);
         }
