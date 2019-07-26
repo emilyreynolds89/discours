@@ -111,8 +111,11 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             }
 
             ParseFile image = article.getImage();
+            String imageUrl = article.getImageUrl();
             if (image != null ) {
                 Glide.with(context).load(image.getUrl()).into(ivArticleImage);
+            } else if (imageUrl != null) {
+                Glide.with(context).load(imageUrl).into(ivArticleImage);
             }
         }
     }

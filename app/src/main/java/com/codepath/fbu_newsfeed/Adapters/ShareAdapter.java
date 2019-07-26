@@ -78,9 +78,13 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         holder.tvTimestamp.setText(share.getRelativeTime());
         ParseFile image = article.getImage();
+        String imageUrl = article.getImageUrl();
         if (image != null ) {
             Glide.with(context).load(image.getUrl()).into(holder.ivArticleImage);
+        } else if (imageUrl != null) {
+            Glide.with(context).load(imageUrl).into(holder.ivArticleImage);
         }
+
         holder.tvArticleTitle.setText(article.getTitle());
         holder.tvArticleSummary.setText(article.getSummary());
         holder.tvSource.setText(article.getSource());

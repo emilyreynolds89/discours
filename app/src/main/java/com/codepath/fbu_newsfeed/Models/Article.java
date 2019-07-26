@@ -19,6 +19,7 @@ public class Article extends ParseObject implements Serializable {
     public static final String KEY_TRUTH = "truth";
     public static final String KEY_SOURCE = "source";
     public static final String KEY_TAG = "tag";
+    public static final String KEY_IMAGEURL = "imageUrl";
     public static final int LIMIT = 20;
     public static final String KEY_CREATED_AT = "createdAt";
     public static final int liberalColor = Color.parseColor("#3385FF");
@@ -35,6 +36,7 @@ public class Article extends ParseObject implements Serializable {
     private String truth;
     private String tag;
     private String source;
+    private String imageUrl;
 
     public Article() {
         super();
@@ -47,8 +49,33 @@ public class Article extends ParseObject implements Serializable {
         put(KEY_URL, url);
         this.title = title;
         put(KEY_TITLE, title);
+        this.imageUrl = null;
+
         this.image = image;
         put(KEY_IMAGE, image);
+        this.summary = summary;
+        put(KEY_SUMMARY, summary);
+        this.bias = bias;
+        put(KEY_BIAS, biasEnumToInt(bias));
+        this.truth = truth;
+        put(KEY_TRUTH, truth);
+        this.tag = tag;
+        put(KEY_TAG, tag);
+        this.source = source;
+        put(KEY_SOURCE, source);
+    }
+
+    public Article(String url, String title, String imageUrl,
+                   String summary, Bias bias, String truth, String source, String tag) {
+        super();
+        this.url = url;
+        put(KEY_URL, url);
+        this.title = title;
+        put(KEY_TITLE, title);
+        this.image = null;
+
+        this.imageUrl = imageUrl;
+        put(KEY_IMAGEURL, imageUrl);
         this.summary = summary;
         put(KEY_SUMMARY, summary);
         this.bias = bias;
@@ -75,6 +102,14 @@ public class Article extends ParseObject implements Serializable {
         put(KEY_URL, url);
     }
 
+    public String getImageUrl() {
+        return getString(KEY_IMAGEURL);
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+        put(KEY_IMAGEURL, imageUrl);
+    }
 
     public String getTitle() {
         return getString(KEY_TITLE);
@@ -144,7 +179,7 @@ public class Article extends ParseObject implements Serializable {
         put(KEY_TAG, tag);
     }
 
-    private Bias biasIntToEnum(int i) {
+    public static Bias biasIntToEnum(int i) {
         Bias res;
         switch(i) {
             case 1:
@@ -168,7 +203,7 @@ public class Article extends ParseObject implements Serializable {
         return res;
     }
 
-    private int biasEnumToInt(Bias bias) {
+    public int biasEnumToInt(Bias bias) {
         int res;
         switch(bias) {
             case LIBERAL:

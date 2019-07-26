@@ -17,7 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -156,9 +155,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
 
         tvTimestamp.setText(share.getRelativeTime());
-        ParseFile image = article.getImage();
-        if (image != null ) {
-            Glide.with(this).load(image.getUrl()).into(ivArticleImage);
+        ParseFile imageFile = article.getImage();
+        String imageUrl = article.getImageUrl();
+        if (imageFile != null ) {
+            Glide.with(getBaseContext()).load(imageFile.getUrl()).into(ivArticleImage);
+        } else if (imageUrl != null) {
+            Glide.with(getBaseContext()).load(imageUrl).into(ivArticleImage);
         }
         tvArticleTitle.setText(article.getTitle());
         tvArticleSummary.setText(article.getSummary());

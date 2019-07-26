@@ -1,20 +1,20 @@
-package com.codepath.fbu_newsfeed;
+package com.codepath.fbu_newsfeed.Helpers;
 
 public class JSoupResult {
     String titleUrl;
-    String factUrl;
     String imageUrl;
-    int biasUrl;
+    String description;
+    String source;
 
     public JSoupResult() {
         super();
     }
 
-    public JSoupResult(String titleUrl, String factUrl, String imageUrl, int biasUrl) {
+    public JSoupResult(String titleUrl, String imageUrl, String description, String source) {
         this.titleUrl = titleUrl;
-        this.factUrl = factUrl;
         this.imageUrl = imageUrl;
-        this.biasUrl = biasUrl;
+        this.description = description;
+        this.source = source;
     }
 
     public String getTitleUrl() {
@@ -25,13 +25,6 @@ public class JSoupResult {
         this.titleUrl = titleUrl;
     }
 
-    public String getFactUrl() {
-        return factUrl;
-    }
-
-    public void setFactUrl(String factUrl) {
-        this.factUrl = factUrl;
-    }
 
     public String getImageUrl() {
         return imageUrl;
@@ -41,11 +34,19 @@ public class JSoupResult {
         this.imageUrl = imageUrl;
     }
 
-    public int getBiasUrl() {
-        return biasUrl;
+    public String getDescription() {
+        return description;
     }
 
-    public void setBiasUrl(int biasUrl) {
-        this.biasUrl = biasUrl;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

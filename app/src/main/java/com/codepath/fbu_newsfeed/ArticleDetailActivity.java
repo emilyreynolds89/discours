@@ -58,9 +58,12 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
 
         url = article.getUrl();
 
-        ParseFile image = article.getImage();
-        if (image != null ) {
-            Glide.with(getBaseContext()).load(image.getUrl()).into(ivArticleImageDetail);
+        ParseFile imageFile = article.getImage();
+        String imageUrl = article.getImageUrl();
+        if (imageFile != null ) {
+            Glide.with(getBaseContext()).load(imageFile.getUrl()).into(ivArticleImageDetail);
+        } else if (imageUrl != null) {
+            Glide.with(getBaseContext()).load(imageUrl).into(ivArticleImageDetail);
         }
 
         btnLink.setOnClickListener(this);
