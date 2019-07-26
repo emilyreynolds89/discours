@@ -18,7 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -177,15 +177,23 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         int biasValue = article.getIntBias();
         switch (biasValue) {
-            case 1:  ivBias.setColorFilter(Article.liberalColor);
+            case 1:
+                ivBias.setBackgroundResource(R.drawable.liberal_icon);
                 break;
-            case 2:  ivBias.setColorFilter(Article.slightlyLiberalColor);
+            case 2:
+                ivBias.setBackgroundResource(R.drawable.slightly_liberal_icon);
                 break;
-            case 3:  ivBias.setColorFilter(Article.moderateColor);
+            case 3:
+                ivBias.setBackgroundResource(R.drawable.moderate_icon);
                 break;
-            case 4:  ivBias.setColorFilter(Article.slightlyConservativeColor);
+            case 4:
+                ivBias.setBackgroundResource(R.drawable.slightly_conserv_icon);
                 break;
-            case 5:  ivBias.setColorFilter(Article.conservativeColor);
+            case 5:
+                ivBias.setBackgroundResource(R.drawable.liberal_icon);
+                break;
+            default:
+                ivBias.setBackgroundResource(R.drawable.moderate_icon);
                 break;
         }
 
@@ -310,9 +318,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void showInformationDialog() {
-        FragmentManager fm = getSupportFragmentManager();
+        //FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
         InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
-        informationDialog.show(fm, "fragment_information");
+        informationDialog.show(fragmentTransaction, "fragment_information");
     }
 
     private void goToUser(ParseUser user) {
@@ -509,9 +519,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void reportArticle() {
-        FragmentManager fm = getSupportFragmentManager();
+        //FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
         ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());
-        articleReportDialog.show(fm, "fragment_report");
+        articleReportDialog.show(fragmentTransaction, "fragment_report");
     }
 
 }

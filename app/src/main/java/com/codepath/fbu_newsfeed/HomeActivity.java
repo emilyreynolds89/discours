@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.codepath.fbu_newsfeed.Fragments.ComposeFragment;
 import com.codepath.fbu_newsfeed.Fragments.CreateFragment;
@@ -26,28 +27,29 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
     private final String TAG ="HomeActivity";
 
     public @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
     public @BindView(R.id.toolbar) Toolbar toolbar;
 
-
+    static boolean isSinglePane = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        final FragmentManager fragmentManager = getSupportFragmentManager();
+        //final FragmentManager fragmentManager = getSupportFragmentManager();
 
         Intent intent = getIntent();
-
-
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+
                 Fragment fragment = new FeedFragment();
                 String fragmentTag = FeedFragment.TAG;
                 switch (menuItem.getItemId()) {
@@ -75,9 +77,11 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                 }
                 if (!Objects.equals(fragmentTag, FeedFragment.TAG)) {
-                    fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(fragmentTag).commit();
+                    fragmentTransaction.replace(R.id.flContainer, fragment).addToBackStack(fragmentTag).commit();
+                    //fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(fragmentTag).commit();
                 } else {
-                    fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                    fragmentTransaction.replace(R.id.flContainer, fragment).addToBackStack(null).commit();
+                    //fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
                 }
                 return true;
             }
@@ -91,6 +95,9 @@ public class HomeActivity extends AppCompatActivity {
             Article article = (Article) intent.getSerializableExtra("article");
             String user_id = intent.getStringExtra("user_id");
 
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+
             if (article != null) {
                 bottomNavigationView.setSelectedItemId(R.id.action_compose);
 
@@ -99,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
                 ComposeFragment composeFragment = new ComposeFragment();
                 composeFragment.setArguments(bundle);
 
-                fragmentManager.beginTransaction().replace(R.id.flContainer, composeFragment).addToBackStack(ComposeFragment.TAG).commit();
+                fragmentTransaction.replace(R.id.flContainer, composeFragment).addToBackStack(ComposeFragment.TAG).commit();
             }
 
             if (user_id != null) {
@@ -107,7 +114,7 @@ public class HomeActivity extends AppCompatActivity {
                     bottomNavigationView.setSelectedItemId(R.id.action_profile);
                 Fragment newProfileFragment = ProfileFragment.newInstance(user_id);
 
-                fragmentManager.beginTransaction().replace(R.id.flContainer, newProfileFragment).addToBackStack(ProfileFragment.TAG).commit();
+                fragmentTransaction.replace(R.id.flContainer, newProfileFragment).addToBackStack(ProfileFragment.TAG).commit();
             }
 
         }
@@ -122,5 +129,18 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackStackChanged() {
+        int backStackEntryCount = getFragmentManager().getBackStackEntryCount();
+        if(backStackEntryCount > 0){
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }else{
+            getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
 
 }
+
+
+
+
