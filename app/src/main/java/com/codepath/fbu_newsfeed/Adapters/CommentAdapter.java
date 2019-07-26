@@ -10,11 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.R;
-import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -23,10 +21,11 @@ import butterknife.ButterKnife;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
-    static Context context;
-    List<Comment> comments;
+    private Context context;
+    private List<Comment> comments;
 
     public CommentAdapter(Context context, List<Comment> comments) {
+
         this.context = context;
         this.comments = comments;
     }
@@ -65,12 +64,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         @BindView(R.id.tvComment) TextView tvComment;
         @BindView(R.id.tvTimeComment) TextView tvTimeComment;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(Comment comment) {
+        void bind(Comment comment) {
             tvUsernameComment.setText("@" + comment.getUser().getUsername());
             tvComment.setText(comment.getText());
             tvTimeComment.setText(comment.getRelativeTime());
@@ -82,7 +81,4 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    private void goToUser(ParseUser user) {
-        ((HomeActivity) context ).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).addToBackStack(ProfileFragment.TAG).commit();
-    }
 }

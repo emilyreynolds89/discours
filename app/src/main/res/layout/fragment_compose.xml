@@ -121,7 +121,6 @@
     <view
         android:id="@+id/view"
         class="androidx.constraintlayout.widget.ConstraintLayout"
-        id="@+id/view2"
         android:layout_width="350dp"
         android:layout_height="2dp"
         android:layout_marginStart="8dp"

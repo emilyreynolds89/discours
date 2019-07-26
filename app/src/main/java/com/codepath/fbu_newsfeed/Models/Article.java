@@ -66,7 +66,7 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public enum Bias {
-        LIBERAL, SLIGHTLY_LIBERAL, MODERATE, SLIGHTLY_CONSERVATIVE, CONSERVATIVE;
+        LIBERAL, SLIGHTLY_LIBERAL, MODERATE, SLIGHTLY_CONSERVATIVE, CONSERVATIVE
     }
 
 

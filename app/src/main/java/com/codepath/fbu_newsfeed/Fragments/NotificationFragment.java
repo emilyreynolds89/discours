@@ -37,9 +37,9 @@ public class NotificationFragment extends Fragment {
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     private Unbinder unbinder;
 
-    ArrayList<Notification> notifications;
-    NotificationAdapter notificationAdapter;
-    EndlessRecyclerViewScrollListener scrollListener;
+    private ArrayList<Notification> notifications;
+    private NotificationAdapter notificationAdapter;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {

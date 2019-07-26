@@ -12,15 +12,15 @@ import java.io.Serializable;
 
 @ParseClassName("Share")
 public class Share extends ParseObject implements Serializable {
-    public static final String KEY_USER = "user";
-    public static final String KEY_ARTICLE = "article";
-    public static final String KEY_CAPTION = "caption";
-    public static final String KEY_IMAGE = "image";
-    public static final String KEY_LIKE_COUNT = "likeCount";
-    public static final String KEY_DISLIKE_COUNT = "dislikeCount";
-    public static final String KEY_HAPPY_COUNT = "happyCount";
-    public static final String KEY_SAD_COUNT = "sadCount";
-    public static final String KEY_ANGRY_COUNT = "angryCount";
+    private static final String KEY_USER = "user";
+    private static final String KEY_ARTICLE = "article";
+    private static final String KEY_CAPTION = "caption";
+    private static final String KEY_IMAGE = "image";
+    private static final String KEY_LIKE_COUNT = "likeCount";
+    private static final String KEY_DISLIKE_COUNT = "dislikeCount";
+    private static final String KEY_HAPPY_COUNT = "happyCount";
+    private static final String KEY_SAD_COUNT = "sadCount";
+    private static final String KEY_ANGRY_COUNT = "angryCount";
     public static final int LIMIT = 20;
 
     private ParseUser user;

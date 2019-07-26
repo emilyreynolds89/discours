@@ -14,7 +14,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewArticle"
-        class="androidx.constraintlayout.widget.ConstraintLayout"
         android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:background="@drawable/border"
@@ -43,7 +42,7 @@
             android:fontFamily="serif"
             android:text="Article summary"
             android:textColor="@color/colorLightText"
-            android:textSize="12dp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/viewArticle"
             app:layout_constraintStart_toStartOf="@+id/viewArticle"
             app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleDetail" />

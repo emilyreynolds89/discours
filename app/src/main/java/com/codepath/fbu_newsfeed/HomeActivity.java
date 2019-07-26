@@ -21,6 +21,8 @@ import com.codepath.fbu_newsfeed.Models.Article;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -72,7 +74,7 @@ public class HomeActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-                if (fragmentTag != FeedFragment.TAG) {
+                if (!Objects.equals(fragmentTag, FeedFragment.TAG)) {
                     fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(fragmentTag).commit();
                 } else {
                     fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();

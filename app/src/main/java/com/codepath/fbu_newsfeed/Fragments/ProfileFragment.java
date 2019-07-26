@@ -49,7 +49,7 @@ import butterknife.Unbinder;
 public class ProfileFragment extends Fragment {
     public static final String TAG = "ProfileFragment";
 
-    ParseUser user;
+    private ParseUser user;
 
     @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
     @BindView(R.id.tvUsername) TextView tvUsername;
@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment {
 
     private ShareAdapter shareAdapter;
     protected @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
-    protected EndlessRecyclerViewScrollListener scrollListener;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     private Unbinder unbinder;
 

@@ -21,11 +21,11 @@ public class Notification extends ParseObject {
     public static final String FRIEND_REQUEST = "FRIEND_REQUEST";
     public static final String ACCEPT_REQUEST = "ACCEPT_REQUEST";
 
-    User sendUser;
-    User receiveUser;
-    String type; // REACTION, COMMENT, FRIEND_REQUEST, ACCEPT_REQUEST
-    Share share;
-    String typeText;
+    private User sendUser;
+    private User receiveUser;
+    private String type; // REACTION, COMMENT, FRIEND_REQUEST, ACCEPT_REQUEST
+    private Share share;
+    private String typeText;
 
     public Notification() {
         super();

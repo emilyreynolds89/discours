@@ -49,9 +49,9 @@ import butterknife.ButterKnife;
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     private static final String TAG = "ShareAdapter";
 
-    public ArrayList<Share> shares;
-    public Context context;
-    Map<String, Map<String, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
+    private ArrayList<Share> shares;
+    private Context context;
+    private Map<String, Map<String, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
 
     public ShareAdapter(ArrayList<Share> shares) {
         this.shares = shares;
@@ -65,8 +65,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View shareView = inflater.inflate(R.layout.article_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(shareView);
-        return viewHolder;
+        return new ViewHolder(shareView);
     }
 
     @Override
@@ -234,7 +233,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.tvTag) TextView tvTag;
 
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
@@ -252,7 +251,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             for (int i = 0; i < result.size(); i++) {
                 Reaction reaction = result.get(i);
                 Share share = reaction.getShare();
-                if (allReactions.containsKey(share)) {
+                if (allReactions.containsKey(share.getObjectId())) {
                     Map<String, Reaction> innerMap = allReactions.get(share.getObjectId());
                     innerMap.put(reaction.getType(), reaction);
                 } else {

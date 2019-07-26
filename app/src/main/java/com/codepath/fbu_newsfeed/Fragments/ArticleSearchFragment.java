@@ -16,12 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
-import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
-import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +37,8 @@ public class ArticleSearchFragment extends Fragment {
     @BindView(R.id.rvResults) RecyclerView rvResults;
     private Unbinder unbinder;
 
-    ArrayList<Article> articleResults;
-    TrendsAdapter trendsAdapter;
+    private ArrayList<Article> articleResults;
+    private TrendsAdapter trendsAdapter;
 
     @Nullable
     @Override

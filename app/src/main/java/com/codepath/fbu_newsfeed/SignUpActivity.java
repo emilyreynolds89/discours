@@ -49,7 +49,7 @@ SignUpActivity extends AppCompatActivity {
 
     }
 
-    protected void setUser() {
+    private void setUser() {
         String name = nameInput.getText().toString();
         String username = usernameInput.getText().toString();
         String password = passwordInput.getText().toString();

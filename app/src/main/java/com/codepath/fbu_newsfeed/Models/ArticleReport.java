@@ -6,10 +6,10 @@ import com.parse.ParseUser;
 
 @ParseClassName("ArticleReport")
 public class ArticleReport extends ParseObject {
-    public static final String KEY_REPORTER = "reporter";
-    public static final String KEY_ARTICLE = "article";
-    public static final String KEY_TYPE = "type";
-    public static final String KEY_COMMENT = "comment";
+    private static final String KEY_REPORTER = "reporter";
+    private static final String KEY_ARTICLE = "article";
+    private static final String KEY_TYPE = "type";
+    private static final String KEY_COMMENT = "comment";
 
     public ArticleReport() {}
 

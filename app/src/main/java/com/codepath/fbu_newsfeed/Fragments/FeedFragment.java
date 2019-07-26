@@ -39,8 +39,8 @@ public class FeedFragment extends Fragment {
     @BindView(R.id.rvShares) RecyclerView rvShares;
     @BindView(R.id.tvNoContent) TextView tvNoContent;
 
-    ArrayList<Share> shares;
-    ShareAdapter shareAdapter;
+    private ArrayList<Share> shares;
+    private ShareAdapter shareAdapter;
     private Unbinder unbinder;
 
     private EndlessRecyclerViewScrollListener scrollListener;

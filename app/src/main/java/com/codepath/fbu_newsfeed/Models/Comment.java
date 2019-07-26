@@ -12,21 +12,14 @@ public class Comment extends ParseObject {
     public static final String KEY_USER = "user";
     public static final String KEY_SHARE = "share";
 
-    private String text;
-    private User user;
-    private Share share;
-
     public Comment() {
         super();
     }
 
     public Comment(String text, User user, Share share) {
         super();
-        this.text = text;
         put(KEY_TEXT, text);
-        this.user = user;
         put(KEY_USER, user);
-        this.share = share;
         put(KEY_SHARE, share);
     }
 
@@ -35,7 +28,6 @@ public class Comment extends ParseObject {
     }
 
     public void setText(String text) {
-        this.text = text;
         put(KEY_TEXT, text);
     }
 
@@ -49,7 +41,7 @@ public class Comment extends ParseObject {
 
     public Share getShare() {
         return (Share) getParseObject(KEY_SHARE);
-    } // can we cast this to Share?
+    }
 
     public void setShare(Share share) {
         put(KEY_SHARE, share);

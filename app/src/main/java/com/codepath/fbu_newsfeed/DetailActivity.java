@@ -32,7 +32,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Adapters.RecommendAdapter;
-import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Helpers.ReactionHelper;
@@ -52,7 +51,6 @@ import com.parse.SaveCallback;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +58,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
-    public static final String TAG = "DetailActivity";
+    private static final String TAG = "DetailActivity";
 
     @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
     @BindView(R.id.tvUsername) TextView tvUsername;
@@ -92,15 +90,15 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.tvSource) TextView tvSource;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
-    Share share;
-    Article article;
-    User user;
-    User currentUser = (User) ParseUser.getCurrentUser();
+    private Share share;
+    private Article article;
+    private User user;
+    private User currentUser = (User) ParseUser.getCurrentUser();
 
-    ArrayList<Comment> comments;
-    ArrayList<Article> articles;
-    CommentAdapter commentAdapter;
-    RecommendAdapter recommendAdapter;
+    private ArrayList<Comment> comments;
+    private ArrayList<Article> articles;
+    private CommentAdapter commentAdapter;
+    private RecommendAdapter recommendAdapter;
 
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
@@ -237,7 +235,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         setUpFriendPermissions();
         setSupportActionBar(toolbar);
-        queryComments(true);
+        queryComments();
 
     }
 
@@ -355,7 +353,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         article = share.getArticle();
     }
 
-    private void queryComments(final boolean refresh) {
+    private void queryComments() {
         ParseQuery<Comment> commentQuery = ParseQuery.getQuery(Comment.class);
         commentQuery.include(Comment.KEY_SHARE);
         commentQuery.include(Comment.KEY_TEXT);
@@ -470,9 +468,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    public void fetchTimelineAsync() {
+    private void fetchTimelineAsync() {
         commentAdapter.clear();
-        queryComments(true);
+        queryComments();
         swipeContainer.setRefreshing(false);
     }
 

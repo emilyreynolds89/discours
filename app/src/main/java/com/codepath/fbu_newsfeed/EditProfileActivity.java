@@ -38,10 +38,10 @@ import butterknife.ButterKnife;
 public class EditProfileActivity extends AppCompatActivity {
     private static final String TAG = "EditProfileActivity";
     // PICK_PHOTO_CODE is a constant integer
-    public final static int RESULT_LOAD_IMG = 1046;
+    private final static int RESULT_LOAD_IMG = 1046;
 
-    ParseUser mUser;
-    ParseFile currentImage;
+    private ParseUser mUser;
+    private ParseFile currentImage;
     Bitmap currentImageBitmap;
 
     public String photoFileName = "photo.jpg";
@@ -97,7 +97,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     // Trigger gallery selection for a photo
-    public void onPickPhoto() {
+    private void onPickPhoto() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);

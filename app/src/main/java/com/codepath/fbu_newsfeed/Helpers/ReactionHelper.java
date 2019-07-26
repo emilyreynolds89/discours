@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ReactionHelper {
-    public static final String TAG = "ReactionHelper";
+    private static final String TAG = "ReactionHelper";
 
     public static int createReaction(String type, Share share) {
         Log.d(TAG, "Creating reaction of type: " + type);

@@ -37,8 +37,8 @@ public class UserSearchFragment extends Fragment {
     @BindView(R.id.rvResults) RecyclerView rvResults;
     private Unbinder unbinder;
 
-    ArrayList<ParseUser> userResults;
-    UserAdapter userAdapter;
+    private ArrayList<ParseUser> userResults;
+    private UserAdapter userAdapter;
 
     @Nullable
     @Override

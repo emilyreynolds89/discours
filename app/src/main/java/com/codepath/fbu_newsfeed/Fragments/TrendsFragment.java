@@ -40,9 +40,9 @@ public class TrendsFragment extends Fragment {
     @BindView(R.id.rvTrends) RecyclerView rvTrends;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
-    protected TrendsAdapter adapter;
-    protected List<Article> articles;
-    protected EndlessRecyclerViewScrollListener scrollListener;
+    private TrendsAdapter adapter;
+    private List<Article> articles;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     private Unbinder unbinder;
 
@@ -125,7 +125,7 @@ public class TrendsFragment extends Fragment {
         unbinder.unbind();
     }
 
-    protected void queryArticles(final boolean refresh, int offset) {
+    private void queryArticles(final boolean refresh, int offset) {
         final ParseQuery<Article> articleQuery = new ParseQuery<Article>(Article.class);
         articleQuery.include(Article.KEY_IMAGE);
         articleQuery.include(Article.KEY_SOURCE);
@@ -154,7 +154,7 @@ public class TrendsFragment extends Fragment {
         });
     }
 
-    public void fetchTimelineAsync() {
+    private void fetchTimelineAsync() {
         adapter.clear();
         queryArticles(true, 0);
         swipeContainer.setRefreshing(false);

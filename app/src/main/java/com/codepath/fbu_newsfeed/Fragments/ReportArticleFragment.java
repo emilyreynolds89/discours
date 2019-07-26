@@ -19,7 +19,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.ArticleReport;
-import com.codepath.fbu_newsfeed.Models.UserReport;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -33,10 +32,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ReportArticleFragment extends DialogFragment {
-    public static final String TAG = "ReportArticleFragment";
+    private static final String TAG = "ReportArticleFragment";
 
-    public static ArrayList<String> TYPE_LIST;
-    ArrayAdapter<String> typeAdapter;
+    private static ArrayList<String> TYPE_LIST;
+    private ArrayAdapter<String> typeAdapter;
 
     @BindView(R.id.tvReportHeader)
     TextView tvReportHeader;

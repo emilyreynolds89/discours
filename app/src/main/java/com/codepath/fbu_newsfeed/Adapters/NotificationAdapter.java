@@ -38,8 +38,8 @@ import butterknife.ButterKnife;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
-    static Context context;
-    List<Notification> notifications;
+    private Context context;
+    private List<Notification> notifications;
 
     public NotificationAdapter(Context context, List<Notification> notifications) {
         this.context = context;
@@ -86,12 +86,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         @BindView(R.id.ivImageNotif) ImageView ivImageNotif;
         @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImageNotif;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(Notification notification) {
+        void bind(Notification notification) {
             User sender = notification.getSendUser();
             String username = "<b>@" + sender.getUsername() + "</b>";
             String typeText = notification.getTypeText();

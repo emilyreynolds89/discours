@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +17,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
-import com.codepath.fbu_newsfeed.Fragments.ReportUserFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.parse.ParseFile;
 
@@ -28,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ArticleDetailActivity extends AppCompatActivity implements View.OnClickListener {
-    public static final String TAG = "ArticleDetailActivity";
+    private static final String TAG = "ArticleDetailActivity";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.ivArtcleImageDetail) ImageView ivArticleImageDetail;
@@ -40,10 +38,8 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
     @BindView(R.id.btnShare) Button btnShare;
     @BindView(R.id.ibReportArticleDetail) ImageButton ibReportArticleDetail;
 
-
-    Article article;
-    String url;
-
+    private Article article;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

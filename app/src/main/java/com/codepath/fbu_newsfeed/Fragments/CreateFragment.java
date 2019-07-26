@@ -44,8 +44,8 @@ import butterknife.Unbinder;
 public class CreateFragment extends Fragment {
     public static final String TAG = "CreateFragment";
 
-    protected List<Article> articles;
-    protected List<String> articleList;
+    private List<Article> articles;
+    private List<String> articleList;
 
     @BindView(R.id.spArticleListCreate) Spinner spArticleListCreate;
     @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreviewCreate;
@@ -57,8 +57,8 @@ public class CreateFragment extends Fragment {
     @BindView(R.id.btShareArticleCreate) Button btnShareCreate;
     private Unbinder unbinder;
 
-    ArrayAdapter<String> spinnerArrayAdapter;
-    Article selectedArticle;
+    private ArrayAdapter<String> spinnerArrayAdapter;
+    private Article selectedArticle;
 
     @Nullable
     @Override
@@ -78,8 +78,7 @@ public class CreateFragment extends Fragment {
         articles = new ArrayList<>();
         articleList = new ArrayList<>();
 
-        queryTitle(true);
-
+        queryTitle();
 
         spinnerArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, articleList);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
@@ -88,7 +87,7 @@ public class CreateFragment extends Fragment {
         spArticleListCreate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Log.d("CreateFragment", "Selected item at " + String.valueOf(position));
+                Log.d("CreateFragment", "Selected item at " + position);
                 if (!articleList.isEmpty()) {
                     tvFactCheckCreate.setText(articles.get(position).getTruth());
                     tvArticleTitleCreate.setText(articles.get(position).getTitle());
@@ -145,15 +144,21 @@ public class CreateFragment extends Fragment {
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
     private void showInformationDialog() {
         FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
         InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
         informationDialog.show(fm, "fragment_information");
     }
 
-    protected void queryTitle(final boolean refresh) {
+    private void queryTitle() {
         final ParseQuery<Article> articleQuery = new ParseQuery<Article>(Article.class);
-        if(refresh) articleQuery.setLimit(10);
+        articleQuery.setLimit(10);
         articleQuery.addDescendingOrder(Article.KEY_CREATED_AT);
 
         articleQuery.findInBackground(new FindCallback<Article>() {

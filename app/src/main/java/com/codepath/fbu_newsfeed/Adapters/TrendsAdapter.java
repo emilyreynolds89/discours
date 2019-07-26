@@ -30,8 +30,8 @@ import butterknife.ButterKnife;
 
 public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder> {
 
-    Context context;
-    List<Article> articles;
+    private Context context;
+    private List<Article> articles;
 
     public TrendsAdapter(Context context, List<Article> articles) {
         this.context = context;
@@ -69,7 +69,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
         @BindView(R.id.tvTagTrends) TextView tvTagTrends;
 
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
@@ -85,21 +85,18 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             if (position != RecyclerView.NO_POSITION) {
                 Article article = articles.get(position);
 
-                switch(view.getId()) {
-                    case R.id.ibReportArticle:
-                        reportArticle(article);
-                        break;
-                    default:
+                if (view.getId() == R.id.ibReportArticle) {
+                    reportArticle(article);
+                } else {
                         Intent intent = new Intent(context, ArticleDetailActivity.class);
                         intent.putExtra("article", (Serializable) article);
                         context.startActivity(intent);
-                        break;
                 }
 
             }
         }
 
-        public void bind(Article article) {
+        void bind(Article article) {
             tvTitle.setText(article.getTitle());
             tvSummary.setText(article.getSummary());
             tvSource.setText(article.getSource());

@@ -28,8 +28,8 @@ import butterknife.ButterKnife;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private static final String TAG = "UserAdapter";
-    public static ArrayList<ParseUser> users;
-    public static Context context;
+    private static ArrayList<ParseUser> users;
+    private Context context;
 
     public UserAdapter(ArrayList<ParseUser> users) { this.users = users; }
 
@@ -40,8 +40,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View shareView = inflater.inflate(R.layout.user_item, parent, false);
-        UserAdapter.ViewHolder viewHolder = new UserAdapter.ViewHolder(shareView);
-        return viewHolder;
+        return new UserAdapter.ViewHolder(shareView);
     }
 
     @Override
@@ -92,7 +91,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         @BindView(R.id.tvFullName) TextView tvFullName;
         @BindView(R.id.layoutUser) ConstraintLayout layoutUser;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

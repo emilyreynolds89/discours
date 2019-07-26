@@ -25,8 +25,8 @@ import butterknife.ButterKnife;
 
 
 public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.ViewHolder> {
-    Context context;
-    List<Article> articles;
+    private Context context;
+    private List<Article> articles;
 
     public RecommendAdapter(Context context, List<Article> articles) {
         this.context = context;
@@ -54,7 +54,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         @BindView(R.id.tvArticleTitleRecommend) TextView tvArticleTitleRecommend;
         @BindView(R.id.ivArticleImageRecommend) ImageView ivArticleImageRecommend;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
@@ -74,7 +74,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
                 context.startActivity(intent);
             }
         }
-        public void bind(Article article) {
+        void bind(Article article) {
             tvArticleTitleRecommend.setText(article.getTitle());
             ParseFile image = article.getImage();
             if (image != null ) {

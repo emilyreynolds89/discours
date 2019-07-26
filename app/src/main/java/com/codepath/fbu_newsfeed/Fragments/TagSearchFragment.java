@@ -1,7 +1,5 @@
 package com.codepath.fbu_newsfeed.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,13 +18,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
-import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +38,11 @@ public class TagSearchFragment extends Fragment {
     @BindView(R.id.rvResults) RecyclerView rvResults;
     private Unbinder unbinder;
 
-    ArrayList<Article> articleResults;
-    TrendsAdapter trendsAdapter;
+    private ArrayList<Article> articleResults;
+    private TrendsAdapter trendsAdapter;
 
-    ArrayList<String> tagList;
-    ArrayAdapter<String> tagAdapter;
+    private ArrayList<String> tagList;
+    private ArrayAdapter<String> tagAdapter;
 
 
     @Nullable

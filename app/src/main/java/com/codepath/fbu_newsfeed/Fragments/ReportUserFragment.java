@@ -31,18 +31,18 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ReportUserFragment extends DialogFragment {
-    public static final String TAG = "ReportUserFragment";
+    private static final String TAG = "ReportUserFragment";
 
-    public static ArrayList<String> TYPE_LIST;
-    ArrayAdapter<String> typeAdapter;
+    private static ArrayList<String> TYPE_LIST;
+    private ArrayAdapter<String> typeAdapter;
 
     @BindView(R.id.tvReportHeader) TextView tvReportHeader;
     @BindView(R.id.spinnerType) Spinner spinnerType;
     @BindView(R.id.etComment) EditText etComment;
     @BindView(R.id.btnReport) Button btnReport;
 
-    ParseUser reporter;
-    ParseUser offender;
+    private ParseUser reporter;
+    private ParseUser offender;
 
     private String reportType;
 

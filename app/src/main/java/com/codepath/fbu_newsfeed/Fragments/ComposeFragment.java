@@ -36,7 +36,7 @@ import butterknife.Unbinder;
 public class ComposeFragment extends Fragment {
     public static final String TAG = "ComposeFragment";
 
-    Article article;
+    private Article article;
 
     @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreview;
     @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
@@ -92,6 +92,12 @@ public class ComposeFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void showInformationDialog() {

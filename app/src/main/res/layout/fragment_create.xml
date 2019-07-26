@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ivBias"
@@ -125,7 +125,6 @@
     <view
         android:id="@+id/view"
         class="androidx.constraintlayout.widget.ConstraintLayout"
-        id="@+id/view2"
         android:layout_width="350dp"
         android:layout_height="2dp"
         android:layout_marginStart="8dp"

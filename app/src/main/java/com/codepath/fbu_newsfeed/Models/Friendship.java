@@ -1,15 +1,14 @@
 package com.codepath.fbu_newsfeed.Models;
 
-import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 @ParseClassName("Friendship")
 public class Friendship extends ParseObject {
-    public static final String KEY_USER1 = "user1";
-    public static final String KEY_USER2 = "user2";
-    public static final String KEY_STATE = "state";
+    private static final String KEY_USER1 = "user1";
+    private static final String KEY_USER2 = "user2";
+    private static final String KEY_STATE = "state";
 
     private ParseUser user1; // NOTE: user1 is always the requester
     private ParseUser user2; // NOTE: user2 is always the requested one
@@ -51,7 +50,7 @@ public class Friendship extends ParseObject {
     }
 
     public enum State {
-        Requested, Accepted;
+        Requested, Accepted
     }
 
     public State getState() {
@@ -82,7 +81,7 @@ public class Friendship extends ParseObject {
         }
     }
 
-    public static State stateIntToEnum(int i) {
+    private static State stateIntToEnum(int i) {
         switch(i) {
             case 1:
                 return State.Requested;
