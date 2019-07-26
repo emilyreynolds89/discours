@@ -29,12 +29,13 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
     private static final String TAG = "ArticleDetailActivity";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.viewArticle) View viewArticle;
     @BindView(R.id.ivArtcleImageDetail) ImageView ivArticleImageDetail;
     @BindView(R.id.tvArticleTitleDetail) TextView tvArticleTitleDetail;
     @BindView(R.id.tvArticleSummaryDetail) TextView tvArticleSummaryDetail;
     @BindView(R.id.tvSourceDetail) TextView tvArticleSourceDetail;
     @BindView(R.id.tvTagDetail) TextView tvTagDetail;
-    @BindView(R.id.btnLink) Button btnLink;
+    //@BindView(R.id.btnLink) Button btnLink;
     @BindView(R.id.btnShare) Button btnShare;
     @BindView(R.id.ibReportArticleDetail) ImageButton ibReportArticleDetail;
 
@@ -61,7 +62,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
             Glide.with(getBaseContext()).load(image.getUrl()).into(ivArticleImageDetail);
         }
 
-        btnLink.setOnClickListener(this);
+        viewArticle.setOnClickListener(this);
         btnShare.setOnClickListener(this);
         ibReportArticleDetail.setOnClickListener(this);
 
@@ -85,7 +86,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
                 Log.d(TAG, "trying to report article");
                 reportArticle();
                 break;
-            case R.id.btnLink:
+            case R.id.viewArticle:
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
