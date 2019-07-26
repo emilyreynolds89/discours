@@ -71,6 +71,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         tvUsername.setText("@" + mUser.getString(User.KEY_USERNAME));
         tvFullName.setText(mUser.getString(User.KEY_FULLNAME));
+        etBio.setText(mUser.getString(User.KEY_BIO));
 
         currentImage = mUser.getParseFile("profileImage");
 
