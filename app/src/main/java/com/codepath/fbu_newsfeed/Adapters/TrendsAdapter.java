@@ -105,15 +105,23 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
             int biasValue = article.getIntBias();
             switch (biasValue) {
-                case 1:  ivBiasTrends.setColorFilter(Article.liberalColor);
+                case 1:
+                    ivBiasTrends.setBackgroundResource(R.drawable.liberal_icon);
                     break;
-                case 2:  ivBiasTrends.setColorFilter(Article.slightlyLiberalColor);
+                case 2:
+                    ivBiasTrends.setBackgroundResource(R.drawable.slightly_liberal_icon);
                     break;
-                case 3:  ivBiasTrends.setColorFilter(Article.moderateColor);
+                case 3:
+                    ivBiasTrends.setBackgroundResource(R.drawable.moderate_icon);
                     break;
-                case 4:  ivBiasTrends.setColorFilter(Article.slightlyConservativeColor);
+                case 4:
+                    ivBiasTrends.setBackgroundResource(R.drawable.slightly_conserv_icon);
                     break;
-                case 5:  ivBiasTrends.setColorFilter(Article.conservativeColor);
+                case 5:
+                    ivBiasTrends.setBackgroundResource(R.drawable.liberal_icon);
+                    break;
+                default:
+                    ivBiasTrends.setBackgroundResource(R.drawable.moderate_icon);
                     break;
             }
 
