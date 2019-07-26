@@ -1,12 +1,16 @@
-package com.codepath.fbu_newsfeed;
+package com.codepath.fbu_newsfeed.Fragments;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,7 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -23,6 +27,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.codepath.fbu_newsfeed.Models.User;
+import com.codepath.fbu_newsfeed.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -34,9 +39,13 @@ import java.io.ByteArrayOutputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-public class EditProfileActivity extends AppCompatActivity {
-    private static final String TAG = "EditProfileActivity";
+public class EditProfileDialogFragment extends DialogFragment {
+    private static final String TAG = "EditProfileDialogFragment";
+
+    private DialogInterface.OnDismissListener onDismissListener;
+
     // PICK_PHOTO_CODE is a constant integer
     private final static int RESULT_LOAD_IMG = 1046;
 
@@ -46,27 +55,49 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public String photoFileName = "photo.jpg";
 
-    @BindView(R.id.tvFullName) TextView tvFullName;
+    @BindView(R.id.tvFullName)
+    TextView tvFullName;
     @BindView(R.id.tvUsername) TextView tvUsername;
-    @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
-    @BindView(R.id.etBio) EditText etBio;
-    @BindView(R.id.btnUpload) Button btnUpload;
+    @BindView(R.id.ivProfileImageNotif)
+    ImageView ivProfileImage;
+    @BindView(R.id.etBio)
+    EditText etBio;
+    @BindView(R.id.btnUpload)
+    Button btnUpload;
     @BindView(R.id.btnSubmit) Button btnSubmit;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
-        ButterKnife.bind(this);
+    private Unbinder unbinder;
 
-        String userId = getIntent().getStringExtra("user_id");
+    public EditProfileDialogFragment() {}
+
+    public static EditProfileDialogFragment newInstance(String userId) {
+        EditProfileDialogFragment frag = new EditProfileDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("user_id", userId);
+        frag.setArguments(args);
+        return frag;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         try {
-            mUser = getUser(userId);
-            Log.d(TAG, "we're getting this user: " + userId);
-        } catch (Exception e) {
-            Log.e(TAG, "Error getting user, showing current user", e);
-            mUser = ParseUser.getCurrentUser();
+            mUser = getUser(getArguments().getString("user_id"));
+            Log.d(TAG, "we're getting this user: " + mUser.getUsername());
+        } catch(Exception e) {
+            Log.e(TAG, "Error getting user", e);
+            dismiss();
         }
 
         tvUsername.setText("@" + mUser.getString(User.KEY_USERNAME));
@@ -120,11 +151,11 @@ public class EditProfileActivity extends AppCompatActivity {
                         public void done(ParseException e) {
                             if (e == null) {
                                 Log.d(TAG, "Updated user");
-                                Toast.makeText(EditProfileActivity.this, "Successfully updated profile", Toast.LENGTH_SHORT).show();
-                                goToProfile();
+                                Toast.makeText(getContext(), "Successfully updated profile", Toast.LENGTH_SHORT).show();
+                                dismiss();
                             } else {
                                 Log.d(TAG, "Error updating user: " + e.getMessage());
-                                Toast.makeText(EditProfileActivity.this, "Error updating profile", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Error updating profile", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -135,19 +166,23 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void goToProfile() {
-        Intent intent = new Intent(this, HomeActivity.class);
-        intent.putExtra("user_id", mUser.getObjectId());
-        startActivity(intent);
-        finish();
+    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
     }
 
     @Override
-    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (onDismissListener != null) {
+            onDismissListener.onDismiss(dialog);
+        }    }
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
 
 
-        if (resultCode == RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             try {
                 final Uri imageUri = data.getData();
                 Glide.with(this).asBitmap().load(imageUri).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(new CustomTarget<Bitmap>() {
@@ -171,11 +206,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
 
         } else {
-            Toast.makeText(this, "You haven't picked an image",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "You haven't picked an image",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -184,4 +219,5 @@ public class EditProfileActivity extends AppCompatActivity {
         query.whereEqualTo("objectId", user_id);
         return query.getFirst();
     }
+
 }

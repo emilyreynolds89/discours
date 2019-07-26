@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".EditProfileActivity">
+    android:layout_height="wrap_content"
+    android:minWidth="380dp"
+    android:paddingBottom="24dp">
 
     <ImageView
         android:id="@+id/ivProfileImageNotif"
@@ -46,11 +47,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="12sp"
-        android:inputType="text"
+        android:layout_marginEnd="32dp"
         android:imeOptions="actionDone"
+        android:inputType="text"
         android:maxLines="1"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvFullName"
@@ -62,9 +63,9 @@
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_accent_button"
-        android:textColor="@android:color/white"
-        android:textAllCaps="false"
         android:text="Upload"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="@+id/ivProfileImageNotif"
         app:layout_constraintStart_toStartOf="@+id/ivProfileImageNotif"
         app:layout_constraintTop_toBottomOf="@+id/ivProfileImageNotif" />
@@ -74,10 +75,10 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="24dp"
-        android:textColor="@android:color/white"
-        android:textAllCaps="false"
         android:background="@drawable/rounded_accent_button"
         android:text="Submit"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="@+id/etBio"
         app:layout_constraintTop_toBottomOf="@+id/btnUpload" />
 

@@ -1,5 +1,6 @@
 package com.codepath.fbu_newsfeed.Fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +25,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
-import com.codepath.fbu_newsfeed.EditProfileActivity;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.LoginActivity;
@@ -161,7 +161,7 @@ public class ProfileFragment extends Fragment {
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    goToEdit();
+                    editUser();
                 }
             });
             btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -212,7 +212,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         unbinder.unbind();
     }
 
@@ -223,6 +222,21 @@ public class ProfileFragment extends Fragment {
         userReportDialog.show(fm, "fragment_user_report");
     }
 
+    private void editUser() {
+        FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        EditProfileDialogFragment editProfileDialog = EditProfileDialogFragment.newInstance(user.getObjectId());
+        editProfileDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                getFragmentManager()
+                        .beginTransaction()
+                        .detach(ProfileFragment.this)
+                        .attach(ProfileFragment.this)
+                        .commit();
+            }
+        });
+        editProfileDialog.show(fm, "fragment_edit_profile");
+    }
 
     private void requestFriend(final ParseUser potentialFriend) {
         Friendship friendship = new Friendship(ParseUser.getCurrentUser(), potentialFriend, Friendship.State.Requested);
@@ -266,12 +280,6 @@ public class ProfileFragment extends Fragment {
             ParseUser.logOut();
         }
         Intent intent = new Intent(getActivity().getApplication(), LoginActivity.class);
-        startActivity(intent);
-    }
-
-    private void goToEdit() {
-        Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-        intent.putExtra("user_id", ParseUser.getCurrentUser().getObjectId());
         startActivity(intent);
     }
 
