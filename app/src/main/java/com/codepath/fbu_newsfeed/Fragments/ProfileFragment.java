@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -243,7 +244,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void editUser() {
-        FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        //FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
         EditProfileDialogFragment editProfileDialog = EditProfileDialogFragment.newInstance(user.getObjectId());
         editProfileDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -255,7 +258,7 @@ public class ProfileFragment extends Fragment {
                         .commit();
             }
         });
-        editProfileDialog.show(fm, "fragment_edit_profile");
+        editProfileDialog.show(fragmentTransaction, "fragment_edit_profile");
     }
 
     private void requestFriend(final ParseUser potentialFriend) {

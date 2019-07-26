@@ -14,7 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -317,15 +317,19 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     }
 
     private void reportArticle(Article article) {
-        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        //FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
         ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());
-        articleReportDialog.show(fm, "fragment_report");
+        articleReportDialog.show(fragmentTransaction, "fragment_report");
     }
 
     private void showInformationDialog() {
-        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        //FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
         InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
-        informationDialog.show(fm, "fragment_information");
+        informationDialog.show(fragmentTransaction, "fragment_information");
     }
 
     private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
