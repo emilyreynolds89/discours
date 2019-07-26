@@ -1,5 +1,7 @@
 package com.codepath.fbu_newsfeed.Fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,8 +24,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.codepath.fbu_newsfeed.Helpers.JSoupResult;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -35,7 +39,11 @@ import com.parse.SaveCallback;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,46 +63,87 @@ public class CreateFragment extends Fragment {
     EditText etCaptionCreate;
     Button btnShareCreate;
     Article selectedArticle;
+    String url;
+    JSoupResult jsoupResult = new JSoupResult();
+    ParseFile imageParseFile;
+
 
 
     ArrayAdapter<String> spinnerArrayAdapter;
 
 
-    class Content extends AsyncTask<String, String, String> {
-
+    class Content extends AsyncTask<String, String, JSoupResult> {
+        String title = "";
+        String description = "";
+        String image = "";
+        String source = "";
+        String urlTest = "";
         @Override
-        protected String doInBackground(String... params) {
-            String title;
-            String urlTest = params[0];
+        protected JSoupResult doInBackground(String... params) {
+
+            urlTest = params[0];
             Log.d(TAG, "urlTest: " + urlTest);
+            Document document = null;
             try {
-                //Connect to the website
-                Document document = Jsoup.connect(urlTest).get();
-
-                //Get the logo source of the website
-                //Element img = document.select("img").first();
-                // Locate the src attribute
-                //String imgSrc = img.absUrl("src");
-                // Download image from URL
-                //InputStream input = new java.net.URL(imgSrc).openStream();
-                // Decode Bitmap
-                //Bitmap bitmap = BitmapFactory.decodeStream(input);
-
-                //Get the title of the website
-                title = document.title();
-
+                document = Jsoup.connect(urlTest).get();
+                title = document.select("meta[property=\"og:title\"]").get(0).attr("content");
+                description = document.select("meta[property=\"og:description\"]").get(0).attr("content");
+                image = document.select("meta[property=\"og:image\"]").get(0).attr("content");
+                source = document.select("meta[property=\"og:site_name\"]").get(0).attr("content");
+                jsoupResult.setTitleUrl(title);
+                jsoupResult.setDescription(description);
+                jsoupResult.setImageUrl(image);
+                jsoupResult.setSource(source);
             } catch (IOException e) {
                 e.printStackTrace();
-                title = "";
             }
-            return title;
+            return jsoupResult;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            Log.d(TAG, "TITLE: " + s);
-            tvArticleTitleCreate.setText(s);
+        protected void onPostExecute(JSoupResult jSoupResult) {
+            Log.d(TAG, "TITLE: " + jSoupResult.getTitleUrl());
+            Source querySource = null;
+            try {
+                querySource = querySource(jSoupResult.getSource().toUpperCase());
+                tvFactCheckCreate.setText(querySource.getFact());
+                tvArticleTitleCreate.setText(jSoupResult.getTitleUrl());
 
+                int biasVal = querySource.getBias();
+                switch (biasVal) {
+                    case 1:
+                        ivBiasCreate.setColorFilter(Article.liberalColor);
+                        break;
+                    case 2:
+                        ivBiasCreate.setColorFilter(Article.slightlyLiberalColor);
+                        break;
+                    case 3:
+                        ivBiasCreate.setColorFilter(Article.moderateColor);
+                        break;
+                    case 4:
+                        ivBiasCreate.setColorFilter(Article.slightlyConservativeColor);
+                        break;
+                    case 5:
+                        ivBiasCreate.setColorFilter(Article.conservativeColor);
+                        break;
+                }
+                if (jSoupResult.getImageUrl() != null) {
+                    Glide.with(getContext()).load(jSoupResult.getImageUrl()).into(ivArticlePreviewCreate);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String strFact = "MIXTURE";
+            int intBias = 3;
+            if (querySource != null) {
+                intBias = querySource.getBias();
+                strFact = querySource.getFact();
+            }
+            //Bitmap myBitmap = getBitmapFromURL(jsoupResult.getImageUrl());
+            //ParseFile imageParse = getParseFileFromBitmap(myBitmap);
+
+            selectedArticle = new Article(urlTest, title, jsoupResult.getImageUrl(), description, Article.biasIntToEnum(intBias), strFact, source, "POLITICS");
+            selectedArticle.saveInBackground();
         }
     }
 
@@ -102,6 +151,9 @@ public class CreateFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            url = getArguments().getString("url");
+        }
         return inflater.inflate(R.layout.fragment_create, container, false);
 
     }
@@ -120,6 +172,10 @@ public class CreateFragment extends Fragment {
         etCaptionCreate = view.findViewById(R.id.etCaptionCreate);
         btnShareCreate = view.findViewById(R.id.btShareArticleCreate);
 
+        if (url != null) {
+            new Content().execute(url);
+            etUrlCreate.setText(url);
+        }
         articles = new ArrayList<>();
         articleList = new ArrayList<>();
         etUrlCreate.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -142,8 +198,6 @@ public class CreateFragment extends Fragment {
 
         queryTitle(true);
 
-
-
         spinnerArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, articleList);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
         spArticleListCreate.setAdapter(spinnerArrayAdapter);
@@ -154,7 +208,7 @@ public class CreateFragment extends Fragment {
                 Log.d("CreateFragment", "Selected item at " + String.valueOf(position));
                 if (!articleList.isEmpty()) {
                     tvFactCheckCreate.setText(articles.get(position).getTruth());
-                    //tvArticleTitleCreate.setText(articles.get(position).getTitle());
+                    tvArticleTitleCreate.setText(articles.get(position).getTitle());
                     ParseFile imageFile = articles.get(position).getImage();
 
                     int biasValue = articles.get(position).getIntBias();
@@ -175,8 +229,11 @@ public class CreateFragment extends Fragment {
                             ivBiasCreate.setColorFilter(Article.conservativeColor);
                             break;
                     }
-                    if (imageFile != null) {
+                    String imageUrl = articles.get(position).getImageUrl();
+                    if (imageFile != null ) {
                         Glide.with(getContext()).load(imageFile.getUrl()).into(ivArticlePreviewCreate);
+                    } else if (imageUrl != null) {
+                        Glide.with(getContext()).load(imageUrl).into(ivArticlePreviewCreate);
                     }
                     selectedArticle = articles.get(position);
                 }
@@ -227,7 +284,6 @@ public class CreateFragment extends Fragment {
         });
     }
     private void shareCreate(String caption, Article article) {
-        //final Share share = new Share(user, newArticle, caption);
         Share share = new Share(ParseUser.getCurrentUser(), article, caption);
         share.saveInBackground(new SaveCallback() {
             @Override
@@ -241,5 +297,35 @@ public class CreateFragment extends Fragment {
                 }
             }
         });
+    }
+    private Source querySource(String source) throws ParseException {
+        ParseQuery<Source> query = ParseQuery.getQuery(Source.class);
+        query.whereEqualTo(Source.KEY_NAME, source);
+        return query.getFirst();
+    }
+
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public ParseFile getParseFileFromBitmap(Bitmap bitmap) {
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] scaledData = bos.toByteArray();
+
+        // Save the scaled image to Parse
+        imageParseFile = new ParseFile("image_to_be_saved.jpg", scaledData);
+        return imageParseFile;
     }
 }

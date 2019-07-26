@@ -70,8 +70,12 @@ public class ComposeFragment extends Fragment {
 
         tvFactCheck.setText(factCheck);
         tvArticleTitle.setText(title);
-        if(imageFile != null) {
+
+        String imageUrl = article.getImageUrl();
+        if (imageFile != null ) {
             Glide.with(getContext()).load(imageFile.getUrl()).into(ivArticlePreview);
+        } else if (imageUrl != null) {
+            Glide.with(getContext()).load(imageUrl).into(ivArticlePreview);
         }
 
         btnShare.setOnClickListener(new View.OnClickListener() {
