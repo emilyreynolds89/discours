@@ -48,7 +48,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+                fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
 
                 Fragment fragment = new FeedFragment();
                 String fragmentTag = FeedFragment.TAG;
@@ -96,7 +96,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
             String user_id = intent.getStringExtra("user_id");
 
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+            fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
 
             if (article != null) {
                 bottomNavigationView.setSelectedItemId(R.id.action_compose);

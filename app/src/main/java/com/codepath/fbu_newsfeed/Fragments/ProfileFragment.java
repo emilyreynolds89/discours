@@ -335,6 +335,7 @@ public class ProfileFragment extends Fragment {
         }
         Intent intent = new Intent(getActivity().getApplication(), LoginActivity.class);
         startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 
     private void fetchTimelineAsync() {

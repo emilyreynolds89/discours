@@ -90,12 +90,13 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
             case R.id.btnShare:
                 Intent intent = new Intent(ArticleDetailActivity.this, HomeActivity.class);
                 intent.putExtra("article", (Serializable) article);
                 startActivity(intent);
-
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
         }
     }
