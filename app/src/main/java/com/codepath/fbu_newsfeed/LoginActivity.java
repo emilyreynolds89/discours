@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("LoginActivity", "Log in successful");
                     final Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
-
+                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                     finish();
                 } else {
                     Log.e("LoginActivity", "Log in error: " + e.getMessage());

@@ -75,6 +75,7 @@ SignUpActivity extends AppCompatActivity {
                     Log.i("SignUp", "New user sign up successful");
                     final Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                     finish();
                 } else {
                     Log.e("SignUp", "Error in new user sign up");

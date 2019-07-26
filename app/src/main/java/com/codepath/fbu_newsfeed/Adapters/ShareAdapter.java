@@ -1,5 +1,6 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -166,6 +167,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 Intent intent = new Intent(context, ArticleDetailActivity.class);
                 intent.putExtra("article", (Serializable) article);
                 context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
             }
         });
 
@@ -175,6 +177,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("share", (Serializable) share);
                 context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
             }
         });
 
@@ -319,7 +322,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     private void reportArticle(Article article) {
         //FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
         ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());
         articleReportDialog.show(fragmentTransaction, "fragment_report");
     }
@@ -327,7 +330,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     private void showInformationDialog() {
         //FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
         InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
         informationDialog.show(fragmentTransaction, "fragment_information");
     }
