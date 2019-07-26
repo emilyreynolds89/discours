@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">fbu-newsfeed</string>
+    <string name="app_name">Discours</string>
 
     <string name="bias_explanation">We calculate bias by the news source, classified into one of the following: \n\nLiberal, Slightly liberal, Moderate, Slightly conservative, Conservative</string>
 
