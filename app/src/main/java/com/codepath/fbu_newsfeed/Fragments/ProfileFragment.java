@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +36,7 @@ import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseUser;
 import com.parse.ParseQuery;
@@ -62,6 +64,7 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.btnLogout) Button btnLogout;
     @BindView(R.id.btnRequest) Button btnRequest;
     @BindView(R.id.btnEdit) ImageButton btnEdit;
+    @BindView(R.id.btnUnfriend) ImageButton btnUnfriend;
     @BindView(R.id.btnReport) ImageButton btnReport;
     @BindView(R.id.rvProfilePosts) RecyclerView rvProfilePosts;
 
@@ -157,6 +160,7 @@ public class ProfileFragment extends Fragment {
             });
 
             btnEdit.setVisibility(View.VISIBLE);
+            btnUnfriend.setVisibility(View.GONE);
             btnReport.setVisibility(View.GONE);
 
             btnReport.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +186,7 @@ public class ProfileFragment extends Fragment {
             btnReport.setVisibility(View.VISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnRequest.setVisibility(View.VISIBLE);
+            btnUnfriend.setVisibility(View.GONE);
             tvFriends.setVisibility(View.GONE);
 
             btnReport.setOnClickListener(new View.OnClickListener() {
@@ -193,6 +198,7 @@ public class ProfileFragment extends Fragment {
 
             if (isFriends()) {
                 btnRequest.setText("Friends!");
+                btnUnfriend.setVisibility(View.VISIBLE);
                 tvFriends.setVisibility(View.VISIBLE);
                 tvFriends.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -200,6 +206,14 @@ public class ProfileFragment extends Fragment {
                         friendsList();
                     }
                 });
+
+                btnUnfriend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        unfriend();
+                    }
+                });
+
 
             } else if (sentRequest()) {
                 btnRequest.setText("Requested");
@@ -229,6 +243,23 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private void unfriend() {
+        Friendship friendship = findFriendship();
+        if (friendship != null) {
+            friendship.deleteInBackground(new DeleteCallback() {
+                @Override
+                public void done(ParseException e) {
+                    Toast.makeText(getContext(), "Unfriended @" + user.getUsername(), Toast.LENGTH_SHORT).show();
+                    getFragmentManager()
+                            .beginTransaction()
+                            .detach(ProfileFragment.this)
+                            .attach(ProfileFragment.this)
+                            .commit();
+                }
+            });
+        }
     }
 
     private void friendsList() {
@@ -353,7 +384,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private boolean isFriends() {
+    private Friendship findFriendship() {
         ParseQuery<Friendship> query1 = ParseQuery.getQuery("Friendship");
         query1.whereEqualTo("user1", ParseUser.getCurrentUser());
         query1.whereEqualTo("user2", user);
@@ -371,11 +402,15 @@ public class ProfileFragment extends Fragment {
 
         try {
             List<Friendship> result = mainQuery.find();
-            return result.size() > 0;
+            return result.get(0);
         } catch(Exception e) {
             Log.d("User", "Error: " + e.getMessage());
-            return false;
+            return null;
         }
+    }
+
+    private boolean isFriends() {
+        return findFriendship() != null;
 
     }
 
