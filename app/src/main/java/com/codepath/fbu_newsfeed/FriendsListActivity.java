@@ -1,12 +1,15 @@
 package com.codepath.fbu_newsfeed;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.View;
 
 import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
@@ -33,6 +36,8 @@ public class FriendsListActivity extends AppCompatActivity {
     private UserAdapter userAdapter;
     private EndlessRecyclerViewScrollListener scrollListener;
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +54,29 @@ public class FriendsListActivity extends AppCompatActivity {
 
         friends = new ArrayList<>();
         userAdapter = new UserAdapter(friends);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvFriends.setLayoutManager(linearLayoutManager);
         rvFriends.setAdapter(userAdapter);
 
         queryFriends(user);
 
+        setSupportActionBar(toolbar);
 
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        return true;
     }
 
     private ParseUser getUser(String userId) throws ParseException {

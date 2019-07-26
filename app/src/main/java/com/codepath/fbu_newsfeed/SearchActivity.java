@@ -1,9 +1,11 @@
 package com.codepath.fbu_newsfeed;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.view.Menu;
 
 import com.codepath.fbu_newsfeed.Adapters.TabAdapter;
 import com.codepath.fbu_newsfeed.Fragments.ArticleSearchFragment;
@@ -20,6 +22,8 @@ public class SearchActivity extends AppCompatActivity {
     private TabAdapter tabAdapter;
     @BindView(R.id.tabLayout) TabLayout tabLayout;
     @BindView(R.id.viewPager) ViewPager viewPager;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,16 @@ public class SearchActivity extends AppCompatActivity {
         viewPager.setAdapter(tabAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        setSupportActionBar(toolbar);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        return true;
     }
 
 
