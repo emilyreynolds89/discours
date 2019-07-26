@@ -117,15 +117,23 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         int biasValue = article.getIntBias();
         switch (biasValue) {
-            case 1:  holder.ivBias.setColorFilter(Article.liberalColor);
+            case 1:
+                holder.ivBias.setBackgroundResource(R.drawable.liberal_icon);
                 break;
-            case 2:  holder.ivBias.setColorFilter(Article.slightlyLiberalColor);
+            case 2:
+                holder.ivBias.setBackgroundResource(R.drawable.slightly_liberal_icon);
                 break;
-            case 3:  holder.ivBias.setColorFilter(Article.moderateColor);
+            case 3:
+                holder.ivBias.setBackgroundResource(R.drawable.moderate_icon);
                 break;
-            case 4:  holder.ivBias.setColorFilter(Article.slightlyConservativeColor);
+            case 4:
+                holder.ivBias.setBackgroundResource(R.drawable.slightly_conserv_icon);
                 break;
-            case 5:  holder.ivBias.setColorFilter(Article.conservativeColor);
+            case 5:
+                holder.ivBias.setBackgroundResource(R.drawable.liberal_icon);
+                break;
+            default:
+                holder.ivBias.setBackgroundResource(R.drawable.moderate_icon);
                 break;
         }
 

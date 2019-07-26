@@ -96,19 +96,22 @@ public class CreateFragment extends Fragment {
                     int biasValue = articles.get(position).getIntBias();
                     switch (biasValue) {
                         case 1:
-                            ivBiasCreate.setColorFilter(Article.liberalColor);
+                            ivBiasCreate.setBackgroundResource(R.drawable.liberal_icon);
                             break;
                         case 2:
-                            ivBiasCreate.setColorFilter(Article.slightlyLiberalColor);
+                            ivBiasCreate.setBackgroundResource(R.drawable.slightly_liberal_icon);
                             break;
                         case 3:
-                            ivBiasCreate.setColorFilter(Article.moderateColor);
+                            ivBiasCreate.setBackgroundResource(R.drawable.moderate_icon);
                             break;
                         case 4:
-                            ivBiasCreate.setColorFilter(Article.slightlyConservativeColor);
+                            ivBiasCreate.setBackgroundResource(R.drawable.slightly_conserv_icon);
                             break;
                         case 5:
-                            ivBiasCreate.setColorFilter(Article.conservativeColor);
+                            ivBiasCreate.setBackgroundResource(R.drawable.liberal_icon);
+                            break;
+                        default:
+                            ivBiasCreate.setBackgroundResource(R.drawable.moderate_icon);
                             break;
                     }
                     if (imageFile != null) {
