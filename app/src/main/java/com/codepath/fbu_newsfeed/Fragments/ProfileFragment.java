@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
+import com.codepath.fbu_newsfeed.FriendsListActivity;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.LoginActivity;
@@ -56,6 +57,7 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.tvFullName) TextView tvFullName;
     @BindView(R.id.tvBio) TextView tvBio;
     @BindView(R.id.tvArticleCount) TextView tvArticleCount;
+    @BindView(R.id.tvFriends) TextView tvFriends;
     @BindView(R.id.btnLogout) Button btnLogout;
     @BindView(R.id.btnRequest) Button btnRequest;
     @BindView(R.id.btnEdit) ImageButton btnEdit;
@@ -148,6 +150,13 @@ public class ProfileFragment extends Fragment {
 
         if (user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             // if profile is for current user
+            tvFriends.setVisibility(View.VISIBLE);
+            tvFriends.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    friendsList();
+                }
+            });
 
             btnEdit.setVisibility(View.VISIBLE);
             btnReport.setVisibility(View.GONE);
@@ -175,6 +184,7 @@ public class ProfileFragment extends Fragment {
             btnReport.setVisibility(View.VISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnRequest.setVisibility(View.VISIBLE);
+            tvFriends.setVisibility(View.GONE);
 
             btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -185,6 +195,14 @@ public class ProfileFragment extends Fragment {
 
             if (isFriends()) {
                 btnRequest.setText("Friends!");
+                tvFriends.setVisibility(View.VISIBLE);
+                tvFriends.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        friendsList();
+                    }
+                });
+
             } else if (sentRequest()) {
                 btnRequest.setText("Requested");
             } else if (canAccept()) {
@@ -215,6 +233,11 @@ public class ProfileFragment extends Fragment {
         unbinder.unbind();
     }
 
+    private void friendsList() {
+        Intent intent = new Intent(getActivity(), FriendsListActivity.class);
+        intent.putExtra("user_id", user.getObjectId());
+        getActivity().startActivity(intent);
+    }
 
     private void reportUser() {
         FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
