@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,12 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
-import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
-import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +32,13 @@ public class ArticleSearchFragment extends Fragment {
     private static final String TAG = "UserSearchFragment";
 
     @BindView(R.id.searchView) SearchView searchView;
+    @BindView(R.id.tvError) TextView tvError;
 
     @BindView(R.id.rvResults) RecyclerView rvResults;
     private Unbinder unbinder;
 
-    ArrayList<Article> articleResults;
-    TrendsAdapter trendsAdapter;
+    private ArrayList<Article> articleResults;
+    private TrendsAdapter trendsAdapter;
 
     @Nullable
     @Override
@@ -105,9 +105,17 @@ public class ArticleSearchFragment extends Fragment {
 
         try {
             List<Article> result = titleQuery.find();
-            trendsAdapter.addAll(result);
+            if (result.size() > 0) {
+                tvError.setVisibility(View.GONE);
+                rvResults.setVisibility(View.VISIBLE);
+                trendsAdapter.addAll(result);
+            } else {
+                rvResults.setVisibility(View.GONE);
+                tvError.setVisibility(View.VISIBLE);
+            }
         } catch(Exception e) {
-            Log.d(TAG, "Error searching users " + e.getMessage());
+            Toast.makeText(getContext(), "Error searching articles", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Error searching articles " + e.getMessage());
         }
     }
 

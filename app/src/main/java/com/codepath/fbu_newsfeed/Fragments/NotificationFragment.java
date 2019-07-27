@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.codepath.fbu_newsfeed.Adapters.NotificationAdapter;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
@@ -24,22 +25,26 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class NotificationFragment extends Fragment {
 
     public static final String TAG = "NotificationFragment";
 
-    ArrayList<Notification> notifications;
-    NotificationAdapter notificationAdapter;
-    RecyclerView rvNotifications;
+    @BindView(R.id.rvNotifications) RecyclerView rvNotifications;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
+    private Unbinder unbinder;
 
-    SwipeRefreshLayout swipeContainer;
-    EndlessRecyclerViewScrollListener scrollListener;
+    private ArrayList<Notification> notifications;
+    private NotificationAdapter notificationAdapter;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
-        rvNotifications = view.findViewById(R.id.rvNotifications);
-        swipeContainer = view.findViewById(R.id.swipeContainer);
+        unbinder = ButterKnife.bind(this, view);
 
         return view;
     }
@@ -47,10 +52,11 @@ public class NotificationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @NonNull Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(3).setChecked(true);
 
         notifications = new ArrayList<Notification>();
         notificationAdapter = new NotificationAdapter(getContext(), notifications);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvNotifications.setLayoutManager(linearLayoutManager);
         rvNotifications.setAdapter(notificationAdapter);
 
@@ -64,10 +70,7 @@ public class NotificationFragment extends Fragment {
             }
         });
 
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        swipeContainer.setColorSchemeResources(R.color.colorAccentBold, R.color.colorAccentDark);
 
         queryNotifications(0);
 
@@ -80,11 +83,23 @@ public class NotificationFragment extends Fragment {
 
         rvNotifications.addOnScrollListener(scrollListener);
 
+        ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        });
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void queryNotifications(int offset) {
         ParseQuery<Notification> notificationQuery = ParseQuery.getQuery(Notification.class);
-        notificationQuery.include(Notification.KEY_TYPE);
         notificationQuery.include(Notification.KEY_SEND_USER);
         notificationQuery.include(Notification.KEY_RECEIVE_USER);
         notificationQuery.include(Notification.KEY_SHARE);
@@ -102,7 +117,6 @@ public class NotificationFragment extends Fragment {
                     return;
                 }
                 notificationAdapter.addAll(newNotifications);
-                notificationAdapter.notifyDataSetChanged();
             }
         });
     }

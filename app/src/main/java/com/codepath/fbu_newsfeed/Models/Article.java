@@ -21,6 +21,7 @@ public class Article extends ParseObject implements Serializable {
     public static final String KEY_TAG = "tag";
     public static final String KEY_IMAGEURL = "imageUrl";
     public static final int LIMIT = 20;
+    public static final String KEY_COUNT = "count";
     public static final String KEY_CREATED_AT = "createdAt";
     public static final int liberalColor = Color.parseColor("#3385FF");
     public static final int slightlyLiberalColor = Color.parseColor("#ABCDFF");
@@ -37,6 +38,7 @@ public class Article extends ParseObject implements Serializable {
     private String tag;
     private String source;
     private String imageUrl;
+    private int count;
 
     public Article() {
         super();
@@ -63,6 +65,8 @@ public class Article extends ParseObject implements Serializable {
         put(KEY_TAG, tag);
         this.source = source;
         put(KEY_SOURCE, source);
+        this.count = 0;
+        put(KEY_COUNT, count);
     }
 
     public Article(String url, String title, String imageUrl,
@@ -86,10 +90,12 @@ public class Article extends ParseObject implements Serializable {
         put(KEY_TAG, tag);
         this.source = source;
         put(KEY_SOURCE, source);
+        this.count = 0;
+        put(KEY_COUNT, 0);
     }
 
     public enum Bias {
-        LIBERAL, SLIGHTLY_LIBERAL, MODERATE, SLIGHTLY_CONSERVATIVE, CONSERVATIVE;
+        LIBERAL, SLIGHTLY_LIBERAL, MODERATE, SLIGHTLY_CONSERVATIVE, CONSERVATIVE
     }
 
 
@@ -167,16 +173,26 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public void setSource(String source) {
+        this.source = source;
         put(KEY_SOURCE, source);
     }
-
 
     public String getTag() {
         return getString(KEY_TAG);
     }
 
     public void setTag(String tag) {
+        this.tag = tag;
         put(KEY_TAG, tag);
+    }
+
+    public int getCount() {
+        return (int) getNumber(KEY_COUNT);
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+        put(KEY_COUNT, count);
     }
 
     public static Bias biasIntToEnum(int i) {

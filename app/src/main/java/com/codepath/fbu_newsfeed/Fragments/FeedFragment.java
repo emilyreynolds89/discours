@@ -1,9 +1,11 @@
 package com.codepath.fbu_newsfeed.Fragments;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
@@ -30,13 +33,14 @@ import butterknife.Unbinder;
 
 
 public class FeedFragment extends Fragment {
-    private final String TAG = "FeedFragment";
+    public final static String TAG = "FeedFragment";
 
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     @BindView(R.id.rvShares) RecyclerView rvShares;
+    @BindView(R.id.tvNoContent) TextView tvNoContent;
 
-    ArrayList<Share> shares;
-    ShareAdapter shareAdapter;
+    private ArrayList<Share> shares;
+    private ShareAdapter shareAdapter;
     private Unbinder unbinder;
 
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -52,12 +56,16 @@ public class FeedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @NonNull Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(0).setChecked(true);
 
         shares = new ArrayList<Share>();
         shareAdapter = new ShareAdapter(shares);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvShares.setLayoutManager(linearLayoutManager);
         rvShares.setAdapter(shareAdapter);
+
+        queryShares(0);
+
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -69,12 +77,7 @@ public class FeedFragment extends Fragment {
             }
         });
 
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-        queryShares(0);
+        swipeContainer.setColorSchemeResources(R.color.colorAccentBold, R.color.colorAccentDark);
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
@@ -84,6 +87,13 @@ public class FeedFragment extends Fragment {
         };
 
         rvShares.addOnScrollListener(scrollListener);
+
+        ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        });
 
     }
 
@@ -96,6 +106,13 @@ public class FeedFragment extends Fragment {
     private void queryShares(int offset) {
 
         List<ParseUser> friends = getFriends();
+        if (friends.size() == 0) {
+            rvShares.setVisibility(View.INVISIBLE);
+            tvNoContent.setVisibility(View.VISIBLE);
+        } else {
+            rvShares.setVisibility(View.VISIBLE);
+            tvNoContent.setVisibility(View.INVISIBLE);
+        }
         friends.add(ParseUser.getCurrentUser());
 
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
@@ -145,8 +162,8 @@ public class FeedFragment extends Fragment {
                     friends.add(friendship.getUser1());
                 }
                 Log.d(TAG, "Found " + friends.size() + " friends");
-                return friends;
             }
+            return friends;
         } catch(Exception e) {
             Log.d(TAG, "Error retrieving friends: " + e.getMessage());
 

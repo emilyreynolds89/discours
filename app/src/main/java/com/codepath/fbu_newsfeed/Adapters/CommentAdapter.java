@@ -1,6 +1,7 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,17 +10,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.R;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
-    static Context context;
-    List<Comment> comments;
+    private Context context;
+    private List<Comment> comments;
 
     public CommentAdapter(Context context, List<Comment> comments) {
+
         this.context = context;
         this.comments = comments;
     }
@@ -33,8 +39,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull CommentAdapter.ViewHolder holder, int position) {
-        Comment comment = comments.get(position);
+        final Comment comment = comments.get(position);
         holder.bind(comment);
+
+        holder.tvUsernameComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, HomeActivity.class);
+                intent.putExtra("user_id", comment.getUser().getObjectId());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -44,19 +60,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvUsernameComment;
-        TextView tvComment;
-        TextView tvTimeComment;
+        @BindView(R.id.tvUsernameComment) TextView tvUsernameComment;
+        @BindView(R.id.tvComment) TextView tvComment;
+        @BindView(R.id.tvTimeComment) TextView tvTimeComment;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-
-            tvUsernameComment = itemView.findViewById(R.id.tvUsernameComment);
-            tvComment = itemView.findViewById(R.id.tvComment);
-            tvTimeComment = itemView.findViewById(R.id.tvTimeComment);
+            ButterKnife.bind(this, itemView);
         }
 
-        public void bind(Comment comment) {
+        void bind(Comment comment) {
             tvUsernameComment.setText("@" + comment.getUser().getUsername());
             tvComment.setText(comment.getText());
             tvTimeComment.setText(comment.getRelativeTime());
@@ -67,4 +80,5 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         comments.clear();
         notifyDataSetChanged();
     }
+
 }

@@ -9,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,13 +19,11 @@ import androidx.fragment.app.DialogFragment;
 
 import com.codepath.fbu_newsfeed.Models.UserReport;
 import com.codepath.fbu_newsfeed.R;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.nio.channels.Selector;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -34,18 +31,18 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ReportUserFragment extends DialogFragment {
-    public static final String TAG = "ReportUserFragment";
+    private static final String TAG = "ReportUserFragment";
 
-    public static ArrayList<String> TYPE_LIST;
-    ArrayAdapter<String> typeAdapter;
+    private static ArrayList<String> TYPE_LIST;
+    private ArrayAdapter<String> typeAdapter;
 
     @BindView(R.id.tvReportHeader) TextView tvReportHeader;
     @BindView(R.id.spinnerType) Spinner spinnerType;
     @BindView(R.id.etComment) EditText etComment;
     @BindView(R.id.btnReport) Button btnReport;
 
-    ParseUser reporter;
-    ParseUser offender;
+    private ParseUser reporter;
+    private ParseUser offender;
 
     private String reportType;
 
@@ -64,7 +61,7 @@ public class ReportUserFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_report_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_report, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -85,7 +82,7 @@ public class ReportUserFragment extends DialogFragment {
             offender = getUser(getArguments().getString("user_id"));
         } catch(Exception e) {
             Log.d(TAG, "Trouble retrieving user", e);
-            offender = reporter;
+            dismiss();
         }
 
         tvReportHeader.setText("Report @" + offender.getUsername());
@@ -129,22 +126,23 @@ public class ReportUserFragment extends DialogFragment {
     }
 
     private void submitReport() {
-        if (!offender.equals(reporter)) {
-            UserReport newReport = new UserReport(reporter, offender, reportType, etComment.getText().toString());
-            newReport.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        Toast.makeText(getContext(), "Submitted report!", Toast.LENGTH_SHORT).show();
-                        dismiss();
-                    } else {
-                        Log.d(TAG, "Error submitting report", e);
-                    }
+        UserReport newReport = new UserReport(reporter, offender, reportType, etComment.getText().toString());
+        newReport.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(getContext(), "Submitted report!", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                } else {
+                    Log.d(TAG, "Error submitting report", e);
+                    Toast.makeText(getContext(), "Error submitting report", Toast.LENGTH_SHORT).show();
                 }
-            });
+            }
+        });
 
-        }
+
     }
+
 
 
 }

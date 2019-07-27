@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".EditProfileActivity">
+    android:layout_height="wrap_content"
+    android:minWidth="380dp"
+    android:paddingBottom="24dp">
 
     <ImageView
-        android:id="@+id/ivProfileImage"
+        android:id="@+id/ivProfileImageNotif"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_marginStart="24dp"
@@ -27,8 +28,8 @@
         android:textColor="@color/colorBaseText"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
-        app:layout_constraintTop_toTopOf="@+id/ivProfileImage" />
+        app:layout_constraintStart_toEndOf="@+id/ivProfileImageNotif"
+        app:layout_constraintTop_toTopOf="@+id/ivProfileImageNotif" />
 
     <TextView
         android:id="@+id/tvUsername"
@@ -44,13 +45,18 @@
     <EditText
         android:id="@+id/etBio"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="12sp"
-        android:inputType="text"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/rounded_edit_text"
+        android:hint="Bio"
         android:imeOptions="actionDone"
+        android:inputType="text"
         android:maxLines="1"
+        android:padding="8dp"
+        android:paddingStart="10dp"
+        android:textColor="@color/colorBaseText"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvFullName"
@@ -58,23 +64,29 @@
 
     <Button
         android:id="@+id/btnUpload"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="110dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/rounded_accent_button"
         android:text="Upload"
-        app:layout_constraintEnd_toEndOf="@+id/ivProfileImage"
-        app:layout_constraintStart_toStartOf="@+id/ivProfileImage"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfileImage" />
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="@+id/ivProfileImageNotif"
+        app:layout_constraintStart_toStartOf="@+id/ivProfileImageNotif"
+        app:layout_constraintTop_toBottomOf="@+id/ivProfileImageNotif" />
 
     <Button
         android:id="@+id/btnSubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_width="110dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
         android:background="@drawable/rounded_accent_button"
         android:text="Submit"
-        app:layout_constraintStart_toStartOf="@+id/etBio"
-        app:layout_constraintTop_toBottomOf="@+id/btnUpload" />
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="@+id/etBio"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/btnUpload"
+        app:layout_constraintTop_toTopOf="@+id/btnUpload" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

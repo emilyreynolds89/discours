@@ -15,9 +15,7 @@ public class InformationDialogFragment extends DialogFragment {
     public InformationDialogFragment() {}
 
     public static InformationDialogFragment newInstance() {
-        InformationDialogFragment fragment = new InformationDialogFragment();
-
-        return fragment;
+        return new InformationDialogFragment();
     }
 
     @Nullable

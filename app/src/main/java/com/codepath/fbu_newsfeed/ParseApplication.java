@@ -2,6 +2,8 @@ package com.codepath.fbu_newsfeed;
 
 import android.app.Application;
 
+import com.codepath.fbu_newsfeed.Models.ArticleReport;
+import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
@@ -42,6 +44,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Notification.class);
         ParseObject.registerSubclass(UserReport.class);
         ParseObject.registerSubclass(Source.class);
+        ParseObject.registerSubclass(ArticleReport.class);
 
         // set applicationId, and server server based on the values in the Heroku settings.
         // clientKey is not needed unless explicitly configured

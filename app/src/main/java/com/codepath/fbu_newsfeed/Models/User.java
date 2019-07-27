@@ -1,16 +1,10 @@
 package com.codepath.fbu_newsfeed.Models;
 
-import android.util.Log;
-
-import com.parse.FindCallback;
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.Serializable;
-import java.util.List;
 
 @ParseClassName("_User")
 public class User extends ParseUser implements Serializable {
@@ -19,10 +13,12 @@ public class User extends ParseUser implements Serializable {
     public static final String KEY_BIO = "bio";
     public static final String KEY_USERNAME = "username";
 
-    public String getUsers() {
+    public static final int LIMIT = 30;
+
+    public String getUsername() {
         return getString(KEY_USERNAME);
     }
-    public void setUsers(String userName) {
+    public void setUsername(String userName) {
         put(KEY_USERNAME, userName);
     }
 

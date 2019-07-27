@@ -20,10 +20,13 @@ import com.parse.ParseFile;
 import java.io.Serializable;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.ViewHolder> {
-    static Context context;
-    static List<Article> articles;
+    private Context context;
+    private List<Article> articles;
 
     public RecommendAdapter(Context context, List<Article> articles) {
         this.context = context;
@@ -48,13 +51,13 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         return articles.size();
     }
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tvArticleTitleRecommend;
-        ImageView ivArticleImageRecommend;
+        @BindView(R.id.tvArticleTitleRecommend) TextView tvArticleTitleRecommend;
+        @BindView(R.id.ivArticleImageRecommend) ImageView ivArticleImageRecommend;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvArticleTitleRecommend = itemView.findViewById(R.id.tvArticleTitleRecommend);
-            ivArticleImageRecommend = itemView.findViewById(R.id.ivArticleImageRecommend);
+
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
@@ -71,7 +74,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
                 context.startActivity(intent);
             }
         }
-        public void bind(Article article) {
+        void bind(Article article) {
             tvArticleTitleRecommend.setText(article.getTitle());
             ParseFile image = article.getImage();
             if (image != null ) {

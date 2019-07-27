@@ -14,15 +14,16 @@
         android:layout_height="20dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/ibReportCreate"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        app:srcCompat="@color/colorSlightlyLiberal" />
+        app:layout_constraintEnd_toStartOf="@+id/ibInformation"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <ImageView
         android:id="@+id/ivArticlePreviewCreate"
         android:layout_width="350dp"
         android:layout_height="200dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:scaleType="centerCrop"
         android:tint="#40636262"
         app:layout_constraintEnd_toEndOf="@+id/etURLCreate"
@@ -48,26 +49,31 @@
         app:layout_constraintBottom_toTopOf="@+id/ivArticlePreviewCreate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/news_placeholder" />
 
     <EditText
         android:id="@+id/etCaptionCreate"
         android:layout_width="350dp"
-        android:layout_height="70dp"
+        android:layout_height="80dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:inputType="text"
-        android:imeOptions="actionDone"
-        android:maxLines="1"
+        android:background="@drawable/rounded_edit_text"
         android:ems="10"
         android:gravity="top|left"
         android:hint="Add Caption"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:paddingStart="10dp"
         android:textSize="14sp"
+        android:maxLength="240"
         app:layout_constraintBottom_toTopOf="@+id/btShareArticleCreate"
         app:layout_constraintEnd_toEndOf="@+id/view"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/ibReportCreate" />
+        app:layout_constraintTop_toBottomOf="@+id/ibInformation" />
 
     <TextView
         android:id="@+id/tvFactCheckCreate"
@@ -90,16 +96,15 @@
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <ImageButton
-        android:id="@+id/ibReportCreate"
+        android:id="@+id/ibInformation"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginTop="16dp"
-        android:background="#00FFFFFF"
+        android:background="@android:color/transparent"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="@+id/ivArticlePreviewCreate"
         app:layout_constraintTop_toBottomOf="@+id/view"
-        app:srcCompat="@android:color/white"
-        tools:srcCompat="@drawable/questionmark_icon" />
+        app:srcCompat="@drawable/question" />
 
     <Button
         android:id="@+id/btShareArticleCreate"
@@ -139,7 +144,6 @@
     <view
         android:id="@+id/view"
         class="androidx.constraintlayout.widget.ConstraintLayout"
-        id="@+id/view2"
         android:layout_width="350dp"
         android:layout_height="2dp"
         android:layout_marginStart="8dp"

@@ -5,10 +5,13 @@
     android:id="@+id/layoutUser"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:background="@android:color/white"
+    android:clickable="true"
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/ivProfileImage"
+        android:id="@+id/ivProfileImageNotif"
         android:layout_width="40dp"
         android:layout_height="40dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,14 +22,14 @@
         android:id="@+id/tvFullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:text="Full Name"
         android:textColor="@color/colorBaseText"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
-        app:layout_constraintTop_toTopOf="@+id/ivProfileImage" />
+        app:layout_constraintStart_toEndOf="@+id/ivProfileImageNotif"
+        app:layout_constraintTop_toTopOf="@+id/ivProfileImageNotif" />
 
     <TextView
         android:id="@+id/tvUsername"

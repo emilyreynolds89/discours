@@ -1,7 +1,9 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
+import androidx.core.text.HtmlCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +27,8 @@ import com.codepath.fbu_newsfeed.ArticleDetailActivity;
 import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
+import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
+import com.codepath.fbu_newsfeed.Helpers.ReactionHelper;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Notification;
@@ -37,18 +42,23 @@ import com.parse.ParseUser;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     private static final String TAG = "ShareAdapter";
-    public ArrayList<Share> shares;
-    public static Context context;
+
+    private ArrayList<Share> shares;
+    private Context context;
+    private Map<String, Map<String, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
 
     public ShareAdapter(ArrayList<Share> shares) {
         this.shares = shares;
+        allReactions = new HashMap<>();
     }
 
     @NonNull
@@ -58,8 +68,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View shareView = inflater.inflate(R.layout.article_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(shareView);
-        return viewHolder;
+        return new ViewHolder(shareView);
     }
 
     @Override
@@ -69,6 +78,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         final ParseUser user = share.getUser();
 
         final User currentUser = (User) ParseUser.getCurrentUser();
+
+        Map<String, Reaction> reactionMap = allReactions.get(share.getObjectId());
 
         holder.tvUsername.setText(user.getUsername());
 
@@ -90,123 +101,56 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.tvSource.setText(article.getSource());
         holder.tvTag.setText(article.getTag());
 
+        for (int i = 0; i < Reaction.TYPES.length; i++) {
+            final String type = Reaction.TYPES[i];
+            final TextView tv = getTextViewFromReactionType(type, holder);
+            final ImageButton ib = getImageButtonFromReactionType(type, holder);
 
-        holder.tvLike.setText(Integer.toString(share.getCount("LIKE")));
-        holder.tvDislike.setText(Integer.toString(share.getCount("DISLIKE")));
-        holder.tvHappy.setText(Integer.toString(share.getCount("HAPPY")));
-        holder.tvSad.setText(Integer.toString(share.getCount("SAD")));
-        holder.tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
+            tv.setText(String.valueOf(share.getCount(type)));
 
+            ib.setSelected(false);
+            if (reactionMap != null && reactionMap.get(type) != null)
+                ib.setSelected(true);
 
-
-        holder.ibReactionLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Reaction likeReaction = getReaction("LIKE", share, currentUser);
-                if (likeReaction != null) {
-                    int count = destroyReaction(likeReaction, "LIKE", share);
-                    holder.tvLike.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("LIKE", share);
-                    holder.tvLike.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
+            ib.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    updateReactionText(type, share, currentUser, tv, ib);
                 }
-
-
-            }
-        });
-
-        holder.ibReactionDislike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Reaction dislikeReaction = getReaction("DISLIKE", share, currentUser);
-                if (dislikeReaction != null) {
-                    int count = destroyReaction(dislikeReaction, "DISLIKE", share);
-                    holder.tvDislike.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("DISLIKE", share);
-                    holder.tvDislike.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-
-
-            }
-        });
-
-        holder.ibReactionHappy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Reaction happyReaction = getReaction("HAPPY", share, currentUser);
-                if (happyReaction != null) {
-                    int count = destroyReaction(happyReaction, "HAPPY", share);
-                    holder.tvHappy.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("HAPPY", share);
-                    holder.tvHappy.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-
-            }
-        });
-
-        holder.ibReactionSad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Reaction sadReaction = getReaction("SAD", share, currentUser);
-                if (sadReaction != null) {
-                    int count = destroyReaction(sadReaction, "SAD", share);
-                    holder.tvSad.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("SAD", share);
-                    holder.tvSad.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-
-            }
-        });
-
-        holder.ibReactionAngry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Reaction angryReaction = getReaction("ANGRY", share, currentUser);
-                if (angryReaction != null) {
-                    int count = destroyReaction(angryReaction, "ANGRY", share);
-                    holder.tvAngry.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("ANGRY", share);
-                    holder.tvAngry.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-
-
-            }
-        });
+            });
+        }
 
         holder.tvFactRating.setText(article.getTruth());
 
         int biasValue = article.getIntBias();
         switch (biasValue) {
-            case 1:  holder.ivBias.setColorFilter(Article.liberalColor);
+            case 1:
+                holder.ivBias.setBackgroundResource(R.drawable.liberal_icon);
                 break;
-            case 2:  holder.ivBias.setColorFilter(Article.slightlyLiberalColor);
+            case 2:
+                holder.ivBias.setBackgroundResource(R.drawable.slightly_liberal_icon);
                 break;
-            case 3:  holder.ivBias.setColorFilter(Article.moderateColor);
+            case 3:
+                holder.ivBias.setBackgroundResource(R.drawable.moderate_icon);
                 break;
-            case 4:  holder.ivBias.setColorFilter(Article.slightlyConservativeColor);
+            case 4:
+                holder.ivBias.setBackgroundResource(R.drawable.slightly_conserv_icon);
                 break;
-            case 5:  holder.ivBias.setColorFilter(Article.conservativeColor);
+            case 5:
+                holder.ivBias.setBackgroundResource(R.drawable.liberal_icon);
+                break;
+            default:
+                holder.ivBias.setBackgroundResource(R.drawable.moderate_icon);
                 break;
         }
-        // TODO: connect listener to information button
 
-        String captionUsername = "@" + user.getUsername() + ": ";
-        holder.tvCaption.setText(captionUsername + share.getCaption());
+        if (!share.getCaption().isEmpty()) {
+            String captionUsername = "<b>@" + user.getUsername() + ": </b>";
 
+            holder.tvCaption.setText(Html.fromHtml(captionUsername + share.getCaption(), HtmlCompat.FROM_HTML_MODE_LEGACY));
+        } else {
+            holder.tvCaption.setVisibility(View.GONE);
+        }
 
 
         holder.tvUsername.setOnClickListener(new View.OnClickListener() {
@@ -230,6 +174,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 Intent intent = new Intent(context, ArticleDetailActivity.class);
                 intent.putExtra("article", (Serializable) article);
                 context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
             }
         });
 
@@ -237,9 +182,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailActivity.class);
-                //intent.putExtra("share_id", share.getObjectId());
                 intent.putExtra("share", (Serializable) share);
                 context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
             }
         });
 
@@ -248,6 +193,13 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             public void onClick(View view) {
                 Log.d(TAG, "Clicked information");
                 showInformationDialog();
+            }
+        });
+
+        holder.ibReportArticle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reportArticle(article);
             }
         });
     }
@@ -262,51 +214,24 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     public void addAll(List<Share> list) {
         shares.addAll(list);
         notifyDataSetChanged();
-
+        getAllReactions();
     }
 
     public void clear() {
         shares.clear();
         notifyDataSetChanged();
+        allReactions.clear();
     }
-
-    private void goToUser(ParseUser user) {
-        ((HomeActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).commit();
-    }
-
-
-    private int createReaction(String type, Share share) {
-        Log.d(TAG, "Creating reaction of type: " + type);
-        Reaction newReaction = new Reaction(ParseUser.getCurrentUser(), share, type);
-        newReaction.saveInBackground();
-        int count = share.incrementCount(type);
-        share.saveInBackground();
-        return count;
-    }
-
-    private int destroyReaction(Reaction reaction, String type, Share share) {
-        Log.d(TAG, "Destroying reaction of type: " + type);
-        reaction.deleteInBackground();
-        int count = share.decrementCount(type);
-        share.saveInBackground();
-        return count;
-    }
-
-    private void showInformationDialog() {
-        FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
-        InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
-        informationDialog.show(fm, "fragment_information");
-    }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+        @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
         @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
         @BindView(R.id.ivArticleImage) ImageView ivArticleImage;
         @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
         @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
+        @BindView(R.id.ibReportArticle) ImageButton ibReportArticle;
         @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
         @BindView(R.id.tvLike) TextView tvLike;
         @BindView(R.id.ibReactionDislike) ImageButton ibReactionDislike;
@@ -326,40 +251,143 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.tvTag) TextView tvTag;
 
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
-
     }
 
-    private Reaction getReaction(final String type, Share share, ParseUser user) {
+    private void getAllReactions() {
         ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
 
-        reactionQuery.include(Reaction.KEY_SHARE);
-        reactionQuery.include(Reaction.KEY_USER);
-
-        reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
-        reactionQuery.whereEqualTo(Reaction.KEY_USER, user);
-        reactionQuery.whereEqualTo(Reaction.KEY_TYPE, type);
+        reactionQuery.whereEqualTo(Reaction.KEY_USER, ParseUser.getCurrentUser());
+        reactionQuery.whereContainedIn(Reaction.KEY_SHARE, shares);
 
         try {
             List<Reaction> result = reactionQuery.find();
-            if (result.size() > 0 ) {
-                return result.get(0);
-            } else {
-                return null;
+            Log.d(TAG, "We found this many reactions: " + result.size());
+            for (int i = 0; i < result.size(); i++) {
+                Reaction reaction = result.get(i);
+                Share share = reaction.getShare();
+                if (allReactions.containsKey(share.getObjectId())) {
+                    Map<String, Reaction> innerMap = allReactions.get(share.getObjectId());
+                    innerMap.put(reaction.getType(), reaction);
+                } else {
+                    Map<String, Reaction> innerMap = new HashMap<>();
+                    innerMap.put(reaction.getType(), reaction);
+                    allReactions.put(share.getObjectId(), innerMap);
+                }
             }
         } catch (Exception e) {
             Log.d(TAG, "Error finding reactions: " + e.getMessage());
-            return null;
+        }
+
+    }
+
+
+    private TextView getTextViewFromReactionType(String type, ShareAdapter.ViewHolder holder) {
+        switch (type) {
+            case "LIKE":
+                return holder.tvLike;
+            case "DISLIKE":
+                return holder.tvDislike;
+            case "HAPPY":
+                return holder.tvHappy;
+            case "SAD":
+                return holder.tvSad;
+            case "ANGRY":
+                return holder.tvAngry;
+            default:
+                return null;
         }
     }
 
-    private void createNotification(String type, Share share) {
+    private ImageButton getImageButtonFromReactionType(String type, ShareAdapter.ViewHolder holder) {
+        switch (type) {
+            case "LIKE":
+                return holder.ibReactionLike;
+            case "DISLIKE":
+                return holder.ibReactionDislike;
+            case "HAPPY":
+                return holder.ibReactionHappy;
+            case "SAD":
+                return holder.ibReactionSad;
+            case "ANGRY":
+                return holder.ibReactionAngry;
+            default:
+                return null;
+        }
+    }
+
+
+    private void goToUser(ParseUser user) {
+        if (user.equals(ParseUser.getCurrentUser()))
+            ((HomeActivity) context).bottomNavigationView.setSelectedItemId(R.id.action_profile);
+        ((HomeActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).addToBackStack(ProfileFragment.TAG).commit();
+    }
+
+    private void reportArticle(Article article) {
+        //FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
+        ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());
+        articleReportDialog.show(fragmentTransaction, "fragment_report");
+    }
+
+    private void showInformationDialog() {
+        //FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
+        InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
+        informationDialog.show(fragmentTransaction, "fragment_information");
+    }
+
+    private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
+        Reaction reaction = ReactionHelper.getReaction(type, share, currentUser);
+        int count;
+        if (reaction != null) {
+            count = ReactionHelper.destroyReaction(reaction, type, share);
+            imageButton.setSelected(false);
+            deleteNotification(Notification.REACTION, share, type);
+        } else {
+            count = ReactionHelper.createReaction(type, share);
+            imageButton.setSelected(true);
+            createNotification(Notification.REACTION, share, type);
+        }
+        textView.setText(Integer.toString(count));
+    }
+
+    private void createNotification(String type, Share share, String typeText) {
         Log.d(TAG, "Creating notification of type: " + type);
-        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share);
+        User shareUser = (User) share.getUser();
+        if (ParseUser.getCurrentUser().getObjectId().equals(shareUser.getObjectId())) { return; }
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), shareUser, share, typeText);
         notification.saveInBackground();
+    }
+
+    private void deleteNotification(String type, Share share, String typeText) {
+        ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
+
+        query.whereEqualTo(Notification.KEY_TYPE, type);
+        query.whereEqualTo(Notification.KEY_TYPE_TEXT, typeText);
+        query.whereEqualTo(Notification.KEY_SEND_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Notification.KEY_RECEIVE_USER, share.getUser());
+
+        Notification notification;
+
+        try {
+            List<Notification> result = query.find();
+            if (result.size() > 0 ) {
+                notification = result.get(0);
+            } else {
+                return;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error finding reactions: " + e.getMessage());
+            return;
+        }
+
+        notification.deleteInBackground();
     }
 
 

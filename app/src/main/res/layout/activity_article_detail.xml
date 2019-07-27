@@ -14,7 +14,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewArticle"
-        class="androidx.constraintlayout.widget.ConstraintLayout"
         android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:background="@drawable/border"
@@ -43,7 +42,7 @@
             android:fontFamily="serif"
             android:text="Article summary"
             android:textColor="@color/colorLightText"
-            android:textSize="12dp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/viewArticle"
             app:layout_constraintStart_toStartOf="@+id/viewArticle"
             app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleDetail" />
@@ -66,57 +65,54 @@
             android:id="@+id/tvSourceDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
             android:fontFamily="serif"
             android:text="Source"
             android:textColor="@color/colorLightText"
-            android:textSize="8sp"
+            android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvArticleSummaryDetail"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tvArticleSummaryDetail"
-            app:layout_constraintTop_toBottomOf="@+id/tvArticleSummaryDetail"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/tvArticleSummaryDetail" />
 
         <TextView
             android:id="@+id/tvTagDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp"
             android:fontFamily="serif"
             android:text="Tag"
             android:textColor="@color/colorBaseText"
-            android:textSize="8sp"
+            android:textSize="10sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tvArticleSummaryDetail"
+            app:layout_constraintEnd_toStartOf="@+id/ibReportArticleDetail"
             app:layout_constraintTop_toBottomOf="@+id/tvArticleSummaryDetail" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:id="@+id/ibReportArticleDetail"
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/report" />
 
-    <Button
-        android:id="@+id/btnLink"
-        android:layout_width="240dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_accent_button"
-        android:text="View Link"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/btnShare"
         android:layout_width="240dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_accent_button"
         android:text="Share Article"
@@ -124,6 +120,6 @@
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLink" />
+        app:layout_constraintTop_toBottomOf="@+id/viewArticle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

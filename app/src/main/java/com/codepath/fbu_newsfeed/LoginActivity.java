@@ -14,29 +14,29 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText usernameInput;
-    private EditText passwordInput;
-    private Button loginButton;
-    private Button signupButton;
+    @BindView(R.id.etUsername) EditText usernameInput;
+    @BindView(R.id.etPassword) EditText passwordInput;
+    @BindView(R.id.btnLogIn) Button loginButton;
+    @BindView(R.id.btnSignUp) Button signupButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
 
         if (currentUser != null) {
             final Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
+            finish();
         }
-
-        usernameInput = findViewById(R.id.etUsername);
-        passwordInput = findViewById(R.id.etPassword);
-        loginButton = findViewById(R.id.btnLogIn);
-        signupButton = findViewById(R.id.btnSignUp);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,10 +63,9 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if (e == null) {
                     Log.d("LoginActivity", "Log in successful");
-
                     final Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
-
+                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                     finish();
                 } else {
                     Log.e("LoginActivity", "Log in error: " + e.getMessage());

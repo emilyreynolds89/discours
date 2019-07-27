@@ -18,13 +18,17 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Helpers.JSoupResult;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.Source;
@@ -47,29 +51,34 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 
 public class CreateFragment extends Fragment {
-    private static final String TAG = "Create Fragment";
-    protected List<Article> articles;
-    protected List<String> articleList;
-    Spinner spArticleListCreate;
-    EditText etUrlCreate;
-    ImageView ivArticlePreviewCreate;
-    TextView tvArticleTitleCreate;
-    TextView tvFactCheckCreate;
-    ImageView  ivBiasCreate;
-    ImageButton ibReportCreate;
-    EditText etCaptionCreate;
-    Button btnShareCreate;
-    Article selectedArticle;
+    public static final String TAG = "CreateFragment";
+
+    private List<Article> articles;
+    private List<String> articleList;
+
+    @BindView(R.id.spArticleListCreate) Spinner spArticleListCreate;
+    @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreviewCreate;
+    @BindView(R.id.tvArticleTitle) TextView tvArticleTitleCreate;
+    @BindView(R.id.tvFactCheckCreate) TextView tvFactCheckCreate;
+    @BindView(R.id.ivBias) ImageView  ivBiasCreate;
+    @BindView(R.id.ibInformation) ImageButton ibInformation;
+    @BindView(R.id.etCaptionCreate) EditText etCaptionCreate;
+    @BindView(R.id.btShareArticleCreate) Button btnShareCreate;
+    @BindView(R.id.etURLCreate) EditText etUrlCreate;
+    private Unbinder unbinder;
+
+    private ArrayAdapter<String> spinnerArrayAdapter;
+    private Article selectedArticle;
     String url;
     JSoupResult jsoupResult = new JSoupResult();
     ParseFile imageParseFile;
-
-
-
-    ArrayAdapter<String> spinnerArrayAdapter;
 
 
     class Content extends AsyncTask<String, String, JSoupResult> {
@@ -154,23 +163,17 @@ public class CreateFragment extends Fragment {
         if (getArguments() != null) {
             url = getArguments().getString("url");
         }
-        return inflater.inflate(R.layout.fragment_create, container, false);
+        View view = inflater.inflate(R.layout.fragment_create, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
+        return view;
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        spArticleListCreate = view.findViewById(R.id.spArticleListCreate);
-        etUrlCreate = view.findViewById(R.id.etURLCreate);
-        ivArticlePreviewCreate  = view.findViewById(R.id.ivArticlePreviewCreate);
-        tvArticleTitleCreate = view.findViewById(R.id.tvArticleTitle);
-        tvFactCheckCreate = view.findViewById(R.id.tvFactCheckCreate);
-        ivBiasCreate = view.findViewById(R.id.ivBias);
-        ibReportCreate = view.findViewById(R.id.ibReportCreate);
-        etCaptionCreate = view.findViewById(R.id.etCaptionCreate);
-        btnShareCreate = view.findViewById(R.id.btShareArticleCreate);
+
+        ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(2).setChecked(true);
 
         if (url != null) {
             new Content().execute(url);
@@ -196,7 +199,7 @@ public class CreateFragment extends Fragment {
             }
         });
 
-        queryTitle(true);
+        queryTitle();
 
         spinnerArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, articleList);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
@@ -205,7 +208,7 @@ public class CreateFragment extends Fragment {
         spArticleListCreate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Log.d("CreateFragment", "Selected item at " + String.valueOf(position));
+                Log.d("CreateFragment", "Selected item at " + position);
                 if (!articleList.isEmpty()) {
                     tvFactCheckCreate.setText(articles.get(position).getTruth());
                     tvArticleTitleCreate.setText(articles.get(position).getTitle());
@@ -214,19 +217,22 @@ public class CreateFragment extends Fragment {
                     int biasValue = articles.get(position).getIntBias();
                     switch (biasValue) {
                         case 1:
-                            ivBiasCreate.setColorFilter(Article.liberalColor);
+                            ivBiasCreate.setBackgroundResource(R.drawable.liberal_icon);
                             break;
                         case 2:
-                            ivBiasCreate.setColorFilter(Article.slightlyLiberalColor);
+                            ivBiasCreate.setBackgroundResource(R.drawable.slightly_liberal_icon);
                             break;
                         case 3:
-                            ivBiasCreate.setColorFilter(Article.moderateColor);
+                            ivBiasCreate.setBackgroundResource(R.drawable.moderate_icon);
                             break;
                         case 4:
-                            ivBiasCreate.setColorFilter(Article.slightlyConservativeColor);
+                            ivBiasCreate.setBackgroundResource(R.drawable.slightly_conserv_icon);
                             break;
                         case 5:
-                            ivBiasCreate.setColorFilter(Article.conservativeColor);
+                            ivBiasCreate.setBackgroundResource(R.drawable.liberal_icon);
+                            break;
+                        default:
+                            ivBiasCreate.setBackgroundResource(R.drawable.moderate_icon);
                             break;
                     }
                     String imageUrl = articles.get(position).getImageUrl();
@@ -255,10 +261,32 @@ public class CreateFragment extends Fragment {
             }
         });
 
+
+        ibInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showInformationDialog();
+            }
+        });
+
+
     }
-    protected void queryTitle(final boolean refresh) {
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    private void showInformationDialog() {
+        FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
+        informationDialog.show(fm, "fragment_information");
+    }
+
+    private void queryTitle() {
         final ParseQuery<Article> articleQuery = new ParseQuery<Article>(Article.class);
-        if(refresh) articleQuery.setLimit(10);
+        articleQuery.setLimit(10);
         articleQuery.addDescendingOrder(Article.KEY_CREATED_AT);
 
         articleQuery.findInBackground(new FindCallback<Article>() {
@@ -284,16 +312,20 @@ public class CreateFragment extends Fragment {
         });
     }
     private void shareCreate(String caption, Article article) {
+        article.setCount(article.getCount() + 1);
         Share share = new Share(ParseUser.getCurrentUser(), article, caption);
         share.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("ComposeFragment", "Share article success");
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new FeedFragment()).commit();
+                    ((HomeActivity) getActivity()).bottomNavigationView.setSelectedItemId(R.id.action_home);
+                    getActivity().getSupportFragmentManager().beginTransaction().remove(CreateFragment.this).commit();
                 } else {
                     Log.e("ComposeFragment", "Error in sharing article");
                     e.printStackTrace();
+                    Toast.makeText(getContext(), "Error in sharing article", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });

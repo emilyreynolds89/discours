@@ -15,10 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
-import com.codepath.fbu_newsfeed.DetailActivity;
-import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.codepath.fbu_newsfeed.HomeActivity;
-import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.ParseUser;
@@ -31,8 +28,8 @@ import butterknife.ButterKnife;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private static final String TAG = "UserAdapter";
-    public static ArrayList<ParseUser> users;
-    public static Context context;
+    private static ArrayList<ParseUser> users;
+    private Context context;
 
     public UserAdapter(ArrayList<ParseUser> users) { this.users = users; }
 
@@ -43,8 +40,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View shareView = inflater.inflate(R.layout.user_item, parent, false);
-        UserAdapter.ViewHolder viewHolder = new UserAdapter.ViewHolder(shareView);
-        return viewHolder;
+        return new UserAdapter.ViewHolder(shareView);
     }
 
     @Override
@@ -90,12 +86,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+        @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.tvFullName) TextView tvFullName;
         @BindView(R.id.layoutUser) ConstraintLayout layoutUser;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

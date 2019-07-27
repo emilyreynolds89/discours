@@ -12,19 +12,26 @@ public class Notification extends ParseObject {
     public static final String KEY_RECEIVE_USER = "receiveUser";
     public static final String KEY_TYPE = "type";
     public static final String KEY_SHARE = "share";
+    public static final String KEY_TYPE_TEXT = "typeText";
     public static final String KEY_CREATEDAT = "createdAt";
-    public static final int LIMIT = 36;
+    public static final int LIMIT = 30;
 
-    User sendUser;
-    User receiveUser;
-    String type; // REACTION or COMMENT
-    Share share;
+    public static final String REACTION = "REACTION";
+    public static final String COMMENT = "COMMENT";
+    public static final String FRIEND_REQUEST = "FRIEND_REQUEST";
+    public static final String ACCEPT_REQUEST = "ACCEPT_REQUEST";
+
+    private User sendUser;
+    private User receiveUser;
+    private String type; // REACTION, COMMENT, FRIEND_REQUEST, ACCEPT_REQUEST
+    private Share share;
+    private String typeText;
 
     public Notification() {
         super();
     }
 
-    public Notification(String type, User sender, User receiver, Share share) {
+    public Notification(String type, User sender, User receiver, Share share, String typeText) {
         super();
 
         this.type = type;
@@ -38,6 +45,26 @@ public class Notification extends ParseObject {
 
         this.share = share;
         put(KEY_SHARE, share);
+
+        this.typeText = typeText;
+        put(KEY_TYPE_TEXT, typeText);
+    }
+
+    // for friend notifications
+    public Notification(String type, User sender, User receiver, String typeText) {
+        super();
+
+        this.type = type;
+        put(KEY_TYPE, type);
+
+        this.sendUser = sender;
+        put(KEY_SEND_USER, sender);
+
+        this.receiveUser = receiver;
+        put(KEY_RECEIVE_USER, receiver);
+
+        this.typeText = typeText;
+        put(KEY_TYPE_TEXT, typeText);
     }
 
 
@@ -77,12 +104,28 @@ public class Notification extends ParseObject {
         put(KEY_SHARE, share);
     }
 
+    public String getTypeText() {
+        return getString(KEY_TYPE_TEXT);
+    }
+
+    public void setTypeText(String typeText) {
+        this.typeText = typeText;
+        put(KEY_TYPE_TEXT, typeText);
+    }
+
 
     public String notificationText(String type) {
-        if (type.equals("REACTION")) {
-            return " reacted to your post";
-        } else {
-            return " commented on your post";
+        switch (type) {
+            case REACTION:
+                return " reacted to your post";
+            case COMMENT:
+                return " commented on your post";
+            case FRIEND_REQUEST:
+                return " sent you a friend request";
+            case ACCEPT_REQUEST:
+                return " accepted your friend request";
+            default:
+                return "";
         }
     }
 

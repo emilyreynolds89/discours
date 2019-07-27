@@ -1,8 +1,14 @@
 package com.codepath.fbu_newsfeed.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,21 +16,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
-import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +37,11 @@ public class TagSearchFragment extends Fragment {
     @BindView(R.id.rvResults) RecyclerView rvResults;
     private Unbinder unbinder;
 
-    ArrayList<Article> articleResults;
-    TrendsAdapter trendsAdapter;
+    private ArrayList<Article> articleResults;
+    private TrendsAdapter trendsAdapter;
 
-    ArrayList<String> tagList;
-    ArrayAdapter<String> tagAdapter;
+    private ArrayList<String> tagList;
+    private ArrayAdapter<String> tagAdapter;
 
 
     @Nullable
@@ -109,17 +106,21 @@ public class TagSearchFragment extends Fragment {
 
     private void queryTags() {
         ParseQuery<Article> query = ParseQuery.getQuery("Article");
-        query.setLimit(Article.LIMIT);
         query.findInBackground(new FindCallback<Article>() {
             @Override
             public void done(List<Article> articles, ParseException e) {
-                for (int i = 0; i < articles.size(); i++) {
-                    String tag = articles.get(i).getTag();
-                    if (!tagList.contains(tag)) {
-                        tagList.add(tag);
+                if (e == null) {
+                    for (int i = 0; i < articles.size(); i++) {
+                        String tag = articles.get(i).getTag();
+                        if (!tagList.contains(tag)) {
+                            tagList.add(tag);
+                        }
                     }
+                    tagAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "Error searching by tag", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Error searching by tag", e);
                 }
-                tagAdapter.notifyDataSetChanged();
             }
         });
     }

@@ -2,14 +2,14 @@ package com.codepath.fbu_newsfeed.Models;
 
 public class Tag {
 
-    Title title;
+    private Title title;
 
     public Tag(Title title) {
         this.title = title;
     }
 
     enum Title  {
-        WORLD, US, POLITICS, BUSINESS, OPINION, TECH, SCIENCE, HEALTH, SPORTS, ARTS, BOOKS, STYLE, FOOD, TRVAEL;
+        WORLD, US, POLITICS, BUSINESS, OPINION, TECH, SCIENCE, HEALTH, SPORTS, ARTS, BOOKS, STYLE, FOOD, TRAVEL
     }
 
     public Title getTitle() {

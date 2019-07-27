@@ -1,27 +1,17 @@
 package com.codepath.fbu_newsfeed;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.SearchView;
+import android.view.Menu;
 
 import com.codepath.fbu_newsfeed.Adapters.TabAdapter;
-import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Fragments.ArticleSearchFragment;
 import com.codepath.fbu_newsfeed.Fragments.TagSearchFragment;
 import com.codepath.fbu_newsfeed.Fragments.UserSearchFragment;
-import com.codepath.fbu_newsfeed.Models.Friendship;
-import com.codepath.fbu_newsfeed.Models.User;
 import com.google.android.material.tabs.TabLayout;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +22,8 @@ public class SearchActivity extends AppCompatActivity {
     private TabAdapter tabAdapter;
     @BindView(R.id.tabLayout) TabLayout tabLayout;
     @BindView(R.id.viewPager) ViewPager viewPager;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +39,16 @@ public class SearchActivity extends AppCompatActivity {
         viewPager.setAdapter(tabAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        setSupportActionBar(toolbar);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        return true;
     }
 
 

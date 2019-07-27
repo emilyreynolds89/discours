@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
 import com.codepath.fbu_newsfeed.SearchActivity;
@@ -32,15 +33,16 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class TrendsFragment extends Fragment {
-    @BindView(R.id.searchButton) Button searchBtn;
+    public static final String TAG = "TrendsFragment";
 
+    @BindView(R.id.searchView)
+    SearchView searchView;
     @BindView(R.id.rvTrends) RecyclerView rvTrends;
-    protected TrendsAdapter adapter;
-    protected List<Article> articles;
-
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
-    protected EndlessRecyclerViewScrollListener scrollListener;
+    private TrendsAdapter adapter;
+    private List<Article> articles;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     private Unbinder unbinder;
 
@@ -56,24 +58,35 @@ public class TrendsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        rvTrends = view.findViewById(R.id.rvTrends);
+        super.onViewCreated(view, savedInstanceState);
+        ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(1).setChecked(true);
+
+        searchView.clearFocus();
+        rvTrends.requestFocus();
 
         articles = new ArrayList<>();
         adapter = new TrendsAdapter(getContext(), articles);
 
         rvTrends.setAdapter(adapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTrends.setLayoutManager(linearLayoutManager);
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                getActivity().startActivity(intent);
+            public void onFocusChange(View view, boolean b) {
+                Log.d(TAG, "FOCUSED: " + b);
+
+                if (b) {
+                    Intent intent = new Intent(getActivity(), SearchActivity.class);
+                    getActivity().startActivity(intent);
+                    searchView.clearFocus();
+                    rvTrends.requestFocus();
+                }
+
             }
         });
 
-        swipeContainer = view.findViewById(R.id.swipeContainer);
+
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -81,24 +94,35 @@ public class TrendsFragment extends Fragment {
             }
         });
 
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        swipeContainer.setColorSchemeResources(R.color.colorAccentBold, R.color.colorAccentDark);
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadNextData(page);
+                queryArticles(false, page);
             }
         };
 
         rvTrends.addOnScrollListener(scrollListener);
         queryArticles(true, 0);
 
+        ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        });
+
     }
 
-    protected void queryArticles(final boolean refresh, int offset) {
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        unbinder.unbind();
+    }
+
+    private void queryArticles(final boolean refresh, int offset) {
         final ParseQuery<Article> articleQuery = new ParseQuery<Article>(Article.class);
         articleQuery.include(Article.KEY_IMAGE);
         articleQuery.include(Article.KEY_SOURCE);
@@ -109,7 +133,7 @@ public class TrendsFragment extends Fragment {
         articleQuery.include(Article.KEY_URL);
         articleQuery.setLimit(Article.LIMIT);
         articleQuery.setSkip(offset * Article.LIMIT);
-        if(refresh) articleQuery.setLimit(20);
+        articleQuery.orderByDescending(Article.KEY_COUNT);
 
         articleQuery.findInBackground(new FindCallback<Article>() {
             @Override
@@ -117,30 +141,22 @@ public class TrendsFragment extends Fragment {
                 if (e != null) {
                     Log.e("TrendsQuery", "Error with query");
                     e.printStackTrace();
-                    return;
-                }
-                articles.addAll(newArticles);
-                adapter.notifyDataSetChanged();
+                } else {
+                    articles.addAll(newArticles);
+                    adapter.notifyDataSetChanged();
 
-                for (int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
-                    Log.d("TrendsQuery", "Article: " + article.getTitle());
                 }
 
-                if (!refresh) scrollListener.resetState();
             }
         });
     }
 
-    public void fetchTimelineAsync() {
+    private void fetchTimelineAsync() {
         adapter.clear();
         queryArticles(true, 0);
         swipeContainer.setRefreshing(false);
     }
 
-    public void loadNextData(int page) {
-        queryArticles(false, page);
-    }
 }
 
 

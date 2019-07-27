@@ -3,9 +3,11 @@ package com.codepath.fbu_newsfeed;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -18,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.core.text.HtmlCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -32,6 +36,8 @@ import com.bumptech.glide.request.target.Target;
 import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Adapters.RecommendAdapter;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
+import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
+import com.codepath.fbu_newsfeed.Helpers.ReactionHelper;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
@@ -49,20 +55,22 @@ import com.parse.SaveCallback;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
-    public static final String TAG = "DetailActivity";
+    private static final String TAG = "DetailActivity";
 
-    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
     @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
     @BindView(R.id.ivArticleImage) ImageView ivArticleImage;
     @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
     @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
+    @BindView(R.id.ibReportArticle) ImageButton ibReportArticle;
     @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
     @BindView(R.id.tvLike) TextView tvLike;
     @BindView(R.id.ibReactionDislike) ImageButton ibReactionDislike;
@@ -85,17 +93,17 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.tvSource) TextView tvSource;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
-    Share share;
-    Article article;
-    ParseUser user;
-    User currentUser = (User) ParseUser.getCurrentUser();
+    private Share share;
+    private Article article;
+    private User user;
+    private User currentUser = (User) ParseUser.getCurrentUser();
 
-    ArrayList<Comment> comments;
-    ArrayList<Article> articles;
-    CommentAdapter commentAdapter;
-    RecommendAdapter recommendAdapter;
+    private ArrayList<Comment> comments;
+    private ArrayList<Article> articles;
+    private CommentAdapter commentAdapter;
+    private RecommendAdapter recommendAdapter;
 
-    protected SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,8 +126,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         rvComments.setLayoutManager(linearLayoutManager);
         rvRecommend.setLayoutManager(linearLayoutManagerRecommend);
 
-
-        swipeContainer = findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -127,13 +133,17 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        swipeContainer.setColorSchemeResources(R.color.colorAccentBold, R.color.colorAccentDark);
 
         queryRecommended();
 
+        String username = "username";
+        try {
+            username = user.fetchIfNeeded().getUsername();
+        } catch (ParseException e){
+            Log.e(TAG, "Error in retrieving username from user");
+            e.printStackTrace();
+        }
         tvUsername.setText(user.getUsername());
 
         if (user.getParseFile("profileImage") != null) {
@@ -170,22 +180,32 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         int biasValue = article.getIntBias();
         switch (biasValue) {
-            case 1:  ivBias.setColorFilter(Article.liberalColor);
+            case 1:
+                ivBias.setBackgroundResource(R.drawable.liberal_icon);
                 break;
-            case 2:  ivBias.setColorFilter(Article.slightlyLiberalColor);
+            case 2:
+                ivBias.setBackgroundResource(R.drawable.slightly_liberal_icon);
                 break;
-            case 3:  ivBias.setColorFilter(Article.moderateColor);
+            case 3:
+                ivBias.setBackgroundResource(R.drawable.moderate_icon);
                 break;
-            case 4:  ivBias.setColorFilter(Article.slightlyConservativeColor);
+            case 4:
+                ivBias.setBackgroundResource(R.drawable.slightly_conserv_icon);
                 break;
-            case 5:  ivBias.setColorFilter(Article.conservativeColor);
+            case 5:
+                ivBias.setBackgroundResource(R.drawable.liberal_icon);
+                break;
+            default:
+                ivBias.setBackgroundResource(R.drawable.moderate_icon);
                 break;
         }
 
-        // TODO: connect listener to information button
-
-        tvCaption.setText("@" + share.getUser().getUsername() + ": " + share.getCaption());
-
+        if (!share.getCaption().isEmpty()) {
+            String captionUsername = "<b>@" + share.getUser().getUsername() + ": </b>";
+            tvCaption.setText(Html.fromHtml(captionUsername + share.getCaption(), HtmlCompat.FROM_HTML_MODE_LEGACY));
+        } else {
+            tvCaption.setVisibility(View.GONE);
+        }
         tvUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -200,149 +220,52 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        tvLike.setText(Integer.toString(share.getCount("LIKE")));
-        tvDislike.setText(Integer.toString(share.getCount("DISLIKE")));
-        tvHappy.setText(Integer.toString(share.getCount("HAPPY")));
-        tvSad.setText(Integer.toString(share.getCount("SAD")));
-        tvAngry.setText(Integer.toString(share.getCount("ANGRY")));
+        Map<String, Reaction> reactionMap = ReactionHelper.getReactions(share, ParseUser.getCurrentUser());
 
+        for (int i = 0; i < Reaction.TYPES.length; i++) {
+            final String type = Reaction.TYPES[i];
+            final TextView tv = getTextViewFromReactionType(type);
+            final ImageButton ib = getImageButtonFromReactionType(type);
 
-        ibReactionLike.setOnClickListener(this);
-        ibReactionDislike.setOnClickListener(this);
-        ibReactionHappy.setOnClickListener(this);
-        ibReactionSad.setOnClickListener(this);
-        ibReactionAngry.setOnClickListener(this);
+            tv.setText(String.valueOf(share.getCount(type)));
 
-        ibInformation.setOnClickListener(this);
+            ib.setSelected(false);
+            if (reactionMap != null && reactionMap.get(type) != null)
+                ib.setSelected(true);
 
-        viewArticle.setOnClickListener(this);
-
-        if (isFriends() || user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
-            etComment.setVisibility(View.VISIBLE);
-            btnSubmit.setVisibility(View.VISIBLE);
-            rvComments.setVisibility(View.VISIBLE);
-            btnSubmit.setOnClickListener(new View.OnClickListener() {
+            ib.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String message = etComment.getText().toString();
-                    if (message == null) {
-                        Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
-                    } else {
-                        Comment addedComment = new Comment(message, (User) ParseUser.getCurrentUser(), share);
-                        addedComment.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d("DetailActivity", "Success in saving comment");
-                                    fetchTimelineAsync();
-                                    etComment.setText("");
-                                    etComment.clearFocus();
-                                    etComment.setEnabled(false);
-                                    return;
-                                } else {
-                                    Log.e("DetailActivity", "Error in creating comment");
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-
-                        createNotification("COMMENT", share);
-                    }
+                    updateReactionText(type, share, currentUser, tv, ib);
                 }
             });
-        } else {
-            etComment.setVisibility(View.INVISIBLE);
-            btnSubmit.setVisibility(View.INVISIBLE);
-            rvComments.setVisibility(View.GONE);
-            btnSubmit.setOnClickListener(null);
-
         }
 
+        ibReportArticle.setOnClickListener(this);
+        ibInformation.setOnClickListener(this);
+        viewArticle.setOnClickListener(this);
+
+        setUpFriendPermissions();
         setSupportActionBar(toolbar);
-        queryComments(true);
+        queryComments();
 
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ibReactionLike:
-                Reaction likeReaction = getReaction("LIKE", share, currentUser);
-                if (likeReaction != null) {
-                    int count = destroyReaction(likeReaction, "LIKE", share);
-                    tvLike.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("LIKE", share);
-                    tvLike.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
+            case R.id.ibReportArticle:
+                reportArticle();
                 break;
-
-            case R.id.ibReactionDislike:
-                Reaction dislikeReaction = getReaction("DISLIKE", share, currentUser);
-                if (dislikeReaction != null) {
-                    int count = destroyReaction(dislikeReaction, "DISLIKE", share);
-                    tvDislike.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("DISLIKE", share);
-                    tvDislike.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-                break;
-
-            case R.id.ibReactionHappy:
-                Reaction happyReaction = getReaction("HAPPY", share, currentUser);
-                if (happyReaction != null) {
-                    int count = destroyReaction(happyReaction, "HAPPY", share);
-                    tvHappy.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("HAPPY", share);
-                    tvHappy.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-                break;
-
-            case R.id.ibReactionSad:
-                Reaction sadReaction = getReaction("SAD", share, currentUser);
-                if (sadReaction != null) {
-                    int count = destroyReaction(sadReaction, "SAD", share);
-                    tvSad.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("SAD", share);
-                    tvSad.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-                break;
-
-            case R.id.ibReactionAngry:
-                Reaction angryReaction = getReaction("ANGRY", share, currentUser);
-                if (angryReaction != null) {
-                    int count = destroyReaction(angryReaction, "ANGRY", share);
-                    tvAngry.setText(Integer.toString(count));
-                } else {
-                    int count = createReaction("ANGRY", share);
-                    tvAngry.setText(Integer.toString(count));
-
-                    createNotification("REACTION", share);
-                }
-                break;
-
             case R.id.ibInformation:
                 Log.d(TAG, "Clicked information");
                 showInformationDialog();
                 break;
-
             case R.id.viewArticle:
                 Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
                 intent.putExtra("article", (Serializable) article);
                 startActivity(intent);
                 break;
-
-
         }
 
     }
@@ -355,10 +278,55 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         return true;
     }
 
+    private void setUpFriendPermissions() {
+        if (isFriends() || user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+            etComment.setVisibility(View.VISIBLE);
+            btnSubmit.setVisibility(View.VISIBLE);
+            rvComments.setVisibility(View.VISIBLE);
+            btnSubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    String message = etComment.getText().toString();
+                    if (message == null) {
+                        Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
+                    } else {
+                        Comment addedComment = new Comment(message, (User) ParseUser.getCurrentUser(), share);
+                        addedComment.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Log.d("DetailActivity", "Success in saving comment");
+                                    fetchTimelineAsync();
+                                    etComment.setText("");
+                                    etComment.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                                    return;
+                                } else {
+                                    Log.e("DetailActivity", "Error in creating comment");
+                                    e.printStackTrace();
+                                    Toast.makeText(DetailActivity.this, "Error in submitting comment", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        createNotification("COMMENT", share, message);
+                    }
+                }
+            });
+        } else {
+            etComment.setVisibility(View.INVISIBLE);
+            btnSubmit.setVisibility(View.INVISIBLE);
+            rvComments.setVisibility(View.GONE);
+            btnSubmit.setOnClickListener(null);
+
+        }
+    }
+
     private void showInformationDialog() {
-        FragmentManager fm = getSupportFragmentManager();
+        //FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
         InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
-        informationDialog.show(fm, "fragment_information");
+        informationDialog.show(fragmentTransaction, "fragment_information");
     }
 
     private void goToUser(ParseUser user) {
@@ -395,11 +363,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
     private void queryShare() {
         share = (Share) getIntent().getSerializableExtra("share");
-        user = share.getUser();
+        user = (User) share.getUser();
         article = share.getArticle();
     }
 
-    private void queryComments(final boolean refresh) {
+    private void queryComments() {
         ParseQuery<Comment> commentQuery = ParseQuery.getQuery(Comment.class);
         commentQuery.include(Comment.KEY_SHARE);
         commentQuery.include(Comment.KEY_TEXT);
@@ -420,51 +388,55 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void createNotification(String type, Share share) {
+    private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
+        Reaction reaction = ReactionHelper.getReaction(type, share, currentUser);
+        int count;
+        if (reaction != null) {
+            count = ReactionHelper.destroyReaction(reaction, type, share);
+            imageButton.setSelected(false);
+            deleteNotification("REACTION", share, type);
+        } else {
+            count = ReactionHelper.createReaction(type, share);
+            imageButton.setSelected(true);
+            createNotification("REACTION", share, type);
+        }
+        textView.setText(Integer.toString(count));
+    }
+
+    private void createNotification(String type, Share share, String typeText) {
         Log.d(TAG, "Creating notification of type: " + type);
-        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), (User) share.getUser(), share);
+        User shareUser = (User) share.getUser();
+        if (ParseUser.getCurrentUser().getObjectId().equals(shareUser.getObjectId())) { return; }
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), shareUser, share, typeText);
         notification.saveInBackground();
     }
 
-    private int createReaction(String type, Share share) {
-        Log.d(TAG, "Creating reaction of type: " + type);
-        Reaction newReaction = new Reaction(ParseUser.getCurrentUser(), share, type);
-        newReaction.saveInBackground();
-        int count = share.incrementCount(type);
-        share.saveInBackground();
-        return count;
-    }
+    private void deleteNotification(String type, Share share, String typeText) {
+        ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
 
-    private int destroyReaction(Reaction reaction, String type, Share share) {
-        Log.d(TAG, "Destroying reaction of type: " + type);
-        reaction.deleteInBackground();
-        int count = share.decrementCount(type);
-        share.saveInBackground();
-        return count;
-    }
 
-    private Reaction getReaction(final String type, Share share, ParseUser user) {
-        ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
+        query.whereEqualTo(Notification.KEY_TYPE, type);
+        query.whereEqualTo(Notification.KEY_TYPE_TEXT, typeText);
+        query.whereEqualTo(Notification.KEY_SEND_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Notification.KEY_RECEIVE_USER, share.getUser());
 
-        reactionQuery.include(Reaction.KEY_SHARE);
-        reactionQuery.include(Reaction.KEY_USER);
-
-        reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
-        reactionQuery.whereEqualTo(Reaction.KEY_USER, user);
-        reactionQuery.whereEqualTo(Reaction.KEY_TYPE, type);
+        Notification notification;
 
         try {
-            List<Reaction> result = reactionQuery.find();
+            List<Notification> result = query.find();
             if (result.size() > 0 ) {
-                return result.get(0);
+                notification = result.get(0);
             } else {
-                return null;
+                return;
             }
         } catch (Exception e) {
             Log.d(TAG, "Error finding reactions: " + e.getMessage());
-            return null;
+            return;
         }
+
+        notification.deleteInBackground();
     }
+
 
     private void queryRecommended() {
         final ParseQuery<Article> recommendQuery = ParseQuery.getQuery(Article.class);
@@ -510,19 +482,52 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    public void fetchTimelineAsync() {
+    private void fetchTimelineAsync() {
         commentAdapter.clear();
-        queryComments(true);
+        queryComments();
         swipeContainer.setRefreshing(false);
     }
 
-    public int userReacted(ArrayList<Reaction> reactions, User user) {
-        for (Reaction r : reactions) {
-            if (r.getUser().getObjectId().equals(user.getObjectId())) {
-                return reactions.indexOf(r);
-            }
+    private TextView getTextViewFromReactionType(String type) {
+        switch (type) {
+            case "LIKE":
+                return tvLike;
+            case "DISLIKE":
+                return tvDislike;
+            case "HAPPY":
+                return tvHappy;
+            case "SAD":
+                return tvSad;
+            case "ANGRY":
+                return tvAngry;
+            default:
+                return null;
         }
-        return -1;
+    }
+
+    private ImageButton getImageButtonFromReactionType(String type) {
+        switch (type) {
+            case "LIKE":
+                return ibReactionLike;
+            case "DISLIKE":
+                return ibReactionDislike;
+            case "HAPPY":
+                return ibReactionHappy;
+            case "SAD":
+                return ibReactionSad;
+            case "ANGRY":
+                return ibReactionAngry;
+            default:
+                return null;
+        }
+    }
+
+    private void reportArticle() {
+        //FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+        ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());
+        articleReportDialog.show(fragmentTransaction, "fragment_report");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.codepath.fbu_newsfeed.Fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +11,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -24,21 +27,22 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
-import com.codepath.fbu_newsfeed.EditProfileActivity;
+import com.codepath.fbu_newsfeed.FriendsListActivity;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
+import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.LoginActivity;
 import com.codepath.fbu_newsfeed.Models.Friendship;
+import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
-import com.codepath.fbu_newsfeed.Models.UserReport;
 import com.codepath.fbu_newsfeed.R;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseUser;
 import com.parse.ParseQuery;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,22 +53,24 @@ import butterknife.Unbinder;
 public class ProfileFragment extends Fragment {
     public static final String TAG = "ProfileFragment";
 
-    ParseUser user;
+    private ParseUser user;
 
-    @BindView(R.id.ivProfileImage) ImageView ivProfileImage;
+    @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvFullName) TextView tvFullName;
     @BindView(R.id.tvBio) TextView tvBio;
     @BindView(R.id.tvArticleCount) TextView tvArticleCount;
+    @BindView(R.id.tvFriends) TextView tvFriends;
     @BindView(R.id.btnLogout) Button btnLogout;
     @BindView(R.id.btnRequest) Button btnRequest;
     @BindView(R.id.btnEdit) ImageButton btnEdit;
+    @BindView(R.id.btnUnfriend) ImageButton btnUnfriend;
     @BindView(R.id.btnReport) ImageButton btnReport;
     @BindView(R.id.rvProfilePosts) RecyclerView rvProfilePosts;
 
     private ShareAdapter shareAdapter;
     protected @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
-    protected EndlessRecyclerViewScrollListener scrollListener;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     private Unbinder unbinder;
 
@@ -87,6 +93,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(4).setChecked(true);
 
         String user_id = getArguments().getString("user_id");
 
@@ -114,7 +121,7 @@ public class ProfileFragment extends Fragment {
         this.shareAdapter = new ShareAdapter(mShare);
         rvProfilePosts.setAdapter(this.shareAdapter);
         this.shareAdapter.clear();
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvProfilePosts.setLayoutManager(linearLayoutManager);
 
         queryShares(true, 0);
@@ -127,10 +134,7 @@ public class ProfileFragment extends Fragment {
             }
         });
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        swipeContainer.setColorSchemeResources(R.color.colorAccentBold, R.color.colorAccentDark);
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -138,9 +142,25 @@ public class ProfileFragment extends Fragment {
             }
         };
 
+        ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        });
+
         if (user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             // if profile is for current user
+            tvFriends.setVisibility(View.VISIBLE);
+            tvFriends.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    friendsList();
+                }
+            });
+
             btnEdit.setVisibility(View.VISIBLE);
+            btnUnfriend.setVisibility(View.GONE);
             btnReport.setVisibility(View.GONE);
 
             btnReport.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +172,7 @@ public class ProfileFragment extends Fragment {
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    goToEdit();
+                    editUser();
                 }
             });
             btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -166,6 +186,8 @@ public class ProfileFragment extends Fragment {
             btnReport.setVisibility(View.VISIBLE);
             btnLogout.setVisibility(View.INVISIBLE);
             btnRequest.setVisibility(View.VISIBLE);
+            btnUnfriend.setVisibility(View.GONE);
+            tvFriends.setVisibility(View.GONE);
 
             btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -176,6 +198,23 @@ public class ProfileFragment extends Fragment {
 
             if (isFriends()) {
                 btnRequest.setText("Friends!");
+                btnUnfriend.setVisibility(View.VISIBLE);
+                tvFriends.setVisibility(View.VISIBLE);
+                tvFriends.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        friendsList();
+                    }
+                });
+
+                btnUnfriend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        unfriend();
+                    }
+                });
+
+
             } else if (sentRequest()) {
                 btnRequest.setText("Requested");
             } else if (canAccept()) {
@@ -203,10 +242,31 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         unbinder.unbind();
     }
 
+    private void unfriend() {
+        Friendship friendship = findFriendship();
+        if (friendship != null) {
+            friendship.deleteInBackground(new DeleteCallback() {
+                @Override
+                public void done(ParseException e) {
+                    Toast.makeText(getContext(), "Unfriended @" + user.getUsername(), Toast.LENGTH_SHORT).show();
+                    getFragmentManager()
+                            .beginTransaction()
+                            .detach(ProfileFragment.this)
+                            .attach(ProfileFragment.this)
+                            .commit();
+                }
+            });
+        }
+    }
+
+    private void friendsList() {
+        Intent intent = new Intent(getActivity(), FriendsListActivity.class);
+        intent.putExtra("user_id", user.getObjectId());
+        getActivity().startActivity(intent);
+    }
 
     private void reportUser() {
         FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
@@ -214,6 +274,23 @@ public class ProfileFragment extends Fragment {
         userReportDialog.show(fm, "fragment_user_report");
     }
 
+    private void editUser() {
+        //FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+        EditProfileDialogFragment editProfileDialog = EditProfileDialogFragment.newInstance(user.getObjectId());
+        editProfileDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                getFragmentManager()
+                        .beginTransaction()
+                        .detach(ProfileFragment.this)
+                        .attach(ProfileFragment.this)
+                        .commit();
+            }
+        });
+        editProfileDialog.show(fragmentTransaction, "fragment_edit_profile");
+    }
 
     private void requestFriend(final ParseUser potentialFriend) {
         Friendship friendship = new Friendship(ParseUser.getCurrentUser(), potentialFriend, Friendship.State.Requested);
@@ -229,6 +306,7 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+        createFriendNotification(Notification.FRIEND_REQUEST, (User) potentialFriend);
     }
 
     private void acceptRequest(final ParseUser requestingUser) {
@@ -245,7 +323,9 @@ public class ProfileFragment extends Fragment {
                 btnRequest.setOnClickListener(null);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
+        createFriendNotification(Notification.ACCEPT_REQUEST, (User) requestingUser);
     }
 
     private void logOut() {
@@ -255,12 +335,7 @@ public class ProfileFragment extends Fragment {
         }
         Intent intent = new Intent(getActivity().getApplication(), LoginActivity.class);
         startActivity(intent);
-    }
-
-    private void goToEdit() {
-        Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-        intent.putExtra("user_id", ParseUser.getCurrentUser().getObjectId());
-        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 
     private void fetchTimelineAsync() {
@@ -309,7 +384,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private boolean isFriends() {
+    private Friendship findFriendship() {
         ParseQuery<Friendship> query1 = ParseQuery.getQuery("Friendship");
         query1.whereEqualTo("user1", ParseUser.getCurrentUser());
         query1.whereEqualTo("user2", user);
@@ -327,11 +402,15 @@ public class ProfileFragment extends Fragment {
 
         try {
             List<Friendship> result = mainQuery.find();
-            return result.size() > 0;
+            return result.get(0);
         } catch(Exception e) {
             Log.d("User", "Error: " + e.getMessage());
-            return false;
+            return null;
         }
+    }
+
+    private boolean isFriends() {
+        return findFriendship() != null;
 
     }
 
@@ -367,6 +446,12 @@ public class ProfileFragment extends Fragment {
             return "error";
         }
 
+    }
+
+    private void createFriendNotification(String type, User friend) {
+        Log.d(TAG, "Creating friend notification of type: " + type);
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), friend, type);
+        notification.saveInBackground();
     }
 
 }
