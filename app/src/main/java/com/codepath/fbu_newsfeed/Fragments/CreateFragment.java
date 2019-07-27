@@ -176,8 +176,8 @@ public class CreateFragment extends Fragment {
         ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(2).setChecked(true);
 
         if (url != null) {
-            new Content().execute(url);
             etUrlCreate.setText(url);
+            new Content().execute(url);
         }
         articles = new ArrayList<>();
         articleList = new ArrayList<>();
