@@ -6,6 +6,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
@@ -28,6 +30,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.Serializable;
@@ -85,6 +88,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         @BindView(R.id.tvDescriptionNotif) TextView tvDescriptionNotif;
         @BindView(R.id.ivImageNotif) ImageView ivImageNotif;
         @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImageNotif;
+        @BindView(R.id.btnFriendStatus) Button btnFriendStatus;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -96,9 +100,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             String username = "<b>@" + sender.getUsername() + "</b>";
             String typeText = notification.getTypeText();
             if (notification.getType().equals(Notification.COMMENT) || notification.getType().equals(Notification.REACTION)) {
+                btnFriendStatus.setVisibility(View.INVISIBLE);
+                ivImageNotif.setVisibility(View.VISIBLE);
                 tvDescriptionNotif.setText(Html.fromHtml(username + notification.notificationText(notification.getType()) + ": " + typeText, HtmlCompat.FROM_HTML_MODE_LEGACY));
             } else {
+                btnFriendStatus.setVisibility(View.VISIBLE);
+                ivImageNotif.setVisibility(View.INVISIBLE);
                 tvDescriptionNotif.setText(Html.fromHtml(username + notification.notificationText(notification.getType()), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                String friendStatus = getFriendStatus(notification.getSendUser(), notification.getReceiveUser());
+                if (friendStatus != null) {
+                    btnFriendStatus.setText(friendStatus);
+                }
             }
 
             final Share share = notification.getShare();
@@ -115,7 +127,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     }
                 });
             } else {
-                ivImageNotif.setVisibility(View.GONE);
+                ivImageNotif.setVisibility(View.INVISIBLE);
             }
 
             User user = notification.getSendUser();
@@ -141,5 +153,22 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         if (user.equals(ParseUser.getCurrentUser()))
             ((HomeActivity) context).bottomNavigationView.setSelectedItemId(R.id.action_profile);
         ((HomeActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user.getObjectId())).addToBackStack(ProfileFragment.TAG).commit();
+    }
+
+    public String getFriendStatus(User sender, User receiver) {
+        ParseQuery<Friendship> query = new ParseQuery<Friendship>(Friendship.class);
+        query.whereEqualTo(Friendship.KEY_USER1, sender);
+        query.whereEqualTo(Friendship.KEY_USER2, receiver);
+        try {
+            Friendship friendship = query.getFirst();
+            if (friendship.getState().equals(Friendship.State.Requested)) {
+                return "Requested";
+            } else {
+                return "Friends";
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
