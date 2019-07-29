@@ -19,7 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -241,6 +240,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             });
         }
 
+        tvArticleTitle.setOnClickListener(this);
         ibReportArticle.setOnClickListener(this);
         ibInformation.setOnClickListener(this);
         viewArticle.setOnClickListener(this);

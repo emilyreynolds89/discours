@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,9 +39,9 @@ import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
-import com.parse.ParseUser;
-import com.parse.ParseQuery;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
@@ -200,6 +201,16 @@ public class ProfileFragment extends Fragment {
                 btnRequest.setText("Friends!");
                 btnUnfriend.setVisibility(View.VISIBLE);
                 tvFriends.setVisibility(View.VISIBLE);
+                tvFriends.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
+                            view.setSelected(true);
+                        }
+                        view.setSelected(false);
+                        return false;
+                    }
+                });
                 tvFriends.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -266,6 +277,7 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(getActivity(), FriendsListActivity.class);
         intent.putExtra("user_id", user.getObjectId());
         getActivity().startActivity(intent);
+        (getActivity()).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 
     private void reportUser() {
