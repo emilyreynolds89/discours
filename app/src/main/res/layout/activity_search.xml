@@ -39,18 +39,21 @@
             android:id="@+id/tabArticles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:text="Articles" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabUsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:text="Users" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabTags"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:text="Tags" />
 
     </com.google.android.material.tabs.TabLayout>

@@ -342,7 +342,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_accent_button"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/lato"
         android:text="View Discussion"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
