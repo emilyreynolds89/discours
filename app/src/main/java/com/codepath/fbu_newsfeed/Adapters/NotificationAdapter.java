@@ -130,11 +130,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 ivImageNotif.setVisibility(View.INVISIBLE);
             }
 
-            User user = notification.getSendUser();
+            final User user = notification.getSendUser();
             ParseFile profileImage = user.getProfileImage();
             if (profileImage != null) {
                 Glide.with(context).load(profileImage.getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImageNotif);
             }
+
+            ivProfileImageNotif.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goToUser(user);
+                }
+            });
 
         }
     }
