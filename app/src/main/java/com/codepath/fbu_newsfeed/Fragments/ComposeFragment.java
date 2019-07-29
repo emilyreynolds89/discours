@@ -45,7 +45,6 @@ public class ComposeFragment extends Fragment {
     @BindView(R.id.ibInformation) ImageButton ibInformation;
     @BindView(R.id.etCaptionCreate) EditText etCaption;
     @BindView(R.id.btShareArticleCreate) Button btnShare;
-    @BindView(R.id.etURLCreate) EditText etUrl;
     private Unbinder unbinder;
 
     @Nullable
@@ -62,8 +61,6 @@ public class ComposeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //Article article = (Article) getActivity().getIntent().getSerializableExtra("article");
-        //article = (Article) getArguments().getSerializable("article");
         ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(2).setChecked(true);
 
         final String factCheck = article.getTruth();
