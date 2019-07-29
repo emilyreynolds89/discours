@@ -30,7 +30,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.viewArticle) View viewArticle;
-    @BindView(R.id.ivArtcleImageDetail) ImageView ivArticleImageDetail;
+    @BindView(R.id.ivArticleImageDetail) ImageView ivArticleImageDetail;
     @BindView(R.id.tvArticleTitleDetail) TextView tvArticleTitleDetail;
     @BindView(R.id.tvArticleSummaryDetail) TextView tvArticleSummaryDetail;
     @BindView(R.id.tvSourceDetail) TextView tvArticleSourceDetail;

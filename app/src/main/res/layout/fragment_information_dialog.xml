@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/lato"
         android:text="@string/bias_explanation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBiasHeader" />
@@ -20,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato"
         android:text="Truth"
         android:textColor="@color/colorHeadlineText"
         android:textSize="16sp"
@@ -31,7 +33,7 @@
         android:id="@+id/tvBiasHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:fontFamily="@font/lato"
         android:text="Bias"
         android:textColor="@color/colorHeadlineText"
         android:textSize="16sp"
@@ -44,12 +46,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/lato"
         android:text="@string/truth_explanation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTruthHeader" />
 
     <TextView
         android:id="@+id/tvDisclaimer"
+        android:fontFamily="@font/lato"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"

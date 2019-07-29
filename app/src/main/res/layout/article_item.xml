@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="8dp"
     android:background="@android:color/white"
     android:orientation="vertical"
-    android:paddingBottom="16dp">
+    android:paddingBottom="12dp">
 
     <ImageView
         android:id="@+id/ivProfileImageNotif"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginLeft="4dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:adjustViewBounds="false"
         app:layout_constraintStart_toStartOf="@+id/viewArticle"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,47 +26,46 @@
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
         android:fontFamily="@font/lato"
         android:text="username"
         android:textColor="#3B3B3B"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ivProfileImageNotif"
         app:layout_constraintStart_toEndOf="@+id/ivProfileImageNotif"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/ivProfileImageNotif" />
 
     <TextView
         android:id="@+id/tvTimeStamp"
         android:layout_width="100dp"
         android:layout_height="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="4dp"
         android:fontFamily="@font/lato"
         android:gravity="right|center_vertical"
         android:text="h"
         android:textColor="#626262"
-        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/tvUsername"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/tvUsername"
+        app:layout_constraintEnd_toEndOf="@+id/viewArticle" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewArticle"
-        android:layout_width="370dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
         android:background="@drawable/border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsername">
+        app:layout_constraintTop_toBottomOf="@+id/ivProfileImageNotif">
 
         <ImageView
             android:id="@+id/ivArticleImage"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="250dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="@+id/viewArticle"
             app:layout_constraintStart_toStartOf="@+id/viewArticle"
@@ -74,9 +74,11 @@
 
         <TextView
             android:id="@+id/tvArticleTitle"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
             android:fontFamily="@font/merriweather_light"
             android:text="Title"
             android:textColor="@color/colorHeadlineText"
@@ -89,9 +91,11 @@
 
         <TextView
             android:id="@+id/tvArticleSummary"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
             android:fontFamily="@font/lato"
             android:text="Article summary"
             android:textColor="@color/colorLightText"
@@ -136,12 +140,11 @@
             android:id="@+id/ibReportArticle"
             android:layout_width="20dp"
             android:layout_height="18dp"
-            android:layout_marginEnd="12dp"
             android:layout_marginBottom="10dp"
             android:background="@android:color/transparent"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvArticleSummary"
             app:srcCompat="@drawable/report" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -150,7 +153,8 @@
         android:id="@+id/ibReactionLike"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="@+id/viewArticle"
@@ -167,6 +171,7 @@
         android:text="#"
         android:textColor="@color/colorLightText"
         android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/ibReactionLike"
         app:layout_constraintStart_toStartOf="@+id/ibReactionLike"
         app:layout_constraintTop_toBottomOf="@+id/ibReactionLike" />
 
@@ -175,7 +180,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         app:layout_constraintStart_toEndOf="@+id/ibReactionLike"
@@ -192,6 +197,7 @@
         android:text="#"
         android:textColor="@color/colorLightText"
         android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/ibReactionDislike"
         app:layout_constraintStart_toStartOf="@+id/ibReactionDislike"
         app:layout_constraintTop_toBottomOf="@+id/ibReactionDislike" />
 
@@ -200,7 +206,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         app:layout_constraintStart_toEndOf="@+id/ibReactionDislike"
@@ -217,6 +223,7 @@
         android:text="#"
         android:textColor="@color/colorLightText"
         android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/ibReactionHappy"
         app:layout_constraintStart_toStartOf="@+id/ibReactionHappy"
         app:layout_constraintTop_toBottomOf="@+id/ibReactionHappy" />
 
@@ -225,7 +232,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         app:layout_constraintStart_toEndOf="@+id/ibReactionHappy"
@@ -242,6 +249,7 @@
         android:text="#"
         android:textColor="@color/colorLightText"
         android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/ibReactionSad"
         app:layout_constraintStart_toStartOf="@+id/ibReactionSad"
         app:layout_constraintTop_toBottomOf="@+id/ibReactionSad" />
 
@@ -250,7 +258,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         app:layout_constraintStart_toEndOf="@+id/ibReactionSad"
@@ -267,6 +275,7 @@
         android:text="#"
         android:textColor="@color/colorLightText"
         android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/ibReactionAngry"
         app:layout_constraintStart_toStartOf="@+id/ibReactionAngry"
         app:layout_constraintTop_toBottomOf="@+id/ibReactionAngry" />
 
@@ -275,7 +284,6 @@
         android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
         android:fontFamily="@font/lato"
         android:gravity="right|center_vertical"
         android:text="TextView"
@@ -283,44 +291,46 @@
         android:textColor="@color/colorHeadlineText"
         android:textSize="12sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tvAngry"
         app:layout_constraintStart_toEndOf="@+id/ibReactionAngry"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle" />
+        app:layout_constraintTop_toTopOf="@+id/ibReactionAngry" />
 
     <ImageView
         android:id="@+id/ivBias"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvFactRating"
         app:layout_constraintEnd_toStartOf="@+id/ibInformation"
         app:layout_constraintStart_toEndOf="@+id/tvFactRating"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle" />
+        app:layout_constraintTop_toTopOf="@+id/tvFactRating" />
 
     <ImageButton
         android:id="@+id/ibInformation"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBias"
         app:layout_constraintEnd_toEndOf="@+id/viewArticle"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/ivBias"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+        app:layout_constraintTop_toTopOf="@+id/ivBias"
         app:srcCompat="@drawable/question" />
 
     <TextView
         android:id="@+id/tvCaption"
-        android:layout_width="360dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="@font/lato"
         android:text="TextView"
         android:textAllCaps="false"
         android:textColor="@color/colorBaseText"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+        app:layout_constraintEnd_toEndOf="@+id/ibInformation"
         app:layout_constraintStart_toStartOf="@+id/viewArticle"
         app:layout_constraintTop_toBottomOf="@+id/tvLike" />
 
@@ -329,10 +339,10 @@
         android:layout_width="180dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_accent_button"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/lato"
         android:text="View Discussion"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
