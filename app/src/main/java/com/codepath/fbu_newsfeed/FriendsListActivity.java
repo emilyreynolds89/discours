@@ -75,7 +75,7 @@ public class FriendsListActivity extends AppCompatActivity {
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+                rvFriends.smoothScrollToPosition(0);
             }
         });
 
