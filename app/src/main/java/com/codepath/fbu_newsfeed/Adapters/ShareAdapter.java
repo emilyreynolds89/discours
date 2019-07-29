@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -152,6 +153,16 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             holder.tvCaption.setVisibility(View.GONE);
         }
 
+        holder.tvArticleTitle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
+                    view.setSelected(true);
+                }
+                view.setSelected(false);
+                return false;
+            }
+        });
 
         holder.tvUsername.setOnClickListener(new View.OnClickListener() {
             @Override

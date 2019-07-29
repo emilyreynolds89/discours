@@ -49,6 +49,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
     public void onBindViewHolder(@NonNull TrendsAdapter.ViewHolder holder, int position) {
         Article article = articles.get(position);
         holder.bind(article);
+
     }
 
     @Override
@@ -100,6 +101,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                     Intent intent = new Intent(context, ArticleDetailActivity.class);
                     intent.putExtra("article", (Serializable) article);
                     context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 }
 
             }
@@ -144,6 +146,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                     Glide.with(context.getApplicationContext()).load(image.getUrl()).into(ivArticleImage);
                 }
             }
+
         }
         }
 
