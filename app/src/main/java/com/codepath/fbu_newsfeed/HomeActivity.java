@@ -52,38 +52,67 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
+                //fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
 
+                boolean swipeRight = true;
+
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flContainer);
                 Fragment fragment = new FeedFragment();
-                String fragmentTag = FeedFragment.TAG;
+                String fragmentTag = null;
                 switch (menuItem.getItemId()) {
                     case R.id.action_home:
-                        fragment = new FeedFragment();
-                        fragmentTag = FeedFragment.TAG;
+                        if (!(currentFragment instanceof FeedFragment)) {
+                            swipeRight = false;
+                            fragment = new FeedFragment();
+                            fragmentTag = FeedFragment.TAG;
+                        }
                         break;
                     case R.id.action_trending:
-                        fragment = new TrendsFragment();
-                        fragmentTag = TrendsFragment.TAG;
+                        if (!(currentFragment instanceof TrendsFragment)) {
+                            if (currentFragment instanceof CreateFragment || currentFragment instanceof NotificationFragment || currentFragment instanceof ProfileFragment) {
+                                swipeRight = false;
+                            }
+                            fragment = new TrendsFragment();
+                            fragmentTag = TrendsFragment.TAG;
+                        }
                         break;
                     case R.id.action_compose:
-                        fragment = new CreateFragment();
-                        fragmentTag = CreateFragment.TAG;
+                        if (!(currentFragment instanceof CreateFragment)) {
+                            if (currentFragment instanceof NotificationFragment || currentFragment instanceof ProfileFragment) {
+                                swipeRight = false;
+                            }
+                            fragment = new CreateFragment();
+                            fragmentTag = CreateFragment.TAG;
+                        }
                         break;
                     case R.id.action_notification:
-                        fragment = new NotificationFragment();
-                        fragmentTag = NotificationFragment.TAG;
+                        if (!(currentFragment instanceof NotificationFragment)) {
+                            if (currentFragment instanceof ProfileFragment) {
+                                swipeRight = false;
+                            }
+                            fragment = new NotificationFragment();
+                            fragmentTag = NotificationFragment.TAG;
+                        }
                         break;
                     case R.id.action_profile:
-                        fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser().getObjectId());
-                        fragmentTag = ProfileFragment.TAG;
+                        if (!(currentFragment instanceof ProfileFragment)) {
+                            fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser().getObjectId());
+                            fragmentTag = ProfileFragment.TAG;
+                        }
                         break;
                     default:
                         break;
                 }
-                if (!Objects.equals(fragmentTag, FeedFragment.TAG)) {
+                if (swipeRight) {
+                    fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
+                } else {
+                    fragmentTransaction.setCustomAnimations(R.anim.left_in, R.anim.right_out, R.anim.left_in, R.anim.right_out);
+                }
+
+                if (!Objects.equals(fragmentTag, FeedFragment.TAG) && fragmentTag != null) {
                     fragmentTransaction.replace(R.id.flContainer, fragment).addToBackStack(fragmentTag).commit();
                     //fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(fragmentTag).commit();
-                } else {
+                } else if (fragmentTag != null){
                     fragmentTransaction.replace(R.id.flContainer, fragment).addToBackStack(null).commit();
                     //fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
                 }
