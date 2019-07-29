@@ -3,8 +3,10 @@ package com.codepath.fbu_newsfeed.Fragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,6 +40,7 @@ public class FeedFragment extends Fragment {
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     @BindView(R.id.rvShares) RecyclerView rvShares;
     @BindView(R.id.tvNoContent) TextView tvNoContent;
+    @BindView(R.id.filterSpinner) Spinner filterSpinner;
 
     private ArrayList<Share> shares;
     private ShareAdapter shareAdapter;
@@ -56,6 +59,7 @@ public class FeedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @NonNull Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
         ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(0).setChecked(true);
 
         shares = new ArrayList<Share>();
@@ -98,9 +102,31 @@ public class FeedFragment extends Fragment {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.miFilter:
+                toggleFilter();
+                if ((filterSpinner.getVisibility() == View.GONE) )
+                    item.setChecked(true);
+                else
+                    item.setChecked(false);
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private void toggleFilter() {
+        if (filterSpinner.getVisibility() == View.GONE) {
+            filterSpinner.setVisibility(View.VISIBLE);
+        } else {
+            filterSpinner.setVisibility(View.GONE);
+        }
     }
 
     private void queryShares(int offset) {
