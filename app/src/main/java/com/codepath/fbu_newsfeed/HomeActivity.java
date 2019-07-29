@@ -163,11 +163,6 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
-        finish();
-    }
-
     private void onSharedIntent() {
         Intent receivedIntent = getIntent();
         Log.e(TAG, receivedIntent.toString());

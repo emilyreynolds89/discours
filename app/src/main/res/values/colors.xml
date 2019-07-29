@@ -12,5 +12,6 @@
     <color name="colorAccentDark">#2BB79E</color>
     <color name="colorAccentBold">#70E7CA</color>
     <color name="colorAccentLight">#BEF8EA</color>
+    <color name="colorAccentExLight">#CEFCF0</color>
     <color name="colorBorder">#DBDBDB</color>
 </resources>
