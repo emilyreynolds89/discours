@@ -69,6 +69,7 @@ public class ReportUserFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
         TYPE_LIST = new ArrayList<>();
         TYPE_LIST.add("Fake Account");

@@ -91,6 +91,7 @@ public class EditProfileDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
         try {
             mUser = getUser(getArguments().getString("user_id"));
