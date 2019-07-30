@@ -145,7 +145,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 holder.ivBias.setBackgroundResource(R.drawable.slightly_conserv_icon);
                 break;
             case 5:
-                holder.ivBias.setBackgroundResource(R.drawable.liberal_icon);
+                holder.ivBias.setBackgroundResource(R.drawable.conserv_icon);
                 break;
             default:
                 holder.ivBias.setBackgroundResource(R.drawable.moderate_icon);
