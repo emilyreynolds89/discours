@@ -12,14 +12,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.ArticleDetailActivity;
+import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
+import com.codepath.fbu_newsfeed.TagActivity;
 import com.parse.ParseFile;
 
 import java.io.Serializable;
@@ -67,6 +70,8 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
         ImageButton ibReportArticle;
         @BindView(R.id.ivArticleImageTrends)
         ImageView ivArticleImage;
+        @BindView(R.id.cvArticleImage)
+        CardView cvArticleImage;
         @BindView(R.id.tvArticleTitleTrends)
         TextView tvTitle;
         @BindView(R.id.tvArticleSummaryTrends)
@@ -84,7 +89,10 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
             ButterKnife.bind(this, itemView);
             ibReportArticle.setOnClickListener(this);
-            itemView.setOnClickListener(this);
+            tvTagTrends.setOnClickListener(this);
+            cvArticleImage.setOnClickListener(this);
+            tvSummary.setOnClickListener(this);
+            tvTitle.setOnClickListener(this);
 
         }
 
@@ -95,15 +103,26 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             if (position != RecyclerView.NO_POSITION) {
                 Article article = articles.get(position);
 
-                if (view.getId() == R.id.ibReportArticle) {
-                    reportArticle(article);
-                } else {
-                    Intent intent = new Intent(context, ArticleDetailActivity.class);
-                    intent.putExtra("article", (Serializable) article);
-                    context.startActivity(intent);
-                    ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                }
+                switch(view.getId()) {
+                    case R.id.ibReportArticle:
+                        reportArticle(article);
+                        break;
+                    case R.id.tvTagTrends:
+                        Intent intent = new Intent(context, TagActivity.class);
+                        intent.putExtra("tag", article.getTag());
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                        break;
+                    case R.id.cvArticleImage:
+                    case R.id.tvArticleSummaryTrends:
+                    case R.id.tvArticleTitleTrends:
+                        intent = new Intent(context, ArticleDetailActivity.class);
+                        intent.putExtra("article", (Serializable) article);
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                        break;
 
+                }
             }
         }
 
