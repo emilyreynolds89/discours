@@ -14,4 +14,5 @@
     <color name="colorAccentLight">#BEF8EA</color>
     <color name="colorAccentExLight">#CEFCF0</color>
     <color name="colorBorder">#DBDBDB</color>
+    <color name="colorBlack">#000000</color>
 </resources>

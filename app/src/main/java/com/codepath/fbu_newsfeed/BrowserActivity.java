@@ -2,8 +2,10 @@ package com.codepath.fbu_newsfeed;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.codepath.fbu_newsfeed.Models.Article;
 
@@ -27,6 +30,10 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     public @BindView(R.id.toolbar) Toolbar toolbar;
     public @BindView(R.id.btnShare)
     Button btnShare;
+    @BindView(R.id.ibBack)
+    ImageButton ibBack;
+    @BindView(R.id.ibForward) ImageButton ibForward;
+    @BindView(R.id.ibRefresh) ImageButton ibRefresh;
 
     private String url;
     private Article article;
@@ -48,11 +55,32 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                if (view.canGoBack()) {
+                    ibBack.setColorFilter(ContextCompat.getColor(BrowserActivity.this, R.color.colorBlack));
+                } else {
+                    ibBack.setColorFilter(ContextCompat.getColor(BrowserActivity.this, R.color.colorModerate));
+                }
+
+                if (view.canGoForward()) {
+                    ibForward.setColorFilter(ContextCompat.getColor(BrowserActivity.this, R.color.colorBlack));
+                } else {
+                    ibForward.setColorFilter(ContextCompat.getColor(BrowserActivity.this, R.color.colorModerate));
+                }
+
+            }
+        });
 
         webView.loadUrl(url);
 
         btnShare.setOnClickListener(this);
+        ibBack.setOnClickListener(this);
+        ibForward.setOnClickListener(this);
+        ibRefresh.setOnClickListener(this);
+
+
 
     }
 
@@ -71,6 +99,17 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                 Intent intent = new Intent(this, HomeActivity.class);
                 intent.putExtra("article", (Serializable) article);
                 startActivity(intent);
+                break;
+            case R.id.ibBack:
+                if (webView.canGoBack())
+                    webView.goBack();
+                break;
+            case R.id.ibForward:
+                if (webView.canGoForward())
+                    webView.goForward();
+                break;
+            case R.id.ibRefresh:
+                webView.reload();
                 break;
         }
     }
