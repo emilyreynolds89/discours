@@ -1,6 +1,5 @@
 package com.codepath.fbu_newsfeed;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -224,14 +223,14 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        Map<String, Reaction> reactionMap = ReactionHelper.getReactions(share, ParseUser.getCurrentUser());
+        Map<Reaction.ReactionType, Reaction> reactionMap = ReactionHelper.getReactions(share, ParseUser.getCurrentUser());
 
         for (int i = 0; i < Reaction.TYPES.length; i++) {
-            final String type = Reaction.TYPES[i];
+            final Reaction.ReactionType type = Reaction.TYPES[i];
             final TextView tv = getTextViewFromReactionType(type);
             final ImageButton ib = getImageButtonFromReactionType(type);
 
-            tv.setText(String.valueOf(share.getCount(type)));
+            tv.setText(String.valueOf(share.getCount(Reaction.enumToString(type))));
 
             ib.setSelected(false);
             if (reactionMap != null && reactionMap.get(type) != null)
@@ -454,17 +453,17 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
+    private void updateReactionText(Reaction.ReactionType type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
         Reaction reaction = ReactionHelper.getReaction(type, share, currentUser);
         int count;
         if (reaction != null) {
             count = ReactionHelper.destroyReaction(reaction, type, share);
             imageButton.setSelected(false);
-            deleteNotification("REACTION", share, type);
+            deleteNotification("REACTION", share, Reaction.enumToString(type));
         } else {
             count = ReactionHelper.createReaction(type, share);
             imageButton.setSelected(true);
-            createNotification("REACTION", share, type);
+            createNotification("REACTION", share, Reaction.enumToString(type));
         }
         textView.setText(Integer.toString(count));
     }
@@ -552,34 +551,34 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         swipeContainer.setRefreshing(false);
     }
 
-    private TextView getTextViewFromReactionType(String type) {
+    private TextView getTextViewFromReactionType(Reaction.ReactionType type) {
         switch (type) {
-            case "LIKE":
+            case LIKE:
                 return tvLike;
-            case "DISLIKE":
+            case DISLIKE:
                 return tvDislike;
-            case "HAPPY":
+            case HAPPY:
                 return tvHappy;
-            case "SAD":
+            case SAD:
                 return tvSad;
-            case "ANGRY":
+            case ANGRY:
                 return tvAngry;
             default:
                 return null;
         }
     }
 
-    private ImageButton getImageButtonFromReactionType(String type) {
+    private ImageButton getImageButtonFromReactionType(Reaction.ReactionType type) {
         switch (type) {
-            case "LIKE":
+            case LIKE:
                 return ibReactionLike;
-            case "DISLIKE":
+            case DISLIKE:
                 return ibReactionDislike;
-            case "HAPPY":
+            case HAPPY:
                 return ibReactionHappy;
-            case "SAD":
+            case SAD:
                 return ibReactionSad;
-            case "ANGRY":
+            case ANGRY:
                 return ibReactionAngry;
             default:
                 return null;
