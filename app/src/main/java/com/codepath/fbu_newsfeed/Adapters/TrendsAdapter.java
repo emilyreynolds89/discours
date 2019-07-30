@@ -18,9 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.ArticleDetailActivity;
-import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.R;
 import com.codepath.fbu_newsfeed.TagActivity;
 import com.parse.ParseFile;
@@ -130,7 +130,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             tvTitle.setText(article.getTitle());
             tvSummary.setText(article.getSummary());
             tvSource.setText(article.getSource());
-            tvFactRatingTrends.setText(article.getTruth());
+            tvFactRatingTrends.setText(Fact.enumToString(article.getTruth()));
             tvTagTrends.setText(article.getTag());
 
             int biasValue = article.getIntBias();

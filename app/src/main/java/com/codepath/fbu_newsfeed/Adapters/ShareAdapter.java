@@ -32,6 +32,7 @@ import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Helpers.ReactionHelper;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
@@ -127,7 +128,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             });
         }
 
-        holder.tvFactRating.setText(article.getTruth());
+        holder.tvFactRating.setText(Fact.enumToString(article.getTruth()));
 
         int biasValue = article.getIntBias();
         switch (biasValue) {

@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Helpers.JSoupResult;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.R;
@@ -151,7 +152,7 @@ public class CreateFragment extends Fragment {
             //Bitmap myBitmap = getBitmapFromURL(jsoupResult.getImageUrl());
             //ParseFile imageParse = getParseFileFromBitmap(myBitmap);
 
-            selectedArticle = new Article(urlTest, title, jsoupResult.getImageUrl(), description, Article.biasIntToEnum(intBias), strFact, source, "POLITICS");
+            selectedArticle = new Article(urlTest, title, jsoupResult.getImageUrl(), description, Article.biasIntToEnum(intBias), Fact.stringToEnum(strFact), source, "POLITICS");
             selectedArticle.saveInBackground();
         }
     }
@@ -210,7 +211,7 @@ public class CreateFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 Log.d("CreateFragment", "Selected item at " + position);
                 if (!articleList.isEmpty()) {
-                    tvFactCheckCreate.setText(articles.get(position).getTruth());
+                    tvFactCheckCreate.setText(Fact.enumToString(articles.get(position).getTruth()));
                     tvArticleTitleCreate.setText(articles.get(position).getTitle());
                     ParseFile imageFile = articles.get(position).getImage();
 

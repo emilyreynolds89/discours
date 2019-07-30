@@ -34,7 +34,7 @@ public class Article extends ParseObject implements Serializable {
     private ParseFile image;
     private String summary;
     private Bias bias;
-    private String truth;
+    private Fact.TruthLevel truth;
     private String tag;
     private String source;
     private String imageUrl;
@@ -45,7 +45,7 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public Article(String url, String title, ParseFile image,
-                   String summary, Bias bias, String truth, String source, String tag) {
+                   String summary, Bias bias, Fact.TruthLevel truth, String source, String tag) {
         super();
         this.url = url;
         put(KEY_URL, url);
@@ -70,7 +70,7 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public Article(String url, String title, String imageUrl,
-                   String summary, Bias bias, String truth, String source, String tag) {
+                   String summary, Bias bias, Fact.TruthLevel truth, String source, String tag) {
         super();
         this.url = url;
         put(KEY_URL, url);
@@ -159,13 +159,13 @@ public class Article extends ParseObject implements Serializable {
     }
 
 
-    public String getTruth() {
-        return getString(KEY_TRUTH);
+    public Fact.TruthLevel getTruth() {
+        return Fact.stringToEnum(getString(KEY_TRUTH));
     }
 
-    public void setTruth(String truth) {
+    public void setTruth(Fact.TruthLevel truth) {
         this.truth = truth;
-        put(KEY_TRUTH, truth);
+        put(KEY_TRUTH, Fact.enumToString(truth));
     }
 
     public String getSource() {
