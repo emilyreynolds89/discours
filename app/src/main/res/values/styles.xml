@@ -14,4 +14,10 @@
         <item name="android:windowExitAnimation">@anim/fadeout</item>
     </style>
 
+    <style name="HeadlineTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/merriweather_light</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorHeadlineText</item>
+    </style>
+
 </resources>

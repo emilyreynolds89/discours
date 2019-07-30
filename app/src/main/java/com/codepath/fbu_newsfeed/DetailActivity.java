@@ -471,13 +471,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     return;
                 }
 
-                articles.addAll(newArticles);
-
-                for (int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
+                for (int i = 0; i < newArticles.size(); i++) {
+                    Article article = newArticles.get(i);
                     Log.d("TrendsQuery", "Article: " + article.getTitle());
                 }
-                recommendAdapter.notifyDataSetChanged();
+                recommendAdapter.addAll(newArticles);
             }
         });
     }
