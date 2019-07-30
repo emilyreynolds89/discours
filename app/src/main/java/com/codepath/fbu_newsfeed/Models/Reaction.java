@@ -8,7 +8,7 @@ import com.parse.ParseUser;
 public class Reaction extends ParseObject {
 
     // types are : LIKE, DISLIKE, HAPPY, SAD, ANGRY
-    public static final String TYPES[] = {"LIKE", "DISLIKE", "HAPPY", "SAD", "ANGRY"};
+    public static final ReactionType TYPES[] = {ReactionType.LIKE, ReactionType.DISLIKE, ReactionType.HAPPY, ReactionType.SAD, ReactionType.ANGRY};
 
     public static final String KEY_USER = "user";
     public static final String KEY_SHARE = "share";
@@ -16,13 +16,17 @@ public class Reaction extends ParseObject {
 
     private ParseUser user;
     private Share share;
-    private String type;
+    private ReactionType type;
+
+    public enum ReactionType {
+        LIKE, DISLIKE, HAPPY, SAD, ANGRY
+    }
 
     public Reaction() {
         super();
     }
 
-    public Reaction(ParseUser user, Share share, String type) {
+    public Reaction(ParseUser user, Share share, ReactionType type) {
         super();
 
         this.user = user;
@@ -30,7 +34,7 @@ public class Reaction extends ParseObject {
         this.share = share;
         put(KEY_SHARE, share);
         this.type = type;
-        put(KEY_TYPE, type);
+        put(KEY_TYPE, enumToString(type));
     }
 
     public ParseUser getUser() {
@@ -55,9 +59,43 @@ public class Reaction extends ParseObject {
         return getString(KEY_TYPE);
     }
 
-    public void setType(String type) {
+    public void setType(ReactionType type) {
         this.type = type;
-        put(KEY_TYPE, type);
+        put(KEY_TYPE, enumToString(type));
+    }
+
+    public static String enumToString(ReactionType type) {
+        switch (type) {
+            case LIKE:
+                return "LIKE";
+            case DISLIKE:
+                return "DISLIKE";
+            case HAPPY:
+                return "HAPPY";
+            case SAD:
+                return "SAD";
+            case ANGRY:
+                return "ANGRY";
+            default:
+                return "LIKE";
+        }
+    }
+
+    public static ReactionType stringToEnum(String type) {
+        switch (type) {
+            case "LIKE":
+                return ReactionType.LIKE;
+            case "DISLIKE":
+                return ReactionType.DISLIKE;
+            case "HAPPY":
+                return ReactionType.HAPPY;
+            case "SAD":
+                return ReactionType.SAD;
+            case "ANGRY":
+                return ReactionType.ANGRY;
+            default:
+                return null;
+        }
     }
 
 }

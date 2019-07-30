@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -53,12 +52,17 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.codepath.fbu_newsfeed.Models.Reaction.KEY_SHARE;
+import static com.codepath.fbu_newsfeed.Models.Reaction.KEY_USER;
+import static com.codepath.fbu_newsfeed.Models.Reaction.ReactionType;
+import static com.codepath.fbu_newsfeed.Models.Reaction.TYPES;
+
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     private static final String TAG = "ShareAdapter";
 
     private List<Share> shares;
     private Context context;
-    private Map<String, Map<String, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
+    private Map<String, Map<ReactionType, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
 
     public ShareAdapter(ArrayList<Share> newShares) {
         shares = newShares;
@@ -83,7 +87,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         final User currentUser = (User) ParseUser.getCurrentUser();
 
-        Map<String, Reaction> reactionMap = allReactions.get(share.getObjectId());
+        Map<ReactionType, Reaction> reactionMap = allReactions.get(share.getObjectId());
 
         holder.tvUsername.setText(user.getUsername());
 
@@ -105,12 +109,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.tvSource.setText(article.getSource());
         holder.tvTag.setText(article.getTag());
 
-        for (int i = 0; i < Reaction.TYPES.length; i++) {
-            final String type = Reaction.TYPES[i];
+        for (int i = 0; i < TYPES.length; i++) {
+            final ReactionType type = TYPES[i];
             final TextView tv = getTextViewFromReactionType(type, holder);
             final ImageButton ib = getImageButtonFromReactionType(type, holder);
 
-            tv.setText(String.valueOf(share.getCount(type)));
+            tv.setText(String.valueOf(share.getCount(Reaction.enumToString(type))));
 
             ib.setSelected(false);
             if (reactionMap != null && reactionMap.get(type) != null)
@@ -280,8 +284,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     private void getAllReactions() {
         ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
 
-        reactionQuery.whereEqualTo(Reaction.KEY_USER, ParseUser.getCurrentUser());
-        reactionQuery.whereContainedIn(Reaction.KEY_SHARE, shares);
+        reactionQuery.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
+        reactionQuery.whereContainedIn(KEY_SHARE, shares);
 
         try {
             List<Reaction> result = reactionQuery.find();
@@ -290,11 +294,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 Reaction reaction = result.get(i);
                 Share share = reaction.getShare();
                 if (allReactions.containsKey(share.getObjectId())) {
-                    Map<String, Reaction> innerMap = allReactions.get(share.getObjectId());
-                    innerMap.put(reaction.getType(), reaction);
+                    Map<ReactionType, Reaction> innerMap = allReactions.get(share.getObjectId());
+                    innerMap.put(Reaction.stringToEnum(reaction.getType()), reaction);
                 } else {
-                    Map<String, Reaction> innerMap = new HashMap<>();
-                    innerMap.put(reaction.getType(), reaction);
+                    Map<ReactionType, Reaction> innerMap = new HashMap<>();
+                    innerMap.put(Reaction.stringToEnum(reaction.getType()), reaction);
                     allReactions.put(share.getObjectId(), innerMap);
                 }
             }
@@ -305,34 +309,34 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     }
 
 
-    private TextView getTextViewFromReactionType(String type, ShareAdapter.ViewHolder holder) {
+    private TextView getTextViewFromReactionType(ReactionType type, ShareAdapter.ViewHolder holder) {
         switch (type) {
-            case "LIKE":
+            case LIKE:
                 return holder.tvLike;
-            case "DISLIKE":
+            case DISLIKE:
                 return holder.tvDislike;
-            case "HAPPY":
+            case HAPPY:
                 return holder.tvHappy;
-            case "SAD":
+            case SAD:
                 return holder.tvSad;
-            case "ANGRY":
+            case ANGRY:
                 return holder.tvAngry;
             default:
                 return null;
         }
     }
 
-    private ImageButton getImageButtonFromReactionType(String type, ShareAdapter.ViewHolder holder) {
+    private ImageButton getImageButtonFromReactionType(ReactionType type, ShareAdapter.ViewHolder holder) {
         switch (type) {
-            case "LIKE":
+            case LIKE:
                 return holder.ibReactionLike;
-            case "DISLIKE":
+            case DISLIKE:
                 return holder.ibReactionDislike;
-            case "HAPPY":
+            case HAPPY:
                 return holder.ibReactionHappy;
-            case "SAD":
+            case SAD:
                 return holder.ibReactionSad;
-            case "ANGRY":
+            case ANGRY:
                 return holder.ibReactionAngry;
             default:
                 return null;
@@ -362,7 +366,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         informationDialog.show(fragmentTransaction, "fragment_information");
     }
 
-    private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
+    private void updateReactionText(ReactionType type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
         Reaction reaction = ReactionHelper.getReaction(type, share, currentUser);
         int count;
         if (reaction != null) {
@@ -377,19 +381,19 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         textView.setText(Integer.toString(count));
     }
 
-    private void createNotification(String type, Share share, String typeText) {
+    private void createNotification(String type, Share share, ReactionType typeText) {
         Log.d(TAG, "Creating notification of type: " + type);
         User shareUser = (User) share.getUser();
         if (ParseUser.getCurrentUser().getObjectId().equals(shareUser.getObjectId())) { return; }
-        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), shareUser, share, typeText);
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), shareUser, share, Reaction.enumToString(typeText));
         notification.saveInBackground();
     }
 
-    private void deleteNotification(String type, Share share, String typeText) {
+    private void deleteNotification(String type, Share share, Reaction.ReactionType typeText) {
         ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
 
         query.whereEqualTo(Notification.KEY_TYPE, type);
-        query.whereEqualTo(Notification.KEY_TYPE_TEXT, typeText);
+        query.whereEqualTo(Notification.KEY_TYPE_TEXT, Reaction.enumToString(typeText));
         query.whereEqualTo(Notification.KEY_SEND_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(Notification.KEY_RECEIVE_USER, share.getUser());
 
