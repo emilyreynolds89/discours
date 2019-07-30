@@ -287,7 +287,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onClick(final View view) {
                     String message = etComment.getText().toString();
-                    if (message == null) {
+                    if (message == null || message.equals("")) {
                         Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
                     } else {
                         Comment addedComment = new Comment(message, (User) ParseUser.getCurrentUser(), share);
