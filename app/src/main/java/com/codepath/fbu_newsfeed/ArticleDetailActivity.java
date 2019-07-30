@@ -64,7 +64,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
         } else if (imageUrl != null) {
             Glide.with(getBaseContext()).load(imageUrl).into(ivArticleImageDetail);
         }
-
+        tvTagDetail.setOnClickListener(this);
         viewArticle.setOnClickListener(this);
         btnShare.setOnClickListener(this);
         ibReportArticleDetail.setOnClickListener(this);
@@ -85,8 +85,12 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.tvTagDetail:
+                Intent intent = new Intent(ArticleDetailActivity.this, TagActivity.class);
+                intent.putExtra("tag", article.getTag());
+                startActivity(intent);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
             case R.id.ibReportArticleDetail:
-                Log.d(TAG, "trying to report article");
                 reportArticle();
                 break;
             case R.id.viewArticle:
@@ -96,7 +100,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
             case R.id.btnShare:
-                Intent intent = new Intent(ArticleDetailActivity.this, HomeActivity.class);
+                intent = new Intent(ArticleDetailActivity.this, HomeActivity.class);
                 intent.putExtra("article", (Serializable) article);
                 startActivity(intent);
                 break;
