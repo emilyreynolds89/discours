@@ -24,18 +24,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <ImageView
-            android:id="@+id/ivArticleImageDetail"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvArticleImage"
             android:layout_width="0dp"
             android:layout_height="250dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
-            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="@+id/viewArticle"
             app:layout_constraintStart_toStartOf="@+id/viewArticle"
             app:layout_constraintTop_toTopOf="@+id/viewArticle"
-            app:srcCompat="@android:color/black" />
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardElevation="0dp"
+            android:focusable="true"
+            android:clickable="true"
+            >
+            <ImageView
+                android:id="@+id/ivArticleImageDetail"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:scaleType="centerCrop"
+
+                app:srcCompat="@android:color/black" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tvArticleTitleDetail"
@@ -54,7 +65,7 @@
             android:focusable="true"
             app:layout_constraintEnd_toEndOf="@+id/viewArticle"
             app:layout_constraintStart_toStartOf="@+id/viewArticle"
-            app:layout_constraintTop_toBottomOf="@+id/ivArticleImageDetail" />
+            app:layout_constraintTop_toBottomOf="@+id/cvArticleImage" />
 
         <TextView
             android:id="@+id/tvArticleSummaryDetail"
