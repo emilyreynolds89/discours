@@ -245,41 +245,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             });
         }
 
-        tvArticleTitle.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
-                    view.setSelected(true);
-                }
-                view.setSelected(false);
-                return false;
-            }
-        });
-
-        tvArticleSummary.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
-                    view.setSelected(true);
-                }
-                view.setSelected(false);
-                return false;
-            }
-        });
-
-        tvTag.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
-                    view.setSelected(true);
-                }
-                view.setSelected(false);
-                return false;
-            }
-        });
-
 
         tvArticleTitle.setOnClickListener(this);
+        tvArticleSummary.setOnClickListener(this);
         ibReportArticle.setOnClickListener(this);
         ibInformation.setOnClickListener(this);
         tvTag.setOnClickListener(this);
@@ -309,11 +277,17 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(intent);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
+            case R.id.tvArticleSummary:
+            case R.id.tvArticleTitle:
             case R.id.viewArticle:
-                intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
-                intent.putExtra("article", (Serializable) article);
-                startActivity(intent);
+                Intent i = new Intent(this, BrowserActivity.class);
+                i.putExtra("article", (Serializable) article);
+                startActivity(i);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//                intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
+//                intent.putExtra("article", (Serializable) article);
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
         }
 

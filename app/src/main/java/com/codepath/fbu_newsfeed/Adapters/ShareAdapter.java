@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
-import com.codepath.fbu_newsfeed.ArticleDetailActivity;
+import com.codepath.fbu_newsfeed.BrowserActivity;
 import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
@@ -270,9 +270,14 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     }
 
     private void goToArticle(Article article) {
-        Intent intent = new Intent(context, ArticleDetailActivity.class);
-        intent.putExtra("article", (Serializable) article);
-        context.startActivity(intent);
+//        Intent intent = new Intent(context, ArticleDetailActivity.class);
+//        intent.putExtra("article", (Serializable) article);
+//        context.startActivity(intent);
+//        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+        Intent i = new Intent(context, BrowserActivity.class);
+        i.putExtra("article", (Serializable) article);
+        context.startActivity(i);
         ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 

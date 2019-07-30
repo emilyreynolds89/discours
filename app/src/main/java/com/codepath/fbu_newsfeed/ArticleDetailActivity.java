@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
@@ -31,6 +32,8 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.viewArticle) View viewArticle;
     @BindView(R.id.ivArticleImageDetail) ImageView ivArticleImageDetail;
+    @BindView(R.id.cvArticleImage)
+    CardView cvArticleImage;
     @BindView(R.id.tvArticleTitleDetail) TextView tvArticleTitleDetail;
     @BindView(R.id.tvArticleSummaryDetail) TextView tvArticleSummaryDetail;
     @BindView(R.id.tvSourceDetail) TextView tvArticleSourceDetail;
@@ -64,6 +67,10 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
         } else if (imageUrl != null) {
             Glide.with(getBaseContext()).load(imageUrl).into(ivArticleImageDetail);
         }
+
+        cvArticleImage.setOnClickListener(this);
+        tvArticleTitleDetail.setOnClickListener(this);
+        tvArticleSummaryDetail.setOnClickListener(this);
         tvTagDetail.setOnClickListener(this);
         viewArticle.setOnClickListener(this);
         btnShare.setOnClickListener(this);
@@ -90,12 +97,18 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
                 intent.putExtra("tag", article.getTag());
                 startActivity(intent);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                break;
             case R.id.ibReportArticleDetail:
                 reportArticle();
                 break;
+            case R.id.cvArticleImage:
+            case R.id.tvArticleTitleDetail:
+            case R.id.tvArticleSummaryDetail:
             case R.id.viewArticle:
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
+//                Intent i = new Intent(Intent.ACTION_VIEW);
+//                i.setData(Uri.parse(url));
+                Intent i = new Intent(ArticleDetailActivity.this, BrowserActivity.class);
+                i.putExtra("url", article.getUrl());
                 startActivity(i);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
