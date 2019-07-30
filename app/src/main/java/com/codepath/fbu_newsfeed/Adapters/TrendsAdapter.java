@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.BrowserActivity;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
+import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.R;
@@ -120,10 +121,6 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                         i.putExtra("article", (Serializable) article);
                         context.startActivity(i);
                         ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-//                        intent = new Intent(context, ArticleDetailActivity.class);
-//                        intent.putExtra("article", (Serializable) article);
-//                        context.startActivity(intent);
-//                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                         break;
 
                 }
@@ -138,26 +135,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             tvTagTrends.setText(article.getTag());
 
             int biasValue = article.getIntBias();
-            switch (biasValue) {
-                case 1:
-                    ivBiasTrends.setBackgroundResource(R.drawable.liberal_icon);
-                    break;
-                case 2:
-                    ivBiasTrends.setBackgroundResource(R.drawable.slightly_liberal_icon);
-                    break;
-                case 3:
-                    ivBiasTrends.setBackgroundResource(R.drawable.moderate_icon);
-                    break;
-                case 4:
-                    ivBiasTrends.setBackgroundResource(R.drawable.slightly_conserv_icon);
-                    break;
-                case 5:
-                    ivBiasTrends.setBackgroundResource(R.drawable.liberal_icon);
-                    break;
-                default:
-                    ivBiasTrends.setBackgroundResource(R.drawable.moderate_icon);
-                    break;
-            }
+            BiasHelper.setBiasImageView(ivBiasTrends, biasValue);
 
             ParseFile image = article.getImage();
             String imageUrl = article.getImageUrl();

@@ -36,7 +36,6 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
     @BindView(R.id.tvArticleSummaryDetail) TextView tvArticleSummaryDetail;
     @BindView(R.id.tvSourceDetail) TextView tvArticleSourceDetail;
     @BindView(R.id.tvTagDetail) TextView tvTagDetail;
-    //@BindView(R.id.btnLink) Button btnLink;
     @BindView(R.id.btnShare) Button btnShare;
     @BindView(R.id.ibReportArticleDetail) ImageButton ibReportArticleDetail;
 
@@ -103,8 +102,6 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
             case R.id.tvArticleTitleDetail:
             case R.id.tvArticleSummaryDetail:
             case R.id.viewArticle:
-//                Intent i = new Intent(Intent.ACTION_VIEW);
-//                i.setData(Uri.parse(url));
                 Intent i = new Intent(ArticleDetailActivity.this, BrowserActivity.class);
                 i.putExtra("url", article.getUrl());
                 startActivity(i);
