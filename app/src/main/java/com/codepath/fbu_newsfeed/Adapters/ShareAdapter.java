@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.FragmentTransaction;
@@ -37,6 +38,7 @@ import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
+import com.codepath.fbu_newsfeed.TagActivity;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -53,12 +55,12 @@ import butterknife.ButterKnife;
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     private static final String TAG = "ShareAdapter";
 
-    private ArrayList<Share> shares;
+    private List<Share> shares;
     private Context context;
     private Map<String, Map<String, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
 
-    public ShareAdapter(ArrayList<Share> shares) {
-        this.shares = shares;
+    public ShareAdapter(ArrayList<Share> newShares) {
+        shares = newShares;
         allReactions = new HashMap<>();
     }
 
@@ -153,66 +155,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             holder.tvCaption.setVisibility(View.GONE);
         }
 
-        holder.tvArticleTitle.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
-                    view.setSelected(true);
-                }
-                view.setSelected(false);
-                return false;
-            }
-        });
-
-        holder.tvUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToUser(user);
-            }
-        });
-
-        holder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToUser(user);
-            }
-        });
-
-
-        holder.viewArticle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, ArticleDetailActivity.class);
-                intent.putExtra("article", (Serializable) article);
-                context.startActivity(intent);
-                ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-            }
-        });
-
-        holder.btnDiscussion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("share", (Serializable) share);
-                context.startActivity(intent);
-                ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-            }
-        });
-
-        holder.ibInformation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Clicked information");
-                showInformationDialog();
-            }
-        });
-
-        holder.ibReportArticle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reportArticle(article);
-            }
-        });
     }
 
 
@@ -234,7 +176,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         allReactions.clear();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
@@ -260,12 +202,73 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.btnDiscussion) Button btnDiscussion;
         @BindView(R.id.tvSource) TextView tvSource;
         @BindView(R.id.tvTag) TextView tvTag;
+        @BindView(R.id.cvArticleImage) CardView cvArticleImage;
 
 
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+
+            tvUsername.setOnClickListener(this);
+            ivProfileImage.setOnClickListener(this);
+            tvTag.setOnClickListener(this);
+            cvArticleImage.setOnClickListener(this);
+            tvArticleTitle.setOnClickListener(this);
+            tvArticleSummary.setOnClickListener(this);
+            btnDiscussion.setOnClickListener(this);
+            ibInformation.setOnClickListener(this);
+            ibReportArticle.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+
+            if (position != RecyclerView.NO_POSITION) {
+                Share share = shares.get(position);
+                Article article = share.getArticle();
+                ParseUser user = share.getUser();
+
+                switch(view.getId()) {
+                    case R.id.tvUsername:
+                    case R.id.ivProfileImageNotif:
+                        goToUser(user);
+                        break;
+                    case R.id.tvTag:
+                        Intent intent = new Intent(context, TagActivity.class);
+                        intent.putExtra("tag", article.getTag());
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                        break;
+                    case R.id.cvArticleImage:
+                    case R.id.tvArticleTitle:
+                    case R.id.tvArticleSummary:
+                        goToArticle(article);
+                        break;
+                    case R.id.btnDiscussion:
+                        intent = new Intent(context, DetailActivity.class);
+                        intent.putExtra("share", (Serializable) share);
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                        break;
+                    case R.id.ibInformation:
+                        showInformationDialog();
+                        break;
+                    case R.id.ibReportArticle:
+                        reportArticle(article);
+                        break;
+                }
+
+                }
+
+        }
+    }
+
+    private void goToArticle(Article article) {
+        Intent intent = new Intent(context, ArticleDetailActivity.class);
+        intent.putExtra("article", (Serializable) article);
+        context.startActivity(intent);
+        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 
     private void getAllReactions() {

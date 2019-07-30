@@ -80,6 +80,28 @@ public class ComposeFragment extends Fragment {
             Glide.with(getContext()).load(imageUrl).into(ivArticlePreview);
         }
 
+        int biasValue = article.getIntBias();
+        switch (biasValue) {
+            case 1:
+                ivBias.setBackgroundResource(R.drawable.liberal_icon);
+                break;
+            case 2:
+                ivBias.setBackgroundResource(R.drawable.slightly_liberal_icon);
+                break;
+            case 3:
+                ivBias.setBackgroundResource(R.drawable.moderate_icon);
+                break;
+            case 4:
+                ivBias.setBackgroundResource(R.drawable.slightly_conserv_icon);
+                break;
+            case 5:
+                ivBias.setBackgroundResource(R.drawable.liberal_icon);
+                break;
+            default:
+                ivBias.setBackgroundResource(R.drawable.moderate_icon);
+                break;
+        }
+
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

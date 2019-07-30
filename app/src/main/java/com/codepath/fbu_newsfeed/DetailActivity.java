@@ -1,13 +1,18 @@
 package com.codepath.fbu_newsfeed;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -240,10 +245,47 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             });
         }
 
+        tvArticleTitle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
+                    view.setSelected(true);
+                }
+                view.setSelected(false);
+                return false;
+            }
+        });
+
+        tvArticleSummary.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
+                    view.setSelected(true);
+                }
+                view.setSelected(false);
+                return false;
+            }
+        });
+
+        tvTag.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
+                    view.setSelected(true);
+                }
+                view.setSelected(false);
+                return false;
+            }
+        });
+
+
         tvArticleTitle.setOnClickListener(this);
         ibReportArticle.setOnClickListener(this);
         ibInformation.setOnClickListener(this);
+        tvTag.setOnClickListener(this);
         viewArticle.setOnClickListener(this);
+
+
 
         setUpFriendPermissions();
         setSupportActionBar(toolbar);
@@ -261,10 +303,17 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 Log.d(TAG, "Clicked information");
                 showInformationDialog();
                 break;
+            case R.id.tvTag:
+                Intent intent = new Intent(DetailActivity.this, TagActivity.class);
+                intent.putExtra("tag", article.getTag());
+                startActivity(intent);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                break;
             case R.id.viewArticle:
-                Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
+                intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
                 intent.putExtra("article", (Serializable) article);
                 startActivity(intent);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
         }
 
@@ -276,6 +325,23 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         return true;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
     }
 
     private void setUpFriendPermissions() {
@@ -471,13 +537,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     return;
                 }
 
-                articles.addAll(newArticles);
-
-                for (int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
+                for (int i = 0; i < newArticles.size(); i++) {
+                    Article article = newArticles.get(i);
                     Log.d("TrendsQuery", "Article: " + article.getTitle());
                 }
-                recommendAdapter.notifyDataSetChanged();
+                recommendAdapter.addAll(newArticles);
             }
         });
     }

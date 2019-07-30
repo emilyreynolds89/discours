@@ -96,6 +96,7 @@ public class TagSearchFragment extends Fragment {
     private void queryArticlesByTag(String tag) {
         ParseQuery<Article> query = ParseQuery.getQuery("Article");
         query.whereEqualTo(Article.KEY_TAG, tag);
+        query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<Article>() {
             @Override
             public void done(List<Article> objects, ParseException e) {

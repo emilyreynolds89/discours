@@ -1,7 +1,9 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -50,6 +53,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
     public int getItemCount() {
         return articles.size();
     }
+
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.tvArticleTitleRecommend) TextView tvArticleTitleRecommend;
         @BindView(R.id.ivArticleImageRecommend) ImageView ivArticleImageRecommend;
@@ -76,12 +80,26 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         }
         void bind(Article article) {
             tvArticleTitleRecommend.setText(article.getTitle());
+            Typeface typeface = ResourcesCompat.getFont(context, R.font.lato);
+            tvArticleTitleRecommend.setTypeface(typeface);
             ParseFile image = article.getImage();
-            if (image != null ) {
+            String imageUrl = article.getImageUrl();
+            if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivArticleImageRecommend);
+            } else if (imageUrl != null) {
+                Glide.with(context).load(imageUrl).into(ivArticleImageRecommend);
+                if (image != null && !(((Activity) context).isFinishing())) {
+                    Glide.with(context.getApplicationContext()).load(image.getUrl()).into(ivArticleImageRecommend);
+                }
             }
         }
     }
+
+    public void addAll(List<Article> newArticles) {
+        articles.addAll(newArticles);
+        notifyDataSetChanged();
+    }
+
     public void clear() {
         articles.clear();
         notifyDataSetChanged();
