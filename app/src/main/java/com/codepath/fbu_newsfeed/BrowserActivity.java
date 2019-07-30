@@ -41,7 +41,6 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "yes we got to this activity");
 
         setContentView(R.layout.activity_browser);
         ButterKnife.bind(this);
