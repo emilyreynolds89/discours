@@ -153,7 +153,7 @@ public class CreateFragment extends Fragment {
             //Bitmap myBitmap = getBitmapFromURL(jsoupResult.getImageUrl());
             //ParseFile imageParse = getParseFileFromBitmap(myBitmap);
 
-            selectedArticle = new Article(urlTest, title, jsoupResult.getImageUrl(), description, Bias.intToEnum(intBias), Fact.stringToEnum(strFact), source, "POLITICS");
+            selectedArticle = new Article(urlTest, title, jsoupResult.getImageUrl(), description, Bias.intToEnum(intBias), Fact.stringToEnum(strFact), querySource, "POLITICS");
             selectedArticle.saveInBackground();
         }
     }

@@ -24,6 +24,7 @@ import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Bias;
 import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -69,7 +70,7 @@ public class ComposeFragment extends Fragment {
         final ParseFile imageFile = article.getImage();
         final String title = article.getTitle();
         final String summary = article.getSummary();
-        final String source = article.getSource();
+        final Source source = article.getSource();
 
         tvFactCheck.setText(Fact.enumToString(factCheck));
         tvArticleTitle.setText(title);

@@ -106,7 +106,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         holder.tvArticleTitle.setText(article.getTitle());
         holder.tvArticleSummary.setText(article.getSummary());
-        holder.tvSource.setText(article.getSource());
+        holder.tvSource.setText(article.getSource().getName());
         holder.tvTag.setText(article.getTag());
 
         for (int i = 0; i < TYPES.length; i++) {

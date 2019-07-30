@@ -179,7 +179,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvArticleTitle.setText(article.getTitle());
         tvArticleSummary.setText(article.getSummary());
         tvTag.setText(article.getTag());
-        tvSource.setText(article.getSource());
+        tvSource.setText(article.getSource().getName());
         tvFactRating.setText(Fact.enumToString(article.getTruth()));
 
         int biasValue = article.getIntBias();

@@ -17,7 +17,7 @@ public class Article extends ParseObject implements Serializable {
     public static final String KEY_SUMMARY = "summary";
     public static final String KEY_BIAS = "bias";
     public static final String KEY_TRUTH = "truth";
-    public static final String KEY_SOURCE = "source";
+    public static final String KEY_SOURCE = "sourceObject";
     public static final String KEY_TAG = "tag";
     public static final String KEY_IMAGEURL = "imageUrl";
     public static final int LIMIT = 20;
@@ -36,7 +36,7 @@ public class Article extends ParseObject implements Serializable {
     private Bias.BiasType bias;
     private Fact.TruthLevel truth;
     private String tag;
-    private String source;
+    private Source source;
     private String imageUrl;
     private int count;
 
@@ -45,7 +45,7 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public Article(String url, String title, ParseFile image,
-                   String summary, Bias.BiasType bias, Fact.TruthLevel truth, String source, String tag) {
+                   String summary, Bias.BiasType bias, Fact.TruthLevel truth, Source source, String tag) {
         super();
         this.url = url;
         put(KEY_URL, url);
@@ -70,7 +70,7 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public Article(String url, String title, String imageUrl,
-                   String summary, Bias.BiasType bias, Fact.TruthLevel truth, String source, String tag) {
+                   String summary, Bias.BiasType bias, Fact.TruthLevel truth, Source source, String tag) {
         super();
         this.url = url;
         put(KEY_URL, url);
@@ -163,11 +163,11 @@ public class Article extends ParseObject implements Serializable {
         put(KEY_TRUTH, Fact.enumToString(truth));
     }
 
-    public String getSource() {
-        return getString(KEY_SOURCE);
+    public Source getSource() {
+        return (Source) getParseObject(KEY_SOURCE);
     }
 
-    public void setSource(String source) {
+    public void setSource(Source source) {
         this.source = source;
         put(KEY_SOURCE, source);
     }
