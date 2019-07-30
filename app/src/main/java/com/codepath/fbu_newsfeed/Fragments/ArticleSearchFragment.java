@@ -92,6 +92,7 @@ public class ArticleSearchFragment extends Fragment {
         ParseQuery<Article> titleQuery = ParseQuery.getQuery("Article");
         titleQuery.whereFullText(Article.KEY_TITLE, query);
         titleQuery.setLimit(Article.LIMIT);
+        titleQuery.orderByDescending("createdAt");
 
 //        MongoDB can't OR text queries
 //
