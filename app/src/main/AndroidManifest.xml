@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".TagActivity"></activity>
+        <activity android:name=".BrowserActivity"></activity>
+        <activity android:name=".TagActivity" />
         <activity android:name=".FriendsListActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".ArticleDetailActivity" />
