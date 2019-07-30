@@ -245,10 +245,47 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             });
         }
 
+        tvArticleTitle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
+                    view.setSelected(true);
+                }
+                view.setSelected(false);
+                return false;
+            }
+        });
+
+        tvArticleSummary.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
+                    view.setSelected(true);
+                }
+                view.setSelected(false);
+                return false;
+            }
+        });
+
+        tvTag.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
+                    view.setSelected(true);
+                }
+                view.setSelected(false);
+                return false;
+            }
+        });
+
+
         tvArticleTitle.setOnClickListener(this);
         ibReportArticle.setOnClickListener(this);
         ibInformation.setOnClickListener(this);
+        tvTag.setOnClickListener(this);
         viewArticle.setOnClickListener(this);
+
+
 
         setUpFriendPermissions();
         setSupportActionBar(toolbar);
@@ -266,10 +303,17 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 Log.d(TAG, "Clicked information");
                 showInformationDialog();
                 break;
+            case R.id.tvTag:
+                Intent intent = new Intent(DetailActivity.this, TagActivity.class);
+                intent.putExtra("tag", article.getTag());
+                startActivity(intent);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                break;
             case R.id.viewArticle:
-                Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
+                intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
                 intent.putExtra("article", (Serializable) article);
                 startActivity(intent);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
         }
 
