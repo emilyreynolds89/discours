@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout6"
+    android:layout_width="380dp"
+    android:layout_height="400dp"
+    android:orientation="vertical" >
+
+    <ProgressBar
+        android:id="@+id/pbFactAverage"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:indeterminateTint="@color/colorAccentBold"
+        android:max="100"
+        android:min="0"
+        android:progress="75"
+        tools:layout_editor_absoluteX="50dp"
+        tools:layout_editor_absoluteY="235dp" />
+
+    <ProgressBar
+        android:id="@+id/pbBiasAverage"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="280dp"
+        android:layout_height="44dp"
+        tools:layout_editor_absoluteX="50dp"
+        tools:layout_editor_absoluteY="111dp" />
+
+    <ImageView
+        android:id="@+id/ivNewspaper"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:srcCompat="@drawable/newspaper_icon"
+        tools:layout_editor_absoluteX="250dp"
+        tools:layout_editor_absoluteY="235dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

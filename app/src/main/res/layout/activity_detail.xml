@@ -106,6 +106,9 @@
                         android:textColor="@color/colorHeadlineText"
                         android:textSize="18sp"
                         android:textStyle="bold"
+                        android:foreground="?selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
                         app:layout_constraintEnd_toEndOf="@+id/viewArticle"
                         app:layout_constraintStart_toStartOf="@+id/viewArticle"
                         app:layout_constraintTop_toBottomOf="@+id/ivArticleImage" />
@@ -121,6 +124,9 @@
                         android:text="Article summary"
                         android:textColor="@color/colorLightText"
                         android:textSize="12sp"
+                        android:foreground="?selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
                         app:layout_constraintEnd_toEndOf="@+id/viewArticle"
                         app:layout_constraintStart_toStartOf="@+id/viewArticle"
                         app:layout_constraintTop_toBottomOf="@+id/tvArticleTitle" />
@@ -153,6 +159,9 @@
                         android:textColor="@color/colorBaseText"
                         android:textSize="10sp"
                         android:textStyle="bold"
+                        android:foreground="?selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/ibReportArticle"
                         app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary" />
