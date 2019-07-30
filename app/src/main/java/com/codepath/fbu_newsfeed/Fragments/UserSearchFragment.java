@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -59,6 +62,8 @@ public class UserSearchFragment extends Fragment {
         rvResults.setLayoutManager(linearLayoutManager);
         rvResults.setAdapter(userAdapter);
 
+        fetchAllUsers();
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -86,6 +91,23 @@ public class UserSearchFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private void fetchAllUsers() {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.orderByDescending("createdAt");
+        query.setLimit(20);
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (e == null) {
+                    userAdapter.addAll(objects);
+                } else {
+                    Log.d(TAG, "Error: " + e);
+                }
+            }
+        });
     }
 
     private void fetchUsers(String query) {
