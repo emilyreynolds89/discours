@@ -281,7 +281,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.tvArticleTitle:
             case R.id.viewArticle:
                 Intent i = new Intent(this, BrowserActivity.class);
-                i.putExtra("url", article.getUrl());
+                i.putExtra("article", (Serializable) article);
                 startActivity(i);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 //                intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.ArticleDetailActivity;
+import com.codepath.fbu_newsfeed.BrowserActivity;
 import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Models.Article;
@@ -116,10 +117,14 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                     case R.id.cvArticleImage:
                     case R.id.tvArticleSummaryTrends:
                     case R.id.tvArticleTitleTrends:
-                        intent = new Intent(context, ArticleDetailActivity.class);
-                        intent.putExtra("article", (Serializable) article);
-                        context.startActivity(intent);
+                        Intent i = new Intent(context, BrowserActivity.class);
+                        i.putExtra("article", (Serializable) article);
+                        context.startActivity(i);
                         ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//                        intent = new Intent(context, ArticleDetailActivity.class);
+//                        intent.putExtra("article", (Serializable) article);
+//                        context.startActivity(intent);
+//                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                         break;
 
                 }

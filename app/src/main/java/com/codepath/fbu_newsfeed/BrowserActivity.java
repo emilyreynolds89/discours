@@ -3,24 +3,33 @@ package com.codepath.fbu_newsfeed;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+
+import com.codepath.fbu_newsfeed.Models.Article;
+
+import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BrowserActivity extends AppCompatActivity {
+public class BrowserActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "BrowserActivity";
 
     public @BindView(R.id.webview) WebView webView;
     public @BindView(R.id.toolbar) Toolbar toolbar;
+    public @BindView(R.id.btnShare)
+    Button btnShare;
 
     private String url;
+    private Article article;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +41,8 @@ public class BrowserActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        url = getIntent().getStringExtra("url");
+        article = (Article) getIntent().getSerializableExtra("article");
+        url = article.getUrl();
 
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -42,6 +52,7 @@ public class BrowserActivity extends AppCompatActivity {
 
         webView.loadUrl(url);
 
+        btnShare.setOnClickListener(this);
 
     }
 
@@ -53,5 +64,14 @@ public class BrowserActivity extends AppCompatActivity {
         return true;
     }
 
-
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.btnShare:
+                Intent intent = new Intent(this, HomeActivity.class);
+                intent.putExtra("article", (Serializable) article);
+                startActivity(intent);
+                break;
+        }
+    }
 }

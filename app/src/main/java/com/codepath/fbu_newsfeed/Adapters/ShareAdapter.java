@@ -272,7 +272,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 //        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         Intent i = new Intent(context, BrowserActivity.class);
-        i.putExtra("url", article.getUrl());
+        i.putExtra("article", (Serializable) article);
         context.startActivity(i);
         ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
