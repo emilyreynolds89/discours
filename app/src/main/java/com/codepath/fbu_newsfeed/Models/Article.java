@@ -33,7 +33,7 @@ public class Article extends ParseObject implements Serializable {
     private String title;
     private ParseFile image;
     private String summary;
-    private Bias bias;
+    private Bias.BiasType bias;
     private Fact.TruthLevel truth;
     private String tag;
     private String source;
@@ -45,7 +45,7 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public Article(String url, String title, ParseFile image,
-                   String summary, Bias bias, Fact.TruthLevel truth, String source, String tag) {
+                   String summary, Bias.BiasType bias, Fact.TruthLevel truth, String source, String tag) {
         super();
         this.url = url;
         put(KEY_URL, url);
@@ -58,7 +58,7 @@ public class Article extends ParseObject implements Serializable {
         this.summary = summary;
         put(KEY_SUMMARY, summary);
         this.bias = bias;
-        put(KEY_BIAS, biasEnumToInt(bias));
+        put(KEY_BIAS, Bias.enumToInt(bias));
         this.truth = truth;
         put(KEY_TRUTH, truth);
         this.tag = tag;
@@ -70,7 +70,7 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public Article(String url, String title, String imageUrl,
-                   String summary, Bias bias, Fact.TruthLevel truth, String source, String tag) {
+                   String summary, Bias.BiasType bias, Fact.TruthLevel truth, String source, String tag) {
         super();
         this.url = url;
         put(KEY_URL, url);
@@ -83,7 +83,7 @@ public class Article extends ParseObject implements Serializable {
         this.summary = summary;
         put(KEY_SUMMARY, summary);
         this.bias = bias;
-        put(KEY_BIAS, biasEnumToInt(bias));
+        put(KEY_BIAS, Bias.enumToInt(bias));
         this.truth = truth;
         put(KEY_TRUTH, truth);
         this.tag = tag;
@@ -93,11 +93,6 @@ public class Article extends ParseObject implements Serializable {
         this.count = 0;
         put(KEY_COUNT, 0);
     }
-
-    public enum Bias {
-        LIBERAL, SLIGHTLY_LIBERAL, MODERATE, SLIGHTLY_CONSERVATIVE, CONSERVATIVE
-    }
-
 
     public String getUrl() {
         return getString(KEY_URL);
@@ -147,15 +142,15 @@ public class Article extends ParseObject implements Serializable {
     }
 
 
-    public Bias getBias() {
-        return biasIntToEnum((int) getNumber(KEY_BIAS));
+    public Bias.BiasType getBias() {
+        return Bias.intToEnum((int) getNumber(KEY_BIAS));
     }
 
     public int getIntBias() { return (int) getNumber(KEY_BIAS); }
 
-    public void setBias(Bias bias) {
+    public void setBias(Bias.BiasType bias) {
         this.bias = bias;
-        put(KEY_BIAS, biasEnumToInt(bias));
+        put(KEY_BIAS, Bias.enumToInt(bias));
     }
 
 
@@ -195,52 +190,6 @@ public class Article extends ParseObject implements Serializable {
         put(KEY_COUNT, count);
     }
 
-    public static Bias biasIntToEnum(int i) {
-        Bias res;
-        switch(i) {
-            case 1:
-                res = Bias.LIBERAL;
-                break;
-            case 2:
-                res = Bias.SLIGHTLY_LIBERAL;
-                break;
-            case 3:
-                res = Bias.MODERATE;
-                break;
-            case 4:
-                res = Bias.SLIGHTLY_CONSERVATIVE;
-                break;
-            case 5:
-                res = Bias.CONSERVATIVE;
-                break;
-            default:
-                res = Bias.MODERATE;
-        }
-        return res;
-    }
 
-    public int biasEnumToInt(Bias bias) {
-        int res;
-        switch(bias) {
-            case LIBERAL:
-                res = 1;
-                break;
-            case SLIGHTLY_LIBERAL:
-                res = 2;
-                break;
-            case MODERATE:
-                res = 3;
-                break;
-            case SLIGHTLY_CONSERVATIVE:
-                res = 4;
-                break;
-            case CONSERVATIVE:
-                res = 5;
-                break;
-            default:
-                res = 3;
-        }
-        return res;
-    }
 
 }

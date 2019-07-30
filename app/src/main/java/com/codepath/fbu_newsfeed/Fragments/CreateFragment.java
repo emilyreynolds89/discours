@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Helpers.JSoupResult;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Bias;
 import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.Source;
@@ -152,7 +153,7 @@ public class CreateFragment extends Fragment {
             //Bitmap myBitmap = getBitmapFromURL(jsoupResult.getImageUrl());
             //ParseFile imageParse = getParseFileFromBitmap(myBitmap);
 
-            selectedArticle = new Article(urlTest, title, jsoupResult.getImageUrl(), description, Article.biasIntToEnum(intBias), Fact.stringToEnum(strFact), source, "POLITICS");
+            selectedArticle = new Article(urlTest, title, jsoupResult.getImageUrl(), description, Bias.intToEnum(intBias), Fact.stringToEnum(strFact), source, "POLITICS");
             selectedArticle.saveInBackground();
         }
     }
