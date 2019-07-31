@@ -271,7 +271,6 @@ public class ProfileFragment extends Fragment {
                 }
             });
         }
-        queryDeleteNotifications((User) user);
     }
 
     private void friendsList() {
@@ -466,28 +465,6 @@ public class ProfileFragment extends Fragment {
         Log.d(TAG, "Creating friend notification of type: " + type);
         Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), friend, type);
         notification.saveInBackground();
-    }
-
-    private void queryDeleteNotifications(User receiverUser) {
-        ParseQuery<Notification> notificationQuery = ParseQuery.getQuery(Notification.class);
-        notificationQuery.include(Notification.KEY_SEND_USER);
-        notificationQuery.include(Notification.KEY_RECEIVE_USER);
-        notificationQuery.whereEqualTo(Notification.KEY_RECEIVE_USER, receiverUser);
-        notificationQuery.whereEqualTo(Notification.KEY_SEND_USER, ParseUser.getCurrentUser());
-
-        notificationQuery.findInBackground(new FindCallback<Notification>() {
-            @Override
-            public void done(List<Notification> newNotifications, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error in notification query");
-                    e.printStackTrace();
-                    return;
-                }
-                for (Notification notification: newNotifications) {
-                    notification.deleteInBackground();
-                }
-            }
-        });
     }
 
 }

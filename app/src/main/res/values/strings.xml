@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Discours</string>
 
-    <string name="bias_explanation">We calculate bias by the news source, classified into one of the following: \n\nLiberal, Slightly Liberal, Moderate, Slightly Conservative, Conservative</string>
+    <string name="bias_explanation">We calculate bias by the news source, classified into one of the following:</string>
 
     <string name="truth_explanation">We calculate truth by the news source, classified into one of the following: \n\nTrue, Mostly True, Mixture, Mostly False, False, Unproven, Opinion</string>
 
