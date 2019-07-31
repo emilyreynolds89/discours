@@ -115,6 +115,12 @@ public class CreateFragment extends Fragment {
                 if (!imageSelector.isEmpty()) {
                     image = imageSelector.get(0).attr("content");
                     jsoupResult.setImageUrl(image);
+                } else {
+                    Elements newImageSelector = document.select("img");
+                    if (!newImageSelector.isEmpty()) {
+                        image = newImageSelector.get(0).attr("src");
+                        jsoupResult.setImageUrl(image);
+                    }
                 }
                 Elements sourceSelector = document.select("meta[property=\"og:site_name\"]");
                 if (!sourceSelector.isEmpty()) {
@@ -336,7 +342,7 @@ public class CreateFragment extends Fragment {
         for (Source s : sources) {
             if (s.getUrlMatch() != null) {
                 String urlMatch = s.getUrlMatch();
-                Pattern p = Pattern.compile(urlMatch);
+                Pattern p = Pattern.compile("^.+" + urlMatch + ".+$");
                 Matcher m = p.matcher(sourceUrl);
                 if (m.matches()) {
                     return s;
