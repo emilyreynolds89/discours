@@ -60,7 +60,7 @@ public class Article extends ParseObject implements Serializable {
         this.bias = bias;
         put(KEY_BIAS, Bias.enumToInt(bias));
         this.truth = truth;
-        put(KEY_TRUTH, truth);
+        put(KEY_TRUTH, Fact.enumToString(truth));
         this.tag = tag;
         put(KEY_TAG, tag);
         this.source = source;
@@ -85,7 +85,7 @@ public class Article extends ParseObject implements Serializable {
         this.bias = bias;
         put(KEY_BIAS, Bias.enumToInt(bias));
         this.truth = truth;
-        put(KEY_TRUTH, truth);
+        put(KEY_TRUTH, Fact.enumToString(truth));
         this.tag = tag;
         put(KEY_TAG, tag);
         this.source = source;

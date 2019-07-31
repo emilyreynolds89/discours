@@ -45,6 +45,7 @@ import com.parse.SaveCallback;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,6 +54,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,7 +91,7 @@ public class CreateFragment extends Fragment {
         String title = "";
         String description = "";
         String image = "";
-        String source = "";
+        Source source;
         String urlTest = "";
         @Override
         protected JSoupResult doInBackground(String... params) {
@@ -98,14 +101,28 @@ public class CreateFragment extends Fragment {
             Document document = null;
             try {
                 document = Jsoup.connect(urlTest).get();
-                title = document.select("meta[property=\"og:title\"]").get(0).attr("content");
-                description = document.select("meta[property=\"og:description\"]").get(0).attr("content");
-                image = document.select("meta[property=\"og:image\"]").get(0).attr("content");
-                source = document.select("meta[property=\"og:site_name\"]").get(0).attr("content");
-                jsoupResult.setTitleUrl(title);
-                jsoupResult.setDescription(description);
-                jsoupResult.setImageUrl(image);
-                jsoupResult.setSource(source);
+                Elements titleSelector = document.select("meta[property=\"og:title\"]");
+                if (!titleSelector.isEmpty()) {
+                    title = titleSelector.get(0).attr("content");
+                    jsoupResult.setTitleUrl(title);
+                }
+                Elements descriptionSelector = document.select("meta[property=\"og:description\"]");
+                if (!descriptionSelector.isEmpty()) {
+                    description = descriptionSelector.get(0).attr("content");
+                    jsoupResult.setDescription(description);
+                }
+                Elements imageSelector = document.select("meta[property=\"og:image\"]");
+                if (!imageSelector.isEmpty()) {
+                    image = imageSelector.get(0).attr("content");
+                    jsoupResult.setImageUrl(image);
+                }
+                Elements sourceSelector = document.select("meta[property=\"og:site_name\"]");
+                if (!sourceSelector.isEmpty()) {
+                    String sourceName = sourceSelector.get(0).attr("content");
+                    jsoupResult.setSourceName(sourceName.toUpperCase());
+                } else {
+                    jsoupResult.setSourceUrl(urlTest);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -115,30 +132,39 @@ public class CreateFragment extends Fragment {
         @Override
         protected void onPostExecute(JSoupResult jSoupResult) {
             Log.d(TAG, "TITLE: " + jSoupResult.getTitleUrl());
-            Source querySource = null;
+            Source articleSource = null;
             try {
-                querySource = querySource(jSoupResult.getSource().toUpperCase());
-                tvFactCheckCreate.setText(querySource.getFact());
-                tvArticleTitleCreate.setText(jSoupResult.getTitleUrl());
+                if (jSoupResult.getSourceName() != null)
+                    articleSource = querySource(jSoupResult.getSourceName());
+                else if (jSoupResult.getSourceUrl() != null)
+                    articleSource = matchUrlToSource(jSoupResult.getSourceUrl());
+                else
+                    Log.e(TAG, "Issue getting source");
 
-                int biasVal = querySource.getBias();
+                if (articleSource != null) {
+                    Log.d(TAG, "We found this source: " + articleSource.toString());
+                    tvFactCheckCreate.setText(articleSource.getFact());
+                    tvArticleTitleCreate.setText(jSoupResult.getTitleUrl());
+                }
+
+                int biasVal = articleSource.getBias();
                 BiasHelper.setBiasImageView(ivBiasCreate, biasVal);
                 if (jSoupResult.getImageUrl() != null) {
                     Glide.with(getContext()).load(jSoupResult.getImageUrl()).into(ivArticlePreviewCreate);
                 }
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             String strFact = "MIXTURE";
             int intBias = 3;
-            if (querySource != null) {
-                intBias = querySource.getBias();
-                strFact = querySource.getFact();
+            if (articleSource != null) {
+                intBias = articleSource.getBias();
+                strFact = articleSource.getFact();
             }
             //Bitmap myBitmap = getBitmapFromURL(jsoupResult.getImageUrl());
             //ParseFile imageParse = getParseFileFromBitmap(myBitmap);
 
-            selectedArticle = new Article(urlTest, title, jsoupResult.getImageUrl(), description, Bias.intToEnum(intBias), Fact.stringToEnum(strFact), querySource, "POLITICS");
+            selectedArticle = new Article(urlTest, title, jsoupResult.getImageUrl(), description, Bias.intToEnum(intBias), Fact.stringToEnum(strFact), articleSource, "POLITICS");
             selectedArticle.saveInBackground();
         }
     }
@@ -303,6 +329,24 @@ public class CreateFragment extends Fragment {
         query.whereEqualTo(Source.KEY_NAME, source);
         return query.getFirst();
     }
+
+    private Source matchUrlToSource(String sourceUrl) throws ParseException {
+        ParseQuery<Source> query = ParseQuery.getQuery(Source.class);
+        List<Source> sources = query.find();
+        for (Source s : sources) {
+            if (s.getUrlMatch() != null) {
+                String urlMatch = s.getUrlMatch();
+                Pattern p = Pattern.compile(urlMatch);
+                Matcher m = p.matcher(sourceUrl);
+                if (m.matches()) {
+                    return s;
+                }
+            }
+        }
+        return null;
+    }
+
+
 
     public static Bitmap getBitmapFromURL(String src) {
         try {

@@ -367,6 +367,7 @@ public class ProfileFragment extends Fragment {
         query.whereEqualTo("user", this.user);
         query.include("user");
         query.include("article");
+        query.include("sourceObject");
         query.setLimit(Share.LIMIT);
         query.setSkip(offset * Share.LIMIT);
         query.orderByDescending("createdAt");

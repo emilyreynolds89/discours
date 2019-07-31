@@ -37,10 +37,14 @@ import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
 import com.codepath.fbu_newsfeed.TagActivity;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -107,7 +111,16 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         holder.tvArticleTitle.setText(article.getTitle());
         holder.tvArticleSummary.setText(article.getSummary());
-        holder.tvSource.setText(article.getSource().getName());
+
+        article.getParseObject(Article.KEY_SOURCE).fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                Source source = (Source) object;
+                holder.tvSource.setText(source.getName());
+            }
+        });
+
+
         holder.tvTag.setText(article.getTag());
 
         for (int i = 0; i < TYPES.length; i++) {
