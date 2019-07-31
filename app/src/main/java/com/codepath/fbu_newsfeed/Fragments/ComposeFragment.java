@@ -21,9 +21,11 @@ import androidx.fragment.app.FragmentManager;
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Bias;
+import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.R;
-
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -63,14 +65,14 @@ public class ComposeFragment extends Fragment {
 
         ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(2).setChecked(true);
 
-        final String factCheck = article.getTruth();
-        final Article.Bias bias = article.getBias();
+        final Fact.TruthLevel factCheck = article.getTruth();
+        final Bias.BiasType bias = article.getBias();
         final ParseFile imageFile = article.getImage();
         final String title = article.getTitle();
         final String summary = article.getSummary();
-        final String source = article.getSource();
+        final Source source = article.getSource();
 
-        tvFactCheck.setText(factCheck);
+        tvFactCheck.setText(Fact.enumToString(factCheck));
         tvArticleTitle.setText(title);
 
         String imageUrl = article.getImageUrl();

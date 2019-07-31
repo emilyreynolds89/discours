@@ -1,9 +1,7 @@
 package com.codepath.fbu_newsfeed;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -55,7 +53,7 @@ public class ArticleDetailActivity extends AppCompatActivity implements View.OnC
 
         tvArticleTitleDetail.setText(article.getTitle());
         tvArticleSummaryDetail.setText(article.getSummary());
-        tvArticleSourceDetail.setText(article.getSource());
+        tvArticleSourceDetail.setText(article.getSource().getName());
         tvTagDetail.setText(article.getTag());
 
         url = article.getUrl();

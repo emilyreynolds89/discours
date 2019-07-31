@@ -6,7 +6,7 @@ public class Fact {
 
     public Fact(TruthLevel truthLevel) { this.truthLevel = truthLevel; }
 
-    enum TruthLevel {
+    public enum TruthLevel {
         TRUE, MOSTLY_TRUE, MIXTURE, MOSTLY_FALSE, FALSE, UNPROVEN, OPINION
     }
 
@@ -37,7 +37,7 @@ public class Fact {
                 fact = TruthLevel.FALSE;
                 break;
             default:
-                fact = TruthLevel.TRUE;
+                fact = TruthLevel.UNPROVEN;
                 break;
         }
         return fact;
@@ -65,5 +65,54 @@ public class Fact {
                 i = 0;
         }
         return i;
+    }
+
+    public static TruthLevel stringToEnum(String truth) {
+        TruthLevel fact;
+        switch(truth) {
+            case "TRUE":
+                fact = TruthLevel.TRUE;
+                break;
+            case "MOSTLY TRUE":
+                fact = TruthLevel.MOSTLY_TRUE;
+                break;
+            case "MIXTURE":
+                fact = TruthLevel.MIXTURE;
+                break;
+            case "MOSTLY FALSE":
+                fact = TruthLevel.MOSTLY_FALSE;
+                break;
+            case "FALSE":
+                fact = TruthLevel.FALSE;
+                break;
+            default:
+                fact = TruthLevel.UNPROVEN;
+                break;
+        }
+        return fact;
+    }
+
+    public static String enumToString(TruthLevel fact) {
+        String truth;
+        switch(fact) {
+            case TRUE:
+                truth = "TRUE";
+                break;
+            case MOSTLY_TRUE:
+                truth = "MOSTLY TRUE";
+                break;
+            case MIXTURE:
+                truth = "MIXTURE";
+                break;
+            case MOSTLY_FALSE:
+                truth = "MOSTLY FALSE";
+                break;
+            case FALSE:
+                truth = "FALSE";
+                break;
+            default:
+                truth = "UNPROVEN";
+        }
+        return truth;
     }
 }

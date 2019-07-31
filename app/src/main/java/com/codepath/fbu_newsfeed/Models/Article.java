@@ -17,7 +17,7 @@ public class Article extends ParseObject implements Serializable {
     public static final String KEY_SUMMARY = "summary";
     public static final String KEY_BIAS = "bias";
     public static final String KEY_TRUTH = "truth";
-    public static final String KEY_SOURCE = "source";
+    public static final String KEY_SOURCE = "sourceObject";
     public static final String KEY_TAG = "tag";
     public static final String KEY_IMAGEURL = "imageUrl";
     public static final int LIMIT = 20;
@@ -33,10 +33,10 @@ public class Article extends ParseObject implements Serializable {
     private String title;
     private ParseFile image;
     private String summary;
-    private Bias bias;
-    private String truth;
+    private Bias.BiasType bias;
+    private Fact.TruthLevel truth;
     private String tag;
-    private String source;
+    private Source source;
     private String imageUrl;
     private int count;
 
@@ -45,7 +45,7 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public Article(String url, String title, ParseFile image,
-                   String summary, Bias bias, String truth, String source, String tag) {
+                   String summary, Bias.BiasType bias, Fact.TruthLevel truth, Source source, String tag) {
         super();
         this.url = url;
         put(KEY_URL, url);
@@ -58,9 +58,9 @@ public class Article extends ParseObject implements Serializable {
         this.summary = summary;
         put(KEY_SUMMARY, summary);
         this.bias = bias;
-        put(KEY_BIAS, biasEnumToInt(bias));
+        put(KEY_BIAS, Bias.enumToInt(bias));
         this.truth = truth;
-        put(KEY_TRUTH, truth);
+        put(KEY_TRUTH, Fact.enumToString(truth));
         this.tag = tag;
         put(KEY_TAG, tag);
         this.source = source;
@@ -70,7 +70,7 @@ public class Article extends ParseObject implements Serializable {
     }
 
     public Article(String url, String title, String imageUrl,
-                   String summary, Bias bias, String truth, String source, String tag) {
+                   String summary, Bias.BiasType bias, Fact.TruthLevel truth, Source source, String tag) {
         super();
         this.url = url;
         put(KEY_URL, url);
@@ -83,9 +83,9 @@ public class Article extends ParseObject implements Serializable {
         this.summary = summary;
         put(KEY_SUMMARY, summary);
         this.bias = bias;
-        put(KEY_BIAS, biasEnumToInt(bias));
+        put(KEY_BIAS, Bias.enumToInt(bias));
         this.truth = truth;
-        put(KEY_TRUTH, truth);
+        put(KEY_TRUTH, Fact.enumToString(truth));
         this.tag = tag;
         put(KEY_TAG, tag);
         this.source = source;
@@ -93,11 +93,6 @@ public class Article extends ParseObject implements Serializable {
         this.count = 0;
         put(KEY_COUNT, 0);
     }
-
-    public enum Bias {
-        LIBERAL, SLIGHTLY_LIBERAL, MODERATE, SLIGHTLY_CONSERVATIVE, CONSERVATIVE
-    }
-
 
     public String getUrl() {
         return getString(KEY_URL);
@@ -147,32 +142,32 @@ public class Article extends ParseObject implements Serializable {
     }
 
 
-    public Bias getBias() {
-        return biasIntToEnum((int) getNumber(KEY_BIAS));
+    public Bias.BiasType getBias() {
+        return Bias.intToEnum((int) getNumber(KEY_BIAS));
     }
 
     public int getIntBias() { return (int) getNumber(KEY_BIAS); }
 
-    public void setBias(Bias bias) {
+    public void setBias(Bias.BiasType bias) {
         this.bias = bias;
-        put(KEY_BIAS, biasEnumToInt(bias));
+        put(KEY_BIAS, Bias.enumToInt(bias));
     }
 
 
-    public String getTruth() {
-        return getString(KEY_TRUTH);
+    public Fact.TruthLevel getTruth() {
+        return Fact.stringToEnum(getString(KEY_TRUTH));
     }
 
-    public void setTruth(String truth) {
+    public void setTruth(Fact.TruthLevel truth) {
         this.truth = truth;
-        put(KEY_TRUTH, truth);
+        put(KEY_TRUTH, Fact.enumToString(truth));
     }
 
-    public String getSource() {
-        return getString(KEY_SOURCE);
+    public Source getSource() {
+        return (Source) getParseObject(KEY_SOURCE);
     }
 
-    public void setSource(String source) {
+    public void setSource(Source source) {
         this.source = source;
         put(KEY_SOURCE, source);
     }
@@ -195,52 +190,6 @@ public class Article extends ParseObject implements Serializable {
         put(KEY_COUNT, count);
     }
 
-    public static Bias biasIntToEnum(int i) {
-        Bias res;
-        switch(i) {
-            case 1:
-                res = Bias.LIBERAL;
-                break;
-            case 2:
-                res = Bias.SLIGHTLY_LIBERAL;
-                break;
-            case 3:
-                res = Bias.MODERATE;
-                break;
-            case 4:
-                res = Bias.SLIGHTLY_CONSERVATIVE;
-                break;
-            case 5:
-                res = Bias.CONSERVATIVE;
-                break;
-            default:
-                res = Bias.MODERATE;
-        }
-        return res;
-    }
 
-    public int biasEnumToInt(Bias bias) {
-        int res;
-        switch(bias) {
-            case LIBERAL:
-                res = 1;
-                break;
-            case SLIGHTLY_LIBERAL:
-                res = 2;
-                break;
-            case MODERATE:
-                res = 3;
-                break;
-            case SLIGHTLY_CONSERVATIVE:
-                res = 4;
-                break;
-            case CONSERVATIVE:
-                res = 5;
-                break;
-            default:
-                res = 3;
-        }
-        return res;
-    }
 
 }

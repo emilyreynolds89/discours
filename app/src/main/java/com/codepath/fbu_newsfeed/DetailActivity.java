@@ -43,6 +43,7 @@ import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Helpers.ReactionHelper;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
+import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Reaction;
@@ -178,8 +179,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvArticleTitle.setText(article.getTitle());
         tvArticleSummary.setText(article.getSummary());
         tvTag.setText(article.getTag());
-        tvSource.setText(article.getSource());
-        tvFactRating.setText(article.getTruth());
+        tvSource.setText(article.getSource().getName());
+        tvFactRating.setText(Fact.enumToString(article.getTruth()));
 
         int biasValue = article.getIntBias();
         switch (biasValue) {
