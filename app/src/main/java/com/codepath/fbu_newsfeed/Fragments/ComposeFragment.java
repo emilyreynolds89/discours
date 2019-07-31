@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
+import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Bias;
@@ -83,26 +84,7 @@ public class ComposeFragment extends Fragment {
         }
 
         int biasValue = article.getIntBias();
-        switch (biasValue) {
-            case 1:
-                ivBias.setBackgroundResource(R.drawable.liberal_icon);
-                break;
-            case 2:
-                ivBias.setBackgroundResource(R.drawable.slightly_liberal_icon);
-                break;
-            case 3:
-                ivBias.setBackgroundResource(R.drawable.moderate_icon);
-                break;
-            case 4:
-                ivBias.setBackgroundResource(R.drawable.slightly_conserv_icon);
-                break;
-            case 5:
-                ivBias.setBackgroundResource(R.drawable.liberal_icon);
-                break;
-            default:
-                ivBias.setBackgroundResource(R.drawable.moderate_icon);
-                break;
-        }
+        BiasHelper.setBiasImageView(ivBias, biasValue);
 
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override

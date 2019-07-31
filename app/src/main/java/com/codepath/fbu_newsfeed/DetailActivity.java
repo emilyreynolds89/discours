@@ -40,6 +40,7 @@ import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Adapters.RecommendAdapter;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
+import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Helpers.ReactionHelper;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
@@ -183,26 +184,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvFactRating.setText(Fact.enumToString(article.getTruth()));
 
         int biasValue = article.getIntBias();
-        switch (biasValue) {
-            case 1:
-                ivBias.setBackgroundResource(R.drawable.liberal_icon);
-                break;
-            case 2:
-                ivBias.setBackgroundResource(R.drawable.slightly_liberal_icon);
-                break;
-            case 3:
-                ivBias.setBackgroundResource(R.drawable.moderate_icon);
-                break;
-            case 4:
-                ivBias.setBackgroundResource(R.drawable.slightly_conserv_icon);
-                break;
-            case 5:
-                ivBias.setBackgroundResource(R.drawable.liberal_icon);
-                break;
-            default:
-                ivBias.setBackgroundResource(R.drawable.moderate_icon);
-                break;
-        }
+        BiasHelper.setBiasImageView(ivBias, biasValue);
 
         if (!share.getCaption().isEmpty()) {
             String captionUsername = "<b>@" + share.getUser().getUsername() + ": </b>";
@@ -284,10 +266,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 i.putExtra("article", (Serializable) article);
                 startActivity(i);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-//                intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
-//                intent.putExtra("article", (Serializable) article);
-//                startActivity(intent);
-//                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
         }
 
@@ -362,7 +340,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void showInformationDialog() {
-        //FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
         InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
@@ -561,7 +538,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void reportArticle() {
-        //FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
         ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());

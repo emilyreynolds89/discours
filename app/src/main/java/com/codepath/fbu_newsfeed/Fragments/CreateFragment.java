@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
+import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Helpers.JSoupResult;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
@@ -144,28 +145,12 @@ public class CreateFragment extends Fragment {
                     Log.d(TAG, "We found this source: " + articleSource.toString());
                     tvFactCheckCreate.setText(articleSource.getFact());
                     tvArticleTitleCreate.setText(jSoupResult.getTitleUrl());
+                }
 
-                    int biasVal = articleSource.getBias();
-                    switch (biasVal) {
-                        case 1:
-                            ivBiasCreate.setColorFilter(Article.liberalColor);
-                            break;
-                        case 2:
-                            ivBiasCreate.setColorFilter(Article.slightlyLiberalColor);
-                            break;
-                        case 3:
-                            ivBiasCreate.setColorFilter(Article.moderateColor);
-                            break;
-                        case 4:
-                            ivBiasCreate.setColorFilter(Article.slightlyConservativeColor);
-                            break;
-                        case 5:
-                            ivBiasCreate.setColorFilter(Article.conservativeColor);
-                            break;
-                    }
-                    if (jSoupResult.getImageUrl() != null) {
-                        Glide.with(getContext()).load(jSoupResult.getImageUrl()).into(ivArticlePreviewCreate);
-                    }
+                int biasVal = articleSource.getBias();
+                BiasHelper.setBiasImageView(ivBiasCreate, biasVal);
+                if (jSoupResult.getImageUrl() != null) {
+                    Glide.with(getContext()).load(jSoupResult.getImageUrl()).into(ivArticlePreviewCreate);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -243,26 +228,7 @@ public class CreateFragment extends Fragment {
                     ParseFile imageFile = articles.get(position).getImage();
 
                     int biasValue = articles.get(position).getIntBias();
-                    switch (biasValue) {
-                        case 1:
-                            ivBiasCreate.setBackgroundResource(R.drawable.liberal_icon);
-                            break;
-                        case 2:
-                            ivBiasCreate.setBackgroundResource(R.drawable.slightly_liberal_icon);
-                            break;
-                        case 3:
-                            ivBiasCreate.setBackgroundResource(R.drawable.moderate_icon);
-                            break;
-                        case 4:
-                            ivBiasCreate.setBackgroundResource(R.drawable.slightly_conserv_icon);
-                            break;
-                        case 5:
-                            ivBiasCreate.setBackgroundResource(R.drawable.liberal_icon);
-                            break;
-                        default:
-                            ivBiasCreate.setBackgroundResource(R.drawable.moderate_icon);
-                            break;
-                    }
+                    BiasHelper.setBiasImageView(ivBiasCreate, biasValue);
                     String imageUrl = articles.get(position).getImageUrl();
                     if (imageFile != null ) {
                         Glide.with(getContext()).load(imageFile.getUrl()).into(ivArticlePreviewCreate);

@@ -29,6 +29,7 @@ import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
+import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Helpers.ReactionHelper;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
@@ -144,26 +145,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         holder.tvFactRating.setText(Fact.enumToString(article.getTruth()));
 
         int biasValue = article.getIntBias();
-        switch (biasValue) {
-            case 1:
-                holder.ivBias.setBackgroundResource(R.drawable.liberal_icon);
-                break;
-            case 2:
-                holder.ivBias.setBackgroundResource(R.drawable.slightly_liberal_icon);
-                break;
-            case 3:
-                holder.ivBias.setBackgroundResource(R.drawable.moderate_icon);
-                break;
-            case 4:
-                holder.ivBias.setBackgroundResource(R.drawable.slightly_conserv_icon);
-                break;
-            case 5:
-                holder.ivBias.setBackgroundResource(R.drawable.conserv_icon);
-                break;
-            default:
-                holder.ivBias.setBackgroundResource(R.drawable.moderate_icon);
-                break;
-        }
+        BiasHelper.setBiasImageView(holder.ivBias, biasValue);
 
         if (!share.getCaption().isEmpty()) {
             String captionUsername = "<b>@" + user.getUsername() + ": </b>";
