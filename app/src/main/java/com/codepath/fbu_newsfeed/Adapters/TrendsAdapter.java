@@ -75,14 +75,14 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
         CardView cvArticleImage;
         @BindView(R.id.tvArticleTitleTrends)
         TextView tvTitle;
-        //@BindView(R.id.tvArticleSummaryTrends)
-        //TextView tvSummary;
         @BindView(R.id.tvSourceTrends)
         TextView tvSource;
         @BindView(R.id.tvFactRatingTrends)
         TextView tvFactRatingTrends;
         @BindView(R.id.tvTagTrends)
         TextView tvTagTrends;
+        @BindView(R.id.viewArticle)
+        View viewArticle;
 
 
         ViewHolder(@NonNull View itemView) {
@@ -92,7 +92,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             ibReportArticle.setOnClickListener(this);
             tvTagTrends.setOnClickListener(this);
             cvArticleImage.setOnClickListener(this);
-            //tvSummary.setOnClickListener(this);
+            viewArticle.setOnClickListener(this);
             tvTitle.setOnClickListener(this);
 
         }
@@ -114,8 +114,8 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                         context.startActivity(intent);
                         ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                         break;
+                    case R.id.viewArticle:
                     case R.id.cvArticleImage:
-                    case R.id.tvArticleSummaryTrends:
                     case R.id.tvArticleTitleTrends:
                         Intent i = new Intent(context, BrowserActivity.class);
                         i.putExtra("article", (Serializable) article);
