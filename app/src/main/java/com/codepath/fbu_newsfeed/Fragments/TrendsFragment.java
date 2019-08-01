@@ -86,7 +86,6 @@ public class TrendsFragment extends Fragment {
             }
         });
 
-
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -133,6 +132,7 @@ public class TrendsFragment extends Fragment {
         articleQuery.include(Article.KEY_URL);
         articleQuery.setLimit(Article.LIMIT);
         articleQuery.setSkip(offset * Article.LIMIT);
+        articleQuery.orderByDescending(Article.KEY_CREATED_AT);
         articleQuery.orderByDescending(Article.KEY_COUNT);
 
         articleQuery.findInBackground(new FindCallback<Article>() {
