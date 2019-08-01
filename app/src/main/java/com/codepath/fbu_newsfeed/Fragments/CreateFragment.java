@@ -61,6 +61,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 // TODO: need to check if article already exists
+// TODO: check if article is opinion
 
 public class CreateFragment extends Fragment {
     public static final String TAG = "CreateFragment";
