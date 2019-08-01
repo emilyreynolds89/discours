@@ -96,7 +96,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         switch(view.getId()) {
             case R.id.btnShare:
                 Intent intent = new Intent(this, HomeActivity.class);
-                intent.putExtra("article", (Serializable) article);
+                intent.putExtra("url", webView.getUrl());
                 startActivity(intent);
                 break;
             case R.id.ibBack:
