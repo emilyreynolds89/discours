@@ -29,7 +29,7 @@ public class UserStatsDialogFragment extends DialogFragment {
 
     @BindView(R.id.pbBiasAverage) ProgressBar pbBiasAverage;
     @BindView(R.id.pbFactAverage) ProgressBar pbFactAverage;
-    @BindView(R.id.tvArticleCount) TextView tvArticleNumber;
+    @BindView(R.id.tvArticleTitleCreate) TextView tvArticleNumber;
 
     public UserStatsDialogFragment() {}
 

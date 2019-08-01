@@ -182,7 +182,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
         @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
         @BindView(R.id.ivArticleImage) ImageView ivArticleImage;
-        @BindView(R.id.tvArticleCount) TextView tvArticleTitle;
+        @BindView(R.id.tvArticleTitleCreate) TextView tvArticleTitle;
         @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
         @BindView(R.id.ibReportArticle) ImageButton ibReportArticle;
         @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
@@ -241,7 +241,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                         ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                         break;
                     case R.id.cvArticleImage:
-                    case R.id.tvArticleCount:
+                    case R.id.tvArticleTitleCreate:
                     case R.id.tvArticleSummary:
                         goToArticle(article);
                         break;

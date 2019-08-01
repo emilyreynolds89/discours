@@ -73,7 +73,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
     @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
     @BindView(R.id.ivArticleImage) ImageView ivArticleImage;
-    @BindView(R.id.tvArticleCount) TextView tvArticleTitle;
+    @BindView(R.id.tvArticleTitleCreate) TextView tvArticleTitle;
     @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
     @BindView(R.id.ibReportArticle) ImageButton ibReportArticle;
     @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
@@ -260,7 +260,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
             case R.id.tvArticleSummary:
-            case R.id.tvArticleCount:
+            case R.id.tvArticleTitleCreate:
             case R.id.viewArticle:
                 Intent i = new Intent(this, BrowserActivity.class);
                 i.putExtra("article", (Serializable) article);

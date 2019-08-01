@@ -44,7 +44,7 @@ public class ComposeFragment extends Fragment {
     private Article article;
 
     @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreview;
-    @BindView(R.id.tvArticleCount) TextView tvArticleTitle;
+    @BindView(R.id.tvArticleTitleCreate) TextView tvArticleTitle;
     @BindView(R.id.tvFactCheckCreate) TextView tvFactCheck;
     @BindView(R.id.ivBias) ImageView  ivBias;
     @BindView(R.id.ibInformation) ImageButton ibInformation;

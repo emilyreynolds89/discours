@@ -53,6 +53,7 @@ import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,7 +72,7 @@ public class CreateFragment extends Fragment {
 
     public @BindView(R.id.spArticleListCreate) Spinner spArticleListCreate;
     public @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreviewCreate;
-    public @BindView(R.id.tvArticleTitle) TextView tvArticleTitleCreate;
+    public @BindView(R.id.tvArticleTitleCreate) TextView tvArticleTitleCreate;
     public @BindView(R.id.tvFactCheckCreate) TextView tvFactCheckCreate;
     public @BindView(R.id.ivBias) ImageView  ivBiasCreate;
     public @BindView(R.id.ibInformation) ImageButton ibInformation;
@@ -90,6 +91,7 @@ public class CreateFragment extends Fragment {
 
     //ContentTask contentTask;
 
+    HashMap<String, Boolean> parsedArticles; // key: article URL, value: whether or not the article has already been parsed and added to database
 
     private ArrayList<String> tagList;
     private ArrayAdapter<String> tagAdapter;
@@ -102,6 +104,8 @@ public class CreateFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create, container, false);
         unbinder = ButterKnife.bind(this, view);
 
+        parsedArticles = new HashMap<>();
+
         return view;
     }
 
@@ -111,6 +115,9 @@ public class CreateFragment extends Fragment {
 
         if (getArguments() != null) {
             url = getArguments().getString("url");
+            if (parsedArticles.get(url) == null || parsedArticles.get(url) == false) {
+                parsedArticles.put(url, false);
+            }
         }
 
         ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(2).setChecked(true);
@@ -219,13 +226,20 @@ public class CreateFragment extends Fragment {
         } else if (imageUrl != null) {
             Glide.with(getContext()).load(imageUrl).into(this.ivArticlePreviewCreate);
         }
+
+        int spinnerPosition = tagAdapter.getPosition(this.selectedArticle.getTag());
+        tagSelector.setSelection(spinnerPosition);
+
     }
 
 
     private void urlHasBeenEntered() {
         etUrlCreate.setText(url);
 
-        new ContentTask(CreateFragment.this).execute(url);
+        if (!parsedArticles.get(url)) {
+            new ContentTask(CreateFragment.this).execute(url);
+            parsedArticles.put(url, true);
+        }
         setUpTagSelector();
         spArticleListCreate.setVisibility(View.GONE);
     }
@@ -378,12 +392,12 @@ public class CreateFragment extends Fragment {
 
     public static class ContentTask extends AsyncTask<String, Void, JSoupResult> {
 
-        private SoftReference<CreateFragment> fragmentWeakReference;
-        //CreateFragment fragment;
+        //private SoftReference<CreateFragment> fragmentWeakReference;
+        CreateFragment fragment;
 
         ContentTask(CreateFragment context){
-            fragmentWeakReference = new SoftReference<>(context);
-            //fragment = context;
+            //fragmentWeakReference = new SoftReference<>(context);
+            fragment = context;
         }
 
         @Override
@@ -438,9 +452,8 @@ public class CreateFragment extends Fragment {
         @Override
         protected void onPostExecute(JSoupResult jSoupResult) {
 
-            final CreateFragment fragment = fragmentWeakReference.get();
+            //final CreateFragment fragment = fragmentWeakReference.get();
             if (fragment == null || fragment.isRemoving()) return;
-
             Log.d(TAG, "TITLE: " + jSoupResult.getTitle());
             Source articleSource = null;
             try {
@@ -467,7 +480,9 @@ public class CreateFragment extends Fragment {
             }
             fragment.selectedArticle = new Article(jSoupResult.getSourceUrl(), jSoupResult.getTitle(), jSoupResult.getImageUrl(), jSoupResult.getDescription(), Bias.intToEnum(intBias), Fact.stringToEnum(strFact), articleSource, "UNTAGGED");
             fragment.selectedArticle.saveInBackground();
+            fragment.parsedArticles.put(jSoupResult.getSourceUrl(), true);
             fragment.setArticleView();
+
         }
     }
 
