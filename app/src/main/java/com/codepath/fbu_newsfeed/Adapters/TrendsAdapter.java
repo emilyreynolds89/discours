@@ -14,10 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.BrowserActivity;
+import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Models.Article;
@@ -94,6 +96,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
             ButterKnife.bind(this, itemView);
             ibReportArticle.setOnClickListener(this);
+            ibInformationTrends.setOnClickListener(this);
             tvTagTrends.setOnClickListener(this);
             cvArticleImage.setOnClickListener(this);
             viewArticle.setOnClickListener(this);
@@ -111,6 +114,9 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                 switch(view.getId()) {
                     case R.id.ibReportArticle:
                         reportArticle(article);
+                        break;
+                    case R.id.ibInformation:
+                        showInformationDialog();
                         break;
                     case R.id.tvTagTrends:
                         Intent intent = new Intent(context, TagActivity.class);
@@ -179,6 +185,12 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             articleReportDialog.show(fm, "fragment_report");
         }
 
-
+    private void showInformationDialog() {
+        //FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
+        InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
+        informationDialog.show(fragmentTransaction, "fragment_information");
+    }
 
 }

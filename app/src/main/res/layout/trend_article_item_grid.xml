@@ -140,7 +140,7 @@
         app:layout_constraintEnd_toStartOf="@+id/ivBiasTrends"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/ivBiasTrends"
