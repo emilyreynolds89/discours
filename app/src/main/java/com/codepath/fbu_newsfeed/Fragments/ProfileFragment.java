@@ -68,6 +68,7 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.btnUnfriend) ImageButton btnUnfriend;
     @BindView(R.id.btnReport) ImageButton btnReport;
     @BindView(R.id.rvProfilePosts) RecyclerView rvProfilePosts;
+    @BindView(R.id.ivBadge) ImageView ivBadge;
 
     private ShareAdapter shareAdapter;
     protected @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
@@ -163,6 +164,7 @@ public class ProfileFragment extends Fragment {
             btnEdit.setVisibility(View.VISIBLE);
             btnUnfriend.setVisibility(View.GONE);
             btnReport.setVisibility(View.GONE);
+            ivBadge.setVisibility(View.VISIBLE);
 
             btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -182,6 +184,13 @@ public class ProfileFragment extends Fragment {
                     logOut();
                 }
             });
+            ivBadge.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showUserStats();
+                }
+            });
+
         } else {
             btnEdit.setVisibility(View.INVISIBLE);
             btnReport.setVisibility(View.VISIBLE);
@@ -189,6 +198,7 @@ public class ProfileFragment extends Fragment {
             btnRequest.setVisibility(View.VISIBLE);
             btnUnfriend.setVisibility(View.GONE);
             tvFriends.setVisibility(View.GONE);
+            ivBadge.setVisibility(View.GONE);
 
             btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -284,6 +294,12 @@ public class ProfileFragment extends Fragment {
         FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
         ReportUserFragment userReportDialog = ReportUserFragment.newInstance(user.getObjectId());
         userReportDialog.show(fm, "fragment_user_report");
+    }
+
+    private void showUserStats() {
+        FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        UserStatsDialogFragment userStatsDialog = UserStatsDialogFragment.newInstance();
+        userStatsDialog.show(fm, "fragment_user_stats");
     }
 
     private void editUser() {

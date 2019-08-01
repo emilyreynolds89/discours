@@ -3,6 +3,7 @@ package com.codepath.fbu_newsfeed.Models;
 import android.util.Log;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -22,8 +23,8 @@ public class User extends ParseUser implements Serializable {
 
     public static final int LIMIT = 30;
 
-    public float biasAverage;
-    public float factAverage;
+    public double biasAverage;
+    public double factAverage;
     public int articleCount;
 
     public String getUsername() {
@@ -50,20 +51,20 @@ public class User extends ParseUser implements Serializable {
         put(KEY_PROFILEIMAGE, file);
     }
 
-    public float getBiasAverage() {
-        return getInt(KEY_BIAS_AVERAGE);
+    public double getBiasAverage() {
+        return getDouble(KEY_BIAS_AVERAGE);
     }
 
-    public void setBiasAverage(float biasAverage) {
+    public void setBiasAverage(double biasAverage) {
         this.biasAverage = biasAverage;
         put(KEY_BIAS_AVERAGE, biasAverage);
     }
 
-    public float getFactAverage() {
-        return getInt(KEY_FACT_AVERAGE);
+    public double getFactAverage() {
+        return getDouble(KEY_FACT_AVERAGE);
     }
 
-    public void setFactAverage(float factAverage) {
+    public void setFactAverage(double factAverage) {
         this.factAverage = factAverage;
         put(KEY_FACT_AVERAGE, factAverage);
     }
@@ -78,17 +79,20 @@ public class User extends ParseUser implements Serializable {
     }
 
 
-    private int queryArticleCount(boolean queryFacts) {
+    public int queryArticleCount(boolean queryFacts) {
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.whereEqualTo("user", this);
-        if (queryFacts) {
-            query.whereNotEqualTo(Article.KEY_TRUTH, "OPINION");
-            query.whereNotEqualTo(Article.KEY_TRUTH, "UNPROVEN");
-            query.whereNotEqualTo(Article.KEY_TRUTH, null);
-        }
         try {
             List<Share> results = query.find();
             Log.d("User", this.getUsername() + " has shared " + results.size() + " articles");
+            if (queryFacts) {
+                for (Share share : results) {
+                    Article article = getArticle(share.getArticle().getObjectId());
+                    if (article.getTruth().equals(Fact.TruthLevel.OPINION) || article.getTruth().equals(Fact.TruthLevel.UNPROVEN)) {
+                        results.remove(share);
+                    }
+                }
+            }
             return results.size();
         } catch(Exception e) {
             Log.d("User", "Error: " + e.getMessage());
@@ -97,20 +101,18 @@ public class User extends ParseUser implements Serializable {
 
     }
 
-    public float updateBiasAverage(int newBias){
-        float average = getBiasAverage();
+    public void updateBiasAverage(int newBias){
+        double average = getBiasAverage();
         int count = getArticleCount();
-        float newAverage = (average + newBias) / (count + 1);
+        double newAverage = (count*average + newBias) / (count + 1);
         setBiasAverage(newAverage);
-        return newAverage;
     }
 
-    public float updateFactAverage(int newFact) {
-        float average = getFactAverage();
+    public void updateFactAverage(int newFact) {
         int count = queryArticleCount(true);
-        float newAverage = (average + newFact) / (count + 1);
+        double average = getFactAverage();
+        double newAverage = (count*average + newFact) / (count + 1);
         setFactAverage(newAverage);
-        return newAverage;
     }
 
     public int updateArticleCount() {
@@ -122,6 +124,12 @@ public class User extends ParseUser implements Serializable {
             setArticleCount(0);
             return 0;
         }
+    }
+
+    private Article getArticle(String article_id) throws ParseException {
+        ParseQuery<Article> query = ParseQuery.getQuery(Article.class);
+        query.whereEqualTo("objectId", article_id);
+        return query.getFirst();
     }
 
 }

@@ -35,6 +35,7 @@ import com.codepath.fbu_newsfeed.Models.Bias;
 import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.Source;
+import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -71,7 +72,7 @@ public class CreateFragment extends Fragment {
 
     @BindView(R.id.spArticleListCreate) Spinner spArticleListCreate;
     @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreviewCreate;
-    @BindView(R.id.tvArticleTitle) TextView tvArticleTitleCreate;
+    @BindView(R.id.tvArticleCount) TextView tvArticleTitleCreate;
     @BindView(R.id.tvFactCheckCreate) TextView tvFactCheckCreate;
     @BindView(R.id.ivBias) ImageView  ivBiasCreate;
     @BindView(R.id.ibInformation) ImageButton ibInformation;
@@ -251,6 +252,8 @@ public class CreateFragment extends Fragment {
                 if (selectedArticle != null) {
                     final String caption = etCaptionCreate.getText().toString();
                     shareCreate(caption, selectedArticle);
+
+                    updateUserStats((User) ParseUser.getCurrentUser(), selectedArticle.getObjectId());
                 }
             }
         });
@@ -346,7 +349,24 @@ public class CreateFragment extends Fragment {
         return null;
     }
 
+    private void updateUserStats(User user, String articleId) {
+        Article article = null;
+        try {
+            article = getArticle(articleId);
+            user.updateArticleCount();
+            user.updateBiasAverage(article.getIntBias());
+            user.updateFactAverage(Fact.enumToInt(article.getTruth()));
+            user.saveInBackground();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private Article getArticle(String article_id) throws ParseException {
+        ParseQuery<Article> query = ParseQuery.getQuery(Article.class);
+        query.whereEqualTo("objectId", article_id);
+        return query.getFirst();
+    }
 
     public static Bitmap getBitmapFromURL(String src) {
         try {

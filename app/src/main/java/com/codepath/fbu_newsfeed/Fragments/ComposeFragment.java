@@ -26,9 +26,11 @@ import com.codepath.fbu_newsfeed.Models.Bias;
 import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.Source;
+import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -42,7 +44,7 @@ public class ComposeFragment extends Fragment {
     private Article article;
 
     @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreview;
-    @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
+    @BindView(R.id.tvArticleCount) TextView tvArticleTitle;
     @BindView(R.id.tvFactCheckCreate) TextView tvFactCheck;
     @BindView(R.id.ivBias) ImageView  ivBias;
     @BindView(R.id.ibInformation) ImageButton ibInformation;
@@ -134,6 +136,26 @@ public class ComposeFragment extends Fragment {
                 }
             }
         });
+        updateUserStats((User) ParseUser.getCurrentUser(), article.getObjectId());
+    }
+
+    private void updateUserStats(User user, String articleId) {
+        Article article = null;
+        try {
+            article = getArticle(articleId);
+            user.updateArticleCount();
+            user.updateBiasAverage(article.getIntBias());
+            user.updateFactAverage(Fact.enumToInt(article.getTruth()));
+            user.saveInBackground();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Article getArticle(String article_id) throws ParseException {
+        ParseQuery<Article> query = ParseQuery.getQuery(Article.class);
+        query.whereEqualTo("objectId", article_id);
+        return query.getFirst();
     }
 
 }

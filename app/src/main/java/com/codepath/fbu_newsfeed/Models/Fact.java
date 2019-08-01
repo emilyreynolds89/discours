@@ -21,19 +21,19 @@ public class Fact {
     public static TruthLevel intToEnum(int i) {
         TruthLevel fact;
         switch(i) {
-            case 0:
+            case 5:
                 fact = TruthLevel.TRUE;
                 break;
-            case 1:
+            case 4:
                 fact = TruthLevel.MOSTLY_TRUE;
                 break;
-            case 2:
+            case 3:
                 fact = TruthLevel.MIXTURE;
                 break;
-            case 3:
+            case 2:
                 fact = TruthLevel.MOSTLY_FALSE;
                 break;
-            case 4:
+            case 1:
                 fact = TruthLevel.FALSE;
                 break;
             default:
@@ -43,26 +43,27 @@ public class Fact {
         return fact;
     }
 
-    public int enumToInt(TruthLevel fact) {
+    public static int enumToInt(TruthLevel fact) {
         int i;
         switch(fact) {
             case TRUE:
-                i = 0;
+                i = 5;
                 break;
             case MOSTLY_TRUE:
-                i = 1;
+                i = 4;
                 break;
             case MIXTURE:
-                i = 2;
-                break;
-            case MOSTLY_FALSE:
                 i = 3;
                 break;
+            case MOSTLY_FALSE:
+                i = 2;
+                break;
             case FALSE:
-                i = 4;
+                i = 1;
                 break;
             default:
                 i = 0;
+                break;
         }
         return i;
     }

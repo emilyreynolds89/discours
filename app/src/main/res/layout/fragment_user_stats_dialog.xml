@@ -3,23 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout6"
-    android:layout_width="400dp"
+    android:layout_width="410dp"
     android:layout_height="400dp"
     android:orientation="vertical">
 
     <ProgressBar
         android:id="@+id/pbFactAverage"
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="64dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="32dp"
-        android:indeterminateTint="@color/colorAccentBold"
+        android:indeterminate="false"
         android:max="100"
-        android:min="0"
+        android:min="1"
         android:progress="75"
+        android:progressDrawable="@drawable/progress_circle"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvFactTitle"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ProgressBar
         android:id="@+id/pbBiasAverage"
@@ -29,6 +33,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="216dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:min="1"
+        android:progress="75"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -79,18 +87,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
         android:fontFamily="@font/lato"
         android:gravity="center"
         android:text="AVERAGE\nTRUTH"
-        app:layout_constraintBottom_toTopOf="@+id/pbFactAverage"
+        app:layout_constraintBottom_toBottomOf="@+id/tvArticleTitle"
         app:layout_constraintEnd_toEndOf="@+id/pbFactAverage"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="@+id/pbFactAverage"
         app:layout_constraintTop_toBottomOf="@+id/pbBiasAverage"
-        app:layout_constraintVertical_bias="0.95" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-        android:id="@+id/tvArticleTitle"
+        android:id="@+id/tvArticleCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -98,14 +106,14 @@
         android:gravity="center"
         android:text="#"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tvArticleTitle2"
-        app:layout_constraintEnd_toEndOf="@+id/tvArticleTitle2"
-        app:layout_constraintStart_toStartOf="@+id/tvArticleTitle2"
+        app:layout_constraintBottom_toTopOf="@+id/tvArticleTitle"
+        app:layout_constraintEnd_toEndOf="@+id/tvArticleTitle"
+        app:layout_constraintStart_toStartOf="@+id/tvArticleTitle"
         app:layout_constraintTop_toBottomOf="@+id/pbBiasAverage"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-        android:id="@+id/tvArticleTitle2"
+        android:id="@+id/tvArticleTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
