@@ -111,7 +111,7 @@
             app:layout_constraintTop_toBottomOf="@+id/etCaptionCreate" />
 
         <TextView
-            android:id="@+id/tvArticleTitle"
+            android:id="@+id/tvArticleCount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -137,7 +137,7 @@
             android:background="@color/colorModerate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvArticleTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/tvArticleCount" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

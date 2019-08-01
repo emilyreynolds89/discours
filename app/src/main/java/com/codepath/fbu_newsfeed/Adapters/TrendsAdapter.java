@@ -26,7 +26,10 @@ import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.R;
 import com.codepath.fbu_newsfeed.TagActivity;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 
 import java.io.Serializable;
 import java.util.List;
@@ -133,14 +136,13 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
         void bind(Article article) {
             tvTitle.setText(article.getTitle());
             tvSummary.setText(article.getSummary());
-
-            try {
-                Source source = article.getSource().fetchIfNeeded();
-                tvSource.setText(source.getName());
-            } catch (Exception e) {
-                Log.e(TAG, "Oops", e);
-            }
-
+            article.getParseObject(Article.KEY_SOURCE).fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject object, ParseException e) {
+                    Source source = (Source) object;
+                    tvSource.setText(source.getName());
+                }
+            });
             tvFactRatingTrends.setText(Fact.enumToString(article.getTruth()));
             tvTagTrends.setText(article.getTag());
 

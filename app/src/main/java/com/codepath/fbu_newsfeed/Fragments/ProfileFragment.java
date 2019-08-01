@@ -60,7 +60,6 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvFullName) TextView tvFullName;
     @BindView(R.id.tvBio) TextView tvBio;
-    @BindView(R.id.tvArticleCount) TextView tvArticleCount;
     @BindView(R.id.tvFriends) TextView tvFriends;
     @BindView(R.id.btnLogout) Button btnLogout;
     @BindView(R.id.btnRequest) Button btnRequest;
@@ -68,6 +67,7 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.btnUnfriend) ImageButton btnUnfriend;
     @BindView(R.id.btnReport) ImageButton btnReport;
     @BindView(R.id.rvProfilePosts) RecyclerView rvProfilePosts;
+    @BindView(R.id.ivBadge) ImageView ivBadge;
 
     private ShareAdapter shareAdapter;
     protected @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
@@ -94,9 +94,12 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(4).setChecked(true);
+
 
         String user_id = getArguments().getString("user_id");
+
+        if (user_id.equals(ParseUser.getCurrentUser().getObjectId()))
+            ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(4).setChecked(true);
 
         Log.d(TAG, "get profile for: " + user_id);
         try {
@@ -110,7 +113,6 @@ public class ProfileFragment extends Fragment {
         tvUsername.setText("@" + user.getString(User.KEY_USERNAME));
         tvFullName.setText(user.getString(User.KEY_FULLNAME));
         tvBio.setText(user.getString(User.KEY_BIO));
-        tvArticleCount.setText(getArticleCount());
 
         if (user.getParseFile("profileImage") != null) {
             Glide.with(getContext()).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
@@ -163,6 +165,7 @@ public class ProfileFragment extends Fragment {
             btnEdit.setVisibility(View.VISIBLE);
             btnUnfriend.setVisibility(View.GONE);
             btnReport.setVisibility(View.GONE);
+            ivBadge.setVisibility(View.VISIBLE);
 
             btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -182,6 +185,13 @@ public class ProfileFragment extends Fragment {
                     logOut();
                 }
             });
+            ivBadge.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showUserStats();
+                }
+            });
+
         } else {
             btnEdit.setVisibility(View.INVISIBLE);
             btnReport.setVisibility(View.VISIBLE);
@@ -189,6 +199,7 @@ public class ProfileFragment extends Fragment {
             btnRequest.setVisibility(View.VISIBLE);
             btnUnfriend.setVisibility(View.GONE);
             tvFriends.setVisibility(View.GONE);
+            ivBadge.setVisibility(View.GONE);
 
             btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -284,6 +295,12 @@ public class ProfileFragment extends Fragment {
         FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
         ReportUserFragment userReportDialog = ReportUserFragment.newInstance(user.getObjectId());
         userReportDialog.show(fm, "fragment_user_report");
+    }
+
+    private void showUserStats() {
+        FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        UserStatsDialogFragment userStatsDialog = UserStatsDialogFragment.newInstance();
+        userStatsDialog.show(fm, "fragment_user_stats");
     }
 
     private void editUser() {
@@ -445,20 +462,6 @@ public class ProfileFragment extends Fragment {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("objectId", user_id);
         return query.getFirst();
-    }
-
-    private String getArticleCount() {
-        ParseQuery<Share> query = ParseQuery.getQuery("Share");
-        query.whereEqualTo("user", user);
-        try {
-            List<Share> results = query.find();
-            Log.d("User", user.getUsername() + " has shared " + results.size() + " articles");
-            return results.size() + " Articles";
-        } catch(Exception e) {
-            Log.d("User", "Error: " + e.getMessage());
-            return "error";
-        }
-
     }
 
     private void createFriendNotification(String type, User friend) {

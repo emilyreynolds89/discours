@@ -30,7 +30,7 @@
         android:layout_marginBottom="16dp"
         android:scaleType="centerCrop"
         android:tint="#40636262"
-        app:layout_constraintBottom_toTopOf="@+id/tvArticleTitle"
+        app:layout_constraintBottom_toTopOf="@+id/tvArticleCount"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spArticleListCreate"
         tools:srcCompat="@drawable/news_placeholder" />
@@ -97,7 +97,7 @@
             android:layout_marginEnd="4dp"
             android:background="@android:color/transparent"
             android:scaleType="fitXY"
-            app:layout_constraintEnd_toEndOf="@+id/tvArticleTitle"
+            app:layout_constraintEnd_toEndOf="@+id/tvArticleCount"
             app:layout_constraintTop_toBottomOf="@+id/view"
             app:srcCompat="@drawable/question" />
 
@@ -120,7 +120,7 @@
             app:layout_constraintTop_toBottomOf="@+id/etCaptionCreate" />
 
         <TextView
-            android:id="@+id/tvArticleTitle"
+            android:id="@+id/tvArticleCount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -146,7 +146,7 @@
             android:background="@color/colorModerate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvArticleTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/tvArticleCount" />
 
         <Spinner
             android:id="@+id/spArticleListCreate"

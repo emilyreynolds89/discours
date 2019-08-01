@@ -133,6 +133,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
         if (intent != null) {
             Article article = (Article) intent.getSerializableExtra("article");
             String user_id = intent.getStringExtra("user_id");
+            String url = intent.getStringExtra("url");
 
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
@@ -149,11 +150,18 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
             }
 
             if (user_id != null) {
-                if (user_id.equals(ParseUser.getCurrentUser().getObjectId()))
-                    bottomNavigationView.setSelectedItemId(R.id.action_profile);
                 Fragment newProfileFragment = ProfileFragment.newInstance(user_id);
 
                 fragmentTransaction.replace(R.id.flContainer, newProfileFragment).addToBackStack(ProfileFragment.TAG).commit();
+            }
+
+            if (url != null) {
+                Bundle bundle = new Bundle();
+                CreateFragment createFragment = new CreateFragment();
+                bundle.putString("url", url);
+
+                createFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, createFragment).commit();
             }
 
             onSharedIntent();

@@ -34,6 +34,7 @@ import com.codepath.fbu_newsfeed.Models.Bias;
 import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.Source;
+import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -180,6 +181,8 @@ public class CreateFragment extends Fragment {
 
                     final String caption = etCaptionCreate.getText().toString();
                     shareCreate(caption, selectedArticle);
+
+                    updateUserStats((User) ParseUser.getCurrentUser(), selectedArticle.getObjectId());
                 }
             }
         });
@@ -192,20 +195,6 @@ public class CreateFragment extends Fragment {
             }
         });
 
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (getArguments() != null) {
-            url = getArguments().getString("url");
-        }
-
-        if (url != null) {
-            urlHasBeenEntered();
-        }
 
     }
 
@@ -290,7 +279,6 @@ public class CreateFragment extends Fragment {
 
                 spinnerArrayAdapter.notifyDataSetChanged();
                 }
-
         });
     }
     private void shareCreate(String caption, Article article) {
@@ -332,6 +320,25 @@ public class CreateFragment extends Fragment {
             }
         }
         return null;
+    }
+
+    private void updateUserStats(User user, String articleId) {
+        Article article = null;
+        try {
+            article = getArticle(articleId);
+            user.updateArticleCount();
+            user.updateBiasAverage(article.getIntBias());
+            user.updateFactAverage(Fact.enumToInt(article.getTruth()));
+            user.saveInBackground();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Article getArticle(String article_id) throws ParseException {
+        ParseQuery<Article> query = ParseQuery.getQuery(Article.class);
+        query.whereEqualTo("objectId", article_id);
+        return query.getFirst();
     }
 
     private void updateArticleTag() {
