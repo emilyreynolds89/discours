@@ -3,6 +3,7 @@ package com.codepath.fbu_newsfeed.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Fact;
+import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.R;
 import com.codepath.fbu_newsfeed.TagActivity;
 import com.parse.ParseFile;
@@ -33,6 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder> {
+    private static final String TAG = "TrendsAdapter";
 
     private Context context;
     private List<Article> articles;
@@ -130,7 +133,14 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
         void bind(Article article) {
             tvTitle.setText(article.getTitle());
             tvSummary.setText(article.getSummary());
-            tvSource.setText(article.getSource().getName());
+
+            try {
+                Source source = article.getSource().fetchIfNeeded();
+                tvSource.setText(source.getName());
+            } catch (Exception e) {
+                Log.e(TAG, "Oops", e);
+            }
+
             tvFactRatingTrends.setText(Fact.enumToString(article.getTruth()));
             tvTagTrends.setText(article.getTag());
 

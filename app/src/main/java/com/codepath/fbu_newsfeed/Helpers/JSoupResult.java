@@ -3,7 +3,7 @@ package com.codepath.fbu_newsfeed.Helpers;
 import com.codepath.fbu_newsfeed.Models.Source;
 
 public class JSoupResult {
-    String titleUrl;
+    String title;
     String imageUrl;
     String description;
     String sourceName;
@@ -14,17 +14,17 @@ public class JSoupResult {
     }
 
     public JSoupResult(String titleUrl, String imageUrl, String description, String source) {
-        this.titleUrl = titleUrl;
+        this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;
     }
 
-    public String getTitleUrl() {
-        return titleUrl;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitleUrl(String titleUrl) {
-        this.titleUrl = titleUrl;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 

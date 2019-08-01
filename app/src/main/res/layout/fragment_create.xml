@@ -35,6 +35,17 @@
         app:layout_constraintTop_toBottomOf="@+id/spArticleListCreate"
         tools:srcCompat="@drawable/news_placeholder" />
 
+        <Spinner
+            android:id="@+id/tagSelector"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:foregroundTint="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toBottomOf="@id/ibInformation" />
+
         <EditText
             android:id="@+id/etCaptionCreate"
             android:layout_width="0dp"
@@ -57,7 +68,7 @@
             app:layout_constraintEnd_toEndOf="@+id/view"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/view"
-            app:layout_constraintTop_toBottomOf="@+id/ibInformation" />
+            app:layout_constraintTop_toBottomOf="@+id/tagSelector" />
 
         <TextView
             android:id="@+id/tvFactCheckCreate"

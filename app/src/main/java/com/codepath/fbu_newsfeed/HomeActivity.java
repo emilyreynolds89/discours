@@ -162,6 +162,13 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent() != null)
+            onSharedIntent();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -189,7 +196,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
                         bundle.putString("url", receivedText);
 
                         createFragment.setArguments(bundle);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, createFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, createFragment).addToBackStack(CreateFragment.TAG).commit();
 
                     }
                 } else if (receivedType.startsWith("image/")) {
