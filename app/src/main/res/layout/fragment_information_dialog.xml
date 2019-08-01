@@ -2,17 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/white"
     android:layout_width="380dp"
     android:layout_height="420dp"
+    android:background="@android:color/white"
     android:minWidth="380dp"
     android:padding="24dp">
 
     <TextView
         android:id="@+id/tvBias2"
         android:layout_width="160dp"
-        android:layout_height="98dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/lato"
         android:text="@string/bias_explanation"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,14 +22,14 @@
         android:id="@+id/tvTruthHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/lato"
         android:text="Truth"
         android:textColor="@color/colorHeadlineText"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvBias2" />
+        app:layout_constraintTop_toBottomOf="@+id/view3" />
 
     <TextView
         android:id="@+id/tvBiasHeader"
@@ -45,9 +45,9 @@
 
     <TextView
         android:id="@+id/tvBias"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/lato"
         android:text="@string/truth_explanation"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
 
     <TextView
         android:id="@+id/tvDisclaimer"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/lato"
@@ -66,15 +66,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view3"
-        android:layout_width="120dp"
+        android:layout_width="110dp"
         android:layout_height="98dp"
         android:layout_marginStart="16dp"
         android:background="@drawable/border"
         app:layout_constraintBottom_toBottomOf="@+id/tvBias2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintEnd_toEndOf="@+id/tvBias"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/tvBias2"
-        app:layout_constraintTop_toTopOf="@+id/tvBias2"
+        app:layout_constraintTop_toTopOf="@+id/tvBiasHeader"
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
@@ -176,13 +176,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view5"
-        android:layout_width="330dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/border"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBias">
 
@@ -205,8 +204,6 @@
             app:lineHeight="16sp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,10 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.BrowserActivity;
+import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Models.Article;
@@ -51,7 +53,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
     @NonNull
     @Override
     public TrendsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.trend_article_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.trend_article_item_grid, parent, false);
         return new ViewHolder(view);
     }
 
@@ -81,14 +83,14 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
         CardView cvArticleImage;
         @BindView(R.id.tvArticleTitleTrends)
         TextView tvTitle;
-        @BindView(R.id.tvArticleSummaryTrends)
-        TextView tvSummary;
         @BindView(R.id.tvSourceTrends)
         TextView tvSource;
         @BindView(R.id.tvFactRatingTrends)
         TextView tvFactRatingTrends;
         @BindView(R.id.tvTagTrends)
         TextView tvTagTrends;
+        @BindView(R.id.viewArticle)
+        View viewArticle;
 
 
         ViewHolder(@NonNull View itemView) {
@@ -96,9 +98,10 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
             ButterKnife.bind(this, itemView);
             ibReportArticle.setOnClickListener(this);
+            ibInformationTrends.setOnClickListener(this);
             tvTagTrends.setOnClickListener(this);
             cvArticleImage.setOnClickListener(this);
-            tvSummary.setOnClickListener(this);
+            viewArticle.setOnClickListener(this);
             tvTitle.setOnClickListener(this);
 
         }
@@ -114,14 +117,17 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                     case R.id.ibReportArticle:
                         reportArticle(article);
                         break;
+                    case R.id.ibInformation:
+                        showInformationDialog();
+                        break;
                     case R.id.tvTagTrends:
                         Intent intent = new Intent(context, TagActivity.class);
                         intent.putExtra("tag", article.getTag());
                         context.startActivity(intent);
                         ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                         break;
+                    case R.id.viewArticle:
                     case R.id.cvArticleImage:
-                    case R.id.tvArticleSummaryTrends:
                     case R.id.tvArticleTitleTrends:
                         Intent i = new Intent(context, BrowserActivity.class);
                         i.putExtra("article", (Serializable) article);
@@ -135,7 +141,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
         void bind(Article article) {
             tvTitle.setText(article.getTitle());
-            tvSummary.setText(article.getSummary());
+            //tvSummary.setText(article.getSummary());
             article.getParseObject(Article.KEY_SOURCE).fetchIfNeededInBackground(new GetCallback<ParseObject>() {
                 @Override
                 public void done(ParseObject object, ParseException e) {
@@ -143,6 +149,8 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                     tvSource.setText(source.getName());
                 }
             });
+            //tvSummary.setText(article.getSummary());
+            tvSource.setText(article.getSource().getName());
             tvFactRatingTrends.setText(Fact.enumToString(article.getTruth()));
             tvTagTrends.setText(article.getTag());
 
@@ -179,6 +187,12 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             articleReportDialog.show(fm, "fragment_report");
         }
 
-
+    private void showInformationDialog() {
+        //FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
+        InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
+        informationDialog.show(fragmentTransaction, "fragment_information");
+    }
 
 }
