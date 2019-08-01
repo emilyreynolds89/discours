@@ -45,7 +45,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
     @NonNull
     @Override
     public TrendsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.trend_article_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.trend_article_item_grid, parent, false);
         return new ViewHolder(view);
     }
 
@@ -75,8 +75,8 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
         CardView cvArticleImage;
         @BindView(R.id.tvArticleTitleTrends)
         TextView tvTitle;
-        @BindView(R.id.tvArticleSummaryTrends)
-        TextView tvSummary;
+        //@BindView(R.id.tvArticleSummaryTrends)
+        //TextView tvSummary;
         @BindView(R.id.tvSourceTrends)
         TextView tvSource;
         @BindView(R.id.tvFactRatingTrends)
@@ -92,7 +92,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             ibReportArticle.setOnClickListener(this);
             tvTagTrends.setOnClickListener(this);
             cvArticleImage.setOnClickListener(this);
-            tvSummary.setOnClickListener(this);
+            //tvSummary.setOnClickListener(this);
             tvTitle.setOnClickListener(this);
 
         }
@@ -129,7 +129,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
         void bind(Article article) {
             tvTitle.setText(article.getTitle());
-            tvSummary.setText(article.getSummary());
+            //tvSummary.setText(article.getSummary());
             tvSource.setText(article.getSource().getName());
             tvFactRatingTrends.setText(Fact.enumToString(article.getTruth()));
             tvTagTrends.setText(article.getTag());

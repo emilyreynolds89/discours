@@ -234,8 +234,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         ibInformation.setOnClickListener(this);
         tvTag.setOnClickListener(this);
         viewArticle.setOnClickListener(this);
-
-
+        ivBias.setOnClickListener(this);
+        tvFactRating.setOnClickListener(this);
 
         setUpFriendPermissions();
         setSupportActionBar(toolbar);
@@ -251,6 +251,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.ibInformation:
                 Log.d(TAG, "Clicked information");
+                showInformationDialog();
+                break;
+            case R.id.ivBias:
+                showInformationDialog();
+                break;
+            case R.id.tvFactRating:
                 showInformationDialog();
                 break;
             case R.id.tvTag:

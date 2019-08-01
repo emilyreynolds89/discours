@@ -218,6 +218,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             btnDiscussion.setOnClickListener(this);
             ibInformation.setOnClickListener(this);
             ibReportArticle.setOnClickListener(this);
+            tvFactRating.setOnClickListener(this);
+            ivBias.setOnClickListener(this);
         }
 
         @Override
@@ -256,6 +258,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                         break;
                     case R.id.ibReportArticle:
                         reportArticle(article);
+                        break;
+                    case R.id.ivBias:
+                        showInformationDialog();
+                        break;
+                    case R.id.tvFactRating:
+                        showInformationDialog();
                         break;
                 }
 

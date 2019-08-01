@@ -336,6 +336,7 @@
                     android:textColor="@color/colorHeadlineText"
                     android:textSize="12sp"
                     android:textStyle="bold"
+                    android:foreground="?selectableItemBackground"
                     app:layout_constraintBottom_toTopOf="@+id/tvAngry"
                     app:layout_constraintStart_toEndOf="@+id/ibReactionAngry"
                     app:layout_constraintTop_toTopOf="@+id/ibReactionAngry" />
@@ -346,6 +347,7 @@
                     android:layout_height="20dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginEnd="12dp"
+                    android:foreground="?selectableItemBackground"
                     app:layout_constraintBottom_toBottomOf="@+id/tvFactRating"
                     app:layout_constraintEnd_toStartOf="@+id/ibInformation"
                     app:layout_constraintStart_toEndOf="@+id/tvFactRating"
