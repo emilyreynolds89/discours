@@ -60,7 +60,6 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvFullName) TextView tvFullName;
     @BindView(R.id.tvBio) TextView tvBio;
-    @BindView(R.id.tvArticleCount) TextView tvArticleCount;
     @BindView(R.id.tvFriends) TextView tvFriends;
     @BindView(R.id.btnLogout) Button btnLogout;
     @BindView(R.id.btnRequest) Button btnRequest;
@@ -114,7 +113,6 @@ public class ProfileFragment extends Fragment {
         tvUsername.setText("@" + user.getString(User.KEY_USERNAME));
         tvFullName.setText(user.getString(User.KEY_FULLNAME));
         tvBio.setText(user.getString(User.KEY_BIO));
-        tvArticleCount.setText(getArticleCount());
 
         if (user.getParseFile("profileImage") != null) {
             Glide.with(getContext()).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
@@ -464,20 +462,6 @@ public class ProfileFragment extends Fragment {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("objectId", user_id);
         return query.getFirst();
-    }
-
-    private String getArticleCount() {
-        ParseQuery<Share> query = ParseQuery.getQuery("Share");
-        query.whereEqualTo("user", user);
-        try {
-            List<Share> results = query.find();
-            Log.d("User", user.getUsername() + " has shared " + results.size() + " articles");
-            return results.size() + " Articles";
-        } catch(Exception e) {
-            Log.d("User", "Error: " + e.getMessage());
-            return "error";
-        }
-
     }
 
     private void createFriendNotification(String type, User friend) {
