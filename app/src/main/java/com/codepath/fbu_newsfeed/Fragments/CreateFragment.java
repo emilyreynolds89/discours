@@ -362,6 +362,9 @@ public class CreateFragment extends Fragment {
             public void done(Article object, ParseException e) {
                 if (e == null) {
                     object.setTag(selectedTag);
+                    if (selectedTag.equals(Fact.enumToString(Fact.TruthLevel.OPINION))) {
+                        object.setTruth(Fact.TruthLevel.OPINION);
+                    }
                     object.saveInBackground();
                 }
             }
@@ -440,9 +443,10 @@ public class CreateFragment extends Fragment {
                 if (!sourceSelector.isEmpty()) {
                     String sourceName = sourceSelector.get(0).attr("content");
                     jsoupResult.setSourceName(sourceName.toUpperCase());
-                } else {
-                    jsoupResult.setSourceUrl(urlTest);
                 }
+
+                jsoupResult.setSourceUrl(urlTest);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

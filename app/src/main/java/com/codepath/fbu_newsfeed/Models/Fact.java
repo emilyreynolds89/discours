@@ -21,6 +21,9 @@ public class Fact {
     public static TruthLevel intToEnum(int i) {
         TruthLevel fact;
         switch(i) {
+            case 6:
+                fact = TruthLevel.OPINION;
+                break;
             case 5:
                 fact = TruthLevel.TRUE;
                 break;
@@ -46,6 +49,9 @@ public class Fact {
     public static int enumToInt(TruthLevel fact) {
         int i;
         switch(fact) {
+            case OPINION:
+                i = 6;
+                break;
             case TRUE:
                 i = 5;
                 break;
@@ -86,6 +92,9 @@ public class Fact {
             case "FALSE":
                 fact = TruthLevel.FALSE;
                 break;
+            case "OPINION":
+                fact = TruthLevel.OPINION;
+                break;
             default:
                 fact = TruthLevel.UNPROVEN;
                 break;
@@ -110,6 +119,9 @@ public class Fact {
                 break;
             case FALSE:
                 truth = "FALSE";
+                break;
+            case OPINION:
+                truth = "OPINION";
                 break;
             default:
                 truth = "UNPROVEN";
