@@ -3,7 +3,7 @@
 
     <string name="bias_explanation">We calculate bias by the news source, classified into one of the following:</string>
 
-    <string name="truth_explanation">We calculate truth by the news source, classified into one of the following: \n\nTrue, Mostly True, Mixture, Mostly False, False, Unproven, Opinion</string>
+    <string name="truth_explanation">We calculate truth by the news source, classified into one of the following:</string>
 
     <string name="search_error">Sorry, we couldn\'t find what you were looking for. Maybe try again?</string>
 </resources>
