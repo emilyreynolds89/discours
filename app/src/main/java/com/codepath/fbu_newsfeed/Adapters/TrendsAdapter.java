@@ -3,6 +3,7 @@ package com.codepath.fbu_newsfeed.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +13,25 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.codepath.fbu_newsfeed.ArticleDetailActivity;
+import com.codepath.fbu_newsfeed.BrowserActivity;
+import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
+import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Fact;
+import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.R;
+import com.codepath.fbu_newsfeed.TagActivity;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,6 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder> {
+    private static final String TAG = "TrendsAdapter";
 
     private Context context;
     private List<Article> articles;
@@ -41,7 +53,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
     @NonNull
     @Override
     public TrendsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.trend_article_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.trend_article_item_grid, parent, false);
         return new ViewHolder(view);
     }
 
@@ -49,6 +61,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
     public void onBindViewHolder(@NonNull TrendsAdapter.ViewHolder holder, int position) {
         Article article = articles.get(position);
         holder.bind(article);
+
     }
 
     @Override
@@ -66,16 +79,18 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
         ImageButton ibReportArticle;
         @BindView(R.id.ivArticleImageTrends)
         ImageView ivArticleImage;
+        @BindView(R.id.cvArticleImage)
+        CardView cvArticleImage;
         @BindView(R.id.tvArticleTitleTrends)
         TextView tvTitle;
-        @BindView(R.id.tvArticleSummaryTrends)
-        TextView tvSummary;
         @BindView(R.id.tvSourceTrends)
         TextView tvSource;
         @BindView(R.id.tvFactRatingTrends)
         TextView tvFactRatingTrends;
         @BindView(R.id.tvTagTrends)
         TextView tvTagTrends;
+        @BindView(R.id.viewArticle)
+        View viewArticle;
 
 
         ViewHolder(@NonNull View itemView) {
@@ -83,7 +98,11 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
 
             ButterKnife.bind(this, itemView);
             ibReportArticle.setOnClickListener(this);
-            itemView.setOnClickListener(this);
+            ibInformationTrends.setOnClickListener(this);
+            tvTagTrends.setOnClickListener(this);
+            cvArticleImage.setOnClickListener(this);
+            viewArticle.setOnClickListener(this);
+            tvTitle.setOnClickListener(this);
 
         }
 
@@ -94,45 +113,48 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             if (position != RecyclerView.NO_POSITION) {
                 Article article = articles.get(position);
 
-                if (view.getId() == R.id.ibReportArticle) {
-                    reportArticle(article);
-                } else {
-                    Intent intent = new Intent(context, ArticleDetailActivity.class);
-                    intent.putExtra("article", (Serializable) article);
-                    context.startActivity(intent);
-                }
+                switch(view.getId()) {
+                    case R.id.ibReportArticle:
+                        reportArticle(article);
+                        break;
+                    case R.id.ibInformation:
+                        showInformationDialog();
+                        break;
+                    case R.id.tvTagTrends:
+                        Intent intent = new Intent(context, TagActivity.class);
+                        intent.putExtra("tag", article.getTag());
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                        break;
+                    case R.id.viewArticle:
+                    case R.id.cvArticleImage:
+                    case R.id.tvArticleTitleTrends:
+                        Intent i = new Intent(context, BrowserActivity.class);
+                        i.putExtra("article", (Serializable) article);
+                        context.startActivity(i);
+                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                        break;
 
+                }
             }
         }
 
         void bind(Article article) {
             tvTitle.setText(article.getTitle());
-            tvSummary.setText(article.getSummary());
-            tvSource.setText(article.getSource());
-            tvFactRatingTrends.setText(article.getTruth());
+            //tvSummary.setText(article.getSummary());
+            article.getParseObject(Article.KEY_SOURCE).fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject object, ParseException e) {
+                    Source source = (Source) object;
+                    tvSource.setText(source.getName());
+                }
+            });
+            //tvSummary.setText(article.getSummary());
+            tvFactRatingTrends.setText(Fact.enumToString(article.getTruth()));
             tvTagTrends.setText(article.getTag());
 
             int biasValue = article.getIntBias();
-            switch (biasValue) {
-                case 1:
-                    ivBiasTrends.setBackgroundResource(R.drawable.liberal_icon);
-                    break;
-                case 2:
-                    ivBiasTrends.setBackgroundResource(R.drawable.slightly_liberal_icon);
-                    break;
-                case 3:
-                    ivBiasTrends.setBackgroundResource(R.drawable.moderate_icon);
-                    break;
-                case 4:
-                    ivBiasTrends.setBackgroundResource(R.drawable.slightly_conserv_icon);
-                    break;
-                case 5:
-                    ivBiasTrends.setBackgroundResource(R.drawable.liberal_icon);
-                    break;
-                default:
-                    ivBiasTrends.setBackgroundResource(R.drawable.moderate_icon);
-                    break;
-            }
+            BiasHelper.setBiasImageView(ivBiasTrends, biasValue);
 
             ParseFile image = article.getImage();
             String imageUrl = article.getImageUrl();
@@ -144,6 +166,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                     Glide.with(context.getApplicationContext()).load(image.getUrl()).into(ivArticleImage);
                 }
             }
+
         }
         }
 
@@ -163,6 +186,12 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             articleReportDialog.show(fm, "fragment_report");
         }
 
-
+    private void showInformationDialog() {
+        //FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
+        InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
+        informationDialog.show(fragmentTransaction, "fragment_information");
+    }
 
 }

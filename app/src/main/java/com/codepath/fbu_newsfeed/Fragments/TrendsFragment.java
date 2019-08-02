@@ -11,8 +11,8 @@ import android.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
@@ -68,8 +68,9 @@ public class TrendsFragment extends Fragment {
         adapter = new TrendsAdapter(getContext(), articles);
 
         rvTrends.setAdapter(adapter);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        rvTrends.setLayoutManager(linearLayoutManager);
+        //final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL);
+        rvTrends.setLayoutManager(gridLayoutManager);
 
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -86,7 +87,6 @@ public class TrendsFragment extends Fragment {
             }
         });
 
-
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -96,7 +96,7 @@ public class TrendsFragment extends Fragment {
 
         swipeContainer.setColorSchemeResources(R.color.colorAccentBold, R.color.colorAccentDark);
 
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 queryArticles(false, page);
@@ -109,7 +109,7 @@ public class TrendsFragment extends Fragment {
         ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+                rvTrends.smoothScrollToPosition(0);
             }
         });
 
@@ -133,6 +133,7 @@ public class TrendsFragment extends Fragment {
         articleQuery.include(Article.KEY_URL);
         articleQuery.setLimit(Article.LIMIT);
         articleQuery.setSkip(offset * Article.LIMIT);
+        articleQuery.orderByDescending(Article.KEY_CREATED_AT);
         articleQuery.orderByDescending(Article.KEY_COUNT);
 
         articleQuery.findInBackground(new FindCallback<Article>() {

@@ -1,28 +1,30 @@
 package com.codepath.fbu_newsfeed.Helpers;
 
+import com.codepath.fbu_newsfeed.Models.Source;
+
 public class JSoupResult {
-    String titleUrl;
+    String title;
     String imageUrl;
     String description;
-    String source;
+    String sourceName;
+    String sourceUrl;
 
     public JSoupResult() {
         super();
     }
 
     public JSoupResult(String titleUrl, String imageUrl, String description, String source) {
-        this.titleUrl = titleUrl;
+        this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;
-        this.source = source;
     }
 
-    public String getTitleUrl() {
-        return titleUrl;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitleUrl(String titleUrl) {
-        this.titleUrl = titleUrl;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 
@@ -42,11 +44,19 @@ public class JSoupResult {
         this.description = description;
     }
 
-    public String getSource() {
-        return source;
+    public String getSourceName() {
+        return sourceName;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
     }
 }

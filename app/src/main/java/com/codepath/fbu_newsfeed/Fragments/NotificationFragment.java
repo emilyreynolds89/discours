@@ -86,7 +86,7 @@ public class NotificationFragment extends Fragment {
         ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+                rvNotifications.smoothScrollToPosition(0);
             }
         });
 

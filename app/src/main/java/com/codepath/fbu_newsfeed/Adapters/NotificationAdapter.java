@@ -1,9 +1,11 @@
 package com.codepath.fbu_newsfeed.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -71,9 +73,21 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("share", (Serializable) finalShare);
                     context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 } else {
                     goToUser(notification.getSendUser());
                 }
+            }
+        });
+
+        holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                while (motionEvent.isButtonPressed(MotionEvent.ACTION_DOWN)) {
+                    view.setSelected(true);
+                }
+                view.setSelected(false);
+                return false;
             }
         });
     }
@@ -170,12 +184,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             Friendship friendship = query.getFirst();
             if (friendship.getState().equals(Friendship.State.Requested)) {
                 return "Requested";
-            } else {
+            } else if (friendship.getState().equals(Friendship.State.Accepted)){
                 return "Friends";
+            } else {
+                return "Unfriended";
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            return null;
+            return "Unfriended";
         }
     }
 }

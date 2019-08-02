@@ -19,13 +19,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
+import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Bias;
+import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.Source;
+import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
-
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -39,7 +44,7 @@ public class ComposeFragment extends Fragment {
     private Article article;
 
     @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreview;
-    @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
+    @BindView(R.id.tvArticleTitleCreate) TextView tvArticleTitle;
     @BindView(R.id.tvFactCheckCreate) TextView tvFactCheck;
     @BindView(R.id.ivBias) ImageView  ivBias;
     @BindView(R.id.ibInformation) ImageButton ibInformation;
@@ -63,14 +68,14 @@ public class ComposeFragment extends Fragment {
 
         ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(2).setChecked(true);
 
-        final String factCheck = article.getTruth();
-        final Article.Bias bias = article.getBias();
+        final Fact.TruthLevel factCheck = article.getTruth();
+        final Bias.BiasType bias = article.getBias();
         final ParseFile imageFile = article.getImage();
         final String title = article.getTitle();
         final String summary = article.getSummary();
-        final String source = article.getSource();
+        final Source source = article.getSource();
 
-        tvFactCheck.setText(factCheck);
+        tvFactCheck.setText(Fact.enumToString(factCheck));
         tvArticleTitle.setText(title);
 
         String imageUrl = article.getImageUrl();
@@ -79,6 +84,9 @@ public class ComposeFragment extends Fragment {
         } else if (imageUrl != null) {
             Glide.with(getContext()).load(imageUrl).into(ivArticlePreview);
         }
+
+        int biasValue = article.getIntBias();
+        BiasHelper.setBiasImageView(ivBias, biasValue);
 
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +136,26 @@ public class ComposeFragment extends Fragment {
                 }
             }
         });
+        updateUserStats((User) ParseUser.getCurrentUser(), article.getObjectId());
+    }
+
+    private void updateUserStats(User user, String articleId) {
+        Article article = null;
+        try {
+            article = getArticle(articleId);
+            user.updateArticleCount();
+            user.updateBiasAverage(article.getIntBias());
+            user.updateFactAverage(Fact.enumToInt(article.getTruth()));
+            user.saveInBackground();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Article getArticle(String article_id) throws ParseException {
+        ParseQuery<Article> query = ParseQuery.getQuery(Article.class);
+        query.whereEqualTo("objectId", article_id);
+        return query.getFirst();
     }
 
 }

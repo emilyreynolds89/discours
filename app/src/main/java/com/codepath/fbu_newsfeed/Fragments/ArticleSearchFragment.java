@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
@@ -55,8 +56,8 @@ public class ArticleSearchFragment extends Fragment {
 
         articleResults = new ArrayList<>();
         trendsAdapter = new TrendsAdapter(getContext(), articleResults);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        rvResults.setLayoutManager(linearLayoutManager);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL);
+        rvResults.setLayoutManager(gridLayoutManager);
         rvResults.setAdapter(trendsAdapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -92,16 +93,7 @@ public class ArticleSearchFragment extends Fragment {
         ParseQuery<Article> titleQuery = ParseQuery.getQuery("Article");
         titleQuery.whereFullText(Article.KEY_TITLE, query);
         titleQuery.setLimit(Article.LIMIT);
-
-//        MongoDB can't OR text queries
-//
-//        ParseQuery<Article> summaryQuery = ParseQuery.getQuery("Article");
-//        summaryQuery.whereFullText(Article.KEY_SUMMARY, query);
-//
-//        List<ParseQuery<Article>> queries = new ArrayList<>();
-//        queries.add(titleQuery);
-//        queries.add(summaryQuery);
-//        ParseQuery<Article> mainQuery = ParseQuery.or(queries);
+        titleQuery.orderByDescending("createdAt");
 
         try {
             List<Article> result = titleQuery.find();

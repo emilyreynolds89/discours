@@ -1,11 +1,17 @@
 package com.codepath.fbu_newsfeed;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -127,6 +133,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
         if (intent != null) {
             Article article = (Article) intent.getSerializableExtra("article");
             String user_id = intent.getStringExtra("user_id");
+            String url = intent.getStringExtra("url");
 
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
@@ -143,16 +150,37 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
             }
 
             if (user_id != null) {
-                if (user_id.equals(ParseUser.getCurrentUser().getObjectId()))
-                    bottomNavigationView.setSelectedItemId(R.id.action_profile);
                 Fragment newProfileFragment = ProfileFragment.newInstance(user_id);
 
                 fragmentTransaction.replace(R.id.flContainer, newProfileFragment).addToBackStack(ProfileFragment.TAG).commit();
             }
 
+            if (url != null) {
+                Bundle bundle = new Bundle();
+                CreateFragment createFragment = new CreateFragment();
+                bundle.putString("url", url);
+
+                createFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, createFragment).commit();
+            }
+
             onSharedIntent();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent() != null)
+            onSharedIntent();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        setIntent(intent);
     }
 
     @Override
@@ -183,7 +211,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
 
     private void onSharedIntent() {
         Intent receivedIntent = getIntent();
-        Log.e(TAG, receivedIntent.toString());
+        dumpIntent(receivedIntent);
         String receivedAction = receivedIntent.getAction();
         String receivedType = receivedIntent.getType();
 
@@ -201,7 +229,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
                         bundle.putString("url", receivedText);
 
                         createFragment.setArguments(bundle);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, createFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, createFragment).addToBackStack(CreateFragment.TAG).commit();
 
                     }
                 } else if (receivedType.startsWith("image/")) {
@@ -227,12 +255,41 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
         }
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+
     public void onBackStackChanged() {
         int backStackEntryCount = getFragmentManager().getBackStackEntryCount();
         if(backStackEntryCount > 0){
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }else{
             getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
+
+    private void dumpIntent(Intent data) {
+
+        Bundle bundle = data.getExtras();
+        if (bundle != null) {
+            for (String key : bundle.keySet()) {
+                Object value = bundle.get(key);
+                Log.d(TAG, String.format("%s %s (%s)", key,
+                        value.toString(), value.getClass().getName()));
+            }
         }
     }
 

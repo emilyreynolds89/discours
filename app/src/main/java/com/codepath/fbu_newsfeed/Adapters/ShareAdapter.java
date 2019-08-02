@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,20 +24,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
-import com.codepath.fbu_newsfeed.ArticleDetailActivity;
+import com.codepath.fbu_newsfeed.BrowserActivity;
 import com.codepath.fbu_newsfeed.DetailActivity;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ProfileFragment;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
+import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Helpers.ReactionHelper;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
+import com.codepath.fbu_newsfeed.SourceActivity;
+import com.codepath.fbu_newsfeed.TagActivity;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -49,15 +58,20 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.codepath.fbu_newsfeed.Models.Reaction.KEY_SHARE;
+import static com.codepath.fbu_newsfeed.Models.Reaction.KEY_USER;
+import static com.codepath.fbu_newsfeed.Models.Reaction.ReactionType;
+import static com.codepath.fbu_newsfeed.Models.Reaction.TYPES;
+
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     private static final String TAG = "ShareAdapter";
 
-    private ArrayList<Share> shares;
+    private List<Share> shares;
     private Context context;
-    private Map<String, Map<String, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
+    private Map<String, Map<ReactionType, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
 
-    public ShareAdapter(ArrayList<Share> shares) {
-        this.shares = shares;
+    public ShareAdapter(ArrayList<Share> newShares) {
+        shares = newShares;
         allReactions = new HashMap<>();
     }
 
@@ -79,7 +93,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         final User currentUser = (User) ParseUser.getCurrentUser();
 
-        Map<String, Reaction> reactionMap = allReactions.get(share.getObjectId());
+        Map<ReactionType, Reaction> reactionMap = allReactions.get(share.getObjectId());
 
         holder.tvUsername.setText(user.getUsername());
 
@@ -98,15 +112,24 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         holder.tvArticleTitle.setText(article.getTitle());
         holder.tvArticleSummary.setText(article.getSummary());
-        holder.tvSource.setText(article.getSource());
+
+        article.getParseObject(Article.KEY_SOURCE).fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                Source source = (Source) object;
+                holder.tvSource.setText(source.getName());
+            }
+        });
+
+
         holder.tvTag.setText(article.getTag());
 
-        for (int i = 0; i < Reaction.TYPES.length; i++) {
-            final String type = Reaction.TYPES[i];
+        for (int i = 0; i < TYPES.length; i++) {
+            final ReactionType type = TYPES[i];
             final TextView tv = getTextViewFromReactionType(type, holder);
             final ImageButton ib = getImageButtonFromReactionType(type, holder);
 
-            tv.setText(String.valueOf(share.getCount(type)));
+            tv.setText(String.valueOf(share.getCount(Reaction.enumToString(type))));
 
             ib.setSelected(false);
             if (reactionMap != null && reactionMap.get(type) != null)
@@ -120,29 +143,10 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             });
         }
 
-        holder.tvFactRating.setText(article.getTruth());
+        holder.tvFactRating.setText(Fact.enumToString(article.getTruth()));
 
         int biasValue = article.getIntBias();
-        switch (biasValue) {
-            case 1:
-                holder.ivBias.setBackgroundResource(R.drawable.liberal_icon);
-                break;
-            case 2:
-                holder.ivBias.setBackgroundResource(R.drawable.slightly_liberal_icon);
-                break;
-            case 3:
-                holder.ivBias.setBackgroundResource(R.drawable.moderate_icon);
-                break;
-            case 4:
-                holder.ivBias.setBackgroundResource(R.drawable.slightly_conserv_icon);
-                break;
-            case 5:
-                holder.ivBias.setBackgroundResource(R.drawable.liberal_icon);
-                break;
-            default:
-                holder.ivBias.setBackgroundResource(R.drawable.moderate_icon);
-                break;
-        }
+        BiasHelper.setBiasImageView(holder.ivBias, biasValue);
 
         if (!share.getCaption().isEmpty()) {
             String captionUsername = "<b>@" + user.getUsername() + ": </b>";
@@ -152,56 +156,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             holder.tvCaption.setVisibility(View.GONE);
         }
 
-
-        holder.tvUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToUser(user);
-            }
-        });
-
-        holder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToUser(user);
-            }
-        });
-
-
-        holder.viewArticle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, ArticleDetailActivity.class);
-                intent.putExtra("article", (Serializable) article);
-                context.startActivity(intent);
-                ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-            }
-        });
-
-        holder.btnDiscussion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("share", (Serializable) share);
-                context.startActivity(intent);
-                ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-            }
-        });
-
-        holder.ibInformation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Clicked information");
-                showInformationDialog();
-            }
-        });
-
-        holder.ibReportArticle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reportArticle(article);
-            }
-        });
     }
 
 
@@ -223,13 +177,13 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         allReactions.clear();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.ivProfileImageNotif) ImageView ivProfileImage;
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
         @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
         @BindView(R.id.ivArticleImage) ImageView ivArticleImage;
-        @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
+        @BindView(R.id.tvArticleTitleCreate) TextView tvArticleTitle;
         @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
         @BindView(R.id.ibReportArticle) ImageButton ibReportArticle;
         @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
@@ -249,19 +203,100 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.btnDiscussion) Button btnDiscussion;
         @BindView(R.id.tvSource) TextView tvSource;
         @BindView(R.id.tvTag) TextView tvTag;
+        @BindView(R.id.cvArticleImage) CardView cvArticleImage;
 
 
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+
+            tvUsername.setOnClickListener(this);
+            ivProfileImage.setOnClickListener(this);
+            tvSource.setOnClickListener(this);
+            tvTag.setOnClickListener(this);
+            cvArticleImage.setOnClickListener(this);
+            tvArticleTitle.setOnClickListener(this);
+            tvArticleSummary.setOnClickListener(this);
+            btnDiscussion.setOnClickListener(this);
+            ibInformation.setOnClickListener(this);
+            ibReportArticle.setOnClickListener(this);
+            tvFactRating.setOnClickListener(this);
+            ivBias.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+
+            if (position != RecyclerView.NO_POSITION) {
+                Share share = shares.get(position);
+                Article article = share.getArticle();
+                ParseUser user = share.getUser();
+
+                switch(view.getId()) {
+                    case R.id.tvUsername:
+                    case R.id.ivProfileImageNotif:
+                        goToUser(user);
+                        break;
+                    case R.id.tvTag:
+                        Intent intent = new Intent(context, TagActivity.class);
+                        intent.putExtra("tag", article.getTag());
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                        break;
+                    case R.id.tvSource:
+                        intent = new Intent(context, SourceActivity.class);
+                        intent.putExtra("source_id", article.getSource().getObjectId());
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                        break;
+                    case R.id.cvArticleImage:
+                    case R.id.tvArticleTitleCreate:
+                    case R.id.tvArticleSummary:
+                        goToArticle(article);
+                        break;
+                    case R.id.btnDiscussion:
+                        intent = new Intent(context, DetailActivity.class);
+                        intent.putExtra("share", (Serializable) share);
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                        break;
+                    case R.id.ibInformation:
+                        showInformationDialog();
+                        break;
+                    case R.id.ibReportArticle:
+                        reportArticle(article);
+                        break;
+                    case R.id.ivBias:
+                        showInformationDialog();
+                        break;
+                    case R.id.tvFactRating:
+                        showInformationDialog();
+                        break;
+                }
+
+                }
+
+        }
+    }
+
+    private void goToArticle(Article article) {
+//        Intent intent = new Intent(context, ArticleDetailActivity.class);
+//        intent.putExtra("article", (Serializable) article);
+//        context.startActivity(intent);
+//        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+        Intent i = new Intent(context, BrowserActivity.class);
+        i.putExtra("article", (Serializable) article);
+        context.startActivity(i);
+        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 
     private void getAllReactions() {
         ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
 
-        reactionQuery.whereEqualTo(Reaction.KEY_USER, ParseUser.getCurrentUser());
-        reactionQuery.whereContainedIn(Reaction.KEY_SHARE, shares);
+        reactionQuery.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
+        reactionQuery.whereContainedIn(KEY_SHARE, shares);
 
         try {
             List<Reaction> result = reactionQuery.find();
@@ -270,11 +305,11 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 Reaction reaction = result.get(i);
                 Share share = reaction.getShare();
                 if (allReactions.containsKey(share.getObjectId())) {
-                    Map<String, Reaction> innerMap = allReactions.get(share.getObjectId());
-                    innerMap.put(reaction.getType(), reaction);
+                    Map<ReactionType, Reaction> innerMap = allReactions.get(share.getObjectId());
+                    innerMap.put(Reaction.stringToEnum(reaction.getType()), reaction);
                 } else {
-                    Map<String, Reaction> innerMap = new HashMap<>();
-                    innerMap.put(reaction.getType(), reaction);
+                    Map<ReactionType, Reaction> innerMap = new HashMap<>();
+                    innerMap.put(Reaction.stringToEnum(reaction.getType()), reaction);
                     allReactions.put(share.getObjectId(), innerMap);
                 }
             }
@@ -285,34 +320,34 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     }
 
 
-    private TextView getTextViewFromReactionType(String type, ShareAdapter.ViewHolder holder) {
+    private TextView getTextViewFromReactionType(ReactionType type, ShareAdapter.ViewHolder holder) {
         switch (type) {
-            case "LIKE":
+            case LIKE:
                 return holder.tvLike;
-            case "DISLIKE":
+            case DISLIKE:
                 return holder.tvDislike;
-            case "HAPPY":
+            case HAPPY:
                 return holder.tvHappy;
-            case "SAD":
+            case SAD:
                 return holder.tvSad;
-            case "ANGRY":
+            case ANGRY:
                 return holder.tvAngry;
             default:
                 return null;
         }
     }
 
-    private ImageButton getImageButtonFromReactionType(String type, ShareAdapter.ViewHolder holder) {
+    private ImageButton getImageButtonFromReactionType(ReactionType type, ShareAdapter.ViewHolder holder) {
         switch (type) {
-            case "LIKE":
+            case LIKE:
                 return holder.ibReactionLike;
-            case "DISLIKE":
+            case DISLIKE:
                 return holder.ibReactionDislike;
-            case "HAPPY":
+            case HAPPY:
                 return holder.ibReactionHappy;
-            case "SAD":
+            case SAD:
                 return holder.ibReactionSad;
-            case "ANGRY":
+            case ANGRY:
                 return holder.ibReactionAngry;
             default:
                 return null;
@@ -342,7 +377,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         informationDialog.show(fragmentTransaction, "fragment_information");
     }
 
-    private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
+    private void updateReactionText(ReactionType type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
         Reaction reaction = ReactionHelper.getReaction(type, share, currentUser);
         int count;
         if (reaction != null) {
@@ -357,19 +392,19 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         textView.setText(Integer.toString(count));
     }
 
-    private void createNotification(String type, Share share, String typeText) {
+    private void createNotification(String type, Share share, ReactionType typeText) {
         Log.d(TAG, "Creating notification of type: " + type);
         User shareUser = (User) share.getUser();
         if (ParseUser.getCurrentUser().getObjectId().equals(shareUser.getObjectId())) { return; }
-        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), shareUser, share, typeText);
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), shareUser, share, Reaction.enumToString(typeText));
         notification.saveInBackground();
     }
 
-    private void deleteNotification(String type, Share share, String typeText) {
+    private void deleteNotification(String type, Share share, Reaction.ReactionType typeText) {
         ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
 
         query.whereEqualTo(Notification.KEY_TYPE, type);
-        query.whereEqualTo(Notification.KEY_TYPE_TEXT, typeText);
+        query.whereEqualTo(Notification.KEY_TYPE_TEXT, Reaction.enumToString(typeText));
         query.whereEqualTo(Notification.KEY_SEND_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(Notification.KEY_RECEIVE_USER, share.getUser());
 

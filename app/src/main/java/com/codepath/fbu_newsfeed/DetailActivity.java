@@ -1,13 +1,17 @@
 package com.codepath.fbu_newsfeed;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,7 +23,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,9 +40,11 @@ import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Adapters.RecommendAdapter;
 import com.codepath.fbu_newsfeed.Fragments.InformationDialogFragment;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
+import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Helpers.ReactionHelper;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
+import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Reaction;
@@ -68,7 +73,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.tvTimeStamp) TextView tvTimestamp;
     @BindView(R.id.viewArticle) ConstraintLayout viewArticle;
     @BindView(R.id.ivArticleImage) ImageView ivArticleImage;
-    @BindView(R.id.tvArticleTitle) TextView tvArticleTitle;
+    @BindView(R.id.tvArticleTitleCreate) TextView tvArticleTitle;
     @BindView(R.id.tvArticleSummary) TextView tvArticleSummary;
     @BindView(R.id.ibReportArticle) ImageButton ibReportArticle;
     @BindView(R.id.ibReactionLike) ImageButton ibReactionLike;
@@ -175,30 +180,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvArticleTitle.setText(article.getTitle());
         tvArticleSummary.setText(article.getSummary());
         tvTag.setText(article.getTag());
-        tvSource.setText(article.getSource());
-        tvFactRating.setText(article.getTruth());
+        tvSource.setText(article.getSource().getName());
+        tvFactRating.setText(Fact.enumToString(article.getTruth()));
 
         int biasValue = article.getIntBias();
-        switch (biasValue) {
-            case 1:
-                ivBias.setBackgroundResource(R.drawable.liberal_icon);
-                break;
-            case 2:
-                ivBias.setBackgroundResource(R.drawable.slightly_liberal_icon);
-                break;
-            case 3:
-                ivBias.setBackgroundResource(R.drawable.moderate_icon);
-                break;
-            case 4:
-                ivBias.setBackgroundResource(R.drawable.slightly_conserv_icon);
-                break;
-            case 5:
-                ivBias.setBackgroundResource(R.drawable.liberal_icon);
-                break;
-            default:
-                ivBias.setBackgroundResource(R.drawable.moderate_icon);
-                break;
-        }
+        BiasHelper.setBiasImageView(ivBias, biasValue);
 
         if (!share.getCaption().isEmpty()) {
             String captionUsername = "<b>@" + share.getUser().getUsername() + ": </b>";
@@ -220,14 +206,14 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        Map<String, Reaction> reactionMap = ReactionHelper.getReactions(share, ParseUser.getCurrentUser());
+        Map<Reaction.ReactionType, Reaction> reactionMap = ReactionHelper.getReactions(share, ParseUser.getCurrentUser());
 
         for (int i = 0; i < Reaction.TYPES.length; i++) {
-            final String type = Reaction.TYPES[i];
+            final Reaction.ReactionType type = Reaction.TYPES[i];
             final TextView tv = getTextViewFromReactionType(type);
             final ImageButton ib = getImageButtonFromReactionType(type);
 
-            tv.setText(String.valueOf(share.getCount(type)));
+            tv.setText(String.valueOf(share.getCount(Reaction.enumToString(type))));
 
             ib.setSelected(false);
             if (reactionMap != null && reactionMap.get(type) != null)
@@ -241,9 +227,15 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             });
         }
 
+
+        tvArticleTitle.setOnClickListener(this);
+        tvArticleSummary.setOnClickListener(this);
         ibReportArticle.setOnClickListener(this);
         ibInformation.setOnClickListener(this);
+        tvTag.setOnClickListener(this);
         viewArticle.setOnClickListener(this);
+        ivBias.setOnClickListener(this);
+        tvFactRating.setOnClickListener(this);
 
         setUpFriendPermissions();
         setSupportActionBar(toolbar);
@@ -261,10 +253,25 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 Log.d(TAG, "Clicked information");
                 showInformationDialog();
                 break;
-            case R.id.viewArticle:
-                Intent intent = new Intent(DetailActivity.this, ArticleDetailActivity.class);
-                intent.putExtra("article", (Serializable) article);
+            case R.id.ivBias:
+                showInformationDialog();
+                break;
+            case R.id.tvFactRating:
+                showInformationDialog();
+                break;
+            case R.id.tvTag:
+                Intent intent = new Intent(DetailActivity.this, TagActivity.class);
+                intent.putExtra("tag", article.getTag());
                 startActivity(intent);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                break;
+            case R.id.tvArticleSummary:
+            case R.id.tvArticleTitleCreate:
+            case R.id.viewArticle:
+                Intent i = new Intent(this, BrowserActivity.class);
+                i.putExtra("article", (Serializable) article);
+                startActivity(i);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
         }
 
@@ -278,6 +285,23 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         return true;
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+
     private void setUpFriendPermissions() {
         if (isFriends() || user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             etComment.setVisibility(View.VISIBLE);
@@ -287,7 +311,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onClick(final View view) {
                     String message = etComment.getText().toString();
-                    if (message == null) {
+                    if (message == null || message.equals("")) {
                         Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
                     } else {
                         Comment addedComment = new Comment(message, (User) ParseUser.getCurrentUser(), share);
@@ -322,7 +346,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void showInformationDialog() {
-        //FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
         InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
@@ -388,17 +411,17 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void updateReactionText(String type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
+    private void updateReactionText(Reaction.ReactionType type, Share share, User currentUser, TextView textView, ImageButton imageButton) {
         Reaction reaction = ReactionHelper.getReaction(type, share, currentUser);
         int count;
         if (reaction != null) {
             count = ReactionHelper.destroyReaction(reaction, type, share);
             imageButton.setSelected(false);
-            deleteNotification("REACTION", share, type);
+            deleteNotification("REACTION", share, Reaction.enumToString(type));
         } else {
             count = ReactionHelper.createReaction(type, share);
             imageButton.setSelected(true);
-            createNotification("REACTION", share, type);
+            createNotification("REACTION", share, Reaction.enumToString(type));
         }
         textView.setText(Integer.toString(count));
     }
@@ -471,13 +494,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     return;
                 }
 
-                articles.addAll(newArticles);
-
-                for (int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
+                for (int i = 0; i < newArticles.size(); i++) {
+                    Article article = newArticles.get(i);
                     Log.d("TrendsQuery", "Article: " + article.getTitle());
                 }
-                recommendAdapter.notifyDataSetChanged();
+                recommendAdapter.addAll(newArticles);
             }
         });
     }
@@ -488,34 +509,34 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         swipeContainer.setRefreshing(false);
     }
 
-    private TextView getTextViewFromReactionType(String type) {
+    private TextView getTextViewFromReactionType(Reaction.ReactionType type) {
         switch (type) {
-            case "LIKE":
+            case LIKE:
                 return tvLike;
-            case "DISLIKE":
+            case DISLIKE:
                 return tvDislike;
-            case "HAPPY":
+            case HAPPY:
                 return tvHappy;
-            case "SAD":
+            case SAD:
                 return tvSad;
-            case "ANGRY":
+            case ANGRY:
                 return tvAngry;
             default:
                 return null;
         }
     }
 
-    private ImageButton getImageButtonFromReactionType(String type) {
+    private ImageButton getImageButtonFromReactionType(Reaction.ReactionType type) {
         switch (type) {
-            case "LIKE":
+            case LIKE:
                 return ibReactionLike;
-            case "DISLIKE":
+            case DISLIKE:
                 return ibReactionDislike;
-            case "HAPPY":
+            case HAPPY:
                 return ibReactionHappy;
-            case "SAD":
+            case SAD:
                 return ibReactionSad;
-            case "ANGRY":
+            case ANGRY:
                 return ibReactionAngry;
             default:
                 return null;
@@ -523,7 +544,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void reportArticle() {
-        //FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
         ReportArticleFragment articleReportDialog = ReportArticleFragment.newInstance(article.getObjectId());
