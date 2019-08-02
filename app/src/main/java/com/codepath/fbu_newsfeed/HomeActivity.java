@@ -48,6 +48,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         //final FragmentManager fragmentManager = getSupportFragmentManager();
