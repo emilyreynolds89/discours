@@ -25,6 +25,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,6 +44,8 @@ public class TagSearchFragment extends Fragment {
 
     private ArrayList<String> tagList;
     private ArrayAdapter<String> tagAdapter;
+
+    // TODO: INFINITE SCROLL AND PULL TO REFRESH
 
 
     @Nullable
@@ -118,6 +121,7 @@ public class TagSearchFragment extends Fragment {
                             tagList.add(tag);
                         }
                     }
+                    Collections.sort(tagList);
                     tagAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getContext(), "Error searching by tag", Toast.LENGTH_SHORT).show();
