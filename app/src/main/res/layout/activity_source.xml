@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context=".SourceActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/sourceInfoView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/white"
+        android:paddingBottom="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <TextView
+            android:id="@+id/tvSourceName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="TextView"
+            android:textColor="@color/colorHeadlineText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/ivSourceLogo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvSourceDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:lines="8"
+            android:maxLines="10"
+            android:text="TextView"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/ivSourceLogo"
+            app:layout_constraintStart_toStartOf="@+id/tvSourceName"
+            app:layout_constraintTop_toBottomOf="@+id/tvSourceName" />
+
+        <ImageView
+            android:id="@+id/ivSourceLogo"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/white"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvFactRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/lato"
+            android:foreground="?selectableItemBackground"
+            android:gravity="right|center_vertical"
+            android:text="TextView"
+            android:textAllCaps="true"
+            android:textColor="@color/colorHeadlineText"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/ivBias"
+            app:layout_constraintStart_toStartOf="@+id/ivSourceLogo"
+            app:layout_constraintTop_toBottomOf="@+id/ivSourceLogo" />
+
+        <ImageView
+            android:id="@+id/ivBias"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:foreground="?selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="@+id/tvFactRating"
+            app:layout_constraintEnd_toEndOf="@+id/ivSourceLogo"
+            app:layout_constraintStart_toEndOf="@+id/tvFactRating"
+            app:layout_constraintTop_toTopOf="@+id/tvFactRating" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sourceInfoView">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvArticles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="@color/colorBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
