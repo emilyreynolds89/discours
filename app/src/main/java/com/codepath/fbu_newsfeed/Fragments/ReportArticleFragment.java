@@ -76,7 +76,7 @@ public class ReportArticleFragment extends DialogFragment {
 
         TYPE_LIST = new ArrayList<>();
         TYPE_LIST.add("False News");
-        TYPE_LIST.add("Inappropriate ContentTask");
+        TYPE_LIST.add("Inappropriate Content");
         TYPE_LIST.add("Hate Speech");
         TYPE_LIST.add("Spam");
         TYPE_LIST.add("Other");
