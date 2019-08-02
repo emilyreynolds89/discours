@@ -334,7 +334,7 @@ public class CreateFragment extends Fragment {
         for (Source s : sources) {
             if (s.getUrlMatch() != null) {
                 String urlMatch = s.getUrlMatch();
-                Pattern p = Pattern.compile("^.+" + urlMatch + ".+$");
+                Pattern p = Pattern.compile("^.+[\\/\\.]" + urlMatch + "\\..+$");
                 Matcher m = p.matcher(sourceUrl);
                 if (m.matches()) {
                     return s;
@@ -491,6 +491,8 @@ public class CreateFragment extends Fragment {
             try {
                 if (jSoupResult.getSourceName() != null)
                     articleSource = fragment.querySource(jSoupResult.getSourceName());
+                    if (articleSource == null && jSoupResult.getSourceUrl() != null)
+                        articleSource = fragment.matchUrlToSource(jSoupResult.getSourceUrl());
                 else if (jSoupResult.getSourceUrl() != null)
                     articleSource = fragment.matchUrlToSource(jSoupResult.getSourceUrl());
                 else
