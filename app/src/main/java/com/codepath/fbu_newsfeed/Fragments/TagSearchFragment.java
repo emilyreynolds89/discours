@@ -18,8 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
+import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
+import com.codepath.fbu_newsfeed.SearchActivity;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -44,8 +46,9 @@ public class TagSearchFragment extends Fragment {
 
     private ArrayList<String> tagList;
     private ArrayAdapter<String> tagAdapter;
+    private String selectedTag;
 
-    // TODO: INFINITE SCROLL AND PULL TO REFRESH
+    EndlessRecyclerViewScrollListener scrollListener;
 
 
     @Nullable
@@ -79,7 +82,8 @@ public class TagSearchFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 trendsAdapter.clear();
-                queryArticlesByTag(tagList.get(position));
+                queryArticlesByTag(tagList.get(position), 0);
+                selectedTag = tagList.get(position);
             }
 
             @Override
@@ -87,6 +91,20 @@ public class TagSearchFragment extends Fragment {
                 return;
             }
 
+        });
+
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                queryArticlesByTag(selectedTag, page);
+            }
+        };
+
+        ((SearchActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rvResults.smoothScrollToPosition(0);
+            }
         });
 
     }
@@ -97,9 +115,11 @@ public class TagSearchFragment extends Fragment {
         unbinder.unbind();
     }
 
-    private void queryArticlesByTag(String tag) {
+    private void queryArticlesByTag(String tag, int offset) {
         ParseQuery<Article> query = ParseQuery.getQuery("Article");
         query.whereEqualTo(Article.KEY_TAG, tag);
+        query.setLimit(Article.LIMIT);
+        query.setSkip(offset * Article.LIMIT);
         query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<Article>() {
             @Override

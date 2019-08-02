@@ -22,7 +22,7 @@ public class SearchActivity extends AppCompatActivity {
     private TabAdapter tabAdapter;
     @BindView(R.id.tabLayout) TabLayout tabLayout;
     @BindView(R.id.viewPager) ViewPager viewPager;
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    public @BindView(R.id.toolbar) Toolbar toolbar;
 
 
     @Override
