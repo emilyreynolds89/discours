@@ -18,8 +18,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
+import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Source;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -34,7 +36,6 @@ import butterknife.ButterKnife;
 
 public class SourceActivity extends AppCompatActivity {
 
-    // TODO: NEED TO SHOW BIAS AND FACTUALNESS TOO
     // TODO: MAYBE ALSO LINK TO WIKIPEDIA OR SOMETHING
 
     public static final String TAG = "SourceActivity";
@@ -43,6 +44,8 @@ public class SourceActivity extends AppCompatActivity {
     @BindView(R.id.tvSourceName) TextView tvSourceName;
     @BindView(R.id.tvSourceDescription) TextView tvSourceDescription;
     @BindView(R.id.ivSourceLogo) ImageView ivSourceLogo;
+    @BindView(R.id.tvFactRating) TextView tvFactRating;
+    @BindView(R.id.ivBias) ImageView ivBias;
     @BindView(R.id.rvArticles) RecyclerView rvArticles;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
@@ -74,6 +77,10 @@ public class SourceActivity extends AppCompatActivity {
 
         tvSourceName.setText(source.getFullName());
         tvSourceDescription.setText(source.getDescription());
+        tvFactRating.setText(source.getFact());
+
+        int biasValue = source.getBias();
+        BiasHelper.setBiasImageView(ivBias, biasValue);
 
         if (source.getLogo() != null)
             Glide.with(this).load(source.getLogo().getUrl()).into(ivSourceLogo);

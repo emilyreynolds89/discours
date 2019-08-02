@@ -46,8 +46,8 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
-            android:lines="6"
-            android:maxLines="5"
+            android:lines="8"
+            android:maxLines="8"
             android:text="TextView"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/ivSourceLogo"
@@ -58,9 +58,9 @@
             android:id="@+id/ivSourceLogo"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:adjustViewBounds="true"
             android:background="@android:color/white"
             android:scaleType="fitCenter"
@@ -68,6 +68,34 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvFactRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/lato"
+            android:foreground="?selectableItemBackground"
+            android:gravity="right|center_vertical"
+            android:text="TextView"
+            android:textAllCaps="true"
+            android:textColor="@color/colorHeadlineText"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/ivBias"
+            app:layout_constraintStart_toStartOf="@+id/ivSourceLogo"
+            app:layout_constraintTop_toBottomOf="@+id/ivSourceLogo" />
+
+        <ImageView
+            android:id="@+id/ivBias"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:foreground="?selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="@+id/tvFactRating"
+            app:layout_constraintEnd_toEndOf="@+id/ivSourceLogo"
+            app:layout_constraintStart_toEndOf="@+id/tvFactRating"
+            app:layout_constraintTop_toTopOf="@+id/tvFactRating" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
