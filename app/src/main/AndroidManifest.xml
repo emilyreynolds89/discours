@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".BrowserActivity"></activity>
+        <activity android:name=".SourceActivity"></activity>
+        <activity android:name=".BrowserActivity" />
         <activity android:name=".TagActivity" />
         <activity android:name=".FriendsListActivity" />
         <activity android:name=".SearchActivity" />
@@ -30,7 +31,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity"
+        <activity
+            android:name=".HomeActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
