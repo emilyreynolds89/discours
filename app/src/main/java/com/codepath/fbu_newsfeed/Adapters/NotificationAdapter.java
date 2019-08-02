@@ -113,7 +113,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             User sender = notification.getSendUser();
             String username = "<b>@" + sender.getUsername() + "</b>";
             String typeText = notification.getTypeText();
-            if (notification.getType().equals(Notification.COMMENT) || notification.getType().equals(Notification.REACTION)) {
+            if (notification.getType().equals(Notification.COMMENT) || notification.getType().equals(Notification.REACTION) || notification.getType().equals(Notification.COMMENT_REACTION)) {
                 btnFriendStatus.setVisibility(View.INVISIBLE);
                 ivImageNotif.setVisibility(View.VISIBLE);
                 tvDescriptionNotif.setText(Html.fromHtml(username + notification.notificationText(notification.getType()) + ": " + typeText, HtmlCompat.FROM_HTML_MODE_LEGACY));
