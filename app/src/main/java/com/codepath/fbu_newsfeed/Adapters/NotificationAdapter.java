@@ -135,8 +135,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     public void done(ParseObject object, ParseException e) {
                         Article article = (Article) object;
                         ParseFile image = article.getImage();
-                        if (image != null) {
+                        String imageUrl = article.getImageUrl();
+                        if (image != null ) {
                             Glide.with(context).load(image.getUrl()).into(ivImageNotif);
+                        } else if (imageUrl != null) {
+                            Glide.with(context).load(imageUrl).into(ivImageNotif);
                         }
                     }
                 });

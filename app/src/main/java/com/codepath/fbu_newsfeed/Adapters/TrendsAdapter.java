@@ -27,6 +27,7 @@ import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.R;
+import com.codepath.fbu_newsfeed.SourceActivity;
 import com.codepath.fbu_newsfeed.TagActivity;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -103,6 +104,7 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
             cvArticleImage.setOnClickListener(this);
             viewArticle.setOnClickListener(this);
             tvTitle.setOnClickListener(this);
+            tvSource.setOnClickListener(this);
 
         }
 
@@ -120,8 +122,14 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                     case R.id.ibInformation:
                         showInformationDialog();
                         break;
+                    case R.id.tvSourceTrends:
+                        Intent intent = new Intent(context, SourceActivity.class);
+                        intent.putExtra("source_id", article.getSource().getObjectId());
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                        break;
                     case R.id.tvTagTrends:
-                        Intent intent = new Intent(context, TagActivity.class);
+                        intent = new Intent(context, TagActivity.class);
                         intent.putExtra("tag", article.getTag());
                         context.startActivity(intent);
                         ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);

@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -78,6 +79,7 @@ public class CreateFragment extends Fragment {
     public @BindView(R.id.btShareArticleCreate) Button btnShareCreate;
     public @BindView(R.id.etURLCreate) EditText etUrlCreate;
     public @BindView(R.id.tagSelector) Spinner tagSelector;
+    public @BindView(R.id.progressBarHolder) FrameLayout progressBarHolder;
 
     private Unbinder unbinder;
 
@@ -249,7 +251,7 @@ public class CreateFragment extends Fragment {
             parsedArticles.put(url, true);
             setArticleView();
         }
-        spArticleListCreate.setVisibility(View.GONE);
+        spArticleListCreate.setVisibility(View.INVISIBLE);
     }
 
 
@@ -304,6 +306,7 @@ public class CreateFragment extends Fragment {
         });
     }
     private void shareCreate(String caption, Article article) {
+        progressBarHolder.setVisibility(View.VISIBLE);
         article.setCount(article.getCount() + 1);
         Share share = new Share(ParseUser.getCurrentUser(), article, caption);
         share.saveInBackground(new SaveCallback() {
@@ -311,9 +314,11 @@ public class CreateFragment extends Fragment {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("ComposeFragment", "Share article success");
+                    progressBarHolder.setVisibility(View.INVISIBLE);
                     ((HomeActivity) getActivity()).bottomNavigationView.setSelectedItemId(R.id.action_home);
                     getActivity().getSupportFragmentManager().beginTransaction().remove(CreateFragment.this).commit();
                 } else {
+                    progressBarHolder.setVisibility(View.INVISIBLE);
                     Log.e("ComposeFragment", "Error in sharing article");
                     e.printStackTrace();
                     Toast.makeText(getContext(), "Error in sharing article", Toast.LENGTH_SHORT).show();
@@ -438,6 +443,12 @@ public class CreateFragment extends Fragment {
             fragment = context;
         }
 
+
+        @Override
+        protected void onPreExecute() {
+            fragment.progressBarHolder.setVisibility(View.VISIBLE);
+        }
+
         @Override
         protected JSoupResult doInBackground(String... params) {
             JSoupResult jsoupResult = new JSoupResult();
@@ -533,7 +544,7 @@ public class CreateFragment extends Fragment {
             } else {
                 Toast.makeText(fragment.getContext(), "Sorry, you can't share articles from that source.", Toast.LENGTH_SHORT).show();
             }
-
+            fragment.progressBarHolder.setVisibility(View.INVISIBLE);
 
         }
     }

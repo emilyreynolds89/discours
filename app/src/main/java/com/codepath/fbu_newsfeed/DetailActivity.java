@@ -51,10 +51,13 @@ import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -190,7 +193,15 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvArticleTitle.setText(article.getTitle());
         tvArticleSummary.setText(article.getSummary());
         tvTag.setText(article.getTag());
-        tvSource.setText(article.getSource().getName());
+
+        article.getParseObject(Article.KEY_SOURCE).fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                Source source = (Source) object;
+                tvSource.setText(source.getName());
+            }
+        });
+
         tvFactRating.setText(Fact.enumToString(article.getTruth()));
 
         int biasValue = article.getIntBias();
