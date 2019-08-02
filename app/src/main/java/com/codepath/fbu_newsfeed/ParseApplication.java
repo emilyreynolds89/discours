@@ -2,12 +2,9 @@ package com.codepath.fbu_newsfeed;
 
 import android.app.Application;
 
-<<<<<<< HEAD
 import com.codepath.fbu_newsfeed.Models.Annotation;
 import com.codepath.fbu_newsfeed.Models.ArticleReport;
 import com.codepath.fbu_newsfeed.Models.Comment;
-=======
->>>>>>> master
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.ArticleReport;
 import com.codepath.fbu_newsfeed.Models.Comment;

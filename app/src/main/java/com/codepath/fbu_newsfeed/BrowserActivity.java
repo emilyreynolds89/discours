@@ -6,7 +6,9 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -16,7 +18,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.parse.ParseUser;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 
 import butterknife.BindView;
@@ -50,6 +56,10 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         article = (Article) getIntent().getSerializableExtra("article");
         url = article.getUrl();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
@@ -69,6 +79,12 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                     ibForward.setColorFilter(ContextCompat.getColor(BrowserActivity.this, R.color.colorModerate));
                 }
 
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                injectJS(view, R.raw.annotate);
             }
         });
 
@@ -110,6 +126,30 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.ibRefresh:
                 webView.reload();
                 break;
+        }
+    }
+
+    private void injectJS(WebView view, int scriptFile) {
+        InputStream input;
+        try {
+            input = new BufferedInputStream(getResources().openRawResource(scriptFile));
+            byte[] buffer = new byte[input.available()];
+            input.read(buffer);
+            input.close();
+
+            // String-ify the script byte-array using BASE64 encoding !!!
+            String encoded = Base64.encodeToString(buffer, Base64.NO_WRAP);
+            view.loadUrl("javascript:(function() {" +
+                    "var parent = document.getElementsByTagName('head').item(0);" +
+                    "var script = document.createElement('script');" +
+                    "script.type = 'text/javascript';" +
+                    // Tell the browser to BASE64-decode the string into your script !!!
+                    "script.innerHTML = window.atob('" + encoded + "');" +
+                    "parent.appendChild(script)" +
+                    "})()");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 }
