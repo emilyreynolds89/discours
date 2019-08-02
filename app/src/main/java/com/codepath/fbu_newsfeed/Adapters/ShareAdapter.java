@@ -40,6 +40,7 @@ import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
+import com.codepath.fbu_newsfeed.SourceActivity;
 import com.codepath.fbu_newsfeed.TagActivity;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -211,6 +212,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
             tvUsername.setOnClickListener(this);
             ivProfileImage.setOnClickListener(this);
+            tvSource.setOnClickListener(this);
             tvTag.setOnClickListener(this);
             cvArticleImage.setOnClickListener(this);
             tvArticleTitle.setOnClickListener(this);
@@ -239,6 +241,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     case R.id.tvTag:
                         Intent intent = new Intent(context, TagActivity.class);
                         intent.putExtra("tag", article.getTag());
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                        break;
+                    case R.id.tvSource:
+                        intent = new Intent(context, SourceActivity.class);
+                        intent.putExtra("source_id", article.getSource().getObjectId());
                         context.startActivity(intent);
                         ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                         break;

@@ -3,6 +3,7 @@ package com.codepath.fbu_newsfeed;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -46,8 +47,8 @@ public class TagActivity extends AppCompatActivity {
         adapter = new TrendsAdapter(this, articles);
 
         rvArticles.setAdapter(adapter);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rvArticles.setLayoutManager(linearLayoutManager);
+        final StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL);
+        rvArticles.setLayoutManager(gridLayoutManager);
 
         queryArticles(0);
 

@@ -150,7 +150,6 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                 }
             });
             //tvSummary.setText(article.getSummary());
-            tvSource.setText(article.getSource().getName());
             tvFactRatingTrends.setText(Fact.enumToString(article.getTruth()));
             tvTagTrends.setText(article.getTag());
 

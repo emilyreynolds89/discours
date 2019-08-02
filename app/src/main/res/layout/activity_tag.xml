@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".TagActivity">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/headerView"
         android:layout_width="match_parent"
