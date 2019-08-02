@@ -15,8 +15,11 @@ import com.codepath.fbu_newsfeed.Helpers.CommentReactionHelper;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.CommentReaction;
+import com.codepath.fbu_newsfeed.Models.Notification;
+import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -28,11 +31,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     private Context context;
     private List<Comment> comments;
+    private Share share;
 
-    public CommentAdapter(Context context, List<Comment> comments) {
+    public CommentAdapter(Context context, List<Comment> comments, Share share) {
 
         this.context = context;
         this.comments = comments;
+        this.share = share;
     }
 
     @NonNull
@@ -119,11 +124,45 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         if (commentReaction != null) {
             count = CommentReactionHelper.destroyCommentReaction(commentReaction, comment);
             imageButton.setSelected(false);
+            deleteNotification(share, comment.getText());
         } else {
             count = CommentReactionHelper.createCommentReaction(comment);
             imageButton.setSelected(true);
+            createNotification(share, comment.getText());
         }
         textView.setText(Integer.toString(count));
+    }
+
+    private void createNotification(Share share, String typeText) {
+        User shareUser = (User) share.getUser();
+        if (ParseUser.getCurrentUser().getObjectId().equals(shareUser.getObjectId())) { return; }
+        Notification notification = new Notification(Notification.COMMENT_REACTION, (User) ParseUser.getCurrentUser(), shareUser, share, typeText);
+        notification.saveInBackground();
+    }
+
+    private void deleteNotification(Share share, String typeText) {
+        ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
+
+        query.whereEqualTo(Notification.KEY_TYPE, Notification.COMMENT_REACTION);
+        query.whereEqualTo(Notification.KEY_TYPE_TEXT, typeText);
+        query.whereEqualTo(Notification.KEY_SEND_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Notification.KEY_RECEIVE_USER, share.getUser());
+
+        Notification notification;
+
+        try {
+            List<Notification> result = query.find();
+            if (result.size() > 0 ) {
+                notification = result.get(0);
+            } else {
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        notification.deleteInBackground();
     }
 
 }

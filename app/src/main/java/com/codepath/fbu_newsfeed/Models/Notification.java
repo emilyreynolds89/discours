@@ -20,10 +20,11 @@ public class Notification extends ParseObject {
     public static final String COMMENT = "COMMENT";
     public static final String FRIEND_REQUEST = "FRIEND_REQUEST";
     public static final String ACCEPT_REQUEST = "ACCEPT_REQUEST";
+    public static final String COMMENT_REACTION = "COMMENT_REACTION";
 
     private User sendUser;
     private User receiveUser;
-    private String type; // REACTION, COMMENT, FRIEND_REQUEST, ACCEPT_REQUEST
+    private String type; // REACTION, COMMENT, FRIEND_REQUEST, ACCEPT_REQUEST, COMMENT_REACTION
     private Share share;
     private String typeText;
 
@@ -124,6 +125,8 @@ public class Notification extends ParseObject {
                 return " sent you a friend request";
             case ACCEPT_REQUEST:
                 return " accepted your friend request";
+            case COMMENT_REACTION:
+                return " clapped to your comment on this post";
             default:
                 return "";
         }

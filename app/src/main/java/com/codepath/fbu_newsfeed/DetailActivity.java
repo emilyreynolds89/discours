@@ -133,7 +133,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         comments = new ArrayList<>();
         articles = new ArrayList<>();
-        commentAdapter = new CommentAdapter(getBaseContext(), comments);
+        commentAdapter = new CommentAdapter(getBaseContext(), comments, share);
         recommendAdapter = new RecommendAdapter(getBaseContext(), articles);
 
         rvComments.setAdapter(commentAdapter);
