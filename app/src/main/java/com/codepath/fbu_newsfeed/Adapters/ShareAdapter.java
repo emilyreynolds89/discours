@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -69,6 +71,10 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     private Context context;
     private Map<String, Map<ReactionType, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
 
+    private Animation open_anim, close_anim;
+
+    boolean isOpen = false;
+
     public ShareAdapter(ArrayList<Share> newShares) {
         shares = newShares;
         allReactions = new HashMap<>();
@@ -91,6 +97,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         final ParseUser user = share.getUser();
 
         final User currentUser = (User) ParseUser.getCurrentUser();
+
+        close_anim = AnimationUtils.loadAnimation(context, R.anim.btn_close);
+        open_anim = AnimationUtils.loadAnimation(context, R.anim.btn_open);
 
         Map<ReactionType, Reaction> reactionMap = allReactions.get(share.getObjectId());
 
@@ -208,6 +217,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+
+
 
             tvUsername.setOnClickListener(this);
             ivProfileImage.setOnClickListener(this);
