@@ -86,7 +86,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View shareView = inflater.inflate(R.layout.article_item, parent, false);
+        View shareView = inflater.inflate(R.layout.article_item_expand_button, parent, false);
         return new ViewHolder(shareView);
     }
 
@@ -212,13 +212,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.tvSource) TextView tvSource;
         @BindView(R.id.tvTag) TextView tvTag;
         @BindView(R.id.cvArticleImage) CardView cvArticleImage;
+        @BindView(R.id.ibReactionExpand) ImageButton ibReactionExpand;
 
 
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-
-
 
             tvUsername.setOnClickListener(this);
             ivProfileImage.setOnClickListener(this);
@@ -231,6 +230,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             ibReportArticle.setOnClickListener(this);
             tvFactRating.setOnClickListener(this);
             ivBias.setOnClickListener(this);
+
+            ibReactionExpand.setOnClickListener(this);
         }
 
         @Override
@@ -243,6 +244,27 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 ParseUser user = share.getUser();
 
                 switch(view.getId()) {
+                    case R.id.ibReactionExpand:
+                        if(isOpen) {
+                            setReactionVisibility(View.INVISIBLE);
+                            setReactionAnim(close_anim);
+                            setReactionClickable(false);
+
+                            setClassificationVisibility(View.VISIBLE);
+                            setClassificationAnim(open_anim);
+
+                            isOpen = false;
+                        } else {
+                            setReactionVisibility(View.VISIBLE);
+                            setReactionAnim(open_anim);
+                            setReactionClickable(true);
+
+                            setClassificationVisibility(View.INVISIBLE);
+                            setClassificationAnim(close_anim);
+
+                            isOpen = true;
+                        }
+                        break;
                     case R.id.tvUsername:
                     case R.id.ivProfileImageNotif:
                         goToUser(user);
@@ -281,6 +303,55 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 }
 
         }
+
+        private void setReactionVisibility(int visibility) {
+            ibReactionLike.setVisibility(visibility);
+            ibReactionDislike.setVisibility(visibility);
+            ibReactionHappy.setVisibility(visibility);
+            ibReactionSad.setVisibility(visibility);
+            ibReactionAngry.setVisibility(visibility);
+
+            tvLike.setVisibility(visibility);
+            tvDislike.setVisibility(visibility);
+            tvHappy.setVisibility(visibility);
+            tvSad.setVisibility(visibility);
+            tvAngry.setVisibility(visibility);
+        }
+
+        private void setReactionAnim(Animation anim) {
+            ibReactionLike.startAnimation(anim);
+            ibReactionDislike.startAnimation(anim);
+            ibReactionHappy.startAnimation(anim);
+            ibReactionSad.startAnimation(anim);
+            ibReactionAngry.startAnimation(anim);
+
+            tvLike.startAnimation(anim);
+            tvDislike.startAnimation(anim);
+            tvHappy.startAnimation(anim);
+            tvSad.startAnimation(anim);
+            tvAngry.startAnimation(anim);
+        }
+
+        private void setReactionClickable(boolean clickable) {
+            ibReactionLike.setClickable(clickable);
+            ibReactionDislike.setClickable(clickable);
+            ibReactionHappy.setClickable(clickable);
+            ibReactionSad.setClickable(clickable);
+            ibReactionAngry.setClickable(clickable);
+        }
+
+        private void setClassificationVisibility(int visibility) {
+            tvFactRating.setVisibility(visibility);
+            ivBias.setVisibility(visibility);
+            ibInformation.setVisibility(visibility);
+        }
+
+        private void setClassificationAnim(Animation anim) {
+            tvFactRating.startAnimation(anim);
+            ivBias.startAnimation(anim);
+            ibInformation.startAnimation(anim);
+        }
+
     }
 
     private void goToArticle(Article article) {
@@ -427,6 +498,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         notification.deleteInBackground();
     }
+
 
 
 }

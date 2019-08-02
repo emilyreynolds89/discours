@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -97,6 +99,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.tvTag) TextView tvTag;
     @BindView(R.id.tvSource) TextView tvSource;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.ibReactionExpand) ImageButton ibReactionExpand;
 
     private Share share;
     private Article article;
@@ -108,6 +111,10 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     private CommentAdapter commentAdapter;
     private RecommendAdapter recommendAdapter;
 
+    private Animation close_anim, open_anim;
+
+    boolean isOpen = false;
+
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     @Override
@@ -117,6 +124,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         ButterKnife.bind(this);
 
         queryShare();
+
+        close_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_close);
+        open_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_open);
 
         comments = new ArrayList<>();
         articles = new ArrayList<>();
@@ -236,6 +246,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         viewArticle.setOnClickListener(this);
         ivBias.setOnClickListener(this);
         tvFactRating.setOnClickListener(this);
+        ibReactionExpand.setOnClickListener(this);
 
         setUpFriendPermissions();
         setSupportActionBar(toolbar);
@@ -246,6 +257,27 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ibReactionExpand:
+                if(isOpen) {
+                    setReactionVisibility(View.INVISIBLE);
+                    setReactionAnim(close_anim);
+                    setReactionClickable(false);
+
+                    setClassificationVisibility(View.VISIBLE);
+                    setClassificationAnim(open_anim);
+
+                    isOpen = false;
+                } else {
+                    setReactionVisibility(View.VISIBLE);
+                    setReactionAnim(open_anim);
+                    setReactionClickable(true);
+
+                    setClassificationVisibility(View.INVISIBLE);
+                    setClassificationAnim(close_anim);
+
+                    isOpen = true;
+                }
+                break;
             case R.id.ibReportArticle:
                 reportArticle();
                 break;
@@ -541,6 +573,54 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             default:
                 return null;
         }
+    }
+
+    private void setReactionVisibility(int visibility) {
+        ibReactionLike.setVisibility(visibility);
+        ibReactionDislike.setVisibility(visibility);
+        ibReactionHappy.setVisibility(visibility);
+        ibReactionSad.setVisibility(visibility);
+        ibReactionAngry.setVisibility(visibility);
+
+        tvLike.setVisibility(visibility);
+        tvDislike.setVisibility(visibility);
+        tvHappy.setVisibility(visibility);
+        tvSad.setVisibility(visibility);
+        tvAngry.setVisibility(visibility);
+    }
+
+    private void setReactionAnim(Animation anim) {
+        ibReactionLike.startAnimation(anim);
+        ibReactionDislike.startAnimation(anim);
+        ibReactionHappy.startAnimation(anim);
+        ibReactionSad.startAnimation(anim);
+        ibReactionAngry.startAnimation(anim);
+
+        tvLike.startAnimation(anim);
+        tvDislike.startAnimation(anim);
+        tvHappy.startAnimation(anim);
+        tvSad.startAnimation(anim);
+        tvAngry.startAnimation(anim);
+    }
+
+    private void setReactionClickable(boolean clickable) {
+        ibReactionLike.setClickable(clickable);
+        ibReactionDislike.setClickable(clickable);
+        ibReactionHappy.setClickable(clickable);
+        ibReactionSad.setClickable(clickable);
+        ibReactionAngry.setClickable(clickable);
+    }
+
+    private void setClassificationVisibility(int visibility) {
+        tvFactRating.setVisibility(visibility);
+        ivBias.setVisibility(visibility);
+        ibInformation.setVisibility(visibility);
+    }
+
+    private void setClassificationAnim(Animation anim) {
+        tvFactRating.startAnimation(anim);
+        ivBias.startAnimation(anim);
+        ibInformation.startAnimation(anim);
     }
 
     private void reportArticle() {
