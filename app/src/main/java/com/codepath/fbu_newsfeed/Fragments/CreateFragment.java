@@ -322,10 +322,15 @@ public class CreateFragment extends Fragment {
             }
         });
     }
-    private Source querySource(String source) throws ParseException {
-        ParseQuery<Source> query = ParseQuery.getQuery(Source.class);
-        query.whereEqualTo(Source.KEY_NAME, source);
-        return query.getFirst();
+    private Source querySource(String source) {
+        try {
+            ParseQuery<Source> query = ParseQuery.getQuery(Source.class);
+            query.whereEqualTo(Source.KEY_NAME, source);
+            return query.getFirst();
+        } catch (Exception e) {
+            Log.d(TAG, "Error querying source", e);
+            return null;
+        }
     }
 
     private Source matchUrlToSource(String sourceUrl) throws ParseException {
