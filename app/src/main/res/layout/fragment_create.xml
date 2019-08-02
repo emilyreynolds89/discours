@@ -30,10 +30,21 @@
         android:layout_marginBottom="16dp"
         android:scaleType="centerCrop"
         android:tint="#40636262"
-        app:layout_constraintBottom_toTopOf="@+id/tvArticleCount"
+        app:layout_constraintBottom_toTopOf="@+id/tvArticleTitleCreate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spArticleListCreate"
         tools:srcCompat="@drawable/news_placeholder" />
+
+        <Spinner
+            android:id="@+id/tagSelector"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:foregroundTint="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toBottomOf="@id/ibInformation" />
 
         <EditText
             android:id="@+id/etCaptionCreate"
@@ -57,7 +68,7 @@
             app:layout_constraintEnd_toEndOf="@+id/view"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/view"
-            app:layout_constraintTop_toBottomOf="@+id/ibInformation" />
+            app:layout_constraintTop_toBottomOf="@+id/tagSelector" />
 
         <TextView
             android:id="@+id/tvFactCheckCreate"
@@ -86,7 +97,7 @@
             android:layout_marginEnd="4dp"
             android:background="@android:color/transparent"
             android:scaleType="fitXY"
-            app:layout_constraintEnd_toEndOf="@+id/tvArticleCount"
+            app:layout_constraintEnd_toEndOf="@+id/tvArticleTitleCreate"
             app:layout_constraintTop_toBottomOf="@+id/view"
             app:srcCompat="@drawable/question" />
 
@@ -109,7 +120,7 @@
             app:layout_constraintTop_toBottomOf="@+id/etCaptionCreate" />
 
         <TextView
-            android:id="@+id/tvArticleCount"
+            android:id="@+id/tvArticleTitleCreate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -135,7 +146,7 @@
             android:background="@color/colorModerate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvArticleCount" />
+            app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleCreate" />
 
         <Spinner
             android:id="@+id/spArticleListCreate"

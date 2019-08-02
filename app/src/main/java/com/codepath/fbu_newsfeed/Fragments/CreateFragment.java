@@ -1,7 +1,5 @@
 package com.codepath.fbu_newsfeed.Fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
+import com.codepath.fbu_newsfeed.Adapters.ArticleTitleSpinnerAdapter;
 import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Helpers.JSoupResult;
 import com.codepath.fbu_newsfeed.HomeActivity;
@@ -38,6 +37,7 @@ import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -48,12 +48,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,122 +63,46 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-
 public class CreateFragment extends Fragment {
     public static final String TAG = "CreateFragment";
 
     private List<Article> articles;
-    private List<String> articleList;
 
-    @BindView(R.id.spArticleListCreate) Spinner spArticleListCreate;
-    @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreviewCreate;
-    @BindView(R.id.tvArticleCount) TextView tvArticleTitleCreate;
-    @BindView(R.id.tvFactCheckCreate) TextView tvFactCheckCreate;
-    @BindView(R.id.ivBias) ImageView  ivBiasCreate;
-    @BindView(R.id.ibInformation) ImageButton ibInformation;
-    @BindView(R.id.etCaptionCreate) EditText etCaptionCreate;
-    @BindView(R.id.btShareArticleCreate) Button btnShareCreate;
-    @BindView(R.id.etURLCreate) EditText etUrlCreate;
+    public @BindView(R.id.spArticleListCreate) Spinner spArticleListCreate;
+    public @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreviewCreate;
+    public @BindView(R.id.tvArticleTitleCreate) TextView tvArticleTitleCreate;
+    public @BindView(R.id.tvFactCheckCreate) TextView tvFactCheckCreate;
+    public @BindView(R.id.ivBias) ImageView  ivBiasCreate;
+    public @BindView(R.id.ibInformation) ImageButton ibInformation;
+    public @BindView(R.id.etCaptionCreate) EditText etCaptionCreate;
+    public @BindView(R.id.btShareArticleCreate) Button btnShareCreate;
+    public @BindView(R.id.etURLCreate) EditText etUrlCreate;
+    public @BindView(R.id.tagSelector) Spinner tagSelector;
+
     private Unbinder unbinder;
 
-    private ArrayAdapter<String> spinnerArrayAdapter;
+    private ArticleTitleSpinnerAdapter spinnerArrayAdapter;
     private Article selectedArticle;
     String url;
-    JSoupResult jsoupResult = new JSoupResult();
+    String selectedTag;
     ParseFile imageParseFile;
 
+    //ContentTask contentTask;
 
-    class Content extends AsyncTask<String, String, JSoupResult> {
-        String title = "";
-        String description = "";
-        String image = "";
-        Source source;
-        String urlTest = "";
-        @Override
-        protected JSoupResult doInBackground(String... params) {
+    HashMap<String, Boolean> parsedArticles; // key: article URL, value: whether or not the article has already been parsed and added to database
 
-            urlTest = params[0];
-            Log.d(TAG, "urlTest: " + urlTest);
-            Document document = null;
-            try {
-                document = Jsoup.connect(urlTest).get();
-                Elements titleSelector = document.select("meta[property=\"og:title\"]");
-                if (!titleSelector.isEmpty()) {
-                    title = titleSelector.get(0).attr("content");
-                    jsoupResult.setTitleUrl(title);
-                }
-                Elements descriptionSelector = document.select("meta[property=\"og:description\"]");
-                if (!descriptionSelector.isEmpty()) {
-                    description = descriptionSelector.get(0).attr("content");
-                    jsoupResult.setDescription(description);
-                }
-                Elements imageSelector = document.select("meta[property=\"og:image\"]");
-                if (!imageSelector.isEmpty()) {
-                    image = imageSelector.get(0).attr("content");
-                    jsoupResult.setImageUrl(image);
-                }
-                Elements sourceSelector = document.select("meta[property=\"og:site_name\"]");
-                if (!sourceSelector.isEmpty()) {
-                    String sourceName = sourceSelector.get(0).attr("content");
-                    jsoupResult.setSourceName(sourceName.toUpperCase());
-                } else {
-                    jsoupResult.setSourceUrl(urlTest);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return jsoupResult;
-        }
-
-        @Override
-        protected void onPostExecute(JSoupResult jSoupResult) {
-            Log.d(TAG, "TITLE: " + jSoupResult.getTitleUrl());
-            Source articleSource = null;
-            try {
-                if (jSoupResult.getSourceName() != null)
-                    articleSource = querySource(jSoupResult.getSourceName());
-                else if (jSoupResult.getSourceUrl() != null)
-                    articleSource = matchUrlToSource(jSoupResult.getSourceUrl());
-                else
-                    Log.e(TAG, "Issue getting source");
-
-                if (articleSource != null) {
-                    Log.d(TAG, "We found this source: " + articleSource.toString());
-                    tvFactCheckCreate.setText(articleSource.getFact());
-                    tvArticleTitleCreate.setText(jSoupResult.getTitleUrl());
-                }
-
-                int biasVal = articleSource.getBias();
-                BiasHelper.setBiasImageView(ivBiasCreate, biasVal);
-                if (jSoupResult.getImageUrl() != null) {
-                    Glide.with(getContext()).load(jSoupResult.getImageUrl()).into(ivArticlePreviewCreate);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            String strFact = "MIXTURE";
-            int intBias = 3;
-            if (articleSource != null) {
-                intBias = articleSource.getBias();
-                strFact = articleSource.getFact();
-            }
-            //Bitmap myBitmap = getBitmapFromURL(jsoupResult.getImageUrl());
-            //ParseFile imageParse = getParseFileFromBitmap(myBitmap);
-
-            selectedArticle = new Article(urlTest, title, jsoupResult.getImageUrl(), description, Bias.intToEnum(intBias), Fact.stringToEnum(strFact), articleSource, "POLITICS");
-            selectedArticle.saveInBackground();
-        }
-    }
+    private ArrayList<String> tagList;
+    private ArrayAdapter<String> tagAdapter;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getArguments() != null) {
-            url = getArguments().getString("url");
-        }
+        super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_create, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        parsedArticles = new HashMap<>();
 
         return view;
     }
@@ -187,14 +111,23 @@ public class CreateFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (getArguments() != null) {
+            url = getArguments().getString("url");
+            if (parsedArticles.get(url) == null || parsedArticles.get(url) == false) {
+                parsedArticles.put(url, false);
+            }
+        }
+
         ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(2).setChecked(true);
 
+        tagSelector.setVisibility(View.GONE);
+        spArticleListCreate.setVisibility(View.VISIBLE);
+        etUrlCreate.setVisibility(View.VISIBLE);
+
         if (url != null) {
-            etUrlCreate.setText(url);
-            new Content().execute(url);
+            urlHasBeenEntered();
         }
         articles = new ArrayList<>();
-        articleList = new ArrayList<>();
         etUrlCreate.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -204,9 +137,14 @@ public class CreateFragment extends Fragment {
                                 keyEvent.getAction() == KeyEvent.ACTION_DOWN &&
                                 keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
                     if (keyEvent == null || !keyEvent.isShiftPressed()) {
-                        String url = etUrlCreate.getText().toString();
-                        new Content().execute(url);
-                        return true;
+                        url = etUrlCreate.getText().toString();
+                        if (!url.isEmpty()) {
+                            if (parsedArticles.get(url) == null || parsedArticles.get(url) == false) {
+                                parsedArticles.put(url, false);
+                            }
+                            urlHasBeenEntered();
+                            return true;
+                        }
                     }
                 }
                 return false;
@@ -215,33 +153,26 @@ public class CreateFragment extends Fragment {
 
         queryTitle();
 
-        spinnerArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, articleList);
-        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinnerArrayAdapter = new ArticleTitleSpinnerAdapter(getContext(), articles);
         spArticleListCreate.setAdapter(spinnerArrayAdapter);
 
         spArticleListCreate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 Log.d("CreateFragment", "Selected item at " + position);
-                if (!articleList.isEmpty()) {
-                    tvFactCheckCreate.setText(Fact.enumToString(articles.get(position).getTruth()));
-                    tvArticleTitleCreate.setText(articles.get(position).getTitle());
-                    ParseFile imageFile = articles.get(position).getImage();
-
-                    int biasValue = articles.get(position).getIntBias();
-                    BiasHelper.setBiasImageView(ivBiasCreate, biasValue);
-                    String imageUrl = articles.get(position).getImageUrl();
-                    if (imageFile != null ) {
-                        Glide.with(getContext()).load(imageFile.getUrl()).into(ivArticlePreviewCreate);
-                    } else if (imageUrl != null) {
-                        Glide.with(getContext()).load(imageUrl).into(ivArticlePreviewCreate);
-                    }
+                if (position != 0 && !articles.isEmpty()) {
+                    position = position - 1;
                     selectedArticle = articles.get(position);
+
+                    setArticleView();
+
+                    etUrlCreate.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+                etUrlCreate.setVisibility(View.VISIBLE);
                 return;
             }
         });
@@ -250,6 +181,11 @@ public class CreateFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (selectedArticle != null) {
+
+                    if (!etUrlCreate.getText().equals("") && tagSelector.getVisibility() == View.VISIBLE) {
+                        updateArticleTag();
+                    }
+
                     final String caption = etCaptionCreate.getText().toString();
                     shareCreate(caption, selectedArticle);
 
@@ -275,6 +211,73 @@ public class CreateFragment extends Fragment {
         unbinder.unbind();
     }
 
+
+    public void setArticleView() {
+        this.tvFactCheckCreate.setText(Fact.enumToString(selectedArticle.getTruth()));
+        this.tvArticleTitleCreate.setText(selectedArticle.getTitle());
+
+        int biasValue = this.selectedArticle.getIntBias();
+        BiasHelper.setBiasImageView(this.ivBiasCreate, biasValue);
+
+        ParseFile imageFile = this.selectedArticle.getImage();
+        String imageUrl = this.selectedArticle.getImageUrl();
+        if (imageFile != null ) {
+            Glide.with(getContext()).load(imageFile.getUrl()).into(this.ivArticlePreviewCreate);
+        } else if (imageUrl != null) {
+            Glide.with(getContext()).load(imageUrl).into(this.ivArticlePreviewCreate);
+        }
+        if (tagSelector.getVisibility() == View.VISIBLE) {
+            int spinnerPosition = tagAdapter.getPosition(this.selectedArticle.getTag());
+            tagSelector.setSelection(spinnerPosition);
+        }
+
+    }
+
+
+    private void urlHasBeenEntered() {
+        etUrlCreate.setText(url);
+
+        Article existingArticle = getArticleByUrl(url);
+        if (existingArticle == null) {
+            if (!parsedArticles.get(url)) {
+                new ContentTask(CreateFragment.this).execute(url);
+                parsedArticles.put(url, true);
+            }
+        } else {
+            Log.d(TAG, "This article already exists (found with URL)");
+            selectedArticle = existingArticle;
+            parsedArticles.put(url, true);
+            setArticleView();
+        }
+        spArticleListCreate.setVisibility(View.GONE);
+    }
+
+
+
+    private void setUpTagSelector() {
+        tagSelector.setVisibility(View.VISIBLE);
+        tagList = new ArrayList<>();
+
+        queryTags();
+
+        tagAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, tagList);
+        tagAdapter.setDropDownViewResource(R.layout.spinner_item);
+        tagSelector.setAdapter(tagAdapter);
+
+        tagSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                selectedTag = tagList.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+
+        });
+    }
+
     private void showInformationDialog() {
         FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
         InformationDialogFragment informationDialog = InformationDialogFragment.newInstance();
@@ -282,7 +285,7 @@ public class CreateFragment extends Fragment {
     }
 
     private void queryTitle() {
-        final ParseQuery<Article> articleQuery = new ParseQuery<Article>(Article.class);
+        final ParseQuery<Article> articleQuery = new ParseQuery<>(Article.class);
         articleQuery.setLimit(10);
         articleQuery.addDescendingOrder(Article.KEY_CREATED_AT);
 
@@ -296,16 +299,8 @@ public class CreateFragment extends Fragment {
                 }
                 articles.addAll(newArticles);
 
-                for (int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
-                    Log.d("TrendsQuery", "Article: " + article.getTitle());
+                spinnerArrayAdapter.notifyDataSetChanged();
                 }
-                for (int i = 0; i < articles.size(); i++) {
-                    articleList.add(i, articles.get(i).getTitle());
-                    spinnerArrayAdapter.notifyDataSetChanged();
-                }
-            }
-
         });
     }
     private void shareCreate(String caption, Article article) {
@@ -339,7 +334,7 @@ public class CreateFragment extends Fragment {
         for (Source s : sources) {
             if (s.getUrlMatch() != null) {
                 String urlMatch = s.getUrlMatch();
-                Pattern p = Pattern.compile(urlMatch);
+                Pattern p = Pattern.compile("^.+[\\/\\.]" + urlMatch + "\\..+$");
                 Matcher m = p.matcher(sourceUrl);
                 if (m.matches()) {
                     return s;
@@ -368,28 +363,174 @@ public class CreateFragment extends Fragment {
         return query.getFirst();
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
+    private void updateArticleTag() {
+        ParseQuery<Article> query = ParseQuery.getQuery("Article");
+        query.getInBackground(selectedArticle.getObjectId(), new GetCallback<Article>() {
+            @Override
+            public void done(Article object, ParseException e) {
+                if (e == null) {
+                    object.setTag(selectedTag);
+                    if (selectedTag.equals(Fact.enumToString(Fact.TruthLevel.OPINION))) {
+                        object.setTruth(Fact.TruthLevel.OPINION);
+                    }
+                    object.saveInBackground();
+                }
+            }
+        });
+
+    }
+
+    private void queryTags() {
+        ParseQuery<Article> query = ParseQuery.getQuery("Article");
+        query.findInBackground(new FindCallback<Article>() {
+            @Override
+            public void done(List<Article> articles, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < articles.size(); i++) {
+                        String tag = articles.get(i).getTag();
+                        if (!tagList.contains(tag)) {
+                            tagList.add(tag);
+                        }
+                    }
+                    tagAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "Error searching by tag", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Error searching by tag", e);
+                }
+            }
+        });
+    }
+
+    private Article getArticleByUrl(String url) {
+        ParseQuery<Article> articleQuery = new ParseQuery<>(Article.class);
+        articleQuery.whereEqualTo(Article.KEY_URL, url);
+        Article result = null;
         try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            result = articleQuery.getFirst();
+        } catch (Exception e) {
+            Log.d(TAG, "Error: ", e);
+        }
+        return result;
+    }
+
+    private Article getArticleByTitleSource(String title, Source source) {
+        ParseQuery<Article> articleQuery = new ParseQuery<>(Article.class);
+        articleQuery.whereEqualTo(Article.KEY_TITLE, title);
+        articleQuery.whereEqualTo(Article.KEY_SOURCE, source);
+        Article result = null;
+        try {
+            result = articleQuery.getFirst();
+        } catch (Exception e) {
+            Log.d(TAG, "Error: ", e);
+        }
+        return result;
+    }
+
+    public static class ContentTask extends AsyncTask<String, Void, JSoupResult> {
+        CreateFragment fragment;
+
+        ContentTask(CreateFragment context){
+            fragment = context;
+        }
+
+        @Override
+        protected JSoupResult doInBackground(String... params) {
+            JSoupResult jsoupResult = new JSoupResult();
+
+            String title = "";
+            String description = "";
+            String image = "";
+            Source source;
+            String urlTest = "";
+            urlTest = params[0];
+            Log.d(TAG, "urlTest: " + urlTest);
+
+            try {
+                Document document = Jsoup.connect(urlTest).get();
+                Elements titleSelector = document.select("meta[property=\"og:title\"]");
+                if (!titleSelector.isEmpty()) {
+                    title = titleSelector.get(0).attr("content");
+                    jsoupResult.setTitle(title);
+                }
+                // TODO: what if title/description/etc. properties don't exist
+                Elements descriptionSelector = document.select("meta[property=\"og:description\"]");
+                if (!descriptionSelector.isEmpty()) {
+                    description = descriptionSelector.get(0).attr("content");
+                    jsoupResult.setDescription(description);
+                }
+                Elements imageSelector = document.select("meta[property=\"og:image\"]");
+                if (!imageSelector.isEmpty()) {
+                    image = imageSelector.get(0).attr("content");
+                    jsoupResult.setImageUrl(image);
+                } else {
+                    Elements newImageSelector = document.select("img");
+                    if (!newImageSelector.isEmpty()) {
+                        image = newImageSelector.get(0).attr("src");
+                        jsoupResult.setImageUrl(image);
+                    }
+                }
+                Elements sourceSelector = document.select("meta[property=\"og:site_name\"]");
+                if (!sourceSelector.isEmpty()) {
+                    String sourceName = sourceSelector.get(0).attr("content");
+                    jsoupResult.setSourceName(sourceName.toUpperCase());
+                }
+
+                jsoupResult.setSourceUrl(urlTest);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return jsoupResult;
+        }
+
+        @Override
+        protected void onPostExecute(JSoupResult jSoupResult) {
+            if (fragment == null || fragment.isRemoving()) return;
+            Log.d(TAG, "TITLE: " + jSoupResult.getTitle());
+            Source articleSource = null;
+            try {
+                if (jSoupResult.getSourceName() != null)
+                    articleSource = fragment.querySource(jSoupResult.getSourceName());
+                    if (articleSource == null && jSoupResult.getSourceUrl() != null)
+                        articleSource = fragment.matchUrlToSource(jSoupResult.getSourceUrl());
+                else if (jSoupResult.getSourceUrl() != null)
+                    articleSource = fragment.matchUrlToSource(jSoupResult.getSourceUrl());
+                else
+                    Log.e(TAG, "Issue getting source");
+
+                if (articleSource != null) {
+                    Log.d(TAG, "We found this source: " + articleSource.toString());
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(fragment.getContext(), "Sorry, you can't share articles from that source.", Toast.LENGTH_SHORT).show();
+            }
+            String strFact = "MIXTURE";
+            int intBias = 3;
+            if (articleSource != null) {
+                intBias = articleSource.getBias();
+                strFact = articleSource.getFact();
+                Article existingArticle = fragment.getArticleByTitleSource(jSoupResult.getTitle(), articleSource);
+                if (existingArticle != null) {
+                    Log.d(TAG, "This article already exists (found with title and source)");
+                    fragment.selectedArticle = existingArticle;
+                    fragment.parsedArticles.put(jSoupResult.getSourceUrl(), true);
+                    fragment.setArticleView();
+                } else {
+                    fragment.selectedArticle = new Article(jSoupResult.getSourceUrl(), jSoupResult.getTitle(), jSoupResult.getImageUrl(), jSoupResult.getDescription(), Bias.intToEnum(intBias), Fact.stringToEnum(strFact), articleSource, "UNTAGGED");
+                    fragment.selectedArticle.saveInBackground();
+                    fragment.parsedArticles.put(jSoupResult.getSourceUrl(), true);
+                    fragment.setArticleView();
+                    fragment.setUpTagSelector();
+                }
+
+            } else {
+                Toast.makeText(fragment.getContext(), "Sorry, you can't share articles from that source.", Toast.LENGTH_SHORT).show();
+            }
+
+
         }
     }
-    public ParseFile getParseFileFromBitmap(Bitmap bitmap) {
 
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-        byte[] scaledData = bos.toByteArray();
-
-        // Save the scaled image to Parse
-        imageParseFile = new ParseFile("image_to_be_saved.jpg", scaledData);
-        return imageParseFile;
-    }
 }

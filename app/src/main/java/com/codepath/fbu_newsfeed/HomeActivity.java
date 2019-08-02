@@ -170,6 +170,20 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent() != null)
+            onSharedIntent();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        setIntent(intent);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -177,9 +191,12 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
         return true;
     }
 
+
+
+
     private void onSharedIntent() {
         Intent receivedIntent = getIntent();
-        Log.e(TAG, receivedIntent.toString());
+        dumpIntent(receivedIntent);
         String receivedAction = receivedIntent.getAction();
         String receivedType = receivedIntent.getType();
 
@@ -197,7 +214,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
                         bundle.putString("url", receivedText);
 
                         createFragment.setArguments(bundle);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, createFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, createFragment).addToBackStack(CreateFragment.TAG).commit();
 
                     }
                 } else if (receivedType.startsWith("image/")) {
@@ -246,6 +263,18 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }else{
             getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
+
+    private void dumpIntent(Intent data) {
+
+        Bundle bundle = data.getExtras();
+        if (bundle != null) {
+            for (String key : bundle.keySet()) {
+                Object value = bundle.get(key);
+                Log.d(TAG, String.format("%s %s (%s)", key,
+                        value.toString(), value.getClass().getName()));
+            }
         }
     }
 
