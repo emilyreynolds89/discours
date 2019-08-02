@@ -62,8 +62,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-// TODO: need to check if article already exists
-// TODO: check if article is opinion
 
 public class CreateFragment extends Fragment {
     public static final String TAG = "CreateFragment";
@@ -141,6 +139,9 @@ public class CreateFragment extends Fragment {
                     if (keyEvent == null || !keyEvent.isShiftPressed()) {
                         url = etUrlCreate.getText().toString();
                         if (!url.isEmpty()) {
+                            if (parsedArticles.get(url) == null || parsedArticles.get(url) == false) {
+                                parsedArticles.put(url, false);
+                            }
                             urlHasBeenEntered();
                             return true;
                         }
@@ -181,8 +182,7 @@ public class CreateFragment extends Fragment {
             public void onClick(View view) {
                 if (selectedArticle != null) {
 
-                    //TODO: FIX THIS
-                    if (!etUrlCreate.getText().equals("") && etUrlCreate.getVisibility() == View.VISIBLE) {
+                    if (!etUrlCreate.getText().equals("") && tagSelector.getVisibility() == View.VISIBLE) {
                         updateArticleTag();
                     }
 
@@ -226,9 +226,10 @@ public class CreateFragment extends Fragment {
         } else if (imageUrl != null) {
             Glide.with(getContext()).load(imageUrl).into(this.ivArticlePreviewCreate);
         }
-
-        int spinnerPosition = tagAdapter.getPosition(this.selectedArticle.getTag());
-        tagSelector.setSelection(spinnerPosition);
+        if (tagSelector.getVisibility() == View.VISIBLE) {
+            int spinnerPosition = tagAdapter.getPosition(this.selectedArticle.getTag());
+            tagSelector.setSelection(spinnerPosition);
+        }
 
     }
 
@@ -236,11 +237,18 @@ public class CreateFragment extends Fragment {
     private void urlHasBeenEntered() {
         etUrlCreate.setText(url);
 
-        if (!parsedArticles.get(url)) {
-            new ContentTask(CreateFragment.this).execute(url);
+        Article existingArticle = getArticleByUrl(url);
+        if (existingArticle == null) {
+            if (!parsedArticles.get(url)) {
+                new ContentTask(CreateFragment.this).execute(url);
+                parsedArticles.put(url, true);
+            }
+        } else {
+            Log.d(TAG, "This article already exists (found with URL)");
+            selectedArticle = existingArticle;
             parsedArticles.put(url, true);
+            setArticleView();
         }
-        setUpTagSelector();
         spArticleListCreate.setVisibility(View.GONE);
     }
 
@@ -277,7 +285,7 @@ public class CreateFragment extends Fragment {
     }
 
     private void queryTitle() {
-        final ParseQuery<Article> articleQuery = new ParseQuery<Article>(Article.class);
+        final ParseQuery<Article> articleQuery = new ParseQuery<>(Article.class);
         articleQuery.setLimit(10);
         articleQuery.addDescendingOrder(Article.KEY_CREATED_AT);
 
@@ -393,13 +401,35 @@ public class CreateFragment extends Fragment {
         });
     }
 
-    public static class ContentTask extends AsyncTask<String, Void, JSoupResult> {
+    private Article getArticleByUrl(String url) {
+        ParseQuery<Article> articleQuery = new ParseQuery<>(Article.class);
+        articleQuery.whereEqualTo(Article.KEY_URL, url);
+        Article result = null;
+        try {
+            result = articleQuery.getFirst();
+        } catch (Exception e) {
+            Log.d(TAG, "Error: ", e);
+        }
+        return result;
+    }
 
-        //private SoftReference<CreateFragment> fragmentWeakReference;
+    private Article getArticleByTitleSource(String title, Source source) {
+        ParseQuery<Article> articleQuery = new ParseQuery<>(Article.class);
+        articleQuery.whereEqualTo(Article.KEY_TITLE, title);
+        articleQuery.whereEqualTo(Article.KEY_SOURCE, source);
+        Article result = null;
+        try {
+            result = articleQuery.getFirst();
+        } catch (Exception e) {
+            Log.d(TAG, "Error: ", e);
+        }
+        return result;
+    }
+
+    public static class ContentTask extends AsyncTask<String, Void, JSoupResult> {
         CreateFragment fragment;
 
         ContentTask(CreateFragment context){
-            //fragmentWeakReference = new SoftReference<>(context);
             fragment = context;
         }
 
@@ -455,8 +485,6 @@ public class CreateFragment extends Fragment {
 
         @Override
         protected void onPostExecute(JSoupResult jSoupResult) {
-
-            //final CreateFragment fragment = fragmentWeakReference.get();
             if (fragment == null || fragment.isRemoving()) return;
             Log.d(TAG, "TITLE: " + jSoupResult.getTitle());
             Source articleSource = null;
@@ -481,11 +509,24 @@ public class CreateFragment extends Fragment {
             if (articleSource != null) {
                 intBias = articleSource.getBias();
                 strFact = articleSource.getFact();
+                Article existingArticle = fragment.getArticleByTitleSource(jSoupResult.getTitle(), articleSource);
+                if (existingArticle != null) {
+                    Log.d(TAG, "This article already exists (found with title and source)");
+                    fragment.selectedArticle = existingArticle;
+                    fragment.parsedArticles.put(jSoupResult.getSourceUrl(), true);
+                    fragment.setArticleView();
+                } else {
+                    fragment.selectedArticle = new Article(jSoupResult.getSourceUrl(), jSoupResult.getTitle(), jSoupResult.getImageUrl(), jSoupResult.getDescription(), Bias.intToEnum(intBias), Fact.stringToEnum(strFact), articleSource, "UNTAGGED");
+                    fragment.selectedArticle.saveInBackground();
+                    fragment.parsedArticles.put(jSoupResult.getSourceUrl(), true);
+                    fragment.setArticleView();
+                    fragment.setUpTagSelector();
+                }
+
+            } else {
+                Toast.makeText(fragment.getContext(), "Sorry, you can't share articles from that source.", Toast.LENGTH_SHORT).show();
             }
-            fragment.selectedArticle = new Article(jSoupResult.getSourceUrl(), jSoupResult.getTitle(), jSoupResult.getImageUrl(), jSoupResult.getDescription(), Bias.intToEnum(intBias), Fact.stringToEnum(strFact), articleSource, "UNTAGGED");
-            fragment.selectedArticle.saveInBackground();
-            fragment.parsedArticles.put(jSoupResult.getSourceUrl(), true);
-            fragment.setArticleView();
+
 
         }
     }
