@@ -11,12 +11,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
+import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Fact;
+import com.codepath.fbu_newsfeed.Models.Source;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
@@ -26,9 +34,18 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TagActivity extends AppCompatActivity {
+public class SourceActivity extends AppCompatActivity {
 
-    @BindView(R.id.tvTagHeader) TextView tvTagHeader;
+    // TODO: MAYBE ALSO LINK TO WIKIPEDIA OR SOMETHING
+
+    public static final String TAG = "SourceActivity";
+    Source source;
+
+    @BindView(R.id.tvSourceName) TextView tvSourceName;
+    @BindView(R.id.tvSourceDescription) TextView tvSourceDescription;
+    @BindView(R.id.ivSourceLogo) ImageView ivSourceLogo;
+    @BindView(R.id.tvFactRating) TextView tvFactRating;
+    @BindView(R.id.ivBias) ImageView ivBias;
     @BindView(R.id.rvArticles) RecyclerView rvArticles;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
@@ -37,22 +54,19 @@ public class TagActivity extends AppCompatActivity {
     ArrayList<Article> articles;
     TrendsAdapter adapter;
 
-    EndlessRecyclerViewScrollListener scrollListener;
-
-    String tag;
-
+    private EndlessRecyclerViewScrollListener scrollListener;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tag);
+        setContentView(R.layout.activity_source);
 
-        tag = getIntent().getStringExtra("tag");
+        String sourceId = getIntent().getStringExtra("source_id");
+
+        querySource(sourceId);
 
         ButterKnife.bind(this);
-
-        tvTagHeader.setText("Recent articles about " + tag);
 
         articles = new ArrayList<>();
         adapter = new TrendsAdapter(this, articles);
@@ -61,7 +75,17 @@ public class TagActivity extends AppCompatActivity {
         final StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL);
         rvArticles.setLayoutManager(gridLayoutManager);
 
-        queryArticles(0);
+        tvSourceName.setText(source.getFullName());
+        tvSourceDescription.setText(source.getDescription());
+        tvFactRating.setText(source.getFact());
+
+        int biasValue = source.getBias();
+        BiasHelper.setBiasImageView(ivBias, biasValue);
+
+        if (source.getLogo() != null)
+            Glide.with(this).load(source.getLogo().getUrl()).into(ivSourceLogo);
+
+        querySourceArticles(0);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -76,7 +100,7 @@ public class TagActivity extends AppCompatActivity {
         scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                queryArticles(page);
+                querySourceArticles(page);
             }
         };
 
@@ -86,7 +110,6 @@ public class TagActivity extends AppCompatActivity {
                 rvArticles.smoothScrollToPosition(0);
             }
         });
-
 
         setSupportActionBar(toolbar);
 
@@ -101,9 +124,20 @@ public class TagActivity extends AppCompatActivity {
     }
 
 
-    private void queryArticles(int offset) {
+    private void querySource(String sourceId) {
+        try {
+            ParseQuery<Source> query = new ParseQuery<>(Source.class);
+            source = query.get(sourceId);
+        } catch (Exception e) {
+            Log.d(TAG, "Error querying source", e);
+        }
+
+    }
+
+    private void querySourceArticles(int offset) {
         final ParseQuery<Article> articleQuery = new ParseQuery<Article>(Article.class);
-        articleQuery.whereEqualTo(Article.KEY_TAG, tag);
+        articleQuery.include(Article.KEY_SOURCE);
+        articleQuery.whereEqualTo(Article.KEY_SOURCE, source);
         articleQuery.setLimit(Article.LIMIT);
         articleQuery.setSkip(offset * Article.LIMIT);
         articleQuery.orderByDescending("createdAt");
@@ -112,11 +146,10 @@ public class TagActivity extends AppCompatActivity {
             @Override
             public void done(List<Article> newArticles, ParseException e) {
                 if (e != null) {
-                    Log.e("TrendsQuery", "Error with query");
+                    Log.e("querySourceArticles", "Error with query");
                     e.printStackTrace();
                 } else {
                     adapter.addAll(newArticles);
-
                 }
 
             }
@@ -125,8 +158,9 @@ public class TagActivity extends AppCompatActivity {
 
     private void fetchTimelineAsync() {
         adapter.clear();
-        queryArticles(0);
+        querySourceArticles(0);
         swipeContainer.setRefreshing(false);
         scrollListener.resetState();
     }
+
 }

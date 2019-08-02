@@ -129,6 +129,7 @@
             android:fontFamily="@font/lato"
             android:text="Source"
             android:textColor="@color/colorBaseText"
+            android:foreground="?selectableItemBackground"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvArticleSummary"

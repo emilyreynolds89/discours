@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
@@ -55,8 +56,8 @@ public class ArticleSearchFragment extends Fragment {
 
         articleResults = new ArrayList<>();
         trendsAdapter = new TrendsAdapter(getContext(), articleResults);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        rvResults.setLayoutManager(linearLayoutManager);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL);
+        rvResults.setLayoutManager(gridLayoutManager);
         rvResults.setAdapter(trendsAdapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
