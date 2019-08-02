@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -70,6 +72,10 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     private Context context;
     private Map<String, Map<ReactionType, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
 
+    private Animation open_anim, close_anim;
+
+    boolean isOpen = false;
+
     public ShareAdapter(ArrayList<Share> newShares) {
         shares = newShares;
         allReactions = new HashMap<>();
@@ -81,7 +87,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View shareView = inflater.inflate(R.layout.article_item, parent, false);
+        View shareView = inflater.inflate(R.layout.article_item_expand_button, parent, false);
         return new ViewHolder(shareView);
     }
 
@@ -92,6 +98,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         final ParseUser user = share.getUser();
 
         final User currentUser = (User) ParseUser.getCurrentUser();
+
+        close_anim = AnimationUtils.loadAnimation(context, R.anim.btn_close);
+        open_anim = AnimationUtils.loadAnimation(context, R.anim.btn_open);
 
         Map<ReactionType, Reaction> reactionMap = allReactions.get(share.getObjectId());
 
@@ -204,6 +213,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.tvSource) TextView tvSource;
         @BindView(R.id.tvTag) TextView tvTag;
         @BindView(R.id.cvArticleImage) CardView cvArticleImage;
+        @BindView(R.id.ibReactionExpand) ImageButton ibReactionExpand;
 
 
         ViewHolder(View view) {
@@ -222,6 +232,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             ibReportArticle.setOnClickListener(this);
             tvFactRating.setOnClickListener(this);
             ivBias.setOnClickListener(this);
+
+            ibReactionExpand.setOnClickListener(this);
         }
 
         @Override
@@ -234,6 +246,27 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 ParseUser user = share.getUser();
 
                 switch(view.getId()) {
+                    case R.id.ibReactionExpand:
+                        if(isOpen) {
+                            setReactionVisibility(View.INVISIBLE);
+                            setReactionAnim(close_anim);
+                            setReactionClickable(false);
+
+                            setClassificationVisibility(View.VISIBLE);
+                            setClassificationAnim(open_anim);
+
+                            isOpen = false;
+                        } else {
+                            setReactionVisibility(View.VISIBLE);
+                            setReactionAnim(open_anim);
+                            setReactionClickable(true);
+
+                            setClassificationVisibility(View.INVISIBLE);
+                            setClassificationAnim(close_anim);
+
+                            isOpen = true;
+                        }
+                        break;
                     case R.id.tvUsername:
                     case R.id.ivProfileImageNotif:
                         goToUser(user);
@@ -278,6 +311,55 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 }
 
         }
+
+        private void setReactionVisibility(int visibility) {
+            ibReactionLike.setVisibility(visibility);
+            ibReactionDislike.setVisibility(visibility);
+            ibReactionHappy.setVisibility(visibility);
+            ibReactionSad.setVisibility(visibility);
+            ibReactionAngry.setVisibility(visibility);
+
+            tvLike.setVisibility(visibility);
+            tvDislike.setVisibility(visibility);
+            tvHappy.setVisibility(visibility);
+            tvSad.setVisibility(visibility);
+            tvAngry.setVisibility(visibility);
+        }
+
+        private void setReactionAnim(Animation anim) {
+            ibReactionLike.startAnimation(anim);
+            ibReactionDislike.startAnimation(anim);
+            ibReactionHappy.startAnimation(anim);
+            ibReactionSad.startAnimation(anim);
+            ibReactionAngry.startAnimation(anim);
+
+            tvLike.startAnimation(anim);
+            tvDislike.startAnimation(anim);
+            tvHappy.startAnimation(anim);
+            tvSad.startAnimation(anim);
+            tvAngry.startAnimation(anim);
+        }
+
+        private void setReactionClickable(boolean clickable) {
+            ibReactionLike.setClickable(clickable);
+            ibReactionDislike.setClickable(clickable);
+            ibReactionHappy.setClickable(clickable);
+            ibReactionSad.setClickable(clickable);
+            ibReactionAngry.setClickable(clickable);
+        }
+
+        private void setClassificationVisibility(int visibility) {
+            tvFactRating.setVisibility(visibility);
+            ivBias.setVisibility(visibility);
+            ibInformation.setVisibility(visibility);
+        }
+
+        private void setClassificationAnim(Animation anim) {
+            tvFactRating.startAnimation(anim);
+            ivBias.startAnimation(anim);
+            ibInformation.startAnimation(anim);
+        }
+
     }
 
     private void goToArticle(Article article) {
@@ -424,6 +506,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         notification.deleteInBackground();
     }
+
 
 
 }
