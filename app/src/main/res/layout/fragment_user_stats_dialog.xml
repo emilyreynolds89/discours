@@ -10,20 +10,16 @@
     <ProgressBar
         android:id="@+id/pbFactAverage"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="160dp"
+        android:layout_width="154dp"
         android:layout_height="160dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="32dp"
         android:indeterminate="false"
         android:max="100"
         android:min="1"
         android:progress="75"
         android:progressDrawable="@drawable/progress_circle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/favoriteView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvFactTitle"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/favoriteView" />
 
     <ProgressBar
         android:id="@+id/pbBiasAverage"
@@ -32,7 +28,7 @@
         android:layout_height="36dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="216dp"
+        android:layout_marginBottom="212dp"
         android:indeterminate="false"
         android:max="100"
         android:min="1"
@@ -43,12 +39,12 @@
 
     <ImageView
         android:id="@+id/ivNewspaper"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="32dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/pbBiasAverage"
         app:srcCompat="@drawable/newspaper_icon" />
 
     <TextView
@@ -56,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/lato"
@@ -75,7 +71,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/lato"
-        android:text="User Activity Statistics"
+        android:text="User Sharing Statistics"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,7 +88,6 @@
         android:text="AVERAGE\nTRUTH"
         app:layout_constraintBottom_toBottomOf="@+id/tvArticleTitle"
         app:layout_constraintEnd_toEndOf="@+id/pbFactAverage"
-        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="@+id/pbFactAverage"
         app:layout_constraintTop_toBottomOf="@+id/pbBiasAverage"
         app:layout_constraintVertical_bias="1.0" />
@@ -122,6 +117,19 @@
         app:layout_constraintBottom_toTopOf="@+id/ivNewspaper"
         app:layout_constraintEnd_toEndOf="@+id/ivNewspaper"
         app:layout_constraintStart_toStartOf="@+id/ivNewspaper" />
+
+    <TextView
+        android:id="@+id/tvFavoritesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/lato"
+        android:text="FAVORITE"
+        app:layout_constraintBottom_toBottomOf="@+id/tvArticleTitle"
+        app:layout_constraintEnd_toEndOf="@+id/favoriteView"
+        app:layout_constraintStart_toStartOf="@+id/favoriteView"
+        app:layout_constraintTop_toTopOf="@+id/tvArticleTitleCreate" />
 
     <TextView
         android:id="@+id/tvLiberal"
@@ -191,5 +199,92 @@
         app:layout_constraintBottom_toTopOf="@+id/pbBiasAverage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvSConservative" />
+
+    <TextView
+        android:id="@+id/tvSourceTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/lato"
+        android:text="Source"
+        android:textAllCaps="true"
+        android:textColor="@color/colorBaseText"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/favoriteView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/favoriteView"
+        app:layout_constraintTop_toTopOf="@+id/favoriteView" />
+
+    <TextView
+        android:id="@+id/tvTagTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/lato"
+        android:text="TOPIC"
+        android:textAllCaps="true"
+        android:textColor="@color/colorBaseText"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/favoriteView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/favoriteView"
+        app:layout_constraintTop_toBottomOf="@+id/tvSourceFavorite" />
+
+    <TextView
+        android:id="@+id/tvSourceFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/lato"
+        android:text="Source"
+        android:textColor="@color/colorLightText"
+        android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/favoriteView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvSourceTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvSourceTitle" />
+
+    <TextView
+        android:id="@+id/tvTagFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/lato"
+        android:text="Source"
+        android:textColor="@color/colorLightText"
+        android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/favoriteView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvSourceTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvTagTitle" />
+
+    <TextView
+        android:id="@+id/tvDisclaimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/lato"
+        android:text="User statistics are calculated from the data of the articles you have previously shared"
+        android:textColor="@color/colorLightText"
+        android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pbFactAverage" />
+
+    <view
+        android:id="@+id/favoriteView"
+        class="androidx.constraintlayout.widget.ConstraintLayout"
+        id="@+id/view4"
+        android:layout_width="110dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/border_transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/ivNewspaper"
+        app:layout_constraintEnd_toStartOf="@+id/ivNewspaper"
+        app:layout_constraintTop_toTopOf="@+id/ivNewspaper"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
