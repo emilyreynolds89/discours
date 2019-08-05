@@ -12,6 +12,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/tvPrompt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccentDark"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:text="Double click to annotate article"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/webview"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:layout_editor_absoluteX="-13dp" />
+
     <WebView
         android:id="@+id/webview"
         android:layout_width="0dp"
@@ -19,7 +34,7 @@
         app:layout_constraintBottom_toTopOf="@+id/annotationConstraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/tvPrompt">
 
     </WebView>
 

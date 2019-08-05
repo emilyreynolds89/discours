@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.codepath.fbu_newsfeed.Models.Annotation;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -43,7 +44,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-// TODO: can only annotate from the correct article (check if same url)
+// TODO: annotations don't go out of bounds of the article
+// TODO: annotations are displayed as a little comment thing and you can expand if you click them
+// TODO: shows that annotations are loading
 
 public class BrowserActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -104,12 +107,13 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                     ibForward.setColorFilter(ContextCompat.getColor(BrowserActivity.this, R.color.colorModerate));
                 }
 
+                getAnnotations();
+
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                getAnnotations();
                 injectJS(view, R.raw.annotate);
             }
         });
@@ -178,6 +182,11 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void setUpAnnotation(final int positionX, final int positionY) {
+        if (!webView.getUrl().equals(url)) {
+            Toast.makeText(this, "You may only annotate on the originally shared article", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         annotationConstraintLayout.setVisibility(View.VISIBLE);
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -208,13 +217,17 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void getAnnotations() {
-        // TODO: only get friends' notifications
+        List<ParseUser> friends = getFriends();
+
+        friends.add(ParseUser.getCurrentUser());
 
         ParseQuery<Annotation> annoQuery = new ParseQuery<>(Annotation.class);
         annoQuery.whereEqualTo(Annotation.KEY_ARTICLE, article);
+        annoQuery.whereContainedIn("user", friends);
         annoQuery.findInBackground(new FindCallback<Annotation>() {
             @Override
             public void done(List<Annotation> objects, ParseException e) {
+                Log.d(TAG, "Got " + objects.size() + " annotations");
                 annoList.addAll(objects);
                 for (Annotation anno : annoList) {
                     displayAnnotation(anno);
@@ -222,7 +235,42 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+    }
 
+    private List<ParseUser> getFriends() {
+
+        ParseQuery<Friendship> query1 = ParseQuery.getQuery("Friendship");
+        query1.whereEqualTo("user1", ParseUser.getCurrentUser());
+        query1.whereEqualTo("state", Friendship.stateEnumToInt(Friendship.State.Accepted));
+
+        ParseQuery<Friendship> query2 = ParseQuery.getQuery("Friendship");
+        query2.whereEqualTo("user2", ParseUser.getCurrentUser());
+        query2.whereEqualTo("state", Friendship.stateEnumToInt(Friendship.State.Accepted));
+
+        List<ParseQuery<Friendship>> queries = new ArrayList<ParseQuery<Friendship>>();
+        queries.add(query1);
+        queries.add(query2);
+        ParseQuery<Friendship> mainQuery = ParseQuery.or(queries);
+
+        try {
+            List<Friendship> result = mainQuery.find();
+            Log.d(TAG, "Found " + result.size() + " friendships");
+            List<ParseUser> friends = new ArrayList<>();
+            for (int i = 0; i < result.size(); i++) {
+                Friendship friendship = result.get(i);
+                if (friendship.isUser1(ParseUser.getCurrentUser())) {
+                    friends.add(friendship.getUser2());
+                } else {
+                    friends.add(friendship.getUser1());
+                }
+                Log.d(TAG, "Found " + friends.size() + " friends");
+            }
+            return friends;
+        } catch(Exception e) {
+            Log.d(TAG, "Error retrieving friends: " + e.getMessage());
+
+        }
+        return new ArrayList<>();
     }
 
     private void displayAnnotation(Annotation anno) {
