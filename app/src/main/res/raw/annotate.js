@@ -7,3 +7,4 @@ body.addEventListener('dblclick', function(e) {
     console.log("DOUBLE CLIKED AT: X=" + e.pageX + " Y=" + e.pageY);
     Android.sendCoords(e.pageX, e.pageY, window.screen.width);
 })
+

@@ -44,8 +44,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-// TODO: annotations don't go out of bounds of the article
-// TODO: annotations are displayed as a little comment thing and you can expand if you click them
 // TODO: shows that annotations are loading
 
 public class BrowserActivity extends AppCompatActivity implements View.OnClickListener {
@@ -111,16 +109,16 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                 } else {
                     ibForward.setColorFilter(ContextCompat.getColor(BrowserActivity.this, R.color.colorModerate));
                 }
-
-                getAnnotations();
+                if (annoList.isEmpty())
+                    getAnnotations();
 
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                renderAnnotations();
                 injectJS(view, R.raw.annotate);
+                renderAnnotations();
             }
 
             @Override
@@ -293,19 +291,40 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             String positionX = String.valueOf(anno.getPositionX()) + "px";
             String positionY = String.valueOf(anno.getPositionY()) + "px";
             String text = anno.getText();
+            String id = anno.getObjectId();
+
             try {
                 String username = anno.getUser().fetchIfNeeded().getUsername();
                 String jsScript = "    var body = document.querySelector('body');\n" +
-                        "    console.log(\"Trying to annotate: " + positionX + " " + positionY + " " + text + " " + username + "\");\n" +
+                        "    console.log(\"Trying to annotate: ID " + id + " " + positionX + " " + positionY + " " + text + " " + username + "\");\n" +
+                        "    var outerdiv = document.createElement('div');\n" +
+                        "    var icon = document.createElement('span');\n" +
+                        "    icon.id = \"annotation-icon-" + id + "\";\n" +
+                        "    icon.style.cssText = 'position: absolute; height: 24px; width: 24px; display: block; z-index: 2';\n" +
+                        "    icon.innerHTML = '<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"> <path fill=\"#70E7CA\" d=\"M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10Z\" /></svg>';\n" +
+                        "    outerdiv.appendChild(icon);" +
+                        "    outerdiv.style.cssText = 'position: absolute; width: 100px; z-index: 1';\n" +
+                        "    outerdiv.style.top = '" + positionY + "';\n" +
+                        "    outerdiv.style.left = '" + positionX + "';\n" +
                         "    var div = document.createElement('div');\n" +
-                        "    var textContent = document.createTextNode(\"@" + username + ": " + text + "\");\n" +
-                        "    div.appendChild(textContent);\n" +
-                        "    div.class = 'annotation';\n" +
-                        "    div.style.cssText = 'position: absolute; background-color: yellow; height: 60px; width: 100px; z-index: 1';\n" +
-                        "    div.style.top = '" + positionY + "';\n" +
-                        "    div.style.left = '" + positionX + "';\n" +
-                        "    body.appendChild(div);\n";
-                //Log.d(TAG, jsScript);
+                        "    div.innerHTML = \"<b>@" + username + ":</b> " + text + "\";\n" +
+                        "    div.id = 'annotation-body-" + id + "';\n" +
+                        "    div.style.cssText = 'position: absolute; background-color: #F7F7F7; padding: 8px; border-radius: 8px; overflow: auto; width: 100px; z-index: 1; display: none';\n" +
+                        "    outerdiv.appendChild(div);\n" +
+                        "    body.appendChild(outerdiv);\n" +
+                        "icon.addEventListener('click', function(e) {\n" +
+                        "    console.log(\"CLICKED AT: X=\" + e.pageX + \" Y=\" + e.pageY);\n" +
+                        "    var div = document.getElementById('annotation-body-" + id + "');\n" +
+                        "    div.style.display = 'block';\n" +
+                        "    this.style.display = 'none';\n" +
+                        "})\n" +
+                        "div.addEventListener('click', function(e) {\n" +
+                        "    console.log(\"CLICKED AT: X=\" + e.pageX + \" Y=\" + e.pageY);\n" +
+                        "    this.style.display = 'none';\n" +
+                        "    var icon = document.getElementById('annotation-icon-" + id + "');\n" +
+                        "    icon.style.display = 'block';\n" +
+                        "})\n";
+                Log.d(TAG, jsScript);
                 webView.evaluateJavascript(jsScript, new ValueCallback<String>() {
                                 @Override
                                 public void onReceiveValue(String s) {
