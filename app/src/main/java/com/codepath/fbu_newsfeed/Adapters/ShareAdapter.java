@@ -248,12 +248,13 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 switch(view.getId()) {
                     case R.id.ibReactionExpand:
                         if(isOpen) {
-                            setReactionVisibility(View.INVISIBLE);
+                            setReactionVisibility(View.GONE);
                             setReactionAnim(close_anim);
                             setReactionClickable(false);
 
                             setClassificationVisibility(View.VISIBLE);
                             setClassificationAnim(open_anim);
+                            setClassificationClickable(true);
 
                             isOpen = false;
                         } else {
@@ -261,8 +262,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                             setReactionAnim(open_anim);
                             setReactionClickable(true);
 
-                            setClassificationVisibility(View.INVISIBLE);
+                            setClassificationVisibility(View.GONE);
                             setClassificationAnim(close_anim);
+                            setClassificationClickable(false);
 
                             isOpen = true;
                         }
@@ -358,6 +360,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             tvFactRating.startAnimation(anim);
             ivBias.startAnimation(anim);
             ibInformation.startAnimation(anim);
+        }
+
+        private void setClassificationClickable(boolean clickable) {
+            tvFactRating.setClickable(clickable);
+            ivBias.setClickable(clickable);
+            ibInformation.setClickable(clickable);
         }
 
     }
