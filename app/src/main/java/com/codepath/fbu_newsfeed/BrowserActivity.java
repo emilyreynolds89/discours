@@ -18,6 +18,7 @@ import android.view.inputmethod.EditorInfo;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -37,7 +38,6 @@ import com.parse.SaveCallback;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +69,9 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
     private ArrayList<Annotation> annoList;
 
+    private boolean urlChanged;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +80,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         ButterKnife.bind(this);
 
         annoList = new ArrayList<>();
+        urlChanged = false;
 
         setSupportActionBar(toolbar);
 
@@ -91,6 +95,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new AnnotationInterface(this), "Android");
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -114,7 +119,15 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                renderAnnotations();
                 injectJS(view, R.raw.annotate);
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                urlChanged = true;
+
+                return super.shouldOverrideUrlLoading(view, request);
             }
         });
 
@@ -181,11 +194,18 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void setUpAnnotation(final int positionX, final int positionY) {
-        if (!webView.getUrl().equals(url)) {
+    public void setUpAnnotation(int tempX, int tempY, int screenWidth) {
+        if (urlChanged) {
             Toast.makeText(this, "You may only annotate on the originally shared article", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (tempX > (screenWidth - 100)) { // annotations don't go beyond viewport
+            // TODO: Change hardcoded pixel count
+            tempX = screenWidth - 100;
+        }
+
+        final int positionX = tempX;
+        final int positionY = tempY;
 
         annotationConstraintLayout.setVisibility(View.VISIBLE);
 
@@ -229,9 +249,6 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             public void done(List<Annotation> objects, ParseException e) {
                 Log.d(TAG, "Got " + objects.size() + " annotations");
                 annoList.addAll(objects);
-                for (Annotation anno : annoList) {
-                    displayAnnotation(anno);
-                }
             }
         });
 
@@ -263,7 +280,6 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                 } else {
                     friends.add(friendship.getUser1());
                 }
-                Log.d(TAG, "Found " + friends.size() + " friends");
             }
             return friends;
         } catch(Exception e) {
@@ -279,17 +295,18 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             String text = anno.getText();
             try {
                 String username = anno.getUser().fetchIfNeeded().getUsername();
-                webView.evaluateJavascript(
-                        "    var body = document.querySelector('body');\n" +
-                        "    console.log('Trying to annotate: " + positionX + " " + positionY + " " + text + " " + username + "');\n" +
+                String jsScript = "    var body = document.querySelector('body');\n" +
+                        "    console.log(\"Trying to annotate: " + positionX + " " + positionY + " " + text + " " + username + "\");\n" +
                         "    var div = document.createElement('div');\n" +
-                        "    var textContent = document.createTextNode('@" + username + ": " + text + "');\n" +
+                        "    var textContent = document.createTextNode(\"@" + username + ": " + text + "\");\n" +
                         "    div.appendChild(textContent);\n" +
                         "    div.class = 'annotation';\n" +
-                        "    div.style.cssText = 'position: absolute; background-color: yellow; height: 60px; width: 120px; z-index: 1;';\n" +
+                        "    div.style.cssText = 'position: absolute; background-color: yellow; height: 60px; width: 100px; z-index: 1';\n" +
                         "    div.style.top = '" + positionY + "';\n" +
                         "    div.style.left = '" + positionX + "';\n" +
-                        "    body.appendChild(div);\n", new ValueCallback<String>() {
+                        "    body.appendChild(div);\n";
+                //Log.d(TAG, jsScript);
+                webView.evaluateJavascript(jsScript, new ValueCallback<String>() {
                                 @Override
                                 public void onReceiveValue(String s) {
                                     Log.d(TAG, "YAY! " + s);
@@ -301,28 +318,36 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    public void renderAnnotations() {
+        for (Annotation anno : annoList) {
+            displayAnnotation(anno);
+        }
+    }
+
 
 
     public class AnnotationInterface {
         Context mContext;
         int positionX;
         int positionY;
+        int screenWidth;
 
         AnnotationInterface(Context context) {
             mContext = context;
         }
 
         @JavascriptInterface
-        public void sendCoords(String X, String Y) {
+        public void sendCoords(String X, String Y, String width) {
             this.positionX = Integer.valueOf(X);
             this.positionY = Integer.valueOf(Y);
+            this.screenWidth = Integer.valueOf(width);
 
             Log.d(TAG, "SENT THESE COORDS: " + X + ", " + Y);
 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ((BrowserActivity) mContext).setUpAnnotation(positionX, positionY);
+                    ((BrowserActivity) mContext).setUpAnnotation(positionX, positionY, screenWidth);
                 }
             });
 
