@@ -124,29 +124,29 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         if (commentReaction != null) {
             count = CommentReactionHelper.destroyCommentReaction(commentReaction, comment);
             imageButton.setSelected(false);
-            deleteNotification(share, comment.getText());
+            deleteNotification(share, comment, comment.getText());
         } else {
             count = CommentReactionHelper.createCommentReaction(comment);
             imageButton.setSelected(true);
-            createNotification(share, comment.getText());
+            createNotification(share, comment, comment.getText());
         }
         textView.setText(Integer.toString(count));
     }
 
-    private void createNotification(Share share, String typeText) {
-        User shareUser = (User) share.getUser();
-        if (ParseUser.getCurrentUser().getObjectId().equals(shareUser.getObjectId())) { return; }
-        Notification notification = new Notification(Notification.COMMENT_REACTION, (User) ParseUser.getCurrentUser(), shareUser, share, typeText);
+    private void createNotification(Share share, Comment comment, String typeText) {
+        User commentedUser = (User) comment.getUser();
+        if (ParseUser.getCurrentUser().getObjectId().equals(comment.getUser().getObjectId())) { return; }
+        Notification notification = new Notification(Notification.COMMENT_REACTION, (User) ParseUser.getCurrentUser(), commentedUser, share, typeText);
         notification.saveInBackground();
     }
 
-    private void deleteNotification(Share share, String typeText) {
+    private void deleteNotification(Share share, Comment comment, String typeText) {
         ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
 
         query.whereEqualTo(Notification.KEY_TYPE, Notification.COMMENT_REACTION);
         query.whereEqualTo(Notification.KEY_TYPE_TEXT, typeText);
         query.whereEqualTo(Notification.KEY_SEND_USER, ParseUser.getCurrentUser());
-        query.whereEqualTo(Notification.KEY_RECEIVE_USER, share.getUser());
+        query.whereEqualTo(Notification.KEY_RECEIVE_USER, comment.getUser());
 
         Notification notification;
 
