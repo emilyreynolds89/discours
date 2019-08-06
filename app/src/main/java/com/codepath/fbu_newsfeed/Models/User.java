@@ -153,21 +153,44 @@ public class User extends ParseUser implements Serializable {
             List<Share> results = query.find();
             Map<String, Integer> tags = new HashMap<>();
             Map<String, Integer> sources = new HashMap<>();
+            Map<Integer, Integer> biases = new HashMap<>();
+            Map<Integer, Integer> facts = new HashMap<>();
             for(Share share: results) {
                 Article article = getArticle(share.getArticle().getObjectId());
+
                 String tag = article.getTag();
-                updateMap(tags, tag);
+                updateStringMap(tags, tag);
                 String source = article.getSource().getFullName();
-                updateMap(sources, source);
+                updateStringMap(sources, source);
+
+                Integer bias = Bias.enumToInt(article.getBias());
+                updateIntMap(biases, bias);
+                Integer fact = Fact.enumToInt(article.getTruth());
+                updateIntMap(facts, fact);
             }
             favoriteTag = mostCommon(tags);
             favoriteSource = mostCommon(sources);
+            biasAverage = getAverage(biases);
+            factAverage = getAverage(facts);
+
+            setBiasAverage(biasAverage);
+            setFactAverage(factAverage);
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
 
-    private void updateMap(Map<String, Integer> map, String key) {
+    private void updateStringMap(Map<String, Integer> map, String key) {
+        if(map.containsKey(key)) {
+            Integer count = map.get(key);
+            count += 1;
+            map.put(key, count);
+        } else {
+            map.put(key, 1);
+        }
+    }
+
+    private void updateIntMap(Map<Integer, Integer> map, Integer key) {
         if(map.containsKey(key)) {
             Integer count = map.get(key);
             count += 1;
@@ -179,11 +202,22 @@ public class User extends ParseUser implements Serializable {
 
     private String mostCommon(Map<String, Integer> map) {
         String mostCommonKey = null;
-        for(String key: map.keySet()) {
+        for (String key: map.keySet()) {
             if(mostCommonKey == null || map.get(key) > map.get(mostCommonKey)) {
                 mostCommonKey = key;
             }
         }
         return mostCommonKey;
+    }
+
+    private double getAverage(Map<Integer, Integer> map) {
+        int sum = 0;
+        int total = 0;
+        for (Integer key: map.keySet()) {
+            int count = map.get(key);
+            sum += key * count;
+            total += count;
+        }
+        return ((double) sum) / total;
     }
 }
