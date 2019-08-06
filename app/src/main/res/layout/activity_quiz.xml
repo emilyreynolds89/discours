@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".QuizActivity">
+
+    <ImageView
+        android:id="@+id/ivQuizImage"
+        android:layout_width="360dp"
+        android:layout_height="320dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="54dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerCrop"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/colorBlack" />
+
+    <TextView
+        android:id="@+id/tvQuizQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/lato"
+        android:text="Is this a true or fake news story?"
+        android:textColor="@color/colorBaseText"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/ivQuizImage"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/ivQuizImage"
+        app:layout_constraintTop_toBottomOf="@+id/ivQuizImage" />
+
+    <Button
+        android:id="@+id/btnTrue"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/rounded_accent_button"
+        android:fontFamily="@font/lato"
+        android:paddingBottom="2dp"
+        android:text="True"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/ivQuizImage"
+        app:layout_constraintStart_toStartOf="@+id/ivQuizImage"
+        app:layout_constraintTop_toBottomOf="@+id/ivQuizImage" />
+
+    <Button
+        android:id="@+id/btnFake"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/rounded_accent_button"
+        android:fontFamily="@font/lato"
+        android:paddingBottom="2dp"
+        android:text="Fake"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/ivQuizImage"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="@+id/ivQuizImage"
+        app:layout_constraintTop_toBottomOf="@+id/btnTrue" />
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="64dp"
+        android:background="@drawable/rounded_accent_button"
+        android:fontFamily="@font/lato"
+        android:paddingBottom="2dp"
+        android:text="Next"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ivQuizImage"
+        app:layout_constraintStart_toStartOf="@+id/ivQuizImage" />
+
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/rounded_accent_button"
+        android:fontFamily="@font/lato"
+        android:paddingBottom="2dp"
+        android:text="Start"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/tvStartTitle"
+        app:layout_constraintStart_toStartOf="@+id/tvStartTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvStartMessage" />
+
+    <Button
+        android:id="@+id/btnFinish"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/rounded_accent_button"
+        android:fontFamily="@font/lato"
+        android:paddingBottom="2dp"
+        android:text="Finish"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/tvEndTitle"
+        app:layout_constraintStart_toStartOf="@+id/tvEndTitle"
+        app:layout_constraintTop_toBottomOf="@id/scoreView" />
+
+    <TextView
+        android:id="@+id/tvQuizCorrectness"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/lato"
+        android:text="Correctness!"
+        android:textAllCaps="true"
+        android:textColor="@color/colorLightText"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/ivQuizImage"
+        app:layout_constraintStart_toStartOf="@+id/ivQuizImage"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuizQuestion" />
+
+    <TextView
+        android:id="@+id/tvQuizMessage"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato"
+        android:text="TextView"
+        android:textColor="@color/colorLightText"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/ivQuizImage"
+        app:layout_constraintStart_toStartOf="@+id/ivQuizImage"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuizCorrectness" />
+
+    <TextView
+        android:id="@+id/tvStartTitle"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
+        android:text="Can you spot a fake news story?"
+        android:textColor="@color/colorBaseText"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lineHeight="40sp" />
+
+    <TextView
+        android:id="@+id/tvEndTitle"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
+        android:text="Finished!"
+        android:textColor="@color/colorBaseText"
+        android:textSize="32sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lineHeight="40sp" />
+
+    <TextView
+        android:id="@+id/tvStartMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/lato"
+        android:text="Take this quiz to find out!"
+        android:textColor="@color/colorLightText"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivStartImage" />
+
+    <TextView
+        android:id="@+id/tvEndMessage"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/end_quiz_message"
+        android:textColor="@color/colorLightText"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivEndImage" />
+
+    <ImageView
+        android:id="@+id/ivStartImage"
+        android:layout_width="320dp"
+        android:layout_height="240dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvStartTitle"
+        app:srcCompat="@drawable/fakenews" />
+
+    <ImageView
+        android:id="@+id/ivEndImage"
+        android:layout_width="320dp"
+        android:layout_height="240dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEndTitle"
+        app:srcCompat="@drawable/fakenews" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/scoreView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/border_transparent"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvEndMessage">
+
+        <TextView
+            android:id="@+id/tvScoreTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/lato"
+            android:text="SCORE : "
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/lato"
+            android:text="0 / 4 Correct"
+            app:layout_constraintBottom_toBottomOf="@+id/tvScoreTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvScoreTitle"
+            app:layout_constraintTop_toTopOf="@+id/tvScoreTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

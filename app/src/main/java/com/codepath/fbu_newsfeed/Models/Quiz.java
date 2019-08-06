@@ -7,12 +7,10 @@ import com.parse.ParseObject;
 @ParseClassName("Quiz")
 public class Quiz extends ParseObject {
 
-    public static final String KEY_ORDER = "order";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_FAKE = "fake";
 
-    private int order;
     private ParseFile image;
     private String message;
     private boolean fake;
@@ -21,26 +19,15 @@ public class Quiz extends ParseObject {
         super();
     }
 
-    public Quiz(int order, ParseFile image, String message, boolean fake) {
+    public Quiz(ParseFile image, String message, boolean fake) {
         super();
 
-        this.order = order;
-        put(KEY_ORDER, order);
         this.image = image;
         put(KEY_IMAGE, image);
         this.message = message;
         put(KEY_MESSAGE, message);
         this.fake = fake;
         put(KEY_FAKE, fake);
-    }
-
-    public int getOrder() {
-        return (int) getNumber(KEY_ORDER);
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-        put(KEY_ORDER, order);
     }
 
     public ParseFile getImage() {

@@ -6,4 +6,8 @@
     <string name="truth_explanation">We calculate truth by the news source, classified into one of the following:</string>
 
     <string name="search_error">Sorry, we couldn\'t find what you were looking for. Maybe try again?</string>
+
+    <string name="end_quiz_message">Congratulations on completing the quiz! Look at your score to see how skilled you are at spotting fake news!</string>
+
+    <string name="score_message"> / 4 Correct</string>
 </resources>
