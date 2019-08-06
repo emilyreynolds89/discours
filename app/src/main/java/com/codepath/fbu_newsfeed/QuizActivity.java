@@ -148,13 +148,14 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                     presentEndOfQuiz();
                 }
                 break;
-            case R.id.tvStartSkip:
+
             case R.id.btnFinish:
                 Intent intent = new Intent(QuizActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
                 break;
 
+            case R.id.tvStartSkip:
             case R.id.tvMoreInfo:
                 Intent infoIntent = new Intent(QuizActivity.this, FakeNewsInfoActivity.class);
                 startActivity(infoIntent);

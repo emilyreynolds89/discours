@@ -219,7 +219,7 @@
         android:clickable="true"
         android:fontFamily="@font/lato"
         android:foreground="?selectableItemBackground"
-        android:text="Click here to skip"
+        android:text="Click here to read more about fake news"
         android:textColor="@color/colorLightText"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="380dp"
-    android:layout_height="420dp"
+    android:layout_height="440dp"
     android:background="@android:color/white"
     android:minWidth="380dp"
     android:padding="24dp">
@@ -15,6 +15,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/lato"
         android:text="@string/bias_explanation"
+        android:textColor="@color/colorLightText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBiasHeader" />
 
@@ -50,19 +51,46 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/lato"
         android:text="@string/truth_explanation"
+        android:textColor="@color/colorLightText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTruthHeader" />
+
+    <TextView
+        android:id="@+id/tvQuiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato"
+        android:foreground="?selectableItemBackground"
+        android:text="Click here!"
+        android:textColor="@color/colorHeadlineText"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/view5"
+        app:layout_constraintTop_toBottomOf="@id/view5" />
+
+    <TextView
+        android:id="@+id/tvQuizInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato"
+        android:text="Want to learn more on fake news?"
+        android:textColor="@color/colorLightText"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/view5"
+        app:layout_constraintTop_toBottomOf="@id/view5" />
 
     <TextView
         android:id="@+id/tvDisclaimer"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:fontFamily="@font/lato"
         android:text="Our classifications are sourced from the Media Bias Chart generated from a study by Ad Fonte Media\n\nSources not included in the study receive the single classification of Unproven, with no indicator for bias"
+        android:textColor="@color/colorLightText"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view5" />
+        app:layout_constraintTop_toBottomOf="@+id/tvQuiz" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view3"
@@ -86,6 +114,7 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/lato"
             android:text="Liberal\nSlightly Liberal\nModerate\nSlightly Conserv.\nConserv."
+            android:textColor="@color/colorLightText"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -186,7 +215,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvBias">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tvTruths"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -196,6 +225,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center"
             android:text="TRUE | MOSTLY TRUE | MIXTURE | MOSTLY FALSE | FALSE\nUNPROVEN | OPINION"
+            android:textColor="@color/colorLightText"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
