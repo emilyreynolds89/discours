@@ -37,7 +37,9 @@ import com.codepath.fbu_newsfeed.Models.Annotation;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
+import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -67,6 +69,9 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.rvComments) RecyclerView rvComments;
 
+    @BindView(R.id.etComment) EditText etComment;
+    @BindView(R.id.btnCommentSubmit) Button btnCommentSubmit;
+
     public @BindView(R.id.etAnnotation) EditText etAnnotation;
     public @BindView(R.id.btnSubmit) Button btnSubmit;
     public @BindView(R.id.annotationConstraintLayout)
@@ -83,6 +88,8 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<Annotation> annoList;
 
     private boolean urlChanged;
+
+    private ArrayList<ParseUser> friends;
 
 
     @Override
@@ -101,6 +108,8 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
         annoList = new ArrayList<>();
         urlChanged = false;
+
+        friends = new ArrayList<>();
 
         comments = new ArrayList<>();
         commentAdapter = new CommentAdapter(getBaseContext(), comments, share);
@@ -138,18 +147,24 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                 } else {
                     ibForward.setColorFilter(ContextCompat.getColor(BrowserActivity.this, R.color.colorModerate));
                 }
-                if (annoList.isEmpty())
-                    getAnnotations();
+
+                if(!urlChanged) {
+                    getFriends();
+                }
 
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                injectJS(view, R.raw.annotate);
-                renderAnnotations();
+                if (!urlChanged) {
+                    injectJS(view, R.raw.annotate);
+                    renderAnnotations();
+                    tvPrompt.setVisibility(View.VISIBLE);
+                } else {
+                    tvPrompt.setVisibility(View.GONE);
+                }
                 progressBar.setVisibility(View.GONE);
-                tvPrompt.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -264,6 +279,50 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    private void setUpFriendPermissions() {
+        if (isFriends()) {
+            etComment.setVisibility(View.VISIBLE);
+            btnCommentSubmit.setVisibility(View.VISIBLE);
+            rvComments.setVisibility(View.VISIBLE);
+            btnCommentSubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    String message = etComment.getText().toString();
+                    if (message == null || message.equals("")) {
+                        Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
+                    } else {
+                        final Comment addedComment = new Comment(message, (User) ParseUser.getCurrentUser(), share);
+                        addedComment.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Log.d(TAG, "Success in saving comment");
+                                    comments.add(addedComment);
+                                    commentAdapter.notifyDataSetChanged();
+                                    etComment.setText("");
+                                    etComment.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                                    return;
+                                } else {
+                                    Log.e(TAG, "Error in creating comment");
+                                    e.printStackTrace();
+                                    Toast.makeText(BrowserActivity.this, "Error in submitting comment", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        createNotification("COMMENT", share, message);
+                    }
+                }
+            });
+        } else {
+            etComment.setVisibility(View.GONE);
+            btnCommentSubmit.setVisibility(View.GONE);
+            rvComments.setVisibility(View.GONE);
+            btnCommentSubmit.setOnClickListener(null);
+
+        }
+    }
+
     private void queryComments() {
         ParseQuery<Comment> commentQuery = ParseQuery.getQuery(Comment.class);
         commentQuery.include(Comment.KEY_SHARE);
@@ -286,13 +345,14 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void getAnnotations() {
-        List<ParseUser> friends = getFriends();
 
-        friends.add(ParseUser.getCurrentUser());
+        ArrayList<ParseUser> annoFriends = new ArrayList<>(friends);
+
+        annoFriends.add(ParseUser.getCurrentUser());
 
         ParseQuery<Annotation> annoQuery = new ParseQuery<>(Annotation.class);
         annoQuery.whereEqualTo(Annotation.KEY_ARTICLE, article);
-        annoQuery.whereContainedIn("user", friends);
+        annoQuery.whereContainedIn("user", annoFriends);
         annoQuery.findInBackground(new FindCallback<Annotation>() {
             @Override
             public void done(List<Annotation> objects, ParseException e) {
@@ -303,7 +363,16 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    private List<ParseUser> getFriends() {
+    private boolean isFriends() {
+        ArrayList<String> friendIds = new ArrayList<>();
+        for (ParseUser friend : friends) {
+            friendIds.add(friend.getObjectId());
+        }
+
+        return share.getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId()) || friendIds.contains(share.getUser().getObjectId());
+    }
+
+    private void getFriends() {
 
         ParseQuery<Friendship> query1 = ParseQuery.getQuery("Friendship");
         query1.whereEqualTo("user1", ParseUser.getCurrentUser());
@@ -321,7 +390,6 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         try {
             List<Friendship> result = mainQuery.find();
             Log.d(TAG, "Found " + result.size() + " friendships");
-            List<ParseUser> friends = new ArrayList<>();
             for (int i = 0; i < result.size(); i++) {
                 Friendship friendship = result.get(i);
                 if (friendship.isUser1(ParseUser.getCurrentUser())) {
@@ -330,12 +398,21 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                     friends.add(friendship.getUser1());
                 }
             }
-            return friends;
+            setUpFriendPermissions();
+            if (annoList.isEmpty())
+                getAnnotations();
         } catch(Exception e) {
             Log.d(TAG, "Error retrieving friends: " + e.getMessage());
 
         }
-        return new ArrayList<>();
+    }
+
+    private void createNotification(String type, Share share, String typeText) {
+        Log.d(TAG, "Creating notification of type: " + type);
+        User shareUser = (User) share.getUser();
+        if (ParseUser.getCurrentUser().getObjectId().equals(shareUser.getObjectId())) { return; }
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), shareUser, share, typeText);
+        notification.saveInBackground();
     }
 
     private void displayAnnotation(Annotation anno) {
@@ -351,7 +428,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                         "    var outerdiv = document.createElement('div');\n" +
                         "    var icon = document.createElement('span');\n" +
                         "    icon.id = \"annotation-icon-" + id + "\";\n" +
-                        "    icon.style.cssText = 'position: absolute; height: 24px; width: 24px; display: block; z-index: 2';\n" +
+                        "    icon.style.cssText = 'position: absolute; height: 24px; width: 24px; display: block; z-index: 1';\n" +
                         "    icon.innerHTML = '<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"> <path fill=\"#70E7CA\" d=\"M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10Z\" /></svg>';\n" +
                         "    outerdiv.appendChild(icon);" +
                         "    outerdiv.style.cssText = 'position: absolute; width: 120px; z-index: 1';\n" +
@@ -360,7 +437,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                         "    var div = document.createElement('div');\n" +
                         "    div.innerHTML = \"<b>@" + username + ":</b> " + text + "\";\n" +
                         "    div.id = 'annotation-body-" + id + "';\n" +
-                        "    div.style.cssText = 'position: absolute; background-color: #F7F7F7; padding: 8px; border-radius: 8px; overflow: auto; width: 120px; z-index: 1; display: none';\n" +
+                        "    div.style.cssText = 'position: absolute; background-color: #F7F7F7; padding: 8px; border-radius: 8px; overflow: auto; width: 120px; z-index: 2; display: none';\n" +
                         "    outerdiv.appendChild(div);\n" +
                         "    body.appendChild(outerdiv);\n" +
                         "icon.addEventListener('click', function(e) {\n" +
