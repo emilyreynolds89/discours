@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,8 +34,11 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,12 +52,18 @@ public class FeedFragment extends Fragment {
     @BindView(R.id.rvShares) RecyclerView rvShares;
     @BindView(R.id.tvNoContent) TextView tvNoContent;
     @BindView(R.id.filterChipGroup) ChipGroup filterChipGroup;
+    @BindView(R.id.filterSubmit)
+    Button filterSubmit;
+
+    private ArrayList<ParseUser> friends;
 
     private ArrayList<Share> shares;
     private ShareAdapter shareAdapter;
     private Unbinder unbinder;
 
     private ArrayList<String> tagList;
+    private HashMap<String, Chip> tagMap;
+    private ArrayList<String> checkedTags;
 
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -75,16 +87,26 @@ public class FeedFragment extends Fragment {
         rvShares.setLayoutManager(linearLayoutManager);
         rvShares.setAdapter(shareAdapter);
 
-        queryShares(0);
-
         tagList = new ArrayList<>();
+        tagMap = new HashMap<>();
+        checkedTags = new ArrayList<>();
         queryTags();
+
+        friends = new ArrayList<>();
+        getFriends();
+
+        queryShares(0, false);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 shareAdapter.clear();
-                queryShares(0);
+                queryShares(0, false);
+                for (Chip chip : tagMap.values()) {
+                    chip.setChecked(true);
+                }
+                checkedTags.clear();
+                checkedTags.addAll(tagList);
                 scrollListener.resetState();
                 swipeContainer.setRefreshing(false);
             }
@@ -95,7 +117,7 @@ public class FeedFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                queryShares(page);
+                queryShares(page, true);
             }
         };
 
@@ -108,13 +130,31 @@ public class FeedFragment extends Fragment {
             }
         });
 
+        filterSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkedTags.clear();
+                for(Map.Entry<String, Chip> entry : tagMap.entrySet()) {
+                    String key = entry.getKey();
+                    Chip value = entry.getValue();
+
+                    if (value.isChecked()) {
+                        checkedTags.add(key);
+                    }
+                }
+                shareAdapter.clear();
+                queryShares(0, true);
+                toggleFilter();
+            }
+        });
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.miFilter:
-                toggleFilter(item);
+                toggleFilter();
                 return true;
         }
         return false;
@@ -126,13 +166,11 @@ public class FeedFragment extends Fragment {
         unbinder.unbind();
     }
 
-    private void toggleFilter(MenuItem item) {
+    private void toggleFilter() {
         if (filterChipGroup.getVisibility() == View.GONE) {
             filterChipGroup.setVisibility(View.VISIBLE);
-            item.setChecked(true);
         } else {
             filterChipGroup.setVisibility(View.GONE);
-            item.setChecked(false);
         }
     }
 
@@ -142,14 +180,15 @@ public class FeedFragment extends Fragment {
             Chip chip = (Chip) inflater.inflate(R.layout.filter_chip, null, false);
             chip.setChecked(true);
             chip.setText(tag);
-            filterChipGroup.addView(chip);
+            filterChipGroup.addView(chip, 0);
 
+            tagMap.put(tag, chip);
         }
     }
 
-    private void queryShares(int offset) {
+    private void queryShares(int offset, boolean byTag) {
+        ArrayList<ParseUser> friendsQueryList = new ArrayList<>(friends);
 
-        List<ParseUser> friends = getFriends();
         if (friends.size() == 0) {
             rvShares.setVisibility(View.INVISIBLE);
             tvNoContent.setVisibility(View.VISIBLE);
@@ -157,12 +196,18 @@ public class FeedFragment extends Fragment {
             rvShares.setVisibility(View.VISIBLE);
             tvNoContent.setVisibility(View.INVISIBLE);
         }
-        friends.add(ParseUser.getCurrentUser());
+        friendsQueryList.add(ParseUser.getCurrentUser());
 
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.include("user");
         query.include("article");
-        query.whereContainedIn("user", friends);
+        query.whereContainedIn("user", friendsQueryList);
+        if (byTag) {
+            Log.d(TAG, "Filtering by tags: " + checkedTags.toString());
+            ParseQuery<Article> innerQuery = ParseQuery.getQuery("Article");
+            innerQuery.whereContainedIn(Article.KEY_TAG, checkedTags);
+            query.whereMatchesQuery("article", innerQuery);
+        }
         query.setLimit(Share.LIMIT);
         query.setSkip(offset * Share.LIMIT);
         query.orderByDescending("createdAt");
@@ -192,6 +237,8 @@ public class FeedFragment extends Fragment {
                         }
                     }
                     Collections.sort(tagList);
+                    checkedTags.addAll(tagList);
+                    Collections.reverse(tagList);
                     initializeFilterGroup();
                 } else {
                     Toast.makeText(getContext(), "Error searching by tag", Toast.LENGTH_SHORT).show();
@@ -201,7 +248,7 @@ public class FeedFragment extends Fragment {
         });
     }
 
-    private List<ParseUser> getFriends() {
+    private void getFriends() {
 
         ParseQuery<Friendship> query1 = ParseQuery.getQuery("Friendship");
         query1.whereEqualTo("user1", ParseUser.getCurrentUser());
@@ -219,7 +266,6 @@ public class FeedFragment extends Fragment {
         try {
             List<Friendship> result = mainQuery.find();
             Log.d(TAG, "Found " + result.size() + " friendships");
-            List<ParseUser> friends = new ArrayList<>();
             for (int i = 0; i < result.size(); i++) {
                 Friendship friendship = result.get(i);
                 if (friendship.isUser1(ParseUser.getCurrentUser())) {
@@ -227,13 +273,10 @@ public class FeedFragment extends Fragment {
                 } else {
                     friends.add(friendship.getUser1());
                 }
-                Log.d(TAG, "Found " + friends.size() + " friends");
             }
-            return friends;
         } catch(Exception e) {
             Log.d(TAG, "Error retrieving friends: " + e.getMessage());
 
         }
-        return new ArrayList<>();
     }
 }
