@@ -138,11 +138,9 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/classAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/codepath/fbu_newsfeed/BrowserActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/codepath/fbu_newsfeed/BrowserActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_browser.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_browser.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/build/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -182,8 +180,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/codepath/fbu_newsfeed/BrowserActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="365" column="5" lean-forward="true" selection-start-line="365" selection-start-column="5" selection-end-line="365" selection-end-column="5" />
+            <state relative-caret-position="195">
+              <caret line="455" column="186" selection-start-line="455" selection-start-column="186" selection-end-line="455" selection-end-column="186" />
               <folding>
                 <element signature="e#9202#10290#0" expanded="true" />
                 <element signature="e#9623#10264#0" expanded="true" />
@@ -191,21 +189,6 @@
                 <element signature="e#10289#10290#0" expanded="true" />
                 <element signature="e#12765#13208#0" expanded="true" />
                 <element signature="e#13207#13208#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/codepath/fbu_newsfeed/ParseApplication.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="870">
-              <caret line="64" column="5" selection-start-line="64" selection-start-column="5" selection-end-line="64" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2763#2803#0" expanded="true" />
-                <element signature="e#2876#2906#0" expanded="true" />
-                <element signature="e#3049#3075#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -222,12 +205,12 @@
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_browser.xml">
-          <provider editor-type-id="text-editor">
-            <state relative-caret-position="165">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1755">
               <caret line="117" column="39" selection-start-line="117" selection-start-column="39" selection-end-line="117" selection-end-column="39" />
             </state>
           </provider>
-          <provider selected="true" editor-type-id="android-designer2" />
+          <provider editor-type-id="android-designer2" />
         </entry>
       </file>
     </leaf>
@@ -329,9 +312,10 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
+    <option name="x" value="211" />
     <option name="y" value="23" />
-    <option name="width" value="1680" />
+    <option name="width" value="1469" />
     <option name="height" value="947" />
   </component>
   <component name="ProjectView">
@@ -623,11 +607,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1680" height="947" extended-state="6" />
+    <frame x="211" y="23" width="1469" height="947" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4990991" visible="true" weight="0.15445666" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4990991" visible="true" weight="0.17729503" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Build Variants" order="4" sideWeight="0.5009009" side_tool="true" weight="0.23076923" />
@@ -638,11 +622,11 @@
       <window_info anchor="bottom" id="Inspection Results" order="0" weight="0.52224827" />
       <window_info anchor="bottom" id="Messages" order="1" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.495116" weight="0.3239766" />
-      <window_info anchor="bottom" id="Logcat" order="3" sideWeight="0.85897434" weight="0.2888889" />
+      <window_info active="true" anchor="bottom" id="Logcat" order="3" sideWeight="0.8577435" visible="true" weight="0.2888889" />
       <window_info anchor="bottom" id="TODO" order="4" sideWeight="0.4993895" weight="0.3263158" />
-      <window_info active="true" anchor="bottom" id="Debug" order="5" sideWeight="0.48168498" visible="true" weight="0.43157893" />
-      <window_info anchor="bottom" id="Terminal" order="6" sideWeight="0.77838826" weight="0.17660819" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.518315" side_tool="true" visible="true" weight="0.43157893" />
+      <window_info anchor="bottom" id="Debug" order="5" sideWeight="0.48106903" weight="0.43157893" />
+      <window_info anchor="bottom" id="Terminal" order="6" sideWeight="0.7777778" weight="0.17660819" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.14225648" side_tool="true" visible="true" weight="0.2888889" />
       <window_info anchor="bottom" id="Android Profiler" order="8" sideWeight="0.49919742" weight="0.32769728" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32751092" />
       <window_info anchor="bottom" id="Build" order="10" sideWeight="0.48427993" weight="0.33977455" />
@@ -665,9 +649,9 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/codepath/fbu_newsfeed/BrowserActivity.java</url>
-          <line>284</line>
+          <line>173</line>
           <properties />
-          <option name="timeStamp" value="7" />
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -1035,20 +1019,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/codepath/fbu_newsfeed/DetailActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1662">
+          <caret line="476" column="4" selection-start-line="476" selection-start-column="4" selection-end-line="482" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/secrets.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_browser.xml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="117" column="39" selection-start-line="117" selection-start-column="39" selection-end-line="117" selection-end-column="39" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/codepath/fbu_newsfeed/ParseApplication.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1063,17 +1046,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/codepath/fbu_newsfeed/DetailActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_browser.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1662">
-          <caret line="476" column="4" selection-start-line="476" selection-start-column="4" selection-end-line="482" selection-end-column="5" />
+        <state relative-caret-position="1755">
+          <caret line="117" column="39" selection-start-line="117" selection-start-column="39" selection-end-line="117" selection-end-column="39" />
         </state>
       </provider>
+      <provider editor-type-id="android-designer2" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/codepath/fbu_newsfeed/BrowserActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="365" column="5" lean-forward="true" selection-start-line="365" selection-start-column="5" selection-end-line="365" selection-end-column="5" />
+        <state relative-caret-position="195">
+          <caret line="455" column="186" selection-start-line="455" selection-start-column="186" selection-end-line="455" selection-end-column="186" />
           <folding>
             <element signature="e#9202#10290#0" expanded="true" />
             <element signature="e#9623#10264#0" expanded="true" />

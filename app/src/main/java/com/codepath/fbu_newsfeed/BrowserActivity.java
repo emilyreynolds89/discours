@@ -45,6 +45,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -76,7 +77,10 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     public @BindView(R.id.btnSubmit) Button btnSubmit;
     public @BindView(R.id.annotationConstraintLayout)
     ConstraintLayout annotationConstraintLayout;
+    @BindView(R.id.dragView) ConstraintLayout dragView;
+    @BindView(R.id.commentConstraintLayout) ConstraintLayout commentConstraintLayout;
     @BindView(R.id.shareConstraintLayout) ConstraintLayout shareConstraintLayout;
+    @BindView(R.id.sliding_layout) SlidingUpPanelLayout slidingLayout;
 
     private String url;
     private Article article;
@@ -88,6 +92,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<Annotation> annoList;
 
     private boolean urlChanged;
+    private String currentUrl;
 
     private ArrayList<ParseUser> friends;
 
@@ -101,7 +106,6 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
         article = (Article) getIntent().getSerializableExtra("article");
 
-        // TODO: if share doesn't exist b/c intent comes from trends adapter
         if (getIntent().hasExtra("share"))
             share = (Share) getIntent().getSerializableExtra("share");
         url = article.getUrl();
@@ -111,13 +115,19 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
         friends = new ArrayList<>();
 
-        comments = new ArrayList<>();
-        commentAdapter = new CommentAdapter(getBaseContext(), comments, share);
-        rvComments.setAdapter(commentAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
-        rvComments.setLayoutManager(linearLayoutManager);
+        if (share != null) {
+            comments = new ArrayList<>();
+            commentAdapter = new CommentAdapter(getBaseContext(), comments, share);
+            rvComments.setAdapter(commentAdapter);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
+            rvComments.setLayoutManager(linearLayoutManager);
 
-        queryComments();
+            queryComments();
+        } else {
+            commentConstraintLayout.setVisibility(View.GONE);
+            slidingLayout.setEnabled(false);
+        }
+
 
         setSupportActionBar(toolbar);
 
@@ -157,6 +167,10 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+
+                urlChanged = false;
+                currentUrl = webView.getUrl();
+
                 if (!urlChanged) {
                     injectJS(view, R.raw.annotate);
                     renderAnnotations();
@@ -243,8 +257,8 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             Toast.makeText(this, "You may only annotate on the originally shared article", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (tempX > (screenWidth - 120)) { // annotations don't go beyond viewport
-            tempX = screenWidth - 120;
+        if (tempX > (screenWidth - 140)) { // annotations don't go beyond viewport
+            tempX = screenWidth - 140;
         }
 
         final int positionX = tempX;
@@ -280,7 +294,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void setUpFriendPermissions() {
-        if (isFriends()) {
+        if (isFriends() && share != null) {
             etComment.setVisibility(View.VISIBLE);
             btnCommentSubmit.setVisibility(View.VISIBLE);
             rvComments.setVisibility(View.VISIBLE);
@@ -398,7 +412,9 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                     friends.add(friendship.getUser1());
                 }
             }
-            setUpFriendPermissions();
+            if (share != null) {
+                setUpFriendPermissions();
+            }
             if (annoList.isEmpty())
                 getAnnotations();
         } catch(Exception e) {
@@ -437,7 +453,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                         "    var div = document.createElement('div');\n" +
                         "    div.innerHTML = \"<b>@" + username + ":</b> " + text + "\";\n" +
                         "    div.id = 'annotation-body-" + id + "';\n" +
-                        "    div.style.cssText = 'position: absolute; background-color: #F7F7F7; padding: 8px; border-radius: 8px; overflow: auto; width: 120px; z-index: 2; display: none';\n" +
+                        "    div.style.cssText = 'position: absolute; background-color: #F7F7F7; padding: 8px; border-radius: 8px; overflow: auto; width: 120px; z-index: 2; font-size: 14px; display: none';\n" +
                         "    outerdiv.appendChild(div);\n" +
                         "    body.appendChild(outerdiv);\n" +
                         "icon.addEventListener('click', function(e) {\n" +
