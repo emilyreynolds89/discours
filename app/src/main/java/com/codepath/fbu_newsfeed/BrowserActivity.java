@@ -24,6 +24,8 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.fbu_newsfeed.Models.Annotation;
@@ -44,8 +46,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-// TODO: shows that annotations are loading
-
 public class BrowserActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "BrowserActivity";
@@ -56,6 +56,8 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     @BindView(R.id.ibBack) ImageButton ibBack;
     @BindView(R.id.ibForward) ImageButton ibForward;
     @BindView(R.id.ibRefresh) ImageButton ibRefresh;
+    @BindView(R.id.tvPrompt) TextView tvPrompt;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     public @BindView(R.id.etAnnotation) EditText etAnnotation;
     public @BindView(R.id.btnSubmit) Button btnSubmit;
@@ -98,6 +100,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                progressBar.setVisibility(View.VISIBLE);
                 if (view.canGoBack()) {
                     ibBack.setColorFilter(ContextCompat.getColor(BrowserActivity.this, R.color.colorBlack));
                 } else {
@@ -119,6 +122,8 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                 super.onPageFinished(view, url);
                 injectJS(view, R.raw.annotate);
                 renderAnnotations();
+                progressBar.setVisibility(View.GONE);
+                tvPrompt.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -197,9 +202,8 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             Toast.makeText(this, "You may only annotate on the originally shared article", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (tempX > (screenWidth - 100)) { // annotations don't go beyond viewport
-            // TODO: Change hardcoded pixel count
-            tempX = screenWidth - 100;
+        if (tempX > (screenWidth - 120)) { // annotations don't go beyond viewport
+            tempX = screenWidth - 120;
         }
 
         final int positionX = tempX;
@@ -303,13 +307,13 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                         "    icon.style.cssText = 'position: absolute; height: 24px; width: 24px; display: block; z-index: 2';\n" +
                         "    icon.innerHTML = '<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"> <path fill=\"#70E7CA\" d=\"M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10Z\" /></svg>';\n" +
                         "    outerdiv.appendChild(icon);" +
-                        "    outerdiv.style.cssText = 'position: absolute; width: 100px; z-index: 1';\n" +
+                        "    outerdiv.style.cssText = 'position: absolute; width: 120px; z-index: 1';\n" +
                         "    outerdiv.style.top = '" + positionY + "';\n" +
                         "    outerdiv.style.left = '" + positionX + "';\n" +
                         "    var div = document.createElement('div');\n" +
                         "    div.innerHTML = \"<b>@" + username + ":</b> " + text + "\";\n" +
                         "    div.id = 'annotation-body-" + id + "';\n" +
-                        "    div.style.cssText = 'position: absolute; background-color: #F7F7F7; padding: 8px; border-radius: 8px; overflow: auto; width: 100px; z-index: 1; display: none';\n" +
+                        "    div.style.cssText = 'position: absolute; background-color: #F7F7F7; padding: 8px; border-radius: 8px; overflow: auto; width: 120px; z-index: 1; display: none';\n" +
                         "    outerdiv.appendChild(div);\n" +
                         "    body.appendChild(outerdiv);\n" +
                         "icon.addEventListener('click', function(e) {\n" +
