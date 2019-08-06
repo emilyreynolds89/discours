@@ -7,6 +7,7 @@
 
     <style name="Dialog" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+        <item name="windowActionBarOverlay">true</item>
     </style>
 
     <style name="DialogAnimation">

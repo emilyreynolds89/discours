@@ -19,6 +19,11 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -53,6 +58,9 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.12.1'
 
     implementation 'com.github.uin3566:AllAngleExpandableButton:v1.2.0'
+
+    implementation 'com.sothree.slidinguppanel:library:3.4.0'
+
     implementation 'com.github.msayan:tutorial-view:v1.0.10'
     implementation 'com.codemybrainsout.onboarding:onboarder:1.0.4'
 
