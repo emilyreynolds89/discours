@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -49,10 +51,13 @@ import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Notification;
 import com.codepath.fbu_newsfeed.Models.Reaction;
 import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.Source;
 import com.codepath.fbu_newsfeed.Models.User;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -97,6 +102,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.tvTag) TextView tvTag;
     @BindView(R.id.tvSource) TextView tvSource;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.ibReactionExpand) ImageButton ibReactionExpand;
 
     private Share share;
     private Article article;
@@ -108,6 +114,10 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     private CommentAdapter commentAdapter;
     private RecommendAdapter recommendAdapter;
 
+    private Animation close_anim, open_anim;
+
+    boolean isOpen = false;
+
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     @Override
@@ -118,9 +128,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         queryShare();
 
+        close_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_close);
+        open_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_open);
+
         comments = new ArrayList<>();
         articles = new ArrayList<>();
-        commentAdapter = new CommentAdapter(getBaseContext(), comments);
+        commentAdapter = new CommentAdapter(getBaseContext(), comments, share);
         recommendAdapter = new RecommendAdapter(getBaseContext(), articles);
 
         rvComments.setAdapter(commentAdapter);
@@ -180,7 +193,15 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvArticleTitle.setText(article.getTitle());
         tvArticleSummary.setText(article.getSummary());
         tvTag.setText(article.getTag());
-        tvSource.setText(article.getSource().getName());
+
+        article.getParseObject(Article.KEY_SOURCE).fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                Source source = (Source) object;
+                tvSource.setText(source.getName());
+            }
+        });
+
         tvFactRating.setText(Fact.enumToString(article.getTruth()));
 
         int biasValue = article.getIntBias();
@@ -236,6 +257,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         viewArticle.setOnClickListener(this);
         ivBias.setOnClickListener(this);
         tvFactRating.setOnClickListener(this);
+        ibReactionExpand.setOnClickListener(this);
 
         setUpFriendPermissions();
         setSupportActionBar(toolbar);
@@ -246,12 +268,37 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ibReactionExpand:
+                if(isOpen) {
+                    setReactionVisibility(View.INVISIBLE);
+                    setReactionAnim(close_anim);
+                    setReactionClickable(false);
+
+                    setClassificationVisibility(View.VISIBLE);
+                    setClassificationAnim(open_anim);
+                    setClassificationClickable(true);
+
+                    isOpen = false;
+                } else {
+                    setReactionVisibility(View.VISIBLE);
+                    setReactionAnim(open_anim);
+                    setReactionClickable(true);
+
+                    setClassificationVisibility(View.INVISIBLE);
+                    setClassificationAnim(close_anim);
+                    setClassificationClickable(false);
+
+                    isOpen = true;
+                }
+                break;
             case R.id.ibReportArticle:
                 reportArticle();
                 break;
             case R.id.ibInformation:
                 Log.d(TAG, "Clicked information");
                 showInformationDialog();
+                /*Intent tempIntent = new Intent(DetailActivity.this, QuizActivity.class);
+                startActivity(tempIntent);*/
                 break;
             case R.id.ivBias:
                 showInformationDialog();
@@ -541,6 +588,60 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             default:
                 return null;
         }
+    }
+
+    private void setReactionVisibility(int visibility) {
+        ibReactionLike.setVisibility(visibility);
+        ibReactionDislike.setVisibility(visibility);
+        ibReactionHappy.setVisibility(visibility);
+        ibReactionSad.setVisibility(visibility);
+        ibReactionAngry.setVisibility(visibility);
+
+        tvLike.setVisibility(visibility);
+        tvDislike.setVisibility(visibility);
+        tvHappy.setVisibility(visibility);
+        tvSad.setVisibility(visibility);
+        tvAngry.setVisibility(visibility);
+    }
+
+    private void setReactionAnim(Animation anim) {
+        ibReactionLike.startAnimation(anim);
+        ibReactionDislike.startAnimation(anim);
+        ibReactionHappy.startAnimation(anim);
+        ibReactionSad.startAnimation(anim);
+        ibReactionAngry.startAnimation(anim);
+
+        tvLike.startAnimation(anim);
+        tvDislike.startAnimation(anim);
+        tvHappy.startAnimation(anim);
+        tvSad.startAnimation(anim);
+        tvAngry.startAnimation(anim);
+    }
+
+    private void setReactionClickable(boolean clickable) {
+        ibReactionLike.setClickable(clickable);
+        ibReactionDislike.setClickable(clickable);
+        ibReactionHappy.setClickable(clickable);
+        ibReactionSad.setClickable(clickable);
+        ibReactionAngry.setClickable(clickable);
+    }
+
+    private void setClassificationVisibility(int visibility) {
+        tvFactRating.setVisibility(visibility);
+        ivBias.setVisibility(visibility);
+        ibInformation.setVisibility(visibility);
+    }
+
+    private void setClassificationAnim(Animation anim) {
+        tvFactRating.startAnimation(anim);
+        ivBias.startAnimation(anim);
+        ibInformation.startAnimation(anim);
+    }
+
+    private void setClassificationClickable(boolean clickable) {
+        tvFactRating.setClickable(clickable);
+        ivBias.setClickable(clickable);
+        ibInformation.setClickable(clickable);
     }
 
     private void reportArticle() {

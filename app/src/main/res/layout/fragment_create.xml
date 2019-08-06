@@ -1,190 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout3"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="16dp">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/ivBias"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/ibInformation"
-            app:layout_constraintEnd_toStartOf="@+id/ibInformation"
-            app:layout_constraintTop_toTopOf="@+id/ibInformation" />
-
-    <ImageView
-        android:id="@+id/ivArticlePreviewCreate"
-        android:layout_width="350dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginBottom="16dp"
-        android:scaleType="centerCrop"
-        android:tint="#40636262"
-        app:layout_constraintBottom_toTopOf="@+id/tvArticleTitleCreate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spArticleListCreate"
-        tools:srcCompat="@drawable/news_placeholder" />
-
-        <Spinner
-            android:id="@+id/tagSelector"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:foregroundTint="@android:color/white"
-            app:layout_constraintEnd_toEndOf="@+id/view"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/view"
-            app:layout_constraintTop_toBottomOf="@id/ibInformation" />
-
-        <EditText
-            android:id="@+id/etCaptionCreate"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_edit_text"
-            android:ems="10"
-            android:fontFamily="@font/lato"
-            android:gravity="top|left"
-            android:hint="Add Caption"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:maxLength="240"
-            android:maxLines="1"
-            android:padding="8dp"
-            android:paddingStart="10dp"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/btShareArticleCreate"
-            app:layout_constraintEnd_toEndOf="@+id/view"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/view"
-            app:layout_constraintTop_toBottomOf="@+id/tagSelector" />
-
-        <TextView
-            android:id="@+id/tvFactCheckCreate"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="12dp"
-            android:fontFamily="@font/lato"
-            android:gravity="right|center_vertical"
-            android:text="Mostly True"
-            android:textAllCaps="true"
-            android:textColor="@color/colorHeadlineText"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/ivBias"
-            app:layout_constraintEnd_toStartOf="@+id/ivBias"
-            app:layout_constraintHorizontal_bias="0.992"
-            app:layout_constraintStart_toStartOf="@+id/ivArticlePreviewCreate"
-            app:layout_constraintTop_toTopOf="@+id/ivBias" />
-
-        <ImageButton
-            android:id="@+id/ibInformation"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="4dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitXY"
-            app:layout_constraintEnd_toEndOf="@+id/tvArticleTitleCreate"
-            app:layout_constraintTop_toBottomOf="@+id/view"
-            app:srcCompat="@drawable/question" />
-
-        <Button
-            android:id="@+id/btShareArticleCreate"
-            android:layout_width="240dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/rounded_accent_button"
-            android:fontFamily="@font/lato"
-            android:text="Share Article"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
+            android:clipToPadding="false"
+            android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etCaptionCreate" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvArticleTitleCreate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="12dp"
-            android:fontFamily="@font/merriweather_light"
-            android:text="Article Title"
-            android:textColor="@color/colorHeadlineText"
-            android:textSize="18sp"
-            android:textStyle="bold"
+
+            <ImageView
+                android:id="@+id/ivBias"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ibInformation"
+                app:layout_constraintEnd_toStartOf="@+id/ibInformation"
+                app:layout_constraintTop_toTopOf="@+id/ibInformation" />
+
+            <ImageView
+                android:id="@+id/ivArticlePreviewCreate"
+                android:layout_width="350dp"
+                android:layout_height="200dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="centerCrop"
+                android:tint="#40636262"
+                app:layout_constraintBottom_toTopOf="@+id/tvArticleTitleCreate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spArticleListCreate"
+                tools:srcCompat="@drawable/news_placeholder" />
+
+            <Spinner
+                android:id="@+id/tagSelector"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:foregroundTint="@android:color/white"
+                app:layout_constraintEnd_toEndOf="@+id/view"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@id/ibInformation" />
+
+            <EditText
+                android:id="@+id/etCaptionCreate"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_edit_text"
+                android:ems="10"
+                android:fontFamily="@font/lato"
+                android:gravity="top|left"
+                android:hint="Add Caption"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLength="240"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:paddingStart="10dp"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/btShareArticleCreate"
+                app:layout_constraintEnd_toEndOf="@+id/view"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@+id/tagSelector" />
+
+            <TextView
+                android:id="@+id/tvFactCheckCreate"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/lato"
+                android:gravity="right|center_vertical"
+                android:text="Mostly True"
+                android:textAllCaps="true"
+                android:textColor="@color/colorHeadlineText"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBias"
+                app:layout_constraintEnd_toStartOf="@+id/ivBias"
+                app:layout_constraintHorizontal_bias="0.992"
+                app:layout_constraintStart_toStartOf="@+id/ivArticlePreviewCreate"
+                app:layout_constraintTop_toTopOf="@+id/ivBias" />
+
+            <ImageButton
+                android:id="@+id/ibInformation"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="4dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toEndOf="@+id/tvArticleTitleCreate"
+                app:layout_constraintTop_toBottomOf="@+id/view"
+                app:srcCompat="@drawable/question" />
+
+            <Button
+                android:id="@+id/btShareArticleCreate"
+                android:layout_width="240dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_accent_button"
+                android:fontFamily="@font/lato"
+                android:text="Share Article"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etCaptionCreate" />
+
+            <TextView
+                android:id="@+id/tvArticleTitleCreate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/merriweather_light"
+                android:text="Article Title"
+                android:textColor="@color/colorHeadlineText"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivArticlePreviewCreate" />
+
+            <view
+                android:id="@+id/view"
+                class="androidx.constraintlayout.widget.ConstraintLayout"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="12dp"
+                android:background="@color/colorModerate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleCreate" />
+
+            <Spinner
+                android:id="@+id/spArticleListCreate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="9dp"
+                app:layout_constraintBottom_toTopOf="@+id/ivArticlePreviewCreate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etURLCreate"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="9dp"
+                android:background="@drawable/rounded_edit_text"
+                android:ems="10"
+                android:fontFamily="@font/lato"
+                android:hint="URL"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/ivArticlePreviewCreate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spArticleListCreate" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <FrameLayout
+            android:id="@+id/progressBarHolder"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:alpha="1"
+            android:animateLayoutChanges="true"
+            android:background="#66E0E0E0"
+            android:backgroundTintMode="screen"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivArticlePreviewCreate" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <view
-            android:id="@+id/view"
-            class="androidx.constraintlayout.widget.ConstraintLayout"
-            android:layout_width="0dp"
-            android:layout_height="2dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="12dp"
-            android:background="@color/colorModerate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleCreate" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorAccentBold" />
 
-        <Spinner
-            android:id="@+id/spArticleListCreate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="9dp"
-            app:layout_constraintBottom_toTopOf="@+id/ivArticlePreviewCreate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        </FrameLayout>
 
-        <EditText
-            android:id="@+id/etURLCreate"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="9dp"
-            android:background="@drawable/rounded_edit_text"
-            android:ems="10"
-            android:fontFamily="@font/lato"
-            android:hint="URL"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:maxLines="1"
-            android:padding="8dp"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/ivArticlePreviewCreate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spArticleListCreate" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </ScrollView>

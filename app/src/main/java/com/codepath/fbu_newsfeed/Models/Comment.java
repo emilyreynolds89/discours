@@ -11,6 +11,7 @@ public class Comment extends ParseObject {
     public static final String KEY_TEXT = "text";
     public static final String KEY_USER = "user";
     public static final String KEY_SHARE = "share";
+    public static final String KEY_CLAP_COUNT = "clapCount";
 
     public Comment() {
         super();
@@ -21,6 +22,7 @@ public class Comment extends ParseObject {
         put(KEY_TEXT, text);
         put(KEY_USER, user);
         put(KEY_SHARE, share);
+        put(KEY_CLAP_COUNT, 0);
     }
 
     public String getText() {
@@ -47,7 +49,28 @@ public class Comment extends ParseObject {
         put(KEY_SHARE, share);
     }
 
+    public int getClapCount() {
+        return (int) getNumber(KEY_CLAP_COUNT);
+    }
+
+    public void setClapCount(int count) {
+        put(KEY_CLAP_COUNT, count);
+    }
+
     public String getRelativeTime() {
         return (String) DateUtils.getRelativeTimeSpanString(getCreatedAt().getTime());
     }
+
+    public int updateCount(boolean increment) {
+        int count = getClapCount();
+        if (increment) {
+            count += 1;
+        } else {
+            count -= 1;
+        }
+        put(KEY_CLAP_COUNT, count);
+        return count;
+    }
+
+
 }

@@ -30,6 +30,8 @@ public class UserStatsDialogFragment extends DialogFragment {
     @BindView(R.id.pbBiasAverage) ProgressBar pbBiasAverage;
     @BindView(R.id.pbFactAverage) ProgressBar pbFactAverage;
     @BindView(R.id.tvArticleTitleCreate) TextView tvArticleNumber;
+    @BindView(R.id.tvSourceFavorite) TextView tvSourceFavorite;
+    @BindView(R.id.tvTagFavorite) TextView tvTagFavorite;
 
     public UserStatsDialogFragment() {}
 
@@ -48,17 +50,27 @@ public class UserStatsDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
+        getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         User user;
         try {
             user = (User) getUser(ParseUser.getCurrentUser().getObjectId());
+            user.setFavoriteStats();
+
             tvArticleNumber.setText(Integer.toString(user.queryArticleCount(false)));
             pbBiasAverage.setProgress((int) (20 * user.getBiasAverage() - 10));
             pbFactAverage.setProgress((int) (20 *user.getFactAverage()));
+
+            tvSourceFavorite.setText(user.getFavoriteSource());
+            tvTagFavorite.setText(user.getFavoriteTag());
         } catch (ParseException e) {
             e.printStackTrace();
             user = (User) ParseUser.getCurrentUser();
+        }
+
+        ProfileFragment profileFragment = (ProfileFragment)getTargetFragment();
+        if (profileFragment != null) {
+            profileFragment.progressBarHolder.setVisibility(View.INVISIBLE);
         }
     }
 

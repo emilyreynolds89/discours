@@ -129,7 +129,6 @@
             android:fontFamily="@font/lato"
             android:text="Source"
             android:textColor="@color/colorBaseText"
-            android:foreground="?selectableItemBackground"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvArticleSummary"
@@ -166,16 +165,37 @@
             app:srcCompat="@drawable/report" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/ibReactionExpand"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:background="#00FFFFFF"
+        android:scaleType="fitXY"
+        android:visibility="visible"
+        app:backgroundTint="@color/colorAccentBold"
+        app:elevation="6dp"
+        app:fabCustomSize="30dp"
+        app:fabSize="normal"
+        app:hoveredFocusedTranslationZ="0dp"
+        app:layout_constraintStart_toStartOf="@+id/viewArticle"
+        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+        app:maxImageSize="24dp"
+        app:pressedTranslationZ="0dp"
+        app:srcCompat="@drawable/react" />
+
 
     <ImageButton
         android:id="@+id/ibReactionLike"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
-        app:layout_constraintStart_toStartOf="@+id/viewArticle"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/ibReactionExpand"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
         app:srcCompat="@drawable/like" />
 
@@ -189,6 +209,7 @@
         android:text="#"
         android:textColor="@color/colorLightText"
         android:textSize="8sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/ibReactionLike"
         app:layout_constraintStart_toStartOf="@+id/ibReactionLike"
         app:layout_constraintTop_toBottomOf="@+id/ibReactionLike" />
@@ -201,6 +222,7 @@
         android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ibReactionLike"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
         app:srcCompat="@drawable/dislike" />
@@ -215,6 +237,7 @@
         android:text="#"
         android:textColor="@color/colorLightText"
         android:textSize="8sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/ibReactionDislike"
         app:layout_constraintStart_toStartOf="@+id/ibReactionDislike"
         app:layout_constraintTop_toBottomOf="@+id/ibReactionDislike" />
@@ -227,6 +250,7 @@
         android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ibReactionDislike"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
         app:srcCompat="@drawable/happiness" />
@@ -241,6 +265,7 @@
         android:text="#"
         android:textColor="@color/colorLightText"
         android:textSize="8sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/ibReactionHappy"
         app:layout_constraintStart_toStartOf="@+id/ibReactionHappy"
         app:layout_constraintTop_toBottomOf="@+id/ibReactionHappy" />
@@ -253,6 +278,7 @@
         android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ibReactionHappy"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
         app:srcCompat="@drawable/embarrassed" />
@@ -267,6 +293,7 @@
         android:text="#"
         android:textColor="@color/colorLightText"
         android:textSize="8sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/ibReactionSad"
         app:layout_constraintStart_toStartOf="@+id/ibReactionSad"
         app:layout_constraintTop_toBottomOf="@+id/ibReactionSad" />
@@ -279,6 +306,7 @@
         android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/ibReactionSad"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
         app:srcCompat="@drawable/angry" />
@@ -293,6 +321,7 @@
         android:text="#"
         android:textColor="@color/colorLightText"
         android:textSize="8sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/ibReactionAngry"
         app:layout_constraintStart_toStartOf="@+id/ibReactionAngry"
         app:layout_constraintTop_toBottomOf="@+id/ibReactionAngry" />
@@ -301,7 +330,7 @@
         android:id="@+id/tvFactRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
+        android:layout_marginEnd="12dp"
         android:fontFamily="@font/lato"
         android:foreground="?selectableItemBackground"
         android:gravity="right|center_vertical"
@@ -310,34 +339,31 @@
         android:textColor="@color/colorHeadlineText"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tvAngry"
-        app:layout_constraintStart_toEndOf="@+id/ibReactionAngry"
-        app:layout_constraintTop_toTopOf="@+id/ibReactionAngry"
-        app:layout_constraintVertical_bias="0.428" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivBias"
+        app:layout_constraintEnd_toStartOf="@+id/ivBias"
+        app:layout_constraintTop_toTopOf="@+id/ivBias" />
 
     <ImageView
         android:id="@+id/ivBias"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:foreground="?selectableItemBackground"
-        app:layout_constraintBottom_toBottomOf="@+id/tvFactRating"
+        app:layout_constraintBottom_toBottomOf="@+id/ibInformation"
         app:layout_constraintEnd_toStartOf="@+id/ibInformation"
-        app:layout_constraintStart_toEndOf="@+id/tvFactRating"
-        app:layout_constraintTop_toTopOf="@+id/tvFactRating" />
+        app:layout_constraintTop_toTopOf="@+id/ibInformation" />
 
     <ImageButton
         android:id="@+id/ibInformation"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/ivBias"
+        app:layout_constraintBottom_toTopOf="@id/tvCaption"
         app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/ivBias"
-        app:layout_constraintTop_toTopOf="@+id/ivBias"
+        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/question" />
 
     <TextView
@@ -353,7 +379,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/ibInformation"
         app:layout_constraintStart_toStartOf="@+id/viewArticle"
-        app:layout_constraintTop_toBottomOf="@+id/tvLike" />
+        app:layout_constraintTop_toBottomOf="@+id/ibReactionExpand" />
 
     <Button
         android:id="@+id/btnDiscussion"
@@ -373,6 +399,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCaption" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

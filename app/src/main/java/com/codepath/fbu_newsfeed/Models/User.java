@@ -9,7 +9,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ParseClassName("_User")
 public class User extends ParseUser implements Serializable {
@@ -26,6 +28,8 @@ public class User extends ParseUser implements Serializable {
     public double biasAverage;
     public double factAverage;
     public int articleCount;
+    public String favoriteTag;
+    public String favoriteSource;
 
     public String getUsername() {
         return getString(KEY_USERNAME);
@@ -78,6 +82,14 @@ public class User extends ParseUser implements Serializable {
         put(KEY_ARTICLE_COUNT, articleCount);
     }
 
+    public String getFavoriteSource() {
+        return favoriteSource;
+    }
+
+    public String getFavoriteTag() {
+        return favoriteTag;
+    }
+
 
     public int queryArticleCount(boolean queryFacts) {
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
@@ -128,8 +140,50 @@ public class User extends ParseUser implements Serializable {
 
     private Article getArticle(String article_id) throws ParseException {
         ParseQuery<Article> query = ParseQuery.getQuery(Article.class);
+        query.include("tag");
+        query.include("sourceObject");
         query.whereEqualTo("objectId", article_id);
         return query.getFirst();
     }
 
+    public void setFavoriteStats() {
+        ParseQuery<Share> query = ParseQuery.getQuery(Share.class);
+        query.whereEqualTo("user", this);
+        try {
+            List<Share> results = query.find();
+            Map<String, Integer> tags = new HashMap<>();
+            Map<String, Integer> sources = new HashMap<>();
+            for(Share share: results) {
+                Article article = getArticle(share.getArticle().getObjectId());
+                String tag = article.getTag();
+                updateMap(tags, tag);
+                String source = article.getSource().getFullName();
+                updateMap(sources, source);
+            }
+            favoriteTag = mostCommon(tags);
+            favoriteSource = mostCommon(sources);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateMap(Map<String, Integer> map, String key) {
+        if(map.containsKey(key)) {
+            Integer count = map.get(key);
+            count += 1;
+            map.put(key, count);
+        } else {
+            map.put(key, 1);
+        }
+    }
+
+    private String mostCommon(Map<String, Integer> map) {
+        String mostCommonKey = null;
+        for(String key: map.keySet()) {
+            if(mostCommonKey == null || map.get(key) > map.get(mostCommonKey)) {
+                mostCommonKey = key;
+            }
+        }
+        return mostCommonKey;
+    }
 }

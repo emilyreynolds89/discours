@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.btnReport) ImageButton btnReport;
     @BindView(R.id.rvProfilePosts) RecyclerView rvProfilePosts;
     @BindView(R.id.ivBadge) ImageView ivBadge;
+    @BindView(R.id.progressBarHolder) FrameLayout progressBarHolder;
 
     private ShareAdapter shareAdapter;
     protected @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
@@ -94,7 +96,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         String user_id = getArguments().getString("user_id");
 
@@ -298,8 +299,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showUserStats() {
+        progressBarHolder.setVisibility(View.VISIBLE);
         FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
         UserStatsDialogFragment userStatsDialog = UserStatsDialogFragment.newInstance();
+        userStatsDialog.setTargetFragment(ProfileFragment.this, 1337);
         userStatsDialog.show(fm, "fragment_user_stats");
     }
 
