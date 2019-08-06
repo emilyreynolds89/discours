@@ -55,4 +55,8 @@ dependencies {
     implementation 'com.github.uin3566:AllAngleExpandableButton:v1.2.0'
 
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
+
+    implementation 'com.github.msayan:tutorial-view:v1.0.10'
+    implementation 'com.codemybrainsout.onboarding:onboarder:1.0.4'
+
 }

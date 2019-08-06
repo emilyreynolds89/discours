@@ -10,16 +10,18 @@ public class Quiz extends ParseObject {
     public static final String KEY_IMAGE = "image";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_FAKE = "fake";
+    public static final String KEY_TITLE = "newsTitle";
 
     private ParseFile image;
     private String message;
     private boolean fake;
+    private String newsTitle;
 
     public Quiz() {
         super();
     }
 
-    public Quiz(ParseFile image, String message, boolean fake) {
+    public Quiz(ParseFile image, String message, boolean fake, String newsTitle) {
         super();
 
         this.image = image;
@@ -28,6 +30,8 @@ public class Quiz extends ParseObject {
         put(KEY_MESSAGE, message);
         this.fake = fake;
         put(KEY_FAKE, fake);
+        this.newsTitle = newsTitle;
+        put(KEY_TITLE, newsTitle);
     }
 
     public ParseFile getImage() {
@@ -55,6 +59,15 @@ public class Quiz extends ParseObject {
     public void setFake(boolean fake) {
         this.fake = fake;
         put(KEY_FAKE, fake);
+    }
+
+    public String getNewsTitle() {
+        return getString(KEY_TITLE);
+    }
+
+    public void setNewsTitle(String newsTitle) {
+        this.newsTitle = newsTitle;
+        put(KEY_TITLE, newsTitle);
     }
 
 }

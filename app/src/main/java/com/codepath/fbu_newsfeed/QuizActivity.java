@@ -29,6 +29,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     @BindView(R.id.ivQuizImage) ImageView ivQuizImage;
     @BindView(R.id.tvQuizQuestion) TextView tvQuizQuestion;
+    @BindView(R.id.tvQuizNewsTitle) TextView tvQuizNewsTitle;
     @BindView(R.id.btnTrue) Button btnTrue;
     @BindView(R.id.btnFake) Button btnFake;
     @BindView(R.id.btnNext) Button btnNext;
@@ -44,6 +45,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.ivEndImage) ImageView ivEndImage;
     @BindView(R.id.scoreView) View scoreView;
     @BindView(R.id.tvScore) TextView tvScore;
+    @BindView(R.id.tvMoreInfo) TextView tvMoreInfo;
 
     private ArrayList<Quiz> quizzes = new ArrayList<>();
     private Quiz quiz;
@@ -62,13 +64,15 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         queryQuizzes();
 
-        //close_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_close);
-        //open_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_open);
+        //close_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.fadeout);
+        //open_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.fadein);
 
         btnStart.setOnClickListener(this);
         btnTrue.setOnClickListener(this);
         btnFake.setOnClickListener(this);
         btnNext.setOnClickListener(this);
+        btnFinish.setOnClickListener(this);
+        tvMoreInfo.setOnClickListener(this);
     }
 
     private void queryQuizzes() {
@@ -76,6 +80,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         query.include(Quiz.KEY_IMAGE);
         query.include(Quiz.KEY_FAKE);
         query.include(Quiz.KEY_MESSAGE);
+        query.include(Quiz.KEY_TITLE);
 
         query.findInBackground(new FindCallback<Quiz>() {
             @Override
@@ -96,6 +101,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         query.include(Quiz.KEY_IMAGE);
         query.include(Quiz.KEY_FAKE);
         query.include(Quiz.KEY_MESSAGE);
+        query.include(Quiz.KEY_TITLE);
         query.whereEqualTo("objectId", quizId);
         return query.getFirst();
     }
@@ -145,6 +151,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 finish();
                 break;
+
+            case R.id.tvMoreInfo:
+                Intent infoIntent = new Intent(QuizActivity.this, FakeNewsInfoActivity.class);
+                startActivity(infoIntent);
+                break;
         }
     }
 
@@ -159,13 +170,17 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         ivEndImage.setVisibility(View.VISIBLE);
         tvEndMessage.setVisibility(View.VISIBLE);
         scoreView.setVisibility(View.VISIBLE);
+        tvMoreInfo.setVisibility(View.VISIBLE);
         btnFinish.setVisibility(View.VISIBLE);
 
-        //tvEndTitle.startAnimation(open_anim);
-        //ivEndImage.startAnimation(open_anim);
-        //tvEndMessage.startAnimation(open_anim);
-        //scoreView.startAnimation(open_anim);
-        //btnFinish.startAnimation(open_anim);
+        tvMoreInfo.setClickable(true);
+        btnFinish.setClickable(true);
+
+        /*tvEndTitle.startAnimation(open_anim);
+        ivEndImage.startAnimation(open_anim);
+        tvEndMessage.startAnimation(open_anim);
+        scoreView.startAnimation(open_anim);
+        btnFinish.startAnimation(open_anim);*/
     }
 
     private void presentNewQuestion() {
@@ -201,18 +216,17 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             Quiz queriedQuiz = getQuiz(quiz.getObjectId());
 
             ParseFile image = queriedQuiz.getImage();
-
             ivQuizImage.setVisibility(View.INVISIBLE);
             //ivQuizImage.startAnimation(close_anim);
-
             if (image != null ) {
                 Glide.with(getBaseContext()).load(image.getUrl()).into(ivQuizImage);
             }
-
             ivQuizImage.setVisibility(View.VISIBLE);
             //ivQuizImage.startAnimation(open_anim);
 
+            tvQuizNewsTitle.setText(queriedQuiz.getNewsTitle());
             tvQuizMessage.setText(queriedQuiz.getMessage());
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -235,11 +249,13 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private void setBackgroundVisibility(int visibility) {
         ivQuizImage.setVisibility(visibility);
         tvQuizQuestion.setVisibility(visibility);
+        tvQuizNewsTitle.setVisibility(visibility);
     }
 
     private void setBackgroundAnim(Animation anim) {
         ivQuizImage.startAnimation(anim);
         tvQuizQuestion.startAnimation(anim);
+        tvQuizNewsTitle.startAnimation(anim);
     }
 
     private void setAnswerButtonVisibility(int visibility) {
