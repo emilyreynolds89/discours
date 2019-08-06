@@ -103,6 +103,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.tvSource) TextView tvSource;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.ibReactionExpand) ImageButton ibReactionExpand;
+    @BindView(R.id.commentConstraintLayout) ConstraintLayout commentConstraintLayout;
 
     private Share share;
     private Article article;
@@ -385,8 +386,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 }
             });
         } else {
-            etComment.setVisibility(View.INVISIBLE);
-            btnSubmit.setVisibility(View.INVISIBLE);
+            commentConstraintLayout.setVisibility(View.GONE);
             rvComments.setVisibility(View.GONE);
             btnSubmit.setOnClickListener(null);
 

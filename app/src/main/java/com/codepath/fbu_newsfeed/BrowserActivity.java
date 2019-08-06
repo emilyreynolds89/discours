@@ -329,8 +329,8 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                 }
             });
         } else {
-            etComment.setVisibility(View.GONE);
-            btnCommentSubmit.setVisibility(View.GONE);
+            commentConstraintLayout.setVisibility(View.GONE);
+            slidingLayout.setEnabled(false);
             rvComments.setVisibility(View.GONE);
             btnCommentSubmit.setOnClickListener(null);
 
