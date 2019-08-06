@@ -276,6 +276,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
                     setClassificationVisibility(View.VISIBLE);
                     setClassificationAnim(open_anim);
+                    setClassificationClickable(true);
 
                     isOpen = false;
                 } else {
@@ -285,6 +286,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
                     setClassificationVisibility(View.INVISIBLE);
                     setClassificationAnim(close_anim);
+                    setClassificationClickable(false);
 
                     isOpen = true;
                 }
@@ -294,7 +296,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.ibInformation:
                 Log.d(TAG, "Clicked information");
-                showInformationDialog();
+                //showInformationDialog();
+                Intent tempIntent = new Intent(DetailActivity.this, QuizActivity.class);
+                startActivity(tempIntent);
                 break;
             case R.id.ivBias:
                 showInformationDialog();
@@ -632,6 +636,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvFactRating.startAnimation(anim);
         ivBias.startAnimation(anim);
         ibInformation.startAnimation(anim);
+    }
+
+    private void setClassificationClickable(boolean clickable) {
+        tvFactRating.setClickable(clickable);
+        ivBias.setClickable(clickable);
+        ibInformation.setClickable(clickable);
     }
 
     private void reportArticle() {

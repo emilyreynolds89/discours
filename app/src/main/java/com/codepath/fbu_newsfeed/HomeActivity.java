@@ -48,6 +48,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         //final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -185,14 +186,29 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if (getSupportFragmentManager().findFragmentById(R.id.flContainer) instanceof FeedFragment) {
+            getMenuInflater().inflate(R.menu.menu_feed, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        }
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.miFilter:
+                return false;
+        }
+        return false;
+    }
 
-
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 
     private void onSharedIntent() {
         Intent receivedIntent = getIntent();

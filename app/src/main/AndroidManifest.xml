@@ -22,6 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".FakeNewsInfoActivity"></activity>
+        <activity android:name=".QuizActivity" />
         <activity android:name=".SourceActivity" />
         <activity android:name=".BrowserActivity" />
         <activity android:name=".TagActivity" />
