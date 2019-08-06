@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.MotionEventCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.CookieManager;
@@ -63,6 +65,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     public @BindView(R.id.btnSubmit) Button btnSubmit;
     public @BindView(R.id.annotationConstraintLayout)
     ConstraintLayout annotationConstraintLayout;
+    @BindView(R.id.shareConstraintLayout) ConstraintLayout shareConstraintLayout;
 
     private String url;
     private Article article;
@@ -141,7 +144,6 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         ibForward.setOnClickListener(this);
         ibRefresh.setOnClickListener(this);
 
-
     }
 
     @Override
@@ -173,6 +175,22 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
+
+//   TODO: For when I decide to work on swipe up and see comments
+
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event){
+//
+//        int action = MotionEventCompat.getActionMasked(event);
+//
+//        switch(action) {
+//            case (MotionEvent.ACTION_UP) :
+//                Log.d(TAG,"Action was UP");
+//                return true;
+//            default :
+//                return super.onTouchEvent(event);
+//        }
+//    }
 
     private void injectJS(WebView view, int scriptFile) {
         InputStream input;
