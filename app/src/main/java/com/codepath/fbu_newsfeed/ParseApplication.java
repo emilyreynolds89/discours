@@ -2,6 +2,9 @@ package com.codepath.fbu_newsfeed;
 
 import android.app.Application;
 
+import com.codepath.fbu_newsfeed.Models.Annotation;
+import com.codepath.fbu_newsfeed.Models.ArticleReport;
+import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.ArticleReport;
 import com.codepath.fbu_newsfeed.Models.Comment;
@@ -46,6 +49,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(UserReport.class);
         ParseObject.registerSubclass(Source.class);
         ParseObject.registerSubclass(ArticleReport.class);
+        ParseObject.registerSubclass(Annotation.class);
         ParseObject.registerSubclass(CommentReaction.class);
         ParseObject.registerSubclass(Quiz.class);
 
