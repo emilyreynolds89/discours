@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,15 +19,19 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.HomeActivity;
+import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Share;
 import com.codepath.fbu_newsfeed.R;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,11 +45,13 @@ public class FeedFragment extends Fragment {
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     @BindView(R.id.rvShares) RecyclerView rvShares;
     @BindView(R.id.tvNoContent) TextView tvNoContent;
-    @BindView(R.id.filterSpinner) Spinner filterSpinner;
+    @BindView(R.id.filterChipGroup) ChipGroup filterChipGroup;
 
     private ArrayList<Share> shares;
     private ShareAdapter shareAdapter;
     private Unbinder unbinder;
+
+    private ArrayList<String> tagList;
 
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -70,6 +77,8 @@ public class FeedFragment extends Fragment {
 
         queryShares(0);
 
+        tagList = new ArrayList<>();
+        queryTags();
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -105,11 +114,7 @@ public class FeedFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.miFilter:
-                toggleFilter();
-                if ((filterSpinner.getVisibility() == View.GONE) )
-                    item.setChecked(true);
-                else
-                    item.setChecked(false);
+                toggleFilter(item);
                 return true;
         }
         return false;
@@ -121,11 +126,24 @@ public class FeedFragment extends Fragment {
         unbinder.unbind();
     }
 
-    private void toggleFilter() {
-        if (filterSpinner.getVisibility() == View.GONE) {
-            filterSpinner.setVisibility(View.VISIBLE);
+    private void toggleFilter(MenuItem item) {
+        if (filterChipGroup.getVisibility() == View.GONE) {
+            filterChipGroup.setVisibility(View.VISIBLE);
+            item.setChecked(true);
         } else {
-            filterSpinner.setVisibility(View.GONE);
+            filterChipGroup.setVisibility(View.GONE);
+            item.setChecked(false);
+        }
+    }
+
+    private void initializeFilterGroup() {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        for (String tag : tagList) {
+            Chip chip = (Chip) inflater.inflate(R.layout.filter_chip, null, false);
+            chip.setChecked(true);
+            chip.setText(tag);
+            filterChipGroup.addView(chip);
+
         }
     }
 
@@ -156,6 +174,28 @@ public class FeedFragment extends Fragment {
                     shareAdapter.addAll(shareList);
                 } else {
                     Log.d(TAG, "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void queryTags() {
+        ParseQuery<Article> query = ParseQuery.getQuery("Article");
+        query.findInBackground(new FindCallback<Article>() {
+            @Override
+            public void done(List<Article> articles, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < articles.size(); i++) {
+                        String tag = articles.get(i).getTag();
+                        if (!tagList.contains(tag)) {
+                            tagList.add(tag);
+                        }
+                    }
+                    Collections.sort(tagList);
+                    initializeFilterGroup();
+                } else {
+                    Toast.makeText(getContext(), "Error searching by tag", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Error searching by tag", e);
                 }
             }
         });
