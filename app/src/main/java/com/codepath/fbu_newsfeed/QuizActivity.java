@@ -29,6 +29,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     @BindView(R.id.ivQuizImage) ImageView ivQuizImage;
     @BindView(R.id.tvQuizQuestion) TextView tvQuizQuestion;
+    @BindView(R.id.tvQuizNewsTitle) TextView tvQuizNewsTitle;
     @BindView(R.id.btnTrue) Button btnTrue;
     @BindView(R.id.btnFake) Button btnFake;
     @BindView(R.id.btnNext) Button btnNext;
@@ -79,6 +80,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         query.include(Quiz.KEY_IMAGE);
         query.include(Quiz.KEY_FAKE);
         query.include(Quiz.KEY_MESSAGE);
+        query.include(Quiz.KEY_TITLE);
 
         query.findInBackground(new FindCallback<Quiz>() {
             @Override
@@ -99,6 +101,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         query.include(Quiz.KEY_IMAGE);
         query.include(Quiz.KEY_FAKE);
         query.include(Quiz.KEY_MESSAGE);
+        query.include(Quiz.KEY_TITLE);
         query.whereEqualTo("objectId", quizId);
         return query.getFirst();
     }
@@ -213,18 +216,17 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             Quiz queriedQuiz = getQuiz(quiz.getObjectId());
 
             ParseFile image = queriedQuiz.getImage();
-
             ivQuizImage.setVisibility(View.INVISIBLE);
             //ivQuizImage.startAnimation(close_anim);
-
             if (image != null ) {
                 Glide.with(getBaseContext()).load(image.getUrl()).into(ivQuizImage);
             }
-
             ivQuizImage.setVisibility(View.VISIBLE);
             //ivQuizImage.startAnimation(open_anim);
 
+            tvQuizNewsTitle.setText(queriedQuiz.getNewsTitle());
             tvQuizMessage.setText(queriedQuiz.getMessage());
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -247,11 +249,13 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private void setBackgroundVisibility(int visibility) {
         ivQuizImage.setVisibility(visibility);
         tvQuizQuestion.setVisibility(visibility);
+        tvQuizNewsTitle.setVisibility(visibility);
     }
 
     private void setBackgroundAnim(Animation anim) {
         ivQuizImage.startAnimation(anim);
         tvQuizQuestion.startAnimation(anim);
+        tvQuizNewsTitle.startAnimation(anim);
     }
 
     private void setAnswerButtonVisibility(int visibility) {

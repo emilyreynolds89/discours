@@ -9,9 +9,9 @@
     <ImageView
         android:id="@+id/ivQuizImage"
         android:layout_width="360dp"
-        android:layout_height="320dp"
+        android:layout_height="280dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="54dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="8dp"
         android:scaleType="centerCrop"
         android:visibility="invisible"
@@ -21,10 +21,24 @@
         app:srcCompat="@color/colorBlack" />
 
     <TextView
+        android:id="@+id/tvQuizNewsTitle"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/merriweather_light"
+        android:text="News Title"
+        android:textColor="@color/colorHeadlineText"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/ivQuizImage"
+        app:layout_constraintStart_toStartOf="@id/ivQuizImage"
+        app:layout_constraintTop_toBottomOf="@id/ivQuizImage" />
+
+    <TextView
         android:id="@+id/tvQuizQuestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="@font/lato"
         android:text="Is this a true or fake news story?"
         android:textColor="@color/colorBaseText"
@@ -32,13 +46,13 @@
         app:layout_constraintEnd_toEndOf="@+id/ivQuizImage"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/ivQuizImage"
-        app:layout_constraintTop_toBottomOf="@+id/ivQuizImage" />
+        app:layout_constraintTop_toBottomOf="@id/tvQuizNewsTitle" />
 
     <Button
         android:id="@+id/btnTrue"
-        android:layout_width="200dp"
+        android:layout_width="240dp"
         android:layout_height="40dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="72dp"
         android:background="@drawable/rounded_accent_button"
         android:fontFamily="@font/lato"
         android:paddingBottom="2dp"
@@ -48,11 +62,11 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/ivQuizImage"
         app:layout_constraintStart_toStartOf="@+id/ivQuizImage"
-        app:layout_constraintTop_toBottomOf="@+id/ivQuizImage" />
+        app:layout_constraintTop_toBottomOf="@id/tvQuizQuestion" />
 
     <Button
         android:id="@+id/btnFake"
-        android:layout_width="200dp"
+        android:layout_width="240dp"
         android:layout_height="40dp"
         android:layout_marginTop="18dp"
         android:background="@drawable/rounded_accent_button"
@@ -69,7 +83,7 @@
 
     <Button
         android:id="@+id/btnNext"
-        android:layout_width="200dp"
+        android:layout_width="240dp"
         android:layout_height="40dp"
         android:layout_marginBottom="44dp"
         android:background="@drawable/rounded_accent_button"
@@ -85,7 +99,7 @@
 
     <Button
         android:id="@+id/btnStart"
-        android:layout_width="200dp"
+        android:layout_width="240dp"
         android:layout_height="40dp"
         android:layout_marginTop="72dp"
         android:background="@drawable/rounded_accent_button"
@@ -100,7 +114,7 @@
 
     <Button
         android:id="@+id/btnFinish"
-        android:layout_width="200dp"
+        android:layout_width="240dp"
         android:layout_height="40dp"
         android:layout_marginTop="40dp"
         android:background="@drawable/rounded_accent_button"
@@ -118,7 +132,7 @@
         android:id="@+id/tvQuizCorrectness"
         android:layout_width="360dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/lato"
         android:text="Correctness!"
         android:textAllCaps="true"
@@ -133,7 +147,7 @@
         android:id="@+id/tvQuizMessage"
         android:layout_width="360dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/lato"
         android:text="TextView"
         android:textColor="@color/colorLightText"
@@ -238,7 +252,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scoreView"
-        android:layout_width="280dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
