@@ -93,18 +93,18 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginEnd="12dp"
-                        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-                        app:layout_constraintStart_toStartOf="@+id/viewArticle"
-                        app:layout_constraintTop_toTopOf="@+id/viewArticle"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         app:cardElevation="0dp"
-                        android:focusable="true"
-                        android:clickable="true"
-                        >
+                        app:layout_constraintEnd_toEndOf="@+id/viewArticle"
+                        app:layout_constraintStart_toStartOf="@+id/viewArticle"
+                        app:layout_constraintTop_toTopOf="@+id/viewArticle">
+
                         <ImageView
                             android:id="@+id/ivArticleImage"
-                            android:layout_height="match_parent"
                             android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:scaleType="centerCrop"
                             app:srcCompat="@android:color/black" />
                     </androidx.cardview.widget.CardView>
@@ -116,14 +116,14 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginEnd="12dp"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:fontFamily="@font/merriweather_light"
+                        android:foreground="?selectableItemBackground"
                         android:text="Title"
                         android:textColor="@color/colorHeadlineText"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:foreground="?selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
                         app:layout_constraintEnd_toEndOf="@+id/viewArticle"
                         app:layout_constraintStart_toStartOf="@+id/viewArticle"
                         app:layout_constraintTop_toBottomOf="@+id/cvArticleImage" />
@@ -135,13 +135,13 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="12dp"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:fontFamily="@font/lato"
                         android:foreground="?selectableItemBackground"
                         android:text="Article summary"
                         android:textColor="@color/colorLightText"
                         android:textSize="12sp"
-                        android:clickable="true"
-                        android:focusable="true"
                         app:layout_constraintEnd_toEndOf="@+id/viewArticle"
                         app:layout_constraintStart_toStartOf="@+id/viewArticle"
                         app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleCreate" />
@@ -169,14 +169,14 @@
                         android:layout_marginTop="12dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="12dp"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:fontFamily="@font/lato"
+                        android:foreground="?selectableItemBackground"
                         android:text="Tag"
                         android:textColor="@color/colorBaseText"
                         android:textSize="10sp"
                         android:textStyle="bold"
-                        android:foreground="?selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/ibReportArticle"
                         app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary" />
@@ -219,12 +219,12 @@
                     android:id="@+id/ibReactionLike"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginStart="54dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="12dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitXY"
                     android:visibility="invisible"
-                    app:layout_constraintStart_toStartOf="@+id/ibReactionExpand"
+                    app:layout_constraintStart_toEndOf="@+id/ibReactionExpand"
                     app:layout_constraintTop_toBottomOf="@+id/viewArticle"
                     app:srcCompat="@drawable/like" />
 
@@ -360,7 +360,7 @@
                     android:id="@+id/tvFactRating"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="192dp"
+                    android:layout_marginStart="233dp"
                     android:layout_marginEnd="12dp"
                     android:fontFamily="@font/lato"
                     android:foreground="?selectableItemBackground"
@@ -370,39 +370,32 @@
                     android:textColor="@color/colorHeadlineText"
                     android:textSize="12sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/tvAngry"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivBias"
                     app:layout_constraintEnd_toStartOf="@+id/ivBias"
-                    app:layout_constraintStart_toEndOf="@+id/ibReactionExpand"
-                    app:layout_constraintTop_toTopOf="@+id/ibReactionAngry"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintStart_toStartOf="@+id/viewArticle"
+                    app:layout_constraintTop_toTopOf="@+id/ivBias" />
 
                 <ImageView
                     android:id="@+id/ivBias"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginStart="12dp"
                     android:layout_marginEnd="12dp"
                     android:foreground="?selectableItemBackground"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvFactRating"
+                    app:layout_constraintBottom_toBottomOf="@+id/ibInformation"
                     app:layout_constraintEnd_toStartOf="@+id/ibInformation"
-                    app:layout_constraintStart_toEndOf="@+id/tvFactRating"
-                    app:layout_constraintTop_toTopOf="@+id/tvFactRating"
-                    app:layout_constraintVertical_bias="0.333" />
+                    app:layout_constraintTop_toTopOf="@+id/ibInformation" />
 
                 <ImageButton
                     android:id="@+id/ibInformation"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="12dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitXY"
-                    app:layout_constraintBottom_toBottomOf="@+id/ivBias"
+                    app:layout_constraintBottom_toTopOf="@+id/tvCaption"
                     app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/ivBias"
-                    app:layout_constraintTop_toTopOf="@+id/ivBias"
-                    app:layout_constraintVertical_bias="1.0"
+                    app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+                    app:layout_constraintVertical_bias="0.0"
                     app:srcCompat="@drawable/question" />
 
                 <TextView
@@ -418,7 +411,7 @@
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="@+id/ibInformation"
                     app:layout_constraintStart_toStartOf="@+id/viewArticle"
-                    app:layout_constraintTop_toBottomOf="@+id/tvLike" />
+                    app:layout_constraintTop_toBottomOf="@+id/ibReactionExpand" />
 
                 <View
                     android:id="@+id/lineView"

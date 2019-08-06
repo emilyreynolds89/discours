@@ -50,8 +50,8 @@ public class UserStatsDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
+        getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         User user;
         try {
             user = (User) getUser(ParseUser.getCurrentUser().getObjectId());
@@ -66,6 +66,11 @@ public class UserStatsDialogFragment extends DialogFragment {
         } catch (ParseException e) {
             e.printStackTrace();
             user = (User) ParseUser.getCurrentUser();
+        }
+
+        ProfileFragment profileFragment = (ProfileFragment)getTargetFragment();
+        if (profileFragment != null) {
+            profileFragment.progressBarHolder.setVisibility(View.INVISIBLE);
         }
     }
 

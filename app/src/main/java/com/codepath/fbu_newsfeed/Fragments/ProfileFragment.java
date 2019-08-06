@@ -97,7 +97,6 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         String user_id = getArguments().getString("user_id");
 
         if (user_id.equals(ParseUser.getCurrentUser().getObjectId()))
@@ -303,8 +302,8 @@ public class ProfileFragment extends Fragment {
         progressBarHolder.setVisibility(View.VISIBLE);
         FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
         UserStatsDialogFragment userStatsDialog = UserStatsDialogFragment.newInstance();
+        userStatsDialog.setTargetFragment(ProfileFragment.this, 1337);
         userStatsDialog.show(fm, "fragment_user_stats");
-        progressBarHolder.setVisibility(View.INVISIBLE);
     }
 
     private void editUser() {
