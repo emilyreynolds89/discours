@@ -40,8 +40,8 @@
 
         <Button
             android:id="@+id/btnRequest"
-            android:layout_width="120dp"
-            android:layout_height="32dp"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/rounded_accent_button"
             android:text="Request friend"
@@ -54,8 +54,8 @@
 
         <Button
             android:id="@+id/btnLogout"
-            android:layout_width="120dp"
-            android:layout_height="32dp"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/rounded_accent_button"
             android:fontFamily="@font/lato"
@@ -85,7 +85,8 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="@font/lato"
             android:foreground="?selectableItemBackground"
             android:text="View Friends"
@@ -151,7 +152,6 @@
             android:layout_width="40dp"
             android:layout_height="38dp"
             android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:padding="8dp"

@@ -50,9 +50,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -191,7 +188,7 @@ public class CreateFragment extends Fragment {
                     final String caption = etCaptionCreate.getText().toString();
                     shareCreate(caption, selectedArticle);
 
-                    updateUserStats((User) ParseUser.getCurrentUser(), selectedArticle.getObjectId());
+                    //updateUserStats((User) ParseUser.getCurrentUser(), selectedArticle.getObjectId());
                 }
             }
         });

@@ -151,23 +151,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
+                        android:layout_marginEnd="16dp"
                         android:layout_marginBottom="12dp"
                         android:fontFamily="@font/lato"
                         android:text="Source"
                         android:textColor="@color/colorBaseText"
                         android:textSize="10sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/tvArticleSummary"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@+id/tvArticleSummary"
-                        app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary" />
+                        app:layout_constraintEnd_toStartOf="@+id/ibReportArticle"
+                        app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary"
+                        app:layout_constraintVertical_bias="0.5" />
 
                     <TextView
                         android:id="@+id/tvTag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="12dp"
                         android:clickable="true"
                         android:focusable="true"
@@ -178,8 +178,11 @@
                         android:textSize="10sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/ibReportArticle"
-                        app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary" />
+                        app:layout_constraintEnd_toStartOf="@+id/tvSource"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/tvArticleSummary"
+                        app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary"
+                        app:layout_constraintVertical_bias="0.5" />
 
                     <ImageButton
                         android:id="@+id/ibReportArticle"

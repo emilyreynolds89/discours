@@ -39,6 +39,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.tvStartTitle) TextView tvStartTitle;
     @BindView(R.id.ivStartImage) ImageView ivStartImage;
     @BindView(R.id.tvStartMessage) TextView tvStartMessage;
+    @BindView(R.id.tvStartSkip) TextView tvStartSkip;
     @BindView(R.id.tvEndTitle) TextView tvEndTitle;
     @BindView(R.id.tvEndMessage) TextView tvEndMessage;
     @BindView(R.id.btnFinish) Button btnFinish;
@@ -73,6 +74,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         btnNext.setOnClickListener(this);
         btnFinish.setOnClickListener(this);
         tvMoreInfo.setOnClickListener(this);
+        tvStartSkip.setOnClickListener(this);
     }
 
     private void queryQuizzes() {
@@ -113,6 +115,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 setStartVisibility(View.GONE);
                 //setStartAnim(close_anim);
                 btnStart.setClickable(false);
+                tvStartSkip.setClickable(false);
 
                 setQuizViews();
 
@@ -152,6 +155,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 break;
 
+            case R.id.tvStartSkip:
             case R.id.tvMoreInfo:
                 Intent infoIntent = new Intent(QuizActivity.this, FakeNewsInfoActivity.class);
                 startActivity(infoIntent);
@@ -237,6 +241,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         tvStartTitle.setVisibility(visibility);
         ivStartImage.setVisibility(visibility);
         tvStartMessage.setVisibility(visibility);
+        tvStartSkip.setVisibility(visibility);
     }
 
     private void setStartAnim(Animation anim) {

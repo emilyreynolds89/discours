@@ -278,7 +278,7 @@
         android:id="@+id/favoriteView"
         class="androidx.constraintlayout.widget.ConstraintLayout"
         id="@+id/view4"
-        android:layout_width="110dp"
+        android:layout_width="104dp"
         android:layout_height="80dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/border_transparent"
@@ -286,5 +286,17 @@
         app:layout_constraintEnd_toStartOf="@+id/ivNewspaper"
         app:layout_constraintTop_toTopOf="@+id/ivNewspaper"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tvFactAverage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:text="%"
+        android:textColor="#5FDAB6"
+        app:layout_constraintBottom_toBottomOf="@+id/pbFactAverage"
+        app:layout_constraintEnd_toEndOf="@+id/pbFactAverage"
+        app:layout_constraintStart_toStartOf="@+id/pbFactAverage"
+        app:layout_constraintTop_toTopOf="@+id/pbFactAverage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
