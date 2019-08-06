@@ -10,4 +10,38 @@
     <string name="end_quiz_message">Congratulations on completing the quiz! Look at your score to see how skilled you are at spotting fake news!</string>
 
     <string name="score_message"> / 4 Correct</string>
+
+    <string name="fake_news_info_site_credit">By Samantha Smith, a First Amendment Center intern at the Freedom Forum Institute</string>
+
+    <string name="fake_news_intro">Fake news is nothing new. Despite its rise to fame thanks to the 2016 presidential election, the phenomenon has been around since humans have been able to relay information
+        – from spoken word to the first newspapers and now, to social media. \n\nIt’s also nothing to be afraid of. When armed with the right tools and information, anyone can spot fake news from a mile away.</string>
+
+    <string name="check_the_source">If you’re reading an article on a website you’ve never heard of before, take a look at the website’s “Contact” and “About Us” pages.  If the site is meant to be satirical,
+        these pages will typically have a disclaimer. \n\nIf the site lacks these pages altogether, that’s also a red flag, as most news outlets want their readers to be able to contact them and learn more
+        about them. \n\nStill not sure? Do a quick Google search of the website–does it have a reputation for publishing fake news or misleading information?</string>
+
+    <string name="judge_by_cover">Unreliable sites will often use misleading headlines to lure in readers and clicks. Before sharing a story with an outrageous claim, keep reading – what’s the whole story?
+        Did the author bury the lead in efforts to make the story more attractive? Were credible and trustworthy sources used to back up the claim made in the headline? \n\nTypically if a story is shared on
+        social media with a misleading headline, readers will voice their frustration in the comments, either on the site itself or on the social media post. If you read a headline that sounds too outrageous
+        to be true, oftentimes that’s because it is.</string>
+
+    <string name="look_at_url">Does the URL look off in some way?  This is often a tell-tale sign of a website that shares fake news, as some fake news websites try to mimic the URL, logo, and design of legitimate
+        news websites, in order to trick readers.</string>
+
+    <string name="other_news_reporting">Chances are, if the majority of other news sites are reporting on the same story, it’s at least partially true. Read multiple stories on the same subject to see what sources
+        are being used and where the differences lie.</string>
+
+    <string name="sloppy_writing">If you are reading an article and the author uses five exclamation points at the end of a sentence, it is often fake news of some sort. Also be skeptical of an abundance of spelling
+        or grammatical errors, or if the writer uses caps lock. \n\nMost credible news sources have copy editors that will check for these mistakes before publication, and will also have rules restricting writers from
+        using features like caps lock for the sake of professionalism.</string>
+
+    <string name="lack_of_quotes">A sure sign of credible journalism is the presence of quotes. This adds an additional layer of integrity, allowing readers to do some research on the individual quoted and decide
+        if they are a reliable source of information. \n\nAbsence of quotes is usually a sign of an opinion piece, either published as a blog post or a column, or of fake news.</string>
+
+    <string name="media_literacy_sites">Before you share an article claiming Lil Wayne has one month to live, take a look at what Snopes.com and Factcheck.org have to say. When fake news stories start to go viral, these sites
+        typically pick up what’s real and what’s not.</string>
+
+    <string name="fake_news_conclusion">Know that using just one of the above methods alone is not a valid way of identifying fake news – the methods are meant to be used together. \n\nWhile a credible news source has a duty to
+        report facts without bias  and rely on trustworthy sources, this doesn’t mean media consumers are off the hook. As a reader, it’s also your job to verify the information you are reading.</string>
+
 </resources>

@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".FakeNewsInfoActivity">
+
+    <TextView
+        android:id="@+id/tvFakeNewsInfoTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
+        android:text="The Quick Guide To Spotting \nFake News"
+        android:textAllCaps="true"
+        android:textColor="@color/colorHeadlineText"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lineHeight="36sp" />
+
+    <TextView
+        android:id="@+id/tvIntro"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:gravity="left"
+        android:text="@string/fake_news_intro"
+        android:textColor="@color/colorBaseText"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvFakeNewsInfoTitle" />
+
+    <View
+        android:id="@+id/lineView"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/colorModerate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvIntro" />
+
+    <View
+        android:id="@+id/lineViewConclusion"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/colorModerate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMediaLiteracySitesBody" />
+
+    <TextView
+        android:id="@+id/tvCheckTheSourceTitle"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="Check the Source"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccentDark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvIntro"
+        app:layout_constraintTop_toBottomOf="@+id/lineView" />
+
+    <TextView
+        android:id="@+id/tvJudgeByCoverTitle"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="DON’T JUDGE A BOOK (OR A NEWS ARTICLE IN THIS CASE), BY IT’S COVER"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccentDark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvCheckTheSourceBody"
+        app:layout_constraintTop_toBottomOf="@+id/tvCheckTheSourceBody" />
+
+    <TextView
+        android:id="@+id/tvCheckUrlTitle"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="Take a Look at the Url"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccentDark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvJudgeByCoverBody"
+        app:layout_constraintTop_toBottomOf="@+id/tvJudgeByCoverBody" />
+
+    <TextView
+        android:id="@+id/tvOtherNewsReportingTitle"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="Are Other News Sites Reporting on the Story?"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccentDark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/tvCheckUrlBody"
+        app:layout_constraintTop_toBottomOf="@id/tvCheckUrlBody" />
+
+    <TextView
+        android:id="@+id/tvSloppyWritingTitle"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="Be Wary of Sloppy Writing"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccentDark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/tvOtherNewsReportingBody"
+        app:layout_constraintTop_toBottomOf="@id/tvOtherNewsReportingBody" />
+
+    <TextView
+        android:id="@+id/tvLackQuotesTitle"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="Quotes - Or Lack Thereof"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccentDark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/tvSloppyWritingBody"
+        app:layout_constraintTop_toBottomOf="@id/tvSloppyWritingBody" />
+
+    <TextView
+        android:id="@+id/tvMediaLiteracySitesTitle"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="Utilize Media Literacy Sites"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccentDark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/tvLackQuotesBody"
+        app:layout_constraintTop_toBottomOf="@id/tvLackQuotesBody" />
+
+    <TextView
+        android:id="@+id/tvCheckTheSourceBody"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/check_the_source"
+        android:textColor="@color/colorBaseText"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvCheckTheSourceTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvCheckTheSourceTitle" />
+
+    <TextView
+        android:id="@+id/tvJudgeByCoverBody"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/judge_by_cover"
+        android:textColor="@color/colorBaseText"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvJudgeByCoverTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvJudgeByCoverTitle" />
+
+    <TextView
+        android:id="@+id/tvCheckUrlBody"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/look_at_url"
+        android:textColor="@color/colorBaseText"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvCheckUrlTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvCheckUrlTitle" />
+
+    <TextView
+        android:id="@+id/tvOtherNewsReportingBody"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/other_news_reporting"
+        android:textColor="@color/colorBaseText"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/tvOtherNewsReportingTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvOtherNewsReportingTitle" />
+
+    <TextView
+        android:id="@+id/tvSloppyWritingBody"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/sloppy_writing"
+        android:textColor="@color/colorBaseText"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/tvSloppyWritingTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvSloppyWritingTitle" />
+
+    <TextView
+        android:id="@+id/tvLackQuotesBody"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/lack_of_quotes"
+        android:textColor="@color/colorBaseText"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/tvLackQuotesTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvLackQuotesTitle" />
+
+    <TextView
+        android:id="@+id/tvMediaLiteracySitesBody"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:text="@string/media_literacy_sites"
+        android:textColor="@color/colorBaseText"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/tvMediaLiteracySitesTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvMediaLiteracySitesTitle" />
+
+    <TextView
+        android:id="@+id/tvConclusion"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
+        android:gravity="left"
+        android:text="@string/fake_news_conclusion"
+        android:textColor="@color/colorBaseText"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lineViewConclusion" />
+
+    <Button
+        android:id="@+id/btnDone"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_accent_button"
+        android:fontFamily="@font/lato"
+        android:paddingBottom="2dp"
+        android:text="Done"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvConclusion" />
+
+    <TextView
+        android:id="@+id/tvSourceCredit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/fake_news_info_site_credit"
+        android:textColor="@color/colorLightText"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDone" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

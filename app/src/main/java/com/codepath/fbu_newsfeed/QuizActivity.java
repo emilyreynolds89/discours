@@ -44,6 +44,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.ivEndImage) ImageView ivEndImage;
     @BindView(R.id.scoreView) View scoreView;
     @BindView(R.id.tvScore) TextView tvScore;
+    @BindView(R.id.tvMoreInfo) TextView tvMoreInfo;
 
     private ArrayList<Quiz> quizzes = new ArrayList<>();
     private Quiz quiz;
@@ -62,13 +63,15 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         queryQuizzes();
 
-        //close_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_close);
-        //open_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_open);
+        //close_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.fadeout);
+        //open_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.fadein);
 
         btnStart.setOnClickListener(this);
         btnTrue.setOnClickListener(this);
         btnFake.setOnClickListener(this);
         btnNext.setOnClickListener(this);
+        btnFinish.setOnClickListener(this);
+        tvMoreInfo.setOnClickListener(this);
     }
 
     private void queryQuizzes() {
@@ -145,6 +148,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 finish();
                 break;
+
+            case R.id.tvMoreInfo:
+                Intent infoIntent = new Intent(QuizActivity.this, FakeNewsInfoActivity.class);
+                startActivity(infoIntent);
+                break;
         }
     }
 
@@ -159,13 +167,17 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         ivEndImage.setVisibility(View.VISIBLE);
         tvEndMessage.setVisibility(View.VISIBLE);
         scoreView.setVisibility(View.VISIBLE);
+        tvMoreInfo.setVisibility(View.VISIBLE);
         btnFinish.setVisibility(View.VISIBLE);
 
-        //tvEndTitle.startAnimation(open_anim);
-        //ivEndImage.startAnimation(open_anim);
-        //tvEndMessage.startAnimation(open_anim);
-        //scoreView.startAnimation(open_anim);
-        //btnFinish.startAnimation(open_anim);
+        tvMoreInfo.setClickable(true);
+        btnFinish.setClickable(true);
+
+        /*tvEndTitle.startAnimation(open_anim);
+        ivEndImage.startAnimation(open_anim);
+        tvEndMessage.startAnimation(open_anim);
+        scoreView.startAnimation(open_anim);
+        btnFinish.startAnimation(open_anim);*/
     }
 
     private void presentNewQuestion() {
