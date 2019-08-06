@@ -16,7 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SourceActivity"></activity>
+        <activity android:name=".OnboardingActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SourceActivity" />
         <activity android:name=".BrowserActivity" />
         <activity android:name=".TagActivity" />
         <activity android:name=".FriendsListActivity" />
