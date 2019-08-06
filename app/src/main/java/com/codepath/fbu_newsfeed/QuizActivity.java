@@ -1,9 +1,9 @@
 package com.codepath.fbu_newsfeed;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,7 +52,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private int count = 0;
     private int numQuestions;
 
-    private Animation close_anim, open_anim;
+    //private Animation close_anim, open_anim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +62,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         queryQuizzes();
 
-        close_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_close);
-        open_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_open);
+        //close_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_close);
+        //open_anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.btn_open);
 
         btnStart.setOnClickListener(this);
         btnTrue.setOnClickListener(this);
@@ -140,6 +140,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
 
+            case R.id.btnFinish:
+                Intent intent = new Intent(QuizActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+                break;
         }
     }
 
@@ -155,6 +160,12 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         tvEndMessage.setVisibility(View.VISIBLE);
         scoreView.setVisibility(View.VISIBLE);
         btnFinish.setVisibility(View.VISIBLE);
+
+        //tvEndTitle.startAnimation(open_anim);
+        //ivEndImage.startAnimation(open_anim);
+        //tvEndMessage.startAnimation(open_anim);
+        //scoreView.startAnimation(open_anim);
+        //btnFinish.startAnimation(open_anim);
     }
 
     private void presentNewQuestion() {

@@ -297,6 +297,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.ibInformation:
                 Log.d(TAG, "Clicked information");
                 showInformationDialog();
+                /*Intent tempIntent = new Intent(DetailActivity.this, QuizActivity.class);
+                startActivity(tempIntent);*/
                 break;
             case R.id.ivBias:
                 showInformationDialog();
