@@ -317,6 +317,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.viewArticle:
                 Intent i = new Intent(this, BrowserActivity.class);
                 i.putExtra("article", (Serializable) article);
+                i.putExtra("share", (Serializable) share);
                 startActivity(i);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;

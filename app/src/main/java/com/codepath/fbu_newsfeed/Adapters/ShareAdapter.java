@@ -288,7 +288,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     case R.id.cvArticleImage:
                     case R.id.tvArticleTitleCreate:
                     case R.id.tvArticleSummary:
-                        goToArticle(article);
+                        goToArticle(article, share);
                         break;
                     case R.id.btnDiscussion:
                         intent = new Intent(context, DetailActivity.class);
@@ -370,13 +370,14 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     }
 
-    private void goToArticle(Article article) {
+    private void goToArticle(Article article, Share share) {
 //        Intent intent = new Intent(context, ArticleDetailActivity.class);
 //        intent.putExtra("article", (Serializable) article);
 //        context.startActivity(intent);
 //        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         Intent i = new Intent(context, BrowserActivity.class);
+        i.putExtra("share", (Serializable) share);
         i.putExtra("article", (Serializable) article);
         context.startActivity(i);
         ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);

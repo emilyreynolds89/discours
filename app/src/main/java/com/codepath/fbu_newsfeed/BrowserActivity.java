@@ -5,6 +5,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MotionEventCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,9 +32,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Models.Annotation;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
+import com.codepath.fbu_newsfeed.Models.Share;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -60,6 +65,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     @BindView(R.id.ibRefresh) ImageButton ibRefresh;
     @BindView(R.id.tvPrompt) TextView tvPrompt;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.rvComments) RecyclerView rvComments;
 
     public @BindView(R.id.etAnnotation) EditText etAnnotation;
     public @BindView(R.id.btnSubmit) Button btnSubmit;
@@ -69,6 +75,10 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
     private String url;
     private Article article;
+    private Share share;
+
+    private ArrayList<Comment> comments;
+    private CommentAdapter commentAdapter;
 
     private ArrayList<Annotation> annoList;
 
@@ -82,13 +92,26 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_browser);
         ButterKnife.bind(this);
 
+        article = (Article) getIntent().getSerializableExtra("article");
+
+        // TODO: if share doesn't exist b/c intent comes from trends adapter
+        if (getIntent().hasExtra("share"))
+            share = (Share) getIntent().getSerializableExtra("share");
+        url = article.getUrl();
+
         annoList = new ArrayList<>();
         urlChanged = false;
 
+        comments = new ArrayList<>();
+        commentAdapter = new CommentAdapter(getBaseContext(), comments, share);
+        rvComments.setAdapter(commentAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
+        rvComments.setLayoutManager(linearLayoutManager);
+
+        queryComments();
+
         setSupportActionBar(toolbar);
 
-        article = (Article) getIntent().getSerializableExtra("article");
-        url = article.getUrl();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
@@ -176,21 +199,6 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-//   TODO: For when I decide to work on swipe up and see comments
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event){
-//
-//        int action = MotionEventCompat.getActionMasked(event);
-//
-//        switch(action) {
-//            case (MotionEvent.ACTION_UP) :
-//                Log.d(TAG,"Action was UP");
-//                return true;
-//            default :
-//                return super.onTouchEvent(event);
-//        }
-//    }
 
     private void injectJS(WebView view, int scriptFile) {
         InputStream input;
@@ -254,6 +262,27 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+    }
+
+    private void queryComments() {
+        ParseQuery<Comment> commentQuery = ParseQuery.getQuery(Comment.class);
+        commentQuery.include(Comment.KEY_SHARE);
+        commentQuery.include(Comment.KEY_TEXT);
+        commentQuery.include(Comment.KEY_USER);
+        commentQuery.whereEqualTo(Comment.KEY_SHARE, share);
+
+        commentQuery.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> newComments, ParseException e) {
+                if (e != null) {
+                    Log.e("DetailActivity", "Error in comment query");
+                    e.printStackTrace();
+                    return;
+                }
+                comments.addAll(newComments);
+                commentAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void getAnnotations() {
