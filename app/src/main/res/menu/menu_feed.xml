@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/miFilter"
+        android:tint="@color/colorBaseText"
         android:icon="@drawable/filter"
         app:showAsAction="ifRoom"
         android:title="Filter">
