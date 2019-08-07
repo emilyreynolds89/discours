@@ -5,6 +5,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MotionEventCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,14 +32,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Models.Annotation;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
+import com.codepath.fbu_newsfeed.Models.Notification;
+import com.codepath.fbu_newsfeed.Models.Share;
+import com.codepath.fbu_newsfeed.Models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -60,19 +68,33 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     @BindView(R.id.ibRefresh) ImageButton ibRefresh;
     @BindView(R.id.tvPrompt) TextView tvPrompt;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.rvComments) RecyclerView rvComments;
+
+    @BindView(R.id.etComment) EditText etComment;
+    @BindView(R.id.btnCommentSubmit) Button btnCommentSubmit;
 
     public @BindView(R.id.etAnnotation) EditText etAnnotation;
     public @BindView(R.id.btnSubmit) Button btnSubmit;
     public @BindView(R.id.annotationConstraintLayout)
     ConstraintLayout annotationConstraintLayout;
+    @BindView(R.id.dragView) ConstraintLayout dragView;
+    @BindView(R.id.commentConstraintLayout) ConstraintLayout commentConstraintLayout;
     @BindView(R.id.shareConstraintLayout) ConstraintLayout shareConstraintLayout;
+    @BindView(R.id.sliding_layout) SlidingUpPanelLayout slidingLayout;
 
     private String url;
     private Article article;
+    private Share share;
+
+    private ArrayList<Comment> comments;
+    private CommentAdapter commentAdapter;
 
     private ArrayList<Annotation> annoList;
 
     private boolean urlChanged;
+    private String currentUrl;
+
+    private ArrayList<ParseUser> friends;
 
 
     @Override
@@ -82,13 +104,33 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_browser);
         ButterKnife.bind(this);
 
+        article = (Article) getIntent().getSerializableExtra("article");
+
+        if (getIntent().hasExtra("share"))
+            share = (Share) getIntent().getSerializableExtra("share");
+        url = article.getUrl();
+
         annoList = new ArrayList<>();
         urlChanged = false;
 
+        friends = new ArrayList<>();
+
+        if (share != null) {
+            comments = new ArrayList<>();
+            commentAdapter = new CommentAdapter(getBaseContext(), comments, share);
+            rvComments.setAdapter(commentAdapter);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
+            rvComments.setLayoutManager(linearLayoutManager);
+
+            queryComments();
+        } else {
+            commentConstraintLayout.setVisibility(View.GONE);
+            slidingLayout.setEnabled(false);
+        }
+
+
         setSupportActionBar(toolbar);
 
-        article = (Article) getIntent().getSerializableExtra("article");
-        url = article.getUrl();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
@@ -115,18 +157,28 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                 } else {
                     ibForward.setColorFilter(ContextCompat.getColor(BrowserActivity.this, R.color.colorModerate));
                 }
-                if (annoList.isEmpty())
-                    getAnnotations();
+
+                if(!urlChanged) {
+                    getFriends();
+                }
 
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                injectJS(view, R.raw.annotate);
-                renderAnnotations();
+
+                urlChanged = false;
+                currentUrl = webView.getUrl();
+
+                if (!urlChanged) {
+                    injectJS(view, R.raw.annotate);
+                    renderAnnotations();
+                    tvPrompt.setVisibility(View.VISIBLE);
+                } else {
+                    tvPrompt.setVisibility(View.GONE);
+                }
                 progressBar.setVisibility(View.GONE);
-                tvPrompt.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -176,21 +228,6 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-//   TODO: For when I decide to work on swipe up and see comments
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event){
-//
-//        int action = MotionEventCompat.getActionMasked(event);
-//
-//        switch(action) {
-//            case (MotionEvent.ACTION_UP) :
-//                Log.d(TAG,"Action was UP");
-//                return true;
-//            default :
-//                return super.onTouchEvent(event);
-//        }
-//    }
 
     private void injectJS(WebView view, int scriptFile) {
         InputStream input;
@@ -220,8 +257,8 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             Toast.makeText(this, "You may only annotate on the originally shared article", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (tempX > (screenWidth - 120)) { // annotations don't go beyond viewport
-            tempX = screenWidth - 120;
+        if (tempX > (screenWidth - 140)) { // annotations don't go beyond viewport
+            tempX = screenWidth - 140;
         }
 
         final int positionX = tempX;
@@ -256,14 +293,80 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    private void getAnnotations() {
-        List<ParseUser> friends = getFriends();
+    private void setUpFriendPermissions() {
+        if (isFriends() && share != null) {
+            etComment.setVisibility(View.VISIBLE);
+            btnCommentSubmit.setVisibility(View.VISIBLE);
+            rvComments.setVisibility(View.VISIBLE);
+            btnCommentSubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    String message = etComment.getText().toString();
+                    if (message == null || message.equals("")) {
+                        Toast.makeText(getBaseContext(), "Please enter a comment", Toast.LENGTH_LONG).show();
+                    } else {
+                        final Comment addedComment = new Comment(message, (User) ParseUser.getCurrentUser(), share);
+                        addedComment.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Log.d(TAG, "Success in saving comment");
+                                    comments.add(addedComment);
+                                    commentAdapter.notifyDataSetChanged();
+                                    etComment.setText("");
+                                    etComment.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                                    return;
+                                } else {
+                                    Log.e(TAG, "Error in creating comment");
+                                    e.printStackTrace();
+                                    Toast.makeText(BrowserActivity.this, "Error in submitting comment", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
 
-        friends.add(ParseUser.getCurrentUser());
+                        createNotification("COMMENT", share, message);
+                    }
+                }
+            });
+        } else {
+            commentConstraintLayout.setVisibility(View.GONE);
+            slidingLayout.setEnabled(false);
+            rvComments.setVisibility(View.GONE);
+            btnCommentSubmit.setOnClickListener(null);
+
+        }
+    }
+
+    private void queryComments() {
+        ParseQuery<Comment> commentQuery = ParseQuery.getQuery(Comment.class);
+        commentQuery.include(Comment.KEY_SHARE);
+        commentQuery.include(Comment.KEY_TEXT);
+        commentQuery.include(Comment.KEY_USER);
+        commentQuery.whereEqualTo(Comment.KEY_SHARE, share);
+
+        commentQuery.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> newComments, ParseException e) {
+                if (e != null) {
+                    Log.e("DetailActivity", "Error in comment query");
+                    e.printStackTrace();
+                    return;
+                }
+                comments.addAll(newComments);
+                commentAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void getAnnotations() {
+
+        ArrayList<ParseUser> annoFriends = new ArrayList<>(friends);
+
+        annoFriends.add(ParseUser.getCurrentUser());
 
         ParseQuery<Annotation> annoQuery = new ParseQuery<>(Annotation.class);
         annoQuery.whereEqualTo(Annotation.KEY_ARTICLE, article);
-        annoQuery.whereContainedIn("user", friends);
+        annoQuery.whereContainedIn("user", annoFriends);
         annoQuery.findInBackground(new FindCallback<Annotation>() {
             @Override
             public void done(List<Annotation> objects, ParseException e) {
@@ -274,7 +377,16 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    private List<ParseUser> getFriends() {
+    private boolean isFriends() {
+        ArrayList<String> friendIds = new ArrayList<>();
+        for (ParseUser friend : friends) {
+            friendIds.add(friend.getObjectId());
+        }
+
+        return share.getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId()) || friendIds.contains(share.getUser().getObjectId());
+    }
+
+    private void getFriends() {
 
         ParseQuery<Friendship> query1 = ParseQuery.getQuery("Friendship");
         query1.whereEqualTo("user1", ParseUser.getCurrentUser());
@@ -292,7 +404,6 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         try {
             List<Friendship> result = mainQuery.find();
             Log.d(TAG, "Found " + result.size() + " friendships");
-            List<ParseUser> friends = new ArrayList<>();
             for (int i = 0; i < result.size(); i++) {
                 Friendship friendship = result.get(i);
                 if (friendship.isUser1(ParseUser.getCurrentUser())) {
@@ -301,12 +412,23 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                     friends.add(friendship.getUser1());
                 }
             }
-            return friends;
+            if (share != null) {
+                setUpFriendPermissions();
+            }
+            if (annoList.isEmpty())
+                getAnnotations();
         } catch(Exception e) {
             Log.d(TAG, "Error retrieving friends: " + e.getMessage());
 
         }
-        return new ArrayList<>();
+    }
+
+    private void createNotification(String type, Share share, String typeText) {
+        Log.d(TAG, "Creating notification of type: " + type);
+        User shareUser = (User) share.getUser();
+        if (ParseUser.getCurrentUser().getObjectId().equals(shareUser.getObjectId())) { return; }
+        Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), shareUser, share, typeText);
+        notification.saveInBackground();
     }
 
     private void displayAnnotation(Annotation anno) {
@@ -322,7 +444,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                         "    var outerdiv = document.createElement('div');\n" +
                         "    var icon = document.createElement('span');\n" +
                         "    icon.id = \"annotation-icon-" + id + "\";\n" +
-                        "    icon.style.cssText = 'position: absolute; height: 24px; width: 24px; display: block; z-index: 2';\n" +
+                        "    icon.style.cssText = 'position: absolute; height: 24px; width: 24px; display: block; z-index: 1';\n" +
                         "    icon.innerHTML = '<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"> <path fill=\"#70E7CA\" d=\"M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10Z\" /></svg>';\n" +
                         "    outerdiv.appendChild(icon);" +
                         "    outerdiv.style.cssText = 'position: absolute; width: 120px; z-index: 1';\n" +
@@ -331,7 +453,7 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
                         "    var div = document.createElement('div');\n" +
                         "    div.innerHTML = \"<b>@" + username + ":</b> " + text + "\";\n" +
                         "    div.id = 'annotation-body-" + id + "';\n" +
-                        "    div.style.cssText = 'position: absolute; background-color: #F7F7F7; padding: 8px; border-radius: 8px; overflow: auto; width: 120px; z-index: 1; display: none';\n" +
+                        "    div.style.cssText = 'position: absolute; background-color: #F7F7F7; padding: 8px; border-radius: 8px; overflow: auto; width: 120px; z-index: 2; font-size: 14px; display: none';\n" +
                         "    outerdiv.appendChild(div);\n" +
                         "    body.appendChild(outerdiv);\n" +
                         "icon.addEventListener('click', function(e) {\n" +

@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".BrowserActivity"
+    android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BrowserActivity">
+    android:gravity="bottom"
+    sothree:umanoPanelHeight="60dp"
+    sothree:umanoShadowHeight="0dp"
+    sothree:umanoDragView="@id/dragView"
+    sothree:umanoOverlay="true"
+    >
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+>
 
     <include
     android:id="@+id/toolbar"
@@ -66,9 +82,13 @@
         android:id="@+id/annotationConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginBottom="60dp"
         android:background="#FFFFFF"
+        android:clickable="true"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/shareConstraintLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -108,32 +128,42 @@
             app:layout_constraintBottom_toBottomOf="@+id/etAnnotation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/etAnnotation"
-            app:layout_constraintTop_toTopOf="@+id/etComment"
             app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/shareConstraintLayout"
+        android:id="@+id/dragView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingTop="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center|top"
+        android:clickable="true"
+        android:focusable="false">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/shareConstraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            sothree:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/btnShare"
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/rounded_accent_button"
             android:fontFamily="@font/lato"
             android:text="Share Article"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            sothree:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -183,6 +213,77 @@
             app:layout_constraintStart_toEndOf="@+id/btnShare"
             app:layout_constraintTop_toTopOf="@+id/btnShare"
             app:srcCompat="@drawable/refresh_right" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvComments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shareConstraintLayout">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/commentConstraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/rvComments"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <EditText
+                android:id="@+id/etComment"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rounded_edit_text"
+                android:ems="10"
+                android:fontFamily="@font/lato"
+                android:hint="Write a new comment"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:paddingStart="10dp"
+                android:textColor="@color/colorBaseText"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/commentConstraintLayout" />
+
+            <Button
+                android:id="@+id/btnCommentSubmit"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_accent_button"
+                android:fontFamily="@font/lato"
+                android:text="Submit"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etComment"
+                app:layout_constraintTop_toTopOf="@+id/etComment"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

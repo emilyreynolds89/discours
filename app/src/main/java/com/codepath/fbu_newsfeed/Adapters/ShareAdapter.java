@@ -45,6 +45,7 @@ import com.codepath.fbu_newsfeed.R;
 import com.codepath.fbu_newsfeed.SourceActivity;
 import com.codepath.fbu_newsfeed.TagActivity;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -71,6 +72,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     private List<Share> shares;
     private Context context;
     private Map<String, Map<ReactionType, Reaction>> allReactions; // key #1 is Share objectId, key #2 is reaction type
+    private Map<String, ArrayList<Reaction>> allReactionsFromEveryoneElse; // key #1 is Share objectId, key #2 is list of reactions
 
     private Animation open_anim, close_anim;
 
@@ -79,6 +81,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     public ShareAdapter(ArrayList<Share> newShares) {
         shares = newShares;
         allReactions = new HashMap<>();
+        allReactionsFromEveryoneElse = new HashMap<>();
     }
 
     @NonNull
@@ -119,6 +122,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             Glide.with(context).load(imageUrl).into(holder.ivArticleImage);
         }
 
+        holder.fp1.setVisibility(View.GONE);
+        holder.fp2.setVisibility(View.GONE);
+        holder.fp3.setVisibility(View.GONE);
+
+        holder.renderFacePile(share);
+
         holder.tvArticleTitle.setText(article.getTitle());
         holder.tvArticleSummary.setText(article.getSummary());
 
@@ -158,9 +167,10 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         BiasHelper.setBiasImageView(holder.ivBias, biasValue);
 
         if (!share.getCaption().isEmpty()) {
-            String captionUsername = "<b>@" + user.getUsername() + ": </b>";
-
-            holder.tvCaption.setText(Html.fromHtml(captionUsername + share.getCaption(), HtmlCompat.FROM_HTML_MODE_LEGACY));
+            //String captionUsername = "<b>@" + user.getUsername() + ": </b>";
+            //String captionText = Html.fromHtml(captionUsername + share.getCaption(), HtmlCompat.FROM_HTML_MODE_LEGACY);
+            String captionText = share.getCaption();
+            holder.tvCaption.setText(captionText);
         } else {
             holder.tvCaption.setVisibility(View.GONE);
         }
@@ -214,7 +224,10 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         @BindView(R.id.tvTag) TextView tvTag;
         @BindView(R.id.cvArticleImage) CardView cvArticleImage;
         @BindView(R.id.ibReactionExpand) ImageButton ibReactionExpand;
-
+        @BindView(R.id.facepile) ConstraintLayout facepile;
+        @BindView(R.id.fp1) ImageView fp1;
+        @BindView(R.id.fp2) ImageView fp2;
+        @BindView(R.id.fp3) ImageView fp3;
 
         ViewHolder(View view) {
             super(view);
@@ -252,6 +265,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                             setReactionAnim(close_anim);
                             setReactionClickable(false);
 
+                            facepile.setVisibility(View.VISIBLE);
+
                             setClassificationVisibility(View.VISIBLE);
                             setClassificationAnim(open_anim);
                             setClassificationClickable(true);
@@ -261,6 +276,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                             setReactionVisibility(View.VISIBLE);
                             setReactionAnim(open_anim);
                             setReactionClickable(true);
+
+                            facepile.setVisibility(View.GONE);
 
                             setClassificationVisibility(View.GONE);
                             setClassificationAnim(close_anim);
@@ -288,7 +305,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     case R.id.cvArticleImage:
                     case R.id.tvArticleTitleCreate:
                     case R.id.tvArticleSummary:
-                        goToArticle(article);
+                        goToArticle(article, share);
                         break;
                     case R.id.btnDiscussion:
                         intent = new Intent(context, DetailActivity.class);
@@ -312,6 +329,41 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
                 }
 
+        }
+
+        private void renderFacePile(Share share) {
+            ArrayList<Reaction> allReactionList = allReactionsFromEveryoneElse.getOrDefault(share.getObjectId(), new ArrayList<Reaction>());
+            if (!allReactionList.isEmpty()) {
+                int faceIndex = 0;
+                ArrayList<String> alreadyPiledUserIds = new ArrayList<>();
+                for (Reaction reaction : allReactionList) {
+                    ImageView target = null;
+                    if (faceIndex == 0) {
+                        fp1.setVisibility(View.VISIBLE);
+                        target = fp1;
+                    } else if (faceIndex == 1) {
+                        fp2.setVisibility(View.VISIBLE);
+                        target = fp2;
+                    } else if (faceIndex == 2) {
+                        fp3.setVisibility(View.VISIBLE);
+                        target = fp3;
+                    }
+
+                    ParseUser reactionUser = reaction.getUser();
+                    if (target != null && !alreadyPiledUserIds.contains(reactionUser.getObjectId())) {
+                        try {
+                            ParseFile profImage = reactionUser.fetchIfNeeded().getParseFile(User.KEY_PROFILEIMAGE);
+
+                            Glide.with(context).load(profImage.getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(target);
+
+                            alreadyPiledUserIds.add(reactionUser.getObjectId());
+                            faceIndex++;
+                        } catch (Exception e) {
+                            Log.d(TAG, "Issue loading images into facepile", e);
+                        }
+                    }
+                }
+            }
         }
 
         private void setReactionVisibility(int visibility) {
@@ -370,22 +422,22 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     }
 
-    private void goToArticle(Article article) {
+    private void goToArticle(Article article, Share share) {
 //        Intent intent = new Intent(context, ArticleDetailActivity.class);
 //        intent.putExtra("article", (Serializable) article);
 //        context.startActivity(intent);
 //        ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         Intent i = new Intent(context, BrowserActivity.class);
+        i.putExtra("share", (Serializable) share);
         i.putExtra("article", (Serializable) article);
         context.startActivity(i);
         ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 
+
     private void getAllReactions() {
         ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
-
-        reactionQuery.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
         reactionQuery.whereContainedIn(KEY_SHARE, shares);
 
         try {
@@ -394,13 +446,19 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             for (int i = 0; i < result.size(); i++) {
                 Reaction reaction = result.get(i);
                 Share share = reaction.getShare();
-                if (allReactions.containsKey(share.getObjectId())) {
-                    Map<ReactionType, Reaction> innerMap = allReactions.get(share.getObjectId());
-                    innerMap.put(Reaction.stringToEnum(reaction.getType()), reaction);
+                if (reaction.getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+                    if (allReactions.containsKey(share.getObjectId())) {
+                        Map<ReactionType, Reaction> innerMap = allReactions.get(share.getObjectId());
+                        innerMap.put(Reaction.stringToEnum(reaction.getType()), reaction);
+                    } else {
+                        Map<ReactionType, Reaction> innerMap = new HashMap<>();
+                        innerMap.put(Reaction.stringToEnum(reaction.getType()), reaction);
+                        allReactions.put(share.getObjectId(), innerMap);
+                    }
                 } else {
-                    Map<ReactionType, Reaction> innerMap = new HashMap<>();
-                    innerMap.put(Reaction.stringToEnum(reaction.getType()), reaction);
-                    allReactions.put(share.getObjectId(), innerMap);
+                    ArrayList<Reaction> val = allReactionsFromEveryoneElse.getOrDefault(share.getObjectId(), new ArrayList<Reaction>());
+                    val.add(reaction);
+                    allReactionsFromEveryoneElse.put(share.getObjectId(), val);
                 }
             }
         } catch (Exception e) {

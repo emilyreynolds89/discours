@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Models.Quiz;
@@ -27,7 +28,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String TAG = "DetailActivity";
 
-    @BindView(R.id.ivQuizImage) ImageView ivQuizImage;
+    @BindView(R.id.ivQuizImage) CardView ivQuizImage;
+    @BindView(R.id.ivImage) ImageView ivImage;
     @BindView(R.id.tvQuizQuestion) TextView tvQuizQuestion;
     @BindView(R.id.tvQuizNewsTitle) TextView tvQuizNewsTitle;
     @BindView(R.id.btnTrue) Button btnTrue;
@@ -39,6 +41,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.tvStartTitle) TextView tvStartTitle;
     @BindView(R.id.ivStartImage) ImageView ivStartImage;
     @BindView(R.id.tvStartMessage) TextView tvStartMessage;
+    @BindView(R.id.tvStartSkip) TextView tvStartSkip;
     @BindView(R.id.tvEndTitle) TextView tvEndTitle;
     @BindView(R.id.tvEndMessage) TextView tvEndMessage;
     @BindView(R.id.btnFinish) Button btnFinish;
@@ -73,6 +76,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         btnNext.setOnClickListener(this);
         btnFinish.setOnClickListener(this);
         tvMoreInfo.setOnClickListener(this);
+        tvStartSkip.setOnClickListener(this);
     }
 
     private void queryQuizzes() {
@@ -113,6 +117,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 setStartVisibility(View.GONE);
                 //setStartAnim(close_anim);
                 btnStart.setClickable(false);
+                tvStartSkip.setClickable(false);
 
                 setQuizViews();
 
@@ -152,6 +157,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 break;
 
+            case R.id.tvStartSkip:
             case R.id.tvMoreInfo:
                 Intent infoIntent = new Intent(QuizActivity.this, FakeNewsInfoActivity.class);
                 startActivity(infoIntent);
@@ -219,7 +225,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             ivQuizImage.setVisibility(View.INVISIBLE);
             //ivQuizImage.startAnimation(close_anim);
             if (image != null ) {
-                Glide.with(getBaseContext()).load(image.getUrl()).into(ivQuizImage);
+                Glide.with(getBaseContext()).load(image.getUrl()).into(ivImage);
             }
             ivQuizImage.setVisibility(View.VISIBLE);
             //ivQuizImage.startAnimation(open_anim);
@@ -237,6 +243,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         tvStartTitle.setVisibility(visibility);
         ivStartImage.setVisibility(visibility);
         tvStartMessage.setVisibility(visibility);
+        tvStartSkip.setVisibility(visibility);
     }
 
     private void setStartAnim(Animation anim) {

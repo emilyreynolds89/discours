@@ -32,6 +32,7 @@ public class UserStatsDialogFragment extends DialogFragment {
     @BindView(R.id.tvArticleTitleCreate) TextView tvArticleNumber;
     @BindView(R.id.tvSourceFavorite) TextView tvSourceFavorite;
     @BindView(R.id.tvTagFavorite) TextView tvTagFavorite;
+    @BindView(R.id.tvFactAverage) TextView tvFactAverage;
 
     public UserStatsDialogFragment() {}
 
@@ -57,9 +58,12 @@ public class UserStatsDialogFragment extends DialogFragment {
             user = (User) getUser(ParseUser.getCurrentUser().getObjectId());
             user.setFavoriteStats();
 
+            int factAverage = (int) (25 * (user.getFactAverage() - 1));
+
             tvArticleNumber.setText(Integer.toString(user.queryArticleCount(false)));
-            pbBiasAverage.setProgress((int) (20 * user.getBiasAverage() - 10));
-            pbFactAverage.setProgress((int) (20 *user.getFactAverage()));
+            pbBiasAverage.setProgress((int) (25 * (user.getBiasAverage() - 1)));
+            pbFactAverage.setProgress(factAverage);
+            tvFactAverage.setText(Integer.toString(factAverage) + "%");
 
             tvSourceFavorite.setText(user.getFavoriteSource());
             tvTagFavorite.setText(user.getFavoriteTag());

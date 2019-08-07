@@ -90,10 +90,11 @@ public class FeedFragment extends Fragment {
         tagList = new ArrayList<>();
         tagMap = new HashMap<>();
         checkedTags = new ArrayList<>();
-        queryTags();
 
         friends = new ArrayList<>();
         getFriends();
+
+        queryTags();
 
         queryShares(0, false);
 
@@ -175,14 +176,16 @@ public class FeedFragment extends Fragment {
     }
 
     private void initializeFilterGroup() {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        for (String tag : tagList) {
-            Chip chip = (Chip) inflater.inflate(R.layout.filter_chip, null, false);
-            chip.setChecked(true);
-            chip.setText(tag);
-            filterChipGroup.addView(chip, 0);
+        if (filterChipGroup != null) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            for (String tag : tagList) {
+                Chip chip = (Chip) inflater.inflate(R.layout.filter_chip, null, false);
+                chip.setChecked(true);
+                chip.setText(tag);
+                filterChipGroup.addView(chip, 0);
 
-            tagMap.put(tag, chip);
+                tagMap.put(tag, chip);
+            }
         }
     }
 
