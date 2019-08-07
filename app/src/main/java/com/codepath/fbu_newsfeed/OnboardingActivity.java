@@ -16,13 +16,17 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AhoyOnboarderCard ahoyOnboarderCard1 = new AhoyOnboarderCard("Welcome to Discours", "Our app is a social platform for having healthy discussions with friends about news.", R.drawable.img1);
-        AhoyOnboarderCard ahoyOnboarderCard2 = new AhoyOnboarderCard("Sharing", "Post any article from the web instantly.", R.drawable.img2);
-        AhoyOnboarderCard ahoyOnboarderCard3 = new AhoyOnboarderCard("Ratings", "Calculates the bias and fact metrics of posts.", R.drawable.img3);
+        AhoyOnboarderCard ahoyOnboarderCard1 = new AhoyOnboarderCard("Fake News", "Misinformation ", R.drawable.shareimg5);
+        AhoyOnboarderCard ahoyOnboarderCard2 = new AhoyOnboarderCard("Mission", "Our app is designed for promoting healthy discussions with friends about news.", R.drawable.img3);
+        AhoyOnboarderCard ahoyOnboarderCard3 = new AhoyOnboarderCard("Sharing", "Post any article from the web instantly.", R.drawable.shareimg1);
 
         ahoyOnboarderCard1.setBackgroundColor(R.color.white);
         ahoyOnboarderCard2.setBackgroundColor(R.color.white);
         ahoyOnboarderCard3.setBackgroundColor(R.color.white);
+
+        ahoyOnboarderCard1.setIconLayoutParams(750, 1400, 8, 8, 8, 8);
+        ahoyOnboarderCard2.setIconLayoutParams(570, 1100, 8, 8, 8, 8);
+        ahoyOnboarderCard3.setIconLayoutParams(570, 1100, 8, 8, 8, 8);
 
         List<AhoyOnboarderCard> pages = new ArrayList<>();
 
@@ -40,8 +44,8 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
         showNavigationControls(true);
 
         List<Integer> colorList = new ArrayList<>();
+        colorList.add(R.color.colorBoardBad);
         colorList.add(R.color.colorAccentDark);
-        colorList.add(R.color.colorAccentBold);
         colorList.add(R.color.colorAccentLight);
 
         setColorBackground(colorList);
