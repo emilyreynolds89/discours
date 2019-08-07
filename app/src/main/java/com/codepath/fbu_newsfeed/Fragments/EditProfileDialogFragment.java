@@ -109,7 +109,8 @@ public class EditProfileDialogFragment extends DialogFragment {
 
         if (currentImage != null) {
             Glide.with(this).load(currentImage.getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
-
+        } else {
+            Glide.with(this).load(R.drawable.profileplaceholder).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
         }
 
         btnUpload.setOnClickListener(new View.OnClickListener() {

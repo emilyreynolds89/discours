@@ -151,6 +151,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             ParseFile profileImage = user.getProfileImage();
             if (profileImage != null) {
                 Glide.with(context).load(profileImage.getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImageNotif);
+            } else {
+                Glide.with(context).load(R.drawable.profileplaceholder).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImageNotif);
             }
 
             ivProfileImageNotif.setOnClickListener(new View.OnClickListener() {

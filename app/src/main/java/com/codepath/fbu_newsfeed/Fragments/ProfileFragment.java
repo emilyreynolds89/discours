@@ -117,6 +117,8 @@ public class ProfileFragment extends Fragment {
 
         if (user.getParseFile("profileImage") != null) {
             Glide.with(getContext()).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
+        } else {
+            Glide.with(getContext()).load(R.drawable.profileplaceholder).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
         }
 
 
