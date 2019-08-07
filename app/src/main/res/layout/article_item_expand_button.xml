@@ -184,10 +184,6 @@
         app:maxImageSize="24dp"
         app:pressedTranslationZ="0dp"
         app:srcCompat="@drawable/happysad" />
-<<<<<<< HEAD
-=======
-
-
     <include
         android:id="@+id/facepile"
         layout="@layout/face_pile"
@@ -197,7 +193,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/ibReactionExpand"
         app:layout_constraintStart_toEndOf="@id/ibReactionExpand"
         app:layout_constraintTop_toTopOf="@+id/ibReactionExpand" />
->>>>>>> face-pile
 
 
     <ImageButton
