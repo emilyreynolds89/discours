@@ -156,7 +156,7 @@
                         android:fontFamily="@font/lato"
                         android:text="Source"
                         android:textColor="@color/colorBaseText"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/ibReportArticle"
                         app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary"
@@ -175,7 +175,7 @@
                         android:foreground="?selectableItemBackground"
                         android:text="Tag"
                         android:textColor="@color/colorBaseText"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSource"
@@ -380,7 +380,7 @@
                     android:text="TextView"
                     android:textAllCaps="true"
                     android:textColor="@color/colorHeadlineText"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/ivBias"
                     app:layout_constraintEnd_toStartOf="@+id/ivBias"
@@ -388,8 +388,8 @@
 
                 <ImageView
                     android:id="@+id/ivBias"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginEnd="12dp"
                     android:background="@android:color/transparent"
                     android:foreground="?selectableItemBackground"
@@ -399,9 +399,9 @@
 
                 <ImageButton
                     android:id="@+id/ibInformation"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="10dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitXY"
                     app:layout_constraintBottom_toTopOf="@+id/tvCaption"
@@ -423,7 +423,6 @@
                     android:textColor="@color/colorBaseText"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@+id/ibInformation"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/viewArticle"
                     app:layout_constraintTop_toBottomOf="@+id/ivProfileImageNotif" />
 
