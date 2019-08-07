@@ -17,5 +17,5 @@
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
-        android:src="@drawable/discours_logo_narrow" />
+        android:src="@drawable/new_discours_logo" />
 </androidx.appcompat.widget.Toolbar>
