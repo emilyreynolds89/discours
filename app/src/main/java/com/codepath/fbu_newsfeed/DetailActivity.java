@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -144,7 +145,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         comments = new ArrayList<>();
         articles = new ArrayList<>();
         commentAdapter = new CommentAdapter(getBaseContext(), comments, share);
-        recommendAdapter = new RecommendAdapter(getBaseContext(), articles);
+        recommendAdapter = new RecommendAdapter(articles);
 
         rvComments.setAdapter(commentAdapter);
         rvRecommend.setAdapter(recommendAdapter);
@@ -218,8 +219,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         BiasHelper.setBiasImageView(ivBias, biasValue);
 
         if (!share.getCaption().isEmpty()) {
-            String captionUsername = "<b>@" + share.getUser().getUsername() + ": </b>";
-            tvCaption.setText(Html.fromHtml(captionUsername + share.getCaption(), HtmlCompat.FROM_HTML_MODE_LEGACY));
+            String captionUsername = "<b>" + user.getString(User.KEY_FULLNAME) + ": </b>";
+            Spanned captionText = Html.fromHtml(captionUsername + share.getCaption(), HtmlCompat.FROM_HTML_MODE_LEGACY);
+            tvCaption.setText(captionText);
         } else {
             tvCaption.setVisibility(View.GONE);
         }

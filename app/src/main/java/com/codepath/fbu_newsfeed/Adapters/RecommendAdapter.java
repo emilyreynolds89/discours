@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.ArticleDetailActivity;
+import com.codepath.fbu_newsfeed.BrowserActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.ParseFile;
@@ -31,14 +32,15 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
     private Context context;
     private List<Article> articles;
 
-    public RecommendAdapter(Context context, List<Article> articles) {
-        this.context = context;
+    public RecommendAdapter(List<Article> articles) {
         this.articles = articles;
     }
 
     @NonNull
     @Override
     public RecommendAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
+
         View view = LayoutInflater.from(context).inflate(R.layout.recommend_article_item, parent, false);
         return new ViewHolder(view);
     }
@@ -72,10 +74,16 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
             if (position != RecyclerView.NO_POSITION) {
                 Article article = articles.get(position);
 
-                Intent intent = new Intent(context, ArticleDetailActivity.class);
-                intent.putExtra("article", (Serializable) article);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+//                Intent intent = new Intent(context, ArticleDetailActivity.class);
+//                intent.putExtra("article", (Serializable) article);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                context.startActivity(intent);
+
+                Intent i = new Intent(context, BrowserActivity.class);
+                i.putExtra("article", (Serializable) article);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+                ((Activity) context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
             }
         }
         void bind(Article article) {
