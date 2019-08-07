@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/tvIntro"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
@@ -43,7 +43,7 @@
         android:textColor="@color/colorBaseText"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvFakeNewsInfoTitle" />
 
@@ -73,7 +73,7 @@
 
     <TextView
         android:id="@+id/tvCheckTheSourceTitle"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
@@ -84,13 +84,13 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/tvIntro"
         app:layout_constraintTop_toBottomOf="@+id/lineView" />
 
     <TextView
         android:id="@+id/tvJudgeByCoverTitle"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
@@ -107,7 +107,7 @@
 
     <TextView
         android:id="@+id/tvCheckUrlTitle"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
@@ -124,7 +124,7 @@
 
     <TextView
         android:id="@+id/tvOtherNewsReportingTitle"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
@@ -141,7 +141,7 @@
 
     <TextView
         android:id="@+id/tvSloppyWritingTitle"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
@@ -158,7 +158,7 @@
 
     <TextView
         android:id="@+id/tvLackQuotesTitle"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
@@ -175,7 +175,7 @@
 
     <TextView
         android:id="@+id/tvMediaLiteracySitesTitle"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
@@ -192,7 +192,7 @@
 
     <TextView
         android:id="@+id/tvCheckTheSourceBody"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -201,13 +201,13 @@
         android:textColor="@color/colorBaseText"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/tvCheckTheSourceTitle"
         app:layout_constraintTop_toBottomOf="@+id/tvCheckTheSourceTitle" />
 
     <TextView
         android:id="@+id/tvJudgeByCoverBody"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -222,7 +222,7 @@
 
     <TextView
         android:id="@+id/tvCheckUrlBody"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -237,7 +237,7 @@
 
     <TextView
         android:id="@+id/tvOtherNewsReportingBody"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -252,7 +252,7 @@
 
     <TextView
         android:id="@+id/tvSloppyWritingBody"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -267,7 +267,7 @@
 
     <TextView
         android:id="@+id/tvLackQuotesBody"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -282,7 +282,7 @@
 
     <TextView
         android:id="@+id/tvMediaLiteracySitesBody"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -297,7 +297,7 @@
 
     <TextView
         android:id="@+id/tvConclusion"
-        android:layout_width="380dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
