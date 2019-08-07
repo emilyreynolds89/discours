@@ -102,10 +102,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
                         }
                         break;
                     case R.id.action_profile:
-                        if (!(currentFragment instanceof ProfileFragment)) {
-                            fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser().getObjectId());
-                            fragmentTag = ProfileFragment.TAG;
-                        }
+                        fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser().getObjectId());
+                        fragmentTag = ProfileFragment.TAG;
                         break;
                     default:
                         break;

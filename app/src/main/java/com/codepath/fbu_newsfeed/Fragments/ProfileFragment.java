@@ -283,6 +283,11 @@ public class ProfileFragment extends Fragment {
                 }
             });
         }
+        deleteNotification(Notification.ACCEPT_REQUEST, (User) user, (User) ParseUser.getCurrentUser());
+        deleteNotification(Notification.ACCEPT_REQUEST, (User) ParseUser.getCurrentUser(), (User) user);
+        deleteNotification(Notification.FRIEND_REQUEST, (User) user, (User) ParseUser.getCurrentUser());
+        deleteNotification(Notification.FRIEND_REQUEST, (User) ParseUser.getCurrentUser(), (User) user);
+
     }
 
     private void friendsList() {
@@ -471,6 +476,30 @@ public class ProfileFragment extends Fragment {
         Log.d(TAG, "Creating friend notification of type: " + type);
         Notification notification = new Notification(type, (User) ParseUser.getCurrentUser(), friend, type);
         notification.saveInBackground();
+    }
+
+    private void deleteNotification(String type, User sendUser, User receiverUser) {
+        ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
+
+        query.whereEqualTo(Notification.KEY_TYPE, type);
+        query.whereEqualTo(Notification.KEY_SEND_USER, sendUser);
+        query.whereEqualTo(Notification.KEY_RECEIVE_USER, receiverUser);
+
+        Notification notification;
+
+        try {
+            List<Notification> result = query.find();
+            if (result.size() > 0 ) {
+                notification = result.get(0);
+            } else {
+                return;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error finding reactions: " + e.getMessage());
+            return;
+        }
+
+        notification.deleteInBackground();
     }
 
 }

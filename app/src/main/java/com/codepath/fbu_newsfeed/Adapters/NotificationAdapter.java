@@ -187,10 +187,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             Friendship friendship = query.getFirst();
             if (friendship.getState().equals(Friendship.State.Requested)) {
                 return "Requested";
-            } else if (friendship.getState().equals(Friendship.State.Accepted)){
-                return "Friends";
             } else {
-                return "Unfriended";
+                return "Friends";
             }
         } catch (ParseException e) {
             e.printStackTrace();
