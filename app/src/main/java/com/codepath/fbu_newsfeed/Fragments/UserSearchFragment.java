@@ -95,6 +95,7 @@ public class UserSearchFragment extends Fragment {
 
     private void fetchAllUsers() {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
         query.orderByDescending("createdAt");
         query.setLimit(20);
 
