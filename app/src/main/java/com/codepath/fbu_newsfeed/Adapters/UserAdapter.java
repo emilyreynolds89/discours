@@ -51,6 +51,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         if (user.getParseFile("profileImage") != null) {
             Glide.with(context).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.ivProfileImage);
+        } else {
+            Glide.with(context).load(R.drawable.profileplaceholder).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.ivProfileImage);
         }
 
         holder.layoutUser.setOnClickListener(new View.OnClickListener() {

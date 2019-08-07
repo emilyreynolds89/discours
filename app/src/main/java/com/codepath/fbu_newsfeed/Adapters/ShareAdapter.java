@@ -46,7 +46,6 @@ import com.codepath.fbu_newsfeed.R;
 import com.codepath.fbu_newsfeed.SourceActivity;
 import com.codepath.fbu_newsfeed.TagActivity;
 import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -63,7 +62,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.codepath.fbu_newsfeed.Models.Reaction.KEY_SHARE;
-import static com.codepath.fbu_newsfeed.Models.Reaction.KEY_USER;
 import static com.codepath.fbu_newsfeed.Models.Reaction.ReactionType;
 import static com.codepath.fbu_newsfeed.Models.Reaction.TYPES;
 
@@ -112,6 +110,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         if (user.getParseFile("profileImage") != null) {
             Glide.with(context).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.ivProfileImage);
+        } else {
+            Glide.with(context).load(R.drawable.profileplaceholder).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.ivProfileImage);
         }
 
         holder.tvTimestamp.setText(share.getRelativeTime());

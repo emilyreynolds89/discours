@@ -65,7 +65,6 @@ import com.parse.SaveCallback;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -190,6 +189,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                             return false;                        }
                     })
                     .apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
+        } else {
+            Glide.with(this).load(R.drawable.profileplaceholder).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImage);
         }
 
 
