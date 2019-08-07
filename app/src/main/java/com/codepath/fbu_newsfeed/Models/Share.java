@@ -166,6 +166,7 @@ public class Share extends ParseObject implements Serializable {
     public String getRelativeTime() {
         return (String) DateUtils.getRelativeTimeSpanString(getCreatedAt().getTime());
     }
+
     public static class Query extends ParseQuery<Share> {
         public Query() {
             super(Share.class);
