@@ -110,8 +110,10 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="12dp"
+            android:ellipsize="end"
             android:fontFamily="@font/lato"
             android:foreground="?selectableItemBackground"
+            android:maxLines="4"
             android:text="Article summary"
             android:textColor="@color/colorLightText"
             android:textSize="12sp"
@@ -127,9 +129,11 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
             android:fontFamily="@font/lato"
+            android:padding="2dp"
             android:text="Source"
             android:textColor="@color/colorBaseText"
             android:textSize="12sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ibReportArticle"
             app:layout_constraintTop_toBottomOf="@+id/tvArticleSummary" />
@@ -142,6 +146,7 @@
             android:layout_marginBottom="12dp"
             android:fontFamily="@font/lato"
             android:foreground="?selectableItemBackground"
+            android:padding="2dp"
             android:text="Tag"
             android:textColor="@color/colorBaseText"
             android:textSize="12sp"
@@ -157,11 +162,11 @@
             android:id="@+id/ibReportArticle"
             android:layout_width="20dp"
             android:layout_height="18dp"
-            android:layout_marginBottom="10dp"
             android:background="@android:color/transparent"
             android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSource"
             app:layout_constraintEnd_toEndOf="@+id/tvArticleSummary"
+            app:layout_constraintTop_toTopOf="@+id/tvSource"
             app:srcCompat="@drawable/report" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -354,8 +359,8 @@
 
     <ImageView
         android:id="@+id/ivBias"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:layout_marginEnd="12dp"
         android:foreground="?selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="@+id/ibInformation"
@@ -368,6 +373,7 @@
         android:layout_height="24dp"
         android:layout_marginTop="10dp"
         android:background="#00FFFFFF"
+        android:padding="2dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@id/tvCaption"
         app:layout_constraintEnd_toEndOf="@+id/viewArticle"
