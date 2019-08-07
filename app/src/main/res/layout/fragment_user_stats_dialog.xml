@@ -133,26 +133,27 @@
 
     <TextView
         android:id="@+id/tvLiberal"
-        android:layout_width="wrap_content"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/lato"
+        android:gravity="center"
         android:text="Liberal"
         android:textColor="@color/colorLightText"
         android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/pbBiasAverage"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/pbBiasAverage" />
 
     <TextView
         android:id="@+id/tvSLiberal"
-        android:layout_width="wrap_content"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/lato"
-        android:text="Slightly Liberal"
+        android:gravity="center"
+        android:text="S. Liberal"
         android:textColor="@color/colorLightText"
         android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/pbBiasAverage"
@@ -162,11 +163,12 @@
 
     <TextView
         android:id="@+id/tvModerate"
-        android:layout_width="wrap_content"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="24dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/lato"
+        android:gravity="center"
         android:text="Moderate"
         android:textColor="@color/colorLightText"
         android:textSize="10sp"
@@ -175,11 +177,12 @@
 
     <TextView
         android:id="@+id/tvSConservative"
-        android:layout_width="wrap_content"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="24dp"
         android:fontFamily="@font/lato"
-        android:text="Slightly Conserv."
+        android:gravity="center"
+        android:text="S. Conserv."
         android:textColor="@color/colorLightText"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/tvModerate"
@@ -187,17 +190,17 @@
 
     <TextView
         android:id="@+id/tvConservative"
-        android:layout_width="wrap_content"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="24dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/lato"
+        android:gravity="center"
         android:text="Conserv."
         android:textColor="@color/colorLightText"
         android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/pbBiasAverage"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/pbBiasAverage"
         app:layout_constraintStart_toEndOf="@+id/tvSConservative" />
 
     <TextView

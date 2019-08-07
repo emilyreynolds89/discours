@@ -75,7 +75,7 @@ public class ReportArticleFragment extends DialogFragment {
         getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
         TYPE_LIST = new ArrayList<>();
-        TYPE_LIST.add("False News");
+        TYPE_LIST.add("Fake News");
         TYPE_LIST.add("Inappropriate Content");
         TYPE_LIST.add("Hate Speech");
         TYPE_LIST.add("Spam");

@@ -151,6 +151,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             ParseFile profileImage = user.getProfileImage();
             if (profileImage != null) {
                 Glide.with(context).load(profileImage.getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImageNotif);
+            } else {
+                Glide.with(context).load(R.drawable.profileplaceholder).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivProfileImageNotif);
             }
 
             ivProfileImageNotif.setOnClickListener(new View.OnClickListener() {
@@ -187,10 +189,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             Friendship friendship = query.getFirst();
             if (friendship.getState().equals(Friendship.State.Requested)) {
                 return "Requested";
-            } else if (friendship.getState().equals(Friendship.State.Accepted)){
-                return "Friends";
             } else {
-                return "Unfriended";
+                return "Friends";
             }
         } catch (ParseException e) {
             e.printStackTrace();

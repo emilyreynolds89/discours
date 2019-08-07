@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +46,6 @@ import com.codepath.fbu_newsfeed.R;
 import com.codepath.fbu_newsfeed.SourceActivity;
 import com.codepath.fbu_newsfeed.TagActivity;
 import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -62,7 +62,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.codepath.fbu_newsfeed.Models.Reaction.KEY_SHARE;
-import static com.codepath.fbu_newsfeed.Models.Reaction.KEY_USER;
 import static com.codepath.fbu_newsfeed.Models.Reaction.ReactionType;
 import static com.codepath.fbu_newsfeed.Models.Reaction.TYPES;
 
@@ -111,6 +110,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
         if (user.getParseFile("profileImage") != null) {
             Glide.with(context).load(user.getParseFile("profileImage").getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.ivProfileImage);
+        } else {
+            Glide.with(context).load(R.drawable.profileplaceholder).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.ivProfileImage);
         }
 
         holder.tvTimestamp.setText(share.getRelativeTime());
@@ -167,9 +168,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         BiasHelper.setBiasImageView(holder.ivBias, biasValue);
 
         if (!share.getCaption().isEmpty()) {
-            //String captionUsername = "<b>@" + user.getUsername() + ": </b>";
-            //String captionText = Html.fromHtml(captionUsername + share.getCaption(), HtmlCompat.FROM_HTML_MODE_LEGACY);
-            String captionText = share.getCaption();
+            String captionUsername = "<b>" + user.getString(User.KEY_FULLNAME) + ": </b>";
+            Spanned captionText = Html.fromHtml(captionUsername + share.getCaption(), HtmlCompat.FROM_HTML_MODE_LEGACY);
             holder.tvCaption.setText(captionText);
         } else {
             holder.tvCaption.setVisibility(View.GONE);
@@ -237,6 +237,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             ivProfileImage.setOnClickListener(this);
             tvSource.setOnClickListener(this);
             tvTag.setOnClickListener(this);
+            tvTimestamp.setOnClickListener(this);
+            tvCaption.setOnClickListener(this);
             cvArticleImage.setOnClickListener(this);
             tvArticleTitle.setOnClickListener(this);
             tvArticleSummary.setOnClickListener(this);
@@ -307,6 +309,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                     case R.id.tvArticleSummary:
                         goToArticle(article, share);
                         break;
+                    case R.id.tvTimeStamp:
+                    case R.id.tvCaption:
                     case R.id.btnDiscussion:
                         intent = new Intent(context, DetailActivity.class);
                         intent.putExtra("share", (Serializable) share);

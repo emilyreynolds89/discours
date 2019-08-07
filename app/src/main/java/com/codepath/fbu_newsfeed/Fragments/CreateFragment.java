@@ -504,8 +504,8 @@ public class CreateFragment extends Fragment {
             try {
                 if (jSoupResult.getSourceName() != null)
                     articleSource = fragment.querySource(jSoupResult.getSourceName());
-                    if (articleSource == null && jSoupResult.getSourceUrl() != null)
-                        articleSource = fragment.matchUrlToSource(jSoupResult.getSourceUrl());
+                if (articleSource == null && jSoupResult.getSourceUrl() != null)
+                    articleSource = fragment.matchUrlToSource(jSoupResult.getSourceUrl());
                 else if (jSoupResult.getSourceUrl() != null)
                     articleSource = fragment.matchUrlToSource(jSoupResult.getSourceUrl());
                 else
@@ -514,35 +514,33 @@ public class CreateFragment extends Fragment {
                 if (articleSource != null) {
                     Log.d(TAG, "We found this source: " + articleSource.toString());
                 }
+                String strFact = "MIXTURE";
+                int intBias = 3;
+                if (articleSource != null) {
+                    intBias = articleSource.getBias();
+                    strFact = articleSource.getFact();
+                    Article existingArticle = fragment.getArticleByTitleSource(jSoupResult.getTitle(), articleSource);
+                    if (existingArticle != null) {
+                        Log.d(TAG, "This article already exists (found with title and source)");
+                        fragment.selectedArticle = existingArticle;
+                        fragment.parsedArticles.put(jSoupResult.getSourceUrl(), true);
+                        fragment.setArticleView();
+                    } else {
+                        fragment.selectedArticle = new Article(jSoupResult.getSourceUrl(), jSoupResult.getTitle(), jSoupResult.getImageUrl(), jSoupResult.getDescription(), Bias.intToEnum(intBias), Fact.stringToEnum(strFact), articleSource, "UNTAGGED");
+                        fragment.selectedArticle.saveInBackground();
+                        fragment.parsedArticles.put(jSoupResult.getSourceUrl(), true);
+                        fragment.setArticleView();
+                        fragment.setUpTagSelector();
+                    }
 
+                } else {
+                    Toast.makeText(fragment.getContext(), "Sorry, you can't share articles from that source.", Toast.LENGTH_SHORT).show();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(fragment.getContext(), "Sorry, you can't share articles from that source.", Toast.LENGTH_SHORT).show();
-            }
-            String strFact = "MIXTURE";
-            int intBias = 3;
-            if (articleSource != null) {
-                intBias = articleSource.getBias();
-                strFact = articleSource.getFact();
-                Article existingArticle = fragment.getArticleByTitleSource(jSoupResult.getTitle(), articleSource);
-                if (existingArticle != null) {
-                    Log.d(TAG, "This article already exists (found with title and source)");
-                    fragment.selectedArticle = existingArticle;
-                    fragment.parsedArticles.put(jSoupResult.getSourceUrl(), true);
-                    fragment.setArticleView();
-                } else {
-                    fragment.selectedArticle = new Article(jSoupResult.getSourceUrl(), jSoupResult.getTitle(), jSoupResult.getImageUrl(), jSoupResult.getDescription(), Bias.intToEnum(intBias), Fact.stringToEnum(strFact), articleSource, "UNTAGGED");
-                    fragment.selectedArticle.saveInBackground();
-                    fragment.parsedArticles.put(jSoupResult.getSourceUrl(), true);
-                    fragment.setArticleView();
-                    fragment.setUpTagSelector();
-                }
-
-            } else {
-                Toast.makeText(fragment.getContext(), "Sorry, you can't share articles from that source.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragment.getContext(), "Sorry, we had trouble finding the article from that URL.", Toast.LENGTH_SHORT).show();
             }
             fragment.progressBarHolder.setVisibility(View.INVISIBLE);
-
         }
     }
 
