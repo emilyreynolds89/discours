@@ -64,6 +64,7 @@ import com.parse.SaveCallback;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -105,6 +106,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.ibReactionExpand) ImageButton ibReactionExpand;
     @BindView(R.id.commentConstraintLayout) ConstraintLayout commentConstraintLayout;
 
+    @BindView(R.id.facepile) ConstraintLayout facepile;
+    @BindView(R.id.fp1) ImageView fp1;
+    @BindView(R.id.fp2) ImageView fp2;
+    @BindView(R.id.fp3) ImageView fp3;
+
     private Share share;
     private Article article;
     private User user;
@@ -116,6 +122,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     private RecommendAdapter recommendAdapter;
 
     private Animation close_anim, open_anim;
+
+    private ArrayList<Reaction> reactionsFromEveryoneElse;
+    private Map<Reaction.ReactionType, Reaction> reactionMap;
 
     boolean isOpen = false;
 
@@ -228,7 +237,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        Map<Reaction.ReactionType, Reaction> reactionMap = ReactionHelper.getReactions(share, ParseUser.getCurrentUser());
+        reactionsFromEveryoneElse = new ArrayList<>();
+        getAllReactions(share);
 
         for (int i = 0; i < Reaction.TYPES.length; i++) {
             final Reaction.ReactionType type = Reaction.TYPES[i];
@@ -264,6 +274,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         setSupportActionBar(toolbar);
         queryComments();
 
+        renderFacePile();
+
     }
 
     @Override
@@ -275,6 +287,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     setReactionAnim(close_anim);
                     setReactionClickable(false);
 
+                    facepile.setVisibility(View.VISIBLE);
+
                     setClassificationVisibility(View.VISIBLE);
                     setClassificationAnim(open_anim);
                     setClassificationClickable(true);
@@ -284,6 +298,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     setReactionVisibility(View.VISIBLE);
                     setReactionAnim(open_anim);
                     setReactionClickable(true);
+
+                    facepile.setVisibility(View.GONE);
 
                     setClassificationVisibility(View.INVISIBLE);
                     setClassificationAnim(close_anim);
@@ -553,6 +569,61 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         commentAdapter.clear();
         queryComments();
         swipeContainer.setRefreshing(false);
+    }
+
+    public void getAllReactions(Share share) {
+        ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
+
+        reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
+
+        try {
+            List<Reaction> result = reactionQuery.find();
+            for (int i = 0; i < result.size(); i++) {
+                Reaction reaction = result.get(i);
+                if (reaction.getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+                    reactionMap.put(Reaction.stringToEnum(result.get(i).getType()), result.get(i));
+                } else {
+                    reactionsFromEveryoneElse.add(reaction);
+                }
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error finding reactions: " + e.getMessage());
+        }
+
+    }
+
+    private void renderFacePile() {
+        if (!reactionsFromEveryoneElse.isEmpty()) {
+            int faceIndex = 0;
+            ArrayList<String> alreadyPiledUserIds = new ArrayList<>();
+            for (Reaction reaction : reactionsFromEveryoneElse) {
+                ImageView target = null;
+                if (faceIndex == 0) {
+                    fp1.setVisibility(View.VISIBLE);
+                    target = fp1;
+                } else if (faceIndex == 1) {
+                    fp2.setVisibility(View.VISIBLE);
+                    target = fp2;
+                } else if (faceIndex == 2) {
+                    fp3.setVisibility(View.VISIBLE);
+                    target = fp3;
+                }
+
+                ParseUser reactionUser = reaction.getUser();
+                if (target != null && !alreadyPiledUserIds.contains(reactionUser.getObjectId())) {
+                    try {
+                        ParseFile profImage = reactionUser.fetchIfNeeded().getParseFile(User.KEY_PROFILEIMAGE);
+
+                        Glide.with(this).load(profImage.getUrl()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(target);
+
+                        alreadyPiledUserIds.add(reactionUser.getObjectId());
+                        faceIndex++;
+                    } catch (Exception e) {
+                        Log.d(TAG, "Issue loading images into facepile", e);
+                    }
+                }
+            }
+        }
     }
 
     private TextView getTextViewFromReactionType(Reaction.ReactionType type) {
