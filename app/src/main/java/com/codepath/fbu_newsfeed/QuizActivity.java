@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.fbu_newsfeed.Models.Quiz;
@@ -27,7 +28,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String TAG = "DetailActivity";
 
-    @BindView(R.id.ivQuizImage) ImageView ivQuizImage;
+    @BindView(R.id.ivQuizImage) CardView ivQuizImage;
+    @BindView(R.id.ivImage) ImageView ivImage;
     @BindView(R.id.tvQuizQuestion) TextView tvQuizQuestion;
     @BindView(R.id.tvQuizNewsTitle) TextView tvQuizNewsTitle;
     @BindView(R.id.btnTrue) Button btnTrue;
@@ -223,7 +225,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             ivQuizImage.setVisibility(View.INVISIBLE);
             //ivQuizImage.startAnimation(close_anim);
             if (image != null ) {
-                Glide.with(getBaseContext()).load(image.getUrl()).into(ivQuizImage);
+                Glide.with(getBaseContext()).load(image.getUrl()).into(ivImage);
             }
             ivQuizImage.setVisibility(View.VISIBLE);
             //ivQuizImage.startAnimation(open_anim);
