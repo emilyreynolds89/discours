@@ -19,7 +19,7 @@
         android:layout_marginEnd="12dp"
         android:background="@android:color/white"
         android:paddingTop="8dp"
-        android:paddingBottom="12dp"
+        android:paddingBottom="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -40,35 +40,43 @@
 
         <Button
             android:id="@+id/btnRequest"
-            android:layout_width="120dp"
+            android:layout_width="140dp"
             android:layout_height="30dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_accent_button"
             android:text="Request friend"
-            android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tvBio"
             app:layout_constraintTop_toBottomOf="@+id/tvBio" />
 
         <Button
             android:id="@+id/btnLogout"
-            android:layout_width="120dp"
+            android:layout_width="140dp"
             android:layout_height="30dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_accent_button"
             android:fontFamily="@font/lato"
             android:text="LOGOUT"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@+id/tvBio"
-            app:layout_constraintTop_toBottomOf="@+id/tvBio" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvBio"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/tvBio"
-            android:layout_width="200dp"
+            android:layout_width="236dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="48dp"
@@ -85,15 +93,15 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="14dp"
-            android:layout_marginBottom="8dp"
             android:fontFamily="@font/lato"
             android:foreground="?selectableItemBackground"
             android:text="View Friends"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/btnLogout"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/tvBio"
+            app:layout_constraintTop_toTopOf="@+id/btnLogout"
+            app:layout_constraintVertical_bias="0.5" />
 
         <TextView
             android:id="@+id/tvUsername"
@@ -115,7 +123,8 @@
             android:layout_height="110dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
-            android:layout_marginEnd="39dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvFullName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -138,20 +147,24 @@
             android:id="@+id/btnReport"
             android:layout_width="46dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
             android:adjustViewBounds="true"
             android:backgroundTint="@android:color/transparent"
             android:cropToPadding="false"
             android:scaleType="fitXY"
             android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
             app:srcCompat="@drawable/report" />
 
         <ImageButton
             android:id="@+id/btnUnfriend"
             android:layout_width="38dp"
             android:layout_height="34dp"
-            android:layout_marginEnd="36dp"
+            android:layout_marginEnd="54dp"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:padding="6dp"
@@ -165,14 +178,14 @@
 
         <ImageView
             android:id="@+id/ivBadge"
-            android:layout_width="40dp"
+            android:layout_width="36dp"
             android:layout_height="40dp"
             android:layout_marginTop="56dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/ivProfileImageNotif"
             app:layout_constraintTop_toTopOf="@+id/ivProfileImageNotif"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/badge" />
+            app:srcCompat="@drawable/medal" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -186,9 +199,9 @@
         android:background="#66E0E0E0"
         android:backgroundTintMode="screen"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/profileView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/profileView"
         app:layout_constraintTop_toTopOf="@+id/profileView">
 
         <ProgressBar

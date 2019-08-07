@@ -225,7 +225,7 @@ public class ProfileFragment extends Fragment {
                         return false;
                     }
                 });
-                tvFriends.setOnClickListener(new View.OnClickListener() {
+                btnRequest.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         friendsList();
