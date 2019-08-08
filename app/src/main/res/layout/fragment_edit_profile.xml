@@ -50,6 +50,7 @@
         android:layout_height="64dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:textCursorDrawable="@drawable/color_cursor"
         android:background="@drawable/rounded_edit_text"
         android:fontFamily="@font/lato"
         android:hint="Bio"

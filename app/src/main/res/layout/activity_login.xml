@@ -16,6 +16,7 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_edit_text"
         android:ems="10"
+        android:textCursorDrawable="@drawable/color_cursor"
         android:hint="Username"
         android:imeOptions="actionDone"
         android:inputType="text"
@@ -37,6 +38,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
+        android:textCursorDrawable="@drawable/color_cursor"
         android:background="@drawable/rounded_edit_text"
         android:ems="10"
         android:hint="Password"
@@ -115,6 +117,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.102"
-        app:srcCompat="@drawable/discours_logo_narrow" />
+        app:srcCompat="@drawable/new_discours_logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

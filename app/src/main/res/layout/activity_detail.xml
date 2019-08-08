@@ -504,6 +504,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:background="@drawable/rounded_edit_text"
             android:ems="10"
             android:fontFamily="@font/lato"
