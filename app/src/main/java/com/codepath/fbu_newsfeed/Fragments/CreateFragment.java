@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -52,6 +53,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -68,6 +70,7 @@ public class CreateFragment extends Fragment {
     private List<Article> articles;
 
     public @BindView(R.id.spArticleListCreate) Spinner spArticleListCreate;
+    public @BindView(R.id.articleSpinnerContainer) ConstraintLayout articleSpinnerContainer;
     public @BindView(R.id.ivArticlePreviewCreate) ImageView ivArticlePreviewCreate;
     public @BindView(R.id.tvArticleTitleCreate) TextView tvArticleTitleCreate;
     public @BindView(R.id.tvFactCheckCreate) TextView tvFactCheckCreate;
@@ -77,6 +80,8 @@ public class CreateFragment extends Fragment {
     public @BindView(R.id.btShareArticleCreate) Button btnShareCreate;
     public @BindView(R.id.etURLCreate) EditText etUrlCreate;
     public @BindView(R.id.tagSelector) Spinner tagSelector;
+    public @BindView(R.id.tagSpinnerContainer)
+    ConstraintLayout tagSpinnerContainer;
     public @BindView(R.id.progressBarHolder) FrameLayout progressBarHolder;
 
     private Unbinder unbinder;
@@ -121,7 +126,9 @@ public class CreateFragment extends Fragment {
         ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(2).setChecked(true);
 
         tagSelector.setVisibility(View.GONE);
+        tagSpinnerContainer.setVisibility(View.GONE);
         spArticleListCreate.setVisibility(View.VISIBLE);
+        articleSpinnerContainer.setVisibility(View.VISIBLE);
         etUrlCreate.setVisibility(View.VISIBLE);
 
         if (url != null) {
@@ -174,6 +181,13 @@ public class CreateFragment extends Fragment {
                 return;
             }
         });
+
+        tagList = new ArrayList<>();
+        queryTags();
+
+        tagAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, tagList);
+        tagAdapter.setDropDownViewResource(R.layout.spinner_item);
+        tagSelector.setAdapter(tagAdapter);
 
         btnShareCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,7 +245,7 @@ public class CreateFragment extends Fragment {
     }
 
 
-    public void setArticleView() {
+    private void setArticleView() {
         this.tvFactCheckCreate.setText(Fact.enumToString(selectedArticle.getTruth()));
         this.tvArticleTitleCreate.setText(selectedArticle.getTitle());
 
@@ -268,20 +282,15 @@ public class CreateFragment extends Fragment {
             parsedArticles.put(url, true);
             setArticleView();
         }
-        spArticleListCreate.setVisibility(View.INVISIBLE);
+        spArticleListCreate.setVisibility(View.GONE);
+        articleSpinnerContainer.setVisibility(View.GONE);
     }
 
 
 
     private void setUpTagSelector() {
         tagSelector.setVisibility(View.VISIBLE);
-        tagList = new ArrayList<>();
-
-        queryTags();
-
-        tagAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, tagList);
-        tagAdapter.setDropDownViewResource(R.layout.spinner_item);
-        tagSelector.setAdapter(tagAdapter);
+        tagSpinnerContainer.setVisibility(View.VISIBLE);
 
         tagSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -419,6 +428,7 @@ public class CreateFragment extends Fragment {
                             tagList.add(tag);
                         }
                     }
+                    Collections.sort(tagList);
                     tagAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getContext(), "Error searching by tag", Toast.LENGTH_SHORT).show();
@@ -549,8 +559,8 @@ public class CreateFragment extends Fragment {
                         fragment.selectedArticle = new Article(jSoupResult.getSourceUrl(), jSoupResult.getTitle(), jSoupResult.getImageUrl(), jSoupResult.getDescription(), Bias.intToEnum(intBias), Fact.stringToEnum(strFact), articleSource, "UNTAGGED");
                         fragment.selectedArticle.saveInBackground();
                         fragment.parsedArticles.put(jSoupResult.getSourceUrl(), true);
-                        fragment.setArticleView();
                         fragment.setUpTagSelector();
+                        fragment.setArticleView();
                     }
 
                 } else {
