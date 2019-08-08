@@ -15,6 +15,7 @@ import com.codepath.fbu_newsfeed.Adapters.UserAdapter;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.User;
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -101,7 +102,7 @@ public class FriendsListActivity extends AppCompatActivity {
         return query.getFirst();
     }
 
-    private void queryFriends(ParseUser user, int offset) {
+    private void queryFriends(final ParseUser user, int offset) {
         ParseQuery<Friendship> query1 = ParseQuery.getQuery("Friendship");
         query1.whereEqualTo(Friendship.KEY_USER1, user);
         query1.whereEqualTo(Friendship.KEY_STATE, Friendship.stateEnumToInt(Friendship.State.Accepted));
@@ -122,18 +123,23 @@ public class FriendsListActivity extends AppCompatActivity {
         mainQuery.setSkip(User.LIMIT * offset);
 
         try {
-            List<Friendship> result = mainQuery.find();
-            Log.d(TAG, "Found " + result.size() + " friendships");
-            for (int i = 0; i < result.size(); i++) {
-                Friendship friendship = result.get(i);
-                if (friendship.isUser1(user)) {
-                    friends.add(friendship.getUser2());
-                } else {
-                    friends.add(friendship.getUser1());
+            mainQuery.findInBackground(new FindCallback<Friendship>() {
+                @Override
+                public void done(List<Friendship> result, ParseException e) {
+                    Log.d(TAG, "Found " + result.size() + " friendships");
+                    for (int i = 0; i < result.size(); i++) {
+                        Friendship friendship = result.get(i);
+                        if (friendship.isUser1(user)) {
+                            friends.add(friendship.getUser2());
+                        } else {
+                            friends.add(friendship.getUser1());
+                        }
+                        Log.d(TAG, "Found " + friends.size() + " friends");
+                    }
+                    userAdapter.notifyDataSetChanged();
                 }
-                Log.d(TAG, "Found " + friends.size() + " friends");
-            }
-            userAdapter.notifyDataSetChanged();
+            });
+
         } catch(Exception e) {
             Log.d(TAG, "Error retrieving friends: " + e.getMessage());
 
