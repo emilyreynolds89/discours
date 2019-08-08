@@ -137,7 +137,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
             android:fontFamily="@font/lato"
-            android:padding="2dp"
+            android:padding="4dp"
             android:text="Source"
             android:textColor="@color/colorBaseText"
             android:textSize="12sp"
@@ -154,7 +154,8 @@
             android:layout_marginBottom="12dp"
             android:fontFamily="@font/lato"
             android:foreground="?selectableItemBackground"
-            android:padding="2dp"
+            android:padding="4dp"
+            android:paddingStart="0dp"
             android:text="Tag"
             android:textColor="@color/colorBaseText"
             android:textSize="12sp"
@@ -211,13 +212,14 @@
 
     <ImageButton
         android:id="@+id/ibReactionLike"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         android:visibility="invisible"
+        android:padding="4dp"
         app:layout_constraintStart_toEndOf="@+id/ibReactionExpand"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
         app:srcCompat="@drawable/like" />
@@ -239,13 +241,14 @@
 
     <ImageButton
         android:id="@+id/ibReactionDislike"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         android:visibility="invisible"
+        android:padding="4dp"
         app:layout_constraintStart_toEndOf="@+id/ibReactionLike"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
         app:srcCompat="@drawable/dislike" />
@@ -267,13 +270,14 @@
 
     <ImageButton
         android:id="@+id/ibReactionHappy"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         android:visibility="invisible"
+        android:padding="4dp"
         app:layout_constraintStart_toEndOf="@+id/ibReactionDislike"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
         app:srcCompat="@drawable/happiness" />
@@ -295,13 +299,14 @@
 
     <ImageButton
         android:id="@+id/ibReactionSad"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         android:visibility="invisible"
+        android:padding="4dp"
         app:layout_constraintStart_toEndOf="@+id/ibReactionHappy"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
         app:srcCompat="@drawable/embarrassed" />
@@ -323,13 +328,14 @@
 
     <ImageButton
         android:id="@+id/ibReactionAngry"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         android:visibility="invisible"
+        android:padding="4dp"
         app:layout_constraintStart_toEndOf="@+id/ibReactionSad"
         app:layout_constraintTop_toBottomOf="@+id/viewArticle"
         app:srcCompat="@drawable/angry" />
