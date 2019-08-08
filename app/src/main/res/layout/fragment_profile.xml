@@ -189,33 +189,32 @@
             app:layout_constraintVertical_bias="1.0"
             app:srcCompat="@drawable/medal" />
 
+        <FrameLayout
+            android:id="@+id/progressBarHolder"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:alpha="1"
+            android:animateLayoutChanges="true"
+            android:background="@android:color/transparent"
+            android:backgroundTintMode="screen"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorAccentBold"
+                android:visibility="visible" />
+
+        </FrameLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <FrameLayout
-        android:id="@+id/progressBarHolder"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:alpha="1"
-        android:animateLayoutChanges="true"
-        android:background="#66E0E0E0"
-        android:backgroundTintMode="screen"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/profileView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/profileView">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/colorAccentBold" />
-
-    </FrameLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
