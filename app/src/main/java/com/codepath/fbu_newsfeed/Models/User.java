@@ -2,6 +2,7 @@ package com.codepath.fbu_newsfeed.Models;
 
 import android.util.Log;
 
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -99,7 +100,7 @@ public class User extends ParseUser implements Serializable {
             Log.d("User", this.getUsername() + " has shared " + results.size() + " articles");
             if (queryFacts) {
                 for (Share share : results) {
-                    Article article = getArticle(share.getArticle().getObjectId());
+                    Article article = share.getArticle().fetchIfNeeded();
                     if (article.getTruth().equals(Fact.TruthLevel.OPINION) || article.getTruth().equals(Fact.TruthLevel.UNPROVEN)) {
                         results.remove(share);
                     }
@@ -138,30 +139,30 @@ public class User extends ParseUser implements Serializable {
         }
     }
 
-    private Article getArticle(String article_id) throws ParseException {
-        ParseQuery<Article> query = ParseQuery.getQuery(Article.class);
-        query.include("tag");
-        query.include("sourceObject");
-        query.whereEqualTo("objectId", article_id);
-        return query.getFirst();
-    }
 
     public void setFavoriteStats() {
         ParseQuery<Share> query = ParseQuery.getQuery(Share.class);
+        query.include(Share.KEY_ARTICLE);
+
         query.whereEqualTo("user", this);
+
         try {
             List<Share> results = query.find();
             Map<String, Integer> tags = new HashMap<>();
             Map<String, Integer> sources = new HashMap<>();
             Map<Integer, Integer> biases = new HashMap<>();
             Map<Integer, Integer> facts = new HashMap<>();
-            for(Share share: results) {
-                Article article = getArticle(share.getArticle().getObjectId());
+            for (Share share : results) {
+                Article article = share.getArticle();
 
                 String tag = article.getTag();
                 updateStringMap(tags, tag);
-                String source = article.getSource().getFullName();
-                updateStringMap(sources, source);
+                try {
+                    String source = ((Source) article.getSource().fetchIfNeeded()).getFullName();
+                    updateStringMap(sources, source);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
 
                 Integer bias = Bias.enumToInt(article.getBias());
                 updateIntMap(biases, bias);
@@ -175,7 +176,7 @@ public class User extends ParseUser implements Serializable {
 
             setBiasAverage(biasAverage);
             setFactAverage(factAverage);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
