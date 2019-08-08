@@ -19,7 +19,7 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
         super.onCreate(savedInstanceState);
 
         AhoyOnboarderCard ahoyOnboarderCard1 = new AhoyOnboarderCard("Fake News", "More Americans think fake news is a bigger problem than racism, climate change, and illegal immigration.", R.drawable.shareimg5);
-        AhoyOnboarderCard ahoyOnboarderCard2 = new AhoyOnboarderCard("Solution", "Our app is designed for promoting healthy discussions with friends about news.", R.drawable.img3);
+        AhoyOnboarderCard ahoyOnboarderCard2 = new AhoyOnboarderCard("Solution", "Our app is designed for promoting healthy discussions with friends about news.", R.drawable.boards4);
         AhoyOnboarderCard ahoyOnboarderCard3 = new AhoyOnboarderCard("Sharing", "Post any article from the web instantly using Web Share.", R.drawable.boards3);
 
         ahoyOnboarderCard1.setBackgroundColor(R.color.white);
@@ -27,7 +27,7 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
         ahoyOnboarderCard3.setBackgroundColor(R.color.white);
 
         ahoyOnboarderCard1.setIconLayoutParams(750, 1100, 8, 8, 8, 8);
-        ahoyOnboarderCard2.setIconLayoutParams(570, 1100, 8, 8, 8, 8);
+        ahoyOnboarderCard2.setIconLayoutParams(915, 1100, 8, 8, 8, 8);
         ahoyOnboarderCard3.setIconLayoutParams(915, 1100, 8, 8, 8, 8);
 
         List<AhoyOnboarderCard> pages = new ArrayList<>();
@@ -47,7 +47,7 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
         List<Integer> colorList = new ArrayList<>();
         colorList.add(R.color.colorBoardBad);
         colorList.add(R.color.colorAccentDark);
-        colorList.add(R.color.colorBoardGood);
+        colorList.add(R.color.colorAccentBold);
 
         setColorBackground(colorList);
         setInactiveIndicatorColor(R.color.grey_600);
