@@ -20,6 +20,7 @@
         android:background="@android:color/white"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
+        android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -40,7 +41,7 @@
 
         <Button
             android:id="@+id/btnRequest"
-            android:layout_width="140dp"
+            android:layout_width="120dp"
             android:layout_height="30dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="12dp"
@@ -58,7 +59,7 @@
 
         <Button
             android:id="@+id/btnLogout"
-            android:layout_width="140dp"
+            android:layout_width="120dp"
             android:layout_height="30dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
@@ -76,14 +77,14 @@
 
         <TextView
             android:id="@+id/tvBio"
-            android:layout_width="236dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="48dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="@font/lato"
             android:text="TextView"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/btnLogout"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tvFullName"
             app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
@@ -178,42 +179,42 @@
 
         <ImageView
             android:id="@+id/ivBadge"
-            android:layout_width="36dp"
-            android:layout_height="40dp"
+            android:layout_width="44dp"
+            android:layout_height="48dp"
             android:layout_marginTop="56dp"
+            android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/ivProfileImageNotif"
             app:layout_constraintTop_toTopOf="@+id/ivProfileImageNotif"
             app:layout_constraintVertical_bias="1.0"
             app:srcCompat="@drawable/medal" />
 
+        <FrameLayout
+            android:id="@+id/progressBarHolder"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:alpha="1"
+            android:animateLayoutChanges="true"
+            android:background="@android:color/transparent"
+            android:backgroundTintMode="screen"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorAccentBold"
+                android:visibility="visible" />
+
+        </FrameLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <FrameLayout
-        android:id="@+id/progressBarHolder"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:alpha="1"
-        android:animateLayoutChanges="true"
-        android:background="#66E0E0E0"
-        android:backgroundTintMode="screen"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/profileView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/profileView">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/colorAccentBold" />
-
-    </FrameLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"

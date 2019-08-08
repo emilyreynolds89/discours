@@ -2,31 +2,29 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="206dp"
+    android:layout_width="196dp"
     android:layout_height="wrap_content"
     android:layout_marginLeft="2dp"
     android:layout_marginTop="2dp"
     android:layout_marginRight="2dp"
     android:layout_marginBottom="2dp"
     android:background="@drawable/rounded_trend_item"
-    android:paddingTop="8dp"
+    android:elevation="1dp"
     android:paddingBottom="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewArticle"
-        android:layout_width="184dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:background="@drawable/border"
         android:foreground="?android:attr/selectableItemBackground"
+        android:paddingBottom="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvArticleImage"
-            android:layout_width="164dp"
+            android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -43,8 +41,9 @@
                 android:id="@+id/ivArticleImageTrends"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
 
+                android:scaleType="centerCrop"
                 app:srcCompat="@android:color/black" />
         </androidx.cardview.widget.CardView>
 
@@ -68,7 +67,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cvArticleImage" />
 
         <TextView
-            android:id="@+id/tvSourceTrends"
+            android:id="@+id/tvTagTrends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -81,17 +80,13 @@
             android:textSize="11sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/tvArticleTitleTrends"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/tvArticleTitleTrends"
             app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleTrends" />
 
         <TextView
-            android:id="@+id/tvTagTrends"
+            android:id="@+id/tvSourceTrends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="104dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="@font/lato"
@@ -100,30 +95,34 @@
             android:textColor="@color/colorBaseText"
             android:textSize="11sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ibReportArticle"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/tvSourceTrends"
-            app:layout_constraintTop_toBottomOf="@+id/tvSourceTrends"
-            app:layout_constraintVertical_bias="0.100000024" />
-
-        <ImageButton
-            android:id="@+id/ibReportArticle"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="6dp"
-            android:layout_marginBottom="6dp"
-            android:background="@android:color/transparent"
-            android:padding="2dp"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleTrends"
-            app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/report" />
+            app:layout_constraintStart_toStartOf="@+id/tvArticleTitleTrends"
+            app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleTrends" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/lineView"
+        android:layout_width="60dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/colorBorder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewArticle" />
+
+    <ImageButton
+        android:id="@+id/ibReportArticle"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/transparent"
+        android:padding="2dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/tvFactRatingTrends"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvFactRatingTrends"
+        app:srcCompat="@drawable/report" />
 
     <TextView
         android:id="@+id/tvFactRatingTrends"
@@ -156,14 +155,15 @@
         android:id="@+id/ibInformation"
         android:layout_width="22dp"
         android:layout_height="22dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:background="#00FFFFFF"
         android:padding="2dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/viewArticle"
-        app:layout_constraintTop_toBottomOf="@+id/viewArticle"
+        app:layout_constraintTop_toBottomOf="@+id/lineView"
         app:srcCompat="@drawable/question" />
 
 

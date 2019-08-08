@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -129,8 +130,6 @@ public class ProfileFragment extends Fragment {
         this.shareAdapter.clear();
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvProfilePosts.setLayoutManager(linearLayoutManager);
-
-        queryShares(true, 0);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -268,6 +267,27 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (nextAnim == 0) {
+            return super.onCreateAnimation(transit, enter, nextAnim);
+        }
+
+        Animation anim = android.view.animation.AnimationUtils.loadAnimation(getContext(), nextAnim);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                queryShares(true, 0);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        return anim;
     }
 
     private void unfriend() {

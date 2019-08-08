@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
 import com.codepath.fbu_newsfeed.Models.Article;
 import com.codepath.fbu_newsfeed.R;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -96,15 +98,20 @@ public class ArticleSearchFragment extends Fragment {
         titleQuery.orderByDescending("createdAt");
 
         try {
-            List<Article> result = titleQuery.find();
-            if (result.size() > 0) {
-                tvError.setVisibility(View.GONE);
-                rvResults.setVisibility(View.VISIBLE);
-                trendsAdapter.addAll(result);
-            } else {
-                rvResults.setVisibility(View.GONE);
-                tvError.setVisibility(View.VISIBLE);
-            }
+            titleQuery.findInBackground(new FindCallback<Article>() {
+                @Override
+                public void done(List<Article> objects, ParseException e) {
+                    if (objects.size() > 0) {
+                        tvError.setVisibility(View.GONE);
+                        rvResults.setVisibility(View.VISIBLE);
+                        trendsAdapter.addAll(objects);
+                    } else {
+                        rvResults.setVisibility(View.GONE);
+                        tvError.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
         } catch(Exception e) {
             Toast.makeText(getContext(), "Error searching articles", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Error searching articles " + e.getMessage());

@@ -63,7 +63,7 @@
         android:fontFamily="@font/lato"
         android:foreground="?selectableItemBackground"
         android:text="Click here!"
-        android:textColor="@color/colorHeadlineText"
+        android:textColor="@color/colorAccentDark"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/view5"
         app:layout_constraintTop_toBottomOf="@id/view5" />
