@@ -267,11 +267,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                             setReactionAnim(close_anim);
                             setReactionClickable(false);
 
-                            facepile.setVisibility(View.VISIBLE);
-
                             setClassificationVisibility(View.VISIBLE);
                             setClassificationAnim(open_anim);
                             setClassificationClickable(true);
+
+                            facepile.startAnimation(open_anim);
+                            facepile.setVisibility(View.VISIBLE);
 
                             isOpen = false;
                         } else {
@@ -279,11 +280,12 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                             setReactionAnim(open_anim);
                             setReactionClickable(true);
 
-                            facepile.setVisibility(View.GONE);
-
                             setClassificationVisibility(View.GONE);
                             setClassificationAnim(close_anim);
                             setClassificationClickable(false);
+
+                            facepile.startAnimation(close_anim);
+                            facepile.setVisibility(View.GONE);
 
                             isOpen = true;
                         }

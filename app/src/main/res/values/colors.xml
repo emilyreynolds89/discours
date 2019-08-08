@@ -13,7 +13,10 @@
     <color name="colorAccentBold">#70E7CA</color>
     <color name="colorAccentLight">#BEF8EA</color>
     <color name="colorAccentExLight">#CEFCF0</color>
+    <color name="colorAccentMuted">#a9ded1</color>
     <color name="colorBorder">#DBDBDB</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorBoardBad">#00836D</color>
+    <color name="colorBoardBad">#26a38d</color>
+    <color name="colorBoardGood">#30C9AD</color>
+
 </resources>

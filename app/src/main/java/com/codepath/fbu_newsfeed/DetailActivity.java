@@ -290,11 +290,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     setReactionAnim(close_anim);
                     setReactionClickable(false);
 
-                    facepile.setVisibility(View.VISIBLE);
-
                     setClassificationVisibility(View.VISIBLE);
                     setClassificationAnim(open_anim);
                     setClassificationClickable(true);
+
+                    facepile.setVisibility(View.VISIBLE);
 
                     isOpen = false;
                 } else {
@@ -302,11 +302,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     setReactionAnim(open_anim);
                     setReactionClickable(true);
 
-                    facepile.setVisibility(View.GONE);
-
                     setClassificationVisibility(View.INVISIBLE);
                     setClassificationAnim(close_anim);
                     setClassificationClickable(false);
+
+                    facepile.setVisibility(View.GONE);
 
                     isOpen = true;
                 }

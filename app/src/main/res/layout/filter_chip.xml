@@ -3,12 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.MaterialComponents.Chip.Filter"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="32dp"
     android:layout_marginRight="8dp"
-    app:backgroundTint="@color/colorAccentLight"
+    android:textSize="12sp"
     android:fontFamily="@font/lato"
     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-    android:textColor="@color/colorBaseText"
-    app:chipIconTint="@color/colorBaseText">
+    android:textColor="@color/white"
+    app:checkedIcon="@drawable/checkmark"
+    app:checkedIconEnabled="false"
+    app:checkedIconVisible="false"
+    app:chipBackgroundColor="@drawable/filter_color_state_list"
+    app:chipIconEnabled="false"
+    app:chipIconTint="@color/white"
+    app:chipIconVisible="true">
 
 </com.google.android.material.chip.Chip>

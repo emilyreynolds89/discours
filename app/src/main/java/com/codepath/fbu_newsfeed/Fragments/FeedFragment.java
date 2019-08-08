@@ -1,5 +1,6 @@
 package com.codepath.fbu_newsfeed.Fragments;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,11 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,6 +55,8 @@ public class FeedFragment extends Fragment {
     @BindView(R.id.rvShares) RecyclerView rvShares;
     @BindView(R.id.tvNoContent) TextView tvNoContent;
     @BindView(R.id.filterChipGroup) ChipGroup filterChipGroup;
+    @BindView(R.id.filterChipLayout)
+    ConstraintLayout filterChipLayout;
     @BindView(R.id.filterSubmit)
     Button filterSubmit;
 
@@ -168,10 +173,10 @@ public class FeedFragment extends Fragment {
     }
 
     private void toggleFilter() {
-        if (filterChipGroup.getVisibility() == View.GONE) {
-            filterChipGroup.setVisibility(View.VISIBLE);
+        if (filterChipLayout.getVisibility() == View.GONE) {
+            filterChipLayout.setVisibility(View.VISIBLE);
         } else {
-            filterChipGroup.setVisibility(View.GONE);
+            filterChipLayout.setVisibility(View.GONE);
         }
     }
 
@@ -182,6 +187,18 @@ public class FeedFragment extends Fragment {
                 Chip chip = (Chip) inflater.inflate(R.layout.filter_chip, null, false);
                 chip.setChecked(true);
                 chip.setText(tag);
+
+                chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if (!b) {
+                            compoundButton.setPaintFlags(compoundButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        } else {
+                            compoundButton.setPaintFlags(compoundButton.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+                        }
+                    }
+                });
+
                 filterChipGroup.addView(chip, 0);
 
                 tagMap.put(tag, chip);
