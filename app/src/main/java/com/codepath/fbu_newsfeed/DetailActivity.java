@@ -65,6 +65,7 @@ import com.parse.SaveCallback;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -124,7 +125,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     private Animation close_anim, open_anim;
 
     private ArrayList<Reaction> reactionsFromEveryoneElse;
-    private Map<Reaction.ReactionType, Reaction> reactionMap;
+    private Map<Reaction.ReactionType, Reaction> reactionMap = new HashMap<>();
 
     boolean isOpen = false;
 
@@ -576,7 +577,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
     public void getAllReactions(Share share) {
         ParseQuery<Reaction> reactionQuery = ParseQuery.getQuery(Reaction.class);
-
+        reactionQuery.include(Reaction.KEY_USER);
         reactionQuery.whereEqualTo(Reaction.KEY_SHARE, share);
 
         try {
