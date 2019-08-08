@@ -53,6 +53,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -427,6 +428,7 @@ public class CreateFragment extends Fragment {
                             tagList.add(tag);
                         }
                     }
+                    Collections.sort(tagList);
                     tagAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getContext(), "Error searching by tag", Toast.LENGTH_SHORT).show();
