@@ -9,7 +9,8 @@
     android:background="@android:color/white"
     android:orientation="vertical"
     android:paddingBottom="12dp"
-    android:clipToPadding="false">
+    android:clipToPadding="false"
+    android:elevation="1dp">
 
     <ImageView
         android:id="@+id/ivProfileImageNotif"
@@ -62,7 +63,8 @@
         android:background="@drawable/border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCaption">
+        app:layout_constraintTop_toBottomOf="@+id/tvCaption"
+        android:elevation="1dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvArticleImage"
@@ -179,7 +181,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         android:visibility="visible"
