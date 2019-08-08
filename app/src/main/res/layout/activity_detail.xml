@@ -154,7 +154,7 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="12dp"
                         android:fontFamily="@font/lato"
-                        android:padding="2dp"
+                        android:padding="4dp"
                         android:text="Source"
                         android:textColor="@color/colorBaseText"
                         android:textSize="12sp"
@@ -175,7 +175,8 @@
                         android:focusable="true"
                         android:fontFamily="@font/lato"
                         android:foreground="?selectableItemBackground"
-                        android:padding="2dp"
+                        android:padding="4dp"
+                        android:paddingStart="0dp"
                         android:text="Tag"
                         android:textColor="@color/colorBaseText"
                         android:textSize="12sp"
@@ -234,13 +235,14 @@
 
                 <ImageButton
                     android:id="@+id/ibReactionLike"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitXY"
                     android:visibility="invisible"
+                    android:padding="4dp"
                     app:layout_constraintStart_toEndOf="@+id/ibReactionExpand"
                     app:layout_constraintTop_toBottomOf="@+id/viewArticle"
                     app:srcCompat="@drawable/like" />
@@ -262,13 +264,14 @@
 
                 <ImageButton
                     android:id="@+id/ibReactionDislike"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitXY"
                     android:visibility="invisible"
+                    android:padding="4dp"
                     app:layout_constraintStart_toEndOf="@+id/ibReactionLike"
                     app:layout_constraintTop_toBottomOf="@+id/viewArticle"
                     app:srcCompat="@drawable/dislike" />
@@ -290,13 +293,14 @@
 
                 <ImageButton
                     android:id="@+id/ibReactionHappy"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitXY"
                     android:visibility="invisible"
+                    android:padding="4dp"
                     app:layout_constraintStart_toEndOf="@+id/ibReactionDislike"
                     app:layout_constraintTop_toBottomOf="@+id/viewArticle"
                     app:srcCompat="@drawable/happiness" />
@@ -318,13 +322,14 @@
 
                 <ImageButton
                     android:id="@+id/ibReactionSad"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitXY"
                     android:visibility="invisible"
+                    android:padding="4dp"
                     app:layout_constraintStart_toEndOf="@+id/ibReactionHappy"
                     app:layout_constraintTop_toBottomOf="@+id/viewArticle"
                     app:srcCompat="@drawable/embarrassed" />
@@ -346,13 +351,14 @@
 
                 <ImageButton
                     android:id="@+id/ibReactionAngry"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitXY"
                     android:visibility="invisible"
+                    android:padding="4dp"
                     app:layout_constraintStart_toEndOf="@+id/ibReactionSad"
                     app:layout_constraintTop_toBottomOf="@+id/viewArticle"
                     app:srcCompat="@drawable/angry" />
@@ -494,7 +500,7 @@
         <EditText
             android:id="@+id/etComment"
             android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
@@ -516,20 +522,19 @@
         <Button
             android:id="@+id/btnSubmit"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_accent_button"
             android:fontFamily="@font/lato"
             android:text="Submit"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/etComment"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/etComment"
             app:layout_constraintTop_toTopOf="@+id/etComment"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.5" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

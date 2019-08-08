@@ -1,12 +1,5 @@
 package com.codepath.fbu_newsfeed;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,17 +7,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
 import com.codepath.fbu_newsfeed.Helpers.BiasHelper;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.Models.Article;
-import com.codepath.fbu_newsfeed.Models.Fact;
 import com.codepath.fbu_newsfeed.Models.Source;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
@@ -33,6 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class SourceActivity extends AppCompatActivity {
 
@@ -83,7 +79,7 @@ public class SourceActivity extends AppCompatActivity {
         BiasHelper.setBiasImageView(ivBias, biasValue);
 
         if (source.getLogo() != null)
-            Glide.with(this).load(source.getLogo().getUrl()).into(ivSourceLogo);
+            Glide.with(this).load(source.getLogo().getUrl()).transform(new RoundedCornersTransformation(12, 0)).into(ivSourceLogo);
 
         querySourceArticles(0);
 
