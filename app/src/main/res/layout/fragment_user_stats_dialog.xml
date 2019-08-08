@@ -133,11 +133,10 @@
 
     <TextView
         android:id="@+id/tvLiberal"
-        android:layout_width="48dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/lato"
-        android:gravity="center"
         android:text="Liberal"
         android:textColor="@color/colorLightText"
         android:textSize="10sp"
@@ -146,9 +145,9 @@
 
     <TextView
         android:id="@+id/tvSLiberal"
-        android:layout_width="48dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/lato"
@@ -163,9 +162,9 @@
 
     <TextView
         android:id="@+id/tvModerate"
-        android:layout_width="48dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="22dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/lato"
         android:gravity="center"
@@ -177,9 +176,9 @@
 
     <TextView
         android:id="@+id/tvSConservative"
-        android:layout_width="48dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="22dp"
         android:fontFamily="@font/lato"
         android:gravity="center"
         android:text="S. Conserv."
@@ -190,9 +189,9 @@
 
     <TextView
         android:id="@+id/tvConservative"
-        android:layout_width="48dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="22dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/lato"
         android:gravity="center"
@@ -201,6 +200,7 @@
         android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/pbBiasAverage"
         app:layout_constraintEnd_toEndOf="@+id/pbBiasAverage"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/tvSConservative" />
 
     <TextView
