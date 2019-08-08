@@ -33,39 +33,41 @@
             android:layout_marginEnd="16dp"
             android:text="TextView"
             android:textColor="@color/colorHeadlineText"
-            android:textSize="16sp"
+            android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/ivSourceLogo"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivSourceLogo"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvSourceDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:ellipsize="end"
             android:lines="8"
             android:maxLines="10"
             android:text="TextView"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/ivSourceLogo"
-            app:layout_constraintStart_toStartOf="@+id/tvSourceName"
-            app:layout_constraintTop_toBottomOf="@+id/tvSourceName" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivSourceLogo"
+            app:lineHeight="18sp" />
 
         <ImageView
             android:id="@+id/ivSourceLogo"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
             android:adjustViewBounds="true"
             android:background="@android:color/white"
             android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -73,7 +75,8 @@
             android:id="@+id/tvFactRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             android:fontFamily="@font/lato"
             android:foreground="?selectableItemBackground"
@@ -81,19 +84,20 @@
             android:text="TextView"
             android:textAllCaps="true"
             android:textColor="@color/colorHeadlineText"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/ivBias"
-            app:layout_constraintStart_toStartOf="@+id/ivSourceLogo"
-            app:layout_constraintTop_toBottomOf="@+id/ivSourceLogo" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/ivSourceLogo"
+            app:layout_constraintTop_toBottomOf="@+id/tvSourceName" />
 
         <ImageView
             android:id="@+id/ivBias"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="12dp"
             android:foreground="?selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="@+id/tvFactRating"
-            app:layout_constraintEnd_toEndOf="@+id/ivSourceLogo"
             app:layout_constraintStart_toEndOf="@+id/tvFactRating"
             app:layout_constraintTop_toTopOf="@+id/tvFactRating" />
     </androidx.constraintlayout.widget.ConstraintLayout>
