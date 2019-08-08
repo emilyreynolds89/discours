@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 
 import com.codemybrainsout.onboarder.AhoyOnboarderActivity;
 import com.codemybrainsout.onboarder.AhoyOnboarderCard;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;

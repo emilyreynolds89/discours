@@ -3,7 +3,12 @@
     android:id="@+id/tvItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorBackground"
+    android:foreground="?selectableItemBackground"
+    android:backgroundTint="@color/white"
     android:fontFamily="@font/lato"
-    android:padding="10dp"
-    android:textColor="@color/colorBaseText" />
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingStart="16dp"
+    android:textColor="@color/colorBaseText"
+    android:singleLine="true"
+    android:ellipsize="end" />

@@ -8,13 +8,21 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackground">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/white"
             android:clipToPadding="false"
-            android:padding="16dp"
+            android:elevation="1dp"
+            android:paddingStart="16dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,19 +51,28 @@
                 app:layout_constraintBottom_toTopOf="@+id/tvArticleTitleCreate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spArticleListCreate"
+                app:layout_constraintTop_toBottomOf="@+id/articleSpinnerContainer"
                 tools:srcCompat="@drawable/news_placeholder" />
 
-            <Spinner
-                android:id="@+id/tagSelector"
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/tagSpinnerContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:foregroundTint="@android:color/white"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_edit_text"
                 app:layout_constraintEnd_toEndOf="@+id/view"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@id/ibInformation" />
+                app:layout_constraintTop_toBottomOf="@id/ibInformation">
+
+                <Spinner
+                    android:id="@+id/tagSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <EditText
                 android:id="@+id/etCaptionCreate"
@@ -64,7 +81,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/rounded_edit_text"
-                android:textCursorDrawable="@drawable/color_cursor"
                 android:ems="10"
                 android:fontFamily="@font/lato"
                 android:gravity="top|left"
@@ -75,12 +91,12 @@
                 android:maxLines="4"
                 android:padding="8dp"
                 android:paddingStart="10dp"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/btShareArticleCreate"
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/tagSelector" />
+                app:layout_constraintTop_toBottomOf="@id/tagSpinnerContainer" />
 
             <TextView
                 android:id="@+id/tvFactCheckCreate"
@@ -120,13 +136,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
                 android:background="@drawable/rounded_accent_button"
                 android:fontFamily="@font/lato"
                 android:text="Share Article"
                 android:textAllCaps="true"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etCaptionCreate" />
@@ -160,19 +174,29 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvArticleTitleCreate" />
 
-            <Spinner
-                android:id="@+id/spArticleListCreate"
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/articleSpinnerContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginBottom="9dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/rounded_edit_text"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 app:layout_constraintBottom_toTopOf="@+id/ivArticlePreviewCreate"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toEndOf="@+id/etURLCreate"
+                app:layout_constraintStart_toStartOf="@+id/etURLCreate">
+
+                <Spinner
+                    android:id="@+id/spArticleListCreate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="4dp"
+                    android:paddingStart="12dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <EditText
                 android:id="@+id/etURLCreate"
@@ -180,11 +204,10 @@
                 android:layout_height="35dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginBottom="9dp"
                 android:background="@drawable/rounded_edit_text"
-                android:textCursorDrawable="@drawable/color_cursor"
                 android:ems="10"
                 android:fontFamily="@font/lato"
                 android:hint="URL"
@@ -192,28 +215,32 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:padding="8dp"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toTopOf="@+id/ivArticlePreviewCreate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spArticleListCreate" />
+                app:layout_constraintTop_toBottomOf="@id/articleSpinnerContainer" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <FrameLayout
             android:id="@+id/progressBarHolder"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:alpha="1"
+            android:elevation="5dp"
             android:animateLayoutChanges="true"
             android:background="#66E0E0E0"
             android:backgroundTintMode="screen"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
             <ProgressBar
                 android:id="@+id/progressBar"
