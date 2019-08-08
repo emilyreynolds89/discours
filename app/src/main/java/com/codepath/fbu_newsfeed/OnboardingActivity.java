@@ -5,21 +5,32 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.codemybrainsout.onboarder.AhoyOnboarderActivity;
 import com.codemybrainsout.onboarder.AhoyOnboarderCard;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OnboardingActivity extends AhoyOnboarderActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        if (currentUser == null) {
+            final Intent intent = new Intent(OnboardingActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         AhoyOnboarderCard ahoyOnboarderCard1 = new AhoyOnboarderCard("Fake News", "More Americans think fake news is a bigger problem than racism, climate change, and illegal immigration.", R.drawable.shareimg5);
-        AhoyOnboarderCard ahoyOnboarderCard2 = new AhoyOnboarderCard("Solution", "Our app is designed for promoting healthy discussions with friends about news.", R.drawable.boards4);
+        AhoyOnboarderCard ahoyOnboarderCard2 = new AhoyOnboarderCard("Solution", "Our app is designed for promoting healthy discussions with friends about news.", R.drawable.boards13);
         AhoyOnboarderCard ahoyOnboarderCard3 = new AhoyOnboarderCard("Sharing", "Post any article from the web instantly using Web Share.", R.drawable.boards3);
 
         ahoyOnboarderCard1.setBackgroundColor(R.color.white);
@@ -27,7 +38,7 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
         ahoyOnboarderCard3.setBackgroundColor(R.color.white);
 
         ahoyOnboarderCard1.setIconLayoutParams(750, 1100, 8, 8, 8, 8);
-        ahoyOnboarderCard2.setIconLayoutParams(915, 1100, 8, 8, 8, 8);
+        ahoyOnboarderCard2.setIconLayoutParams(915, 1050, 8, 8, 8, 8);
         ahoyOnboarderCard3.setIconLayoutParams(915, 1100, 8, 8, 8, 8);
 
         List<AhoyOnboarderCard> pages = new ArrayList<>();
@@ -53,8 +64,8 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
         setInactiveIndicatorColor(R.color.grey_600);
         setActiveIndicatorColor(R.color.white);
 
-        Typeface face = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
-        setFont(face);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.lato);
+        setFont(typeface);
         setFinishButtonDrawableStyle(ContextCompat.getDrawable(this, R.drawable.finish_button));
 
         setOnboardPages(pages);
