@@ -86,6 +86,9 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
     @BindView(R.id.shareConstraintLayout) ConstraintLayout shareConstraintLayout;
     @BindView(R.id.sliding_layout) SlidingUpPanelLayout slidingLayout;
 
+    @BindView(R.id.miReportArticle) ImageButton miReportArticle;
+    @BindView(R.id.miBookmark) ImageButton miBookmark;
+
     private String url;
     private Article article;
     private Share share;
@@ -134,7 +137,6 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
 
         setSupportActionBar(toolbar);
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
@@ -204,20 +206,28 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_browser, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        return true;
-    }
+        miBookmark.setVisibility(View.VISIBLE);
+        miReportArticle.setVisibility(View.VISIBLE);
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.miReportArticle:
+        miBookmark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: bookmark articles
+            }
+        });
+
+
+        miReportArticle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 reportArticle();
-                return false;
-        }
-        return false;
+            }
+        });
+
+        return true;
     }
 
     @Override

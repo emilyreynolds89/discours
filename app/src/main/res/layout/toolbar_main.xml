@@ -22,4 +22,31 @@
         android:layout_gravity="center"
         android:adjustViewBounds="true"
         android:src="@drawable/new_discours_logo" />
+
+    <ImageButton
+        android:id="@+id/miReportArticle"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:layout_gravity="start"
+        android:src="@drawable/report"
+        android:visibility="gone"
+        android:tint="@color/colorBaseText"
+        android:background="@android:color/transparent"/>
+
+    <ImageButton
+        android:id="@+id/miBookmark"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        android:layout_gravity="end"
+        android:src="@drawable/bookmark"
+        android:tint="@color/colorBaseText"
+        android:background="@android:color/transparent"/>
+
+
+
 </androidx.appcompat.widget.Toolbar>
