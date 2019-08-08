@@ -2,9 +2,7 @@ package com.codepath.fbu_newsfeed.Models;
 
 import android.util.Log;
 
-import com.parse.FindCallback;
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -221,4 +219,6 @@ public class User extends ParseUser implements Serializable {
         }
         return ((double) sum) / total;
     }
+
+
 }

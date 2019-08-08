@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout6"
     android:layout_width="410dp"
-    android:layout_height="400dp"
+    android:layout_height="450dp"
     android:orientation="vertical"
     android:padding="0dp">
 
@@ -29,7 +29,7 @@
         android:layout_height="36dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="212dp"
+        android:layout_marginBottom="288dp"
         android:indeterminate="false"
         android:max="100"
         android:min="1"
@@ -43,7 +43,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="144dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/pbBiasAverage"
         app:srcCompat="@drawable/newspaper_icon" />
@@ -129,8 +129,10 @@
         android:text="FAVORITE"
         app:layout_constraintBottom_toBottomOf="@+id/tvArticleTitle"
         app:layout_constraintEnd_toEndOf="@+id/favoriteView"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="@+id/favoriteView"
-        app:layout_constraintTop_toTopOf="@+id/tvArticleTitleCreate" />
+        app:layout_constraintTop_toTopOf="@+id/tvArticleTitleCreate"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tvLiberal"
@@ -269,14 +271,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="76dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/lato"
         android:text="User statistics are calculated from the data of the articles you have previously shared"
         android:textColor="@color/colorLightText"
         android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pbFactAverage" />
+        app:layout_constraintTop_toBottomOf="@+id/pbFactAverage"
+        app:layout_constraintVertical_bias="1.0" />
 
     <view
         android:id="@+id/favoriteView"
@@ -302,5 +309,63 @@
         app:layout_constraintEnd_toEndOf="@+id/pbFactAverage"
         app:layout_constraintStart_toStartOf="@+id/pbFactAverage"
         app:layout_constraintTop_toTopOf="@+id/pbFactAverage" />
+
+    <TextView
+        android:id="@+id/tvSocialDisclaimer"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
+        android:text="In order to promote healthy and informed discussion, it is important to be aware of the potential biases on your feed."
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteView" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewSocialBubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvDisclaimer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSocialDisclaimer"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/tvSocialBubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toEndOf="@+id/tvSocialBubbleTitle"
+            android:text="TextView"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/viewSocialBubble"
+            app:layout_constraintStart_toEndOf="@+id/tvSocialBubbleTitle"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvSocialBubbleTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="SOCIAL BUBBLE :"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
