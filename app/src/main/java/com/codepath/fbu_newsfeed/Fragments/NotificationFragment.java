@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -72,8 +73,6 @@ public class NotificationFragment extends Fragment {
 
         swipeContainer.setColorSchemeResources(R.color.colorAccentBold, R.color.colorAccentDark);
 
-        queryNotifications(0);
-
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -96,6 +95,28 @@ public class NotificationFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (nextAnim == 0) {
+            return super.onCreateAnimation(transit, enter, nextAnim);
+        }
+
+        Animation anim = android.view.animation.AnimationUtils.loadAnimation(getContext(), nextAnim);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                // Do any process intensive work that can wait until after fragment has loaded
+                queryNotifications(0);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        return anim;
     }
 
     private void queryNotifications(int offset) {

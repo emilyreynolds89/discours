@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -97,11 +98,6 @@ public class FeedFragment extends Fragment {
         checkedTags = new ArrayList<>();
 
         friends = new ArrayList<>();
-        getFriends();
-
-        queryTags();
-
-        queryShares(0, false);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -172,6 +168,28 @@ public class FeedFragment extends Fragment {
         unbinder.unbind();
     }
 
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (nextAnim == 0) {
+            return super.onCreateAnimation(transit, enter, nextAnim);
+        }
+
+        Animation anim = android.view.animation.AnimationUtils.loadAnimation(getContext(), nextAnim);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                getFriends();
+                queryTags();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        return anim;
+    }
+
     private void toggleFilter() {
         if (filterChipLayout.getVisibility() == View.GONE) {
             filterChipLayout.setVisibility(View.VISIBLE);
@@ -208,15 +226,9 @@ public class FeedFragment extends Fragment {
 
     private void queryShares(int offset, boolean byTag) {
         ArrayList<ParseUser> friendsQueryList = new ArrayList<>(friends);
-
-        if (friends.size() == 0) {
-            rvShares.setVisibility(View.INVISIBLE);
-            tvNoContent.setVisibility(View.VISIBLE);
-        } else {
-            rvShares.setVisibility(View.VISIBLE);
-            tvNoContent.setVisibility(View.INVISIBLE);
-        }
         friendsQueryList.add(ParseUser.getCurrentUser());
+
+        toggleNoFriendsVisibility();
 
         ParseQuery<Share> query = ParseQuery.getQuery("Share");
         query.include("user");
@@ -242,6 +254,18 @@ public class FeedFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void toggleNoFriendsVisibility() {
+        if (rvShares != null) {
+            if (friends.size() == 0) {
+                rvShares.setVisibility(View.GONE);
+                tvNoContent.setVisibility(View.VISIBLE);
+            } else {
+                rvShares.setVisibility(View.VISIBLE);
+                tvNoContent.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void queryTags() {
@@ -284,16 +308,22 @@ public class FeedFragment extends Fragment {
         ParseQuery<Friendship> mainQuery = ParseQuery.or(queries);
 
         try {
-            List<Friendship> result = mainQuery.find();
-            Log.d(TAG, "Found " + result.size() + " friendships");
-            for (int i = 0; i < result.size(); i++) {
-                Friendship friendship = result.get(i);
-                if (friendship.isUser1(ParseUser.getCurrentUser())) {
-                    friends.add(friendship.getUser2());
-                } else {
-                    friends.add(friendship.getUser1());
+            mainQuery.findInBackground(new FindCallback<Friendship>() {
+                @Override
+                public void done(List<Friendship> result, ParseException e) {
+                    Log.d(TAG, "Found " + result.size() + " friendships");
+                    for (int i = 0; i < result.size(); i++) {
+                        Friendship friendship = result.get(i);
+                        if (friendship.isUser1(ParseUser.getCurrentUser())) {
+                            friends.add(friendship.getUser2());
+                        } else {
+                            friends.add(friendship.getUser1());
+                        }
+                    }
+                    queryShares(0, false);
                 }
-            }
+            });
+
         } catch(Exception e) {
             Log.d(TAG, "Error retrieving friends: " + e.getMessage());
 

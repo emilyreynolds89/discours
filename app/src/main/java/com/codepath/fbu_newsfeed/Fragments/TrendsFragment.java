@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -104,7 +105,6 @@ public class TrendsFragment extends Fragment {
         };
 
         rvTrends.addOnScrollListener(scrollListener);
-        queryArticles(true, 0);
 
         ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +120,27 @@ public class TrendsFragment extends Fragment {
         super.onDestroyView();
 
         unbinder.unbind();
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (nextAnim == 0) {
+            return super.onCreateAnimation(transit, enter, nextAnim);
+        }
+
+        Animation anim = android.view.animation.AnimationUtils.loadAnimation(getContext(), nextAnim);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                queryArticles(true, 0);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        return anim;
     }
 
     private void queryArticles(final boolean refresh, int offset) {

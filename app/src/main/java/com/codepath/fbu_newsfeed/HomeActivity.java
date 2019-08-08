@@ -58,6 +58,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 //fragmentTransaction.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
 
@@ -70,8 +72,11 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
                     case R.id.action_home:
                         if (!(currentFragment instanceof FeedFragment)) {
                             swipeRight = false;
-                            fragment = new FeedFragment();
                             fragmentTag = FeedFragment.TAG;
+                            fragment = fragmentManager.findFragmentByTag(fragmentTag);
+                            if (fragment == null) {
+                                fragment = new FeedFragment();
+                            }
                         }
                         break;
                     case R.id.action_trending:
@@ -79,8 +84,12 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
                             if (currentFragment instanceof CreateFragment || currentFragment instanceof NotificationFragment || currentFragment instanceof ProfileFragment) {
                                 swipeRight = false;
                             }
-                            fragment = new TrendsFragment();
                             fragmentTag = TrendsFragment.TAG;
+
+                            fragment = fragmentManager.findFragmentByTag(fragmentTag);
+                            if (fragment == null) {
+                                fragment = new TrendsFragment();
+                            }
                         }
                         break;
                     case R.id.action_compose:
@@ -88,8 +97,12 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
                             if (currentFragment instanceof NotificationFragment || currentFragment instanceof ProfileFragment) {
                                 swipeRight = false;
                             }
-                            fragment = new CreateFragment();
                             fragmentTag = CreateFragment.TAG;
+                            fragment = fragmentManager.findFragmentByTag(fragmentTag);
+                            if (fragment == null) {
+                                fragment = new CreateFragment();
+                            }
+
                         }
                         break;
                     case R.id.action_notification:
@@ -97,13 +110,19 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
                             if (currentFragment instanceof ProfileFragment) {
                                 swipeRight = false;
                             }
-                            fragment = new NotificationFragment();
                             fragmentTag = NotificationFragment.TAG;
+                            fragment = fragmentManager.findFragmentByTag(fragmentTag);
+                            if (fragment == null) {
+                                fragment = new NotificationFragment();
+                            }
                         }
                         break;
                     case R.id.action_profile:
-                        fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser().getObjectId());
                         fragmentTag = ProfileFragment.TAG;
+                        fragment = fragmentManager.findFragmentByTag(fragmentTag);
+                        if (fragment == null) {
+                            fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser().getObjectId());
+                        }
                         break;
                     default:
                         break;
