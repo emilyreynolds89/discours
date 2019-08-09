@@ -196,7 +196,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            return "Unfriended";
+            return "Friends";
         }
     }
 }
