@@ -334,6 +334,7 @@ public class CreateFragment extends Fragment {
     private void shareCreate(String caption, Article article) {
         progressBarHolder.setVisibility(View.VISIBLE);
         article.setCount(article.getCount() + 1);
+        article.saveInBackground();
         Share share = new Share(ParseUser.getCurrentUser(), article, caption);
         share.saveInBackground(new SaveCallback() {
             @Override
