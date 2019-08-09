@@ -81,6 +81,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     private void queryQuizzes() {
         ParseQuery<Quiz> query = ParseQuery.getQuery(Quiz.class);
+        query.setLimit(2); // for demo
         query.include(Quiz.KEY_IMAGE);
         query.include(Quiz.KEY_FAKE);
         query.include(Quiz.KEY_MESSAGE);
@@ -102,6 +103,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     private Quiz getQuiz(String quizId) throws ParseException {
         ParseQuery<Quiz> query = ParseQuery.getQuery(Quiz.class);
+
         query.include(Quiz.KEY_IMAGE);
         query.include(Quiz.KEY_FAKE);
         query.include(Quiz.KEY_MESSAGE);
@@ -170,7 +172,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         setResultVisibility(View.INVISIBLE);
         //setResultAnim(close_anim);
 
-        tvScore.setText(Integer.toString(score) + " / 4  Correct");
+        //tvScore.setText(Integer.toString(score) + " / 4  Correct");
+        tvScore.setText(Integer.toString(score) + " / 2  Correct");
 
         tvEndTitle.setVisibility(View.VISIBLE);
         ivEndImage.setVisibility(View.VISIBLE);
