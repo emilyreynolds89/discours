@@ -101,10 +101,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
                                 swipeRight = false;
                             }
                             fragmentTag = CreateFragment.TAG;
-                            fragment = fragmentManager.findFragmentByTag(fragmentTag);
-                            if (fragment == null) {
-                                fragment = new CreateFragment();
-                            }
+                            fragment = new CreateFragment();
 
                         }
                         break;
@@ -304,7 +301,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
     }
 
     public void onBackStackChanged() {
-        int backStackEntryCount = getFragmentManager().getBackStackEntryCount();
+        int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
         if(backStackEntryCount > 0){
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }else{
