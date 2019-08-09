@@ -532,6 +532,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         recommendQuery.include(Article.KEY_TITLE);
         recommendQuery.include(Article.KEY_IMAGE);
 
+
         recommendQuery.whereContains(Article.KEY_TAG, article.getTag());
         recommendQuery.whereNotEqualTo(Article.KEY_TITLE, article.getTitle());
         int biasValue = article.getIntBias();
@@ -551,6 +552,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 recommendQuery.orderByAscending(Article.KEY_BIAS);
                 break;
         }
+        recommendQuery.setLimit(10);
+
         recommendQuery.findInBackground(new FindCallback<Article>() {
             @Override
             public void done(List<Article> newArticles, ParseException e) {
