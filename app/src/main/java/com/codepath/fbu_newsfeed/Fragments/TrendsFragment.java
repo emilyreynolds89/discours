@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -17,14 +20,17 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.codepath.fbu_newsfeed.Adapters.TrendsAdapter;
+import com.codepath.fbu_newsfeed.BookmarksActivity;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.HomeActivity;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Bookmark;
 import com.codepath.fbu_newsfeed.R;
 import com.codepath.fbu_newsfeed.SearchActivity;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +46,7 @@ public class TrendsFragment extends Fragment {
     SearchView searchView;
     @BindView(R.id.rvTrends) RecyclerView rvTrends;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
+
 
     private TrendsAdapter adapter;
     private List<Article> articles;
@@ -61,6 +68,8 @@ public class TrendsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((HomeActivity) getActivity()).bottomNavigationView.getMenu().getItem(1).setChecked(true);
+
+        setHasOptionsMenu(true);
 
         searchView.clearFocus();
         rvTrends.requestFocus();
@@ -112,6 +121,8 @@ public class TrendsFragment extends Fragment {
                 rvTrends.smoothScrollToPosition(0);
             }
         });
+
+
 
     }
 

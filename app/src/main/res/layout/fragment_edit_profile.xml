@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minWidth="380dp"
-    android:paddingBottom="24dp">
+    android:paddingBottom="24dp"
+    android:clipToPadding="false">
 
     <ImageView
         android:id="@+id/ivProfileImageNotif"
@@ -55,13 +56,13 @@
         android:fontFamily="@font/lato"
         android:hint="Bio"
         android:imeOptions="actionDone"
-        android:inputType="text"
+        android:inputType="textMultiLine"
+        android:gravity="top|left"
         android:padding="8dp"
         android:paddingStart="10dp"
         android:textColor="@color/colorBaseText"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvFullName"
         app:layout_constraintTop_toBottomOf="@+id/tvFullName" />
 

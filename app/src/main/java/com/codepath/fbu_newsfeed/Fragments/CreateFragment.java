@@ -214,6 +214,13 @@ public class CreateFragment extends Fragment {
             }
         });
 
+        ((HomeActivity) getActivity()).toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                return;
+            }
+        });
+
 
     }
 
@@ -221,6 +228,10 @@ public class CreateFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        getActivity().getIntent().replaceExtras(new Bundle());
+        getActivity().getIntent().setAction("");
+        getActivity().getIntent().setData(null);
+        getActivity().getIntent().setFlags(0);
     }
 
     @Override
@@ -334,6 +345,7 @@ public class CreateFragment extends Fragment {
     private void shareCreate(String caption, Article article) {
         progressBarHolder.setVisibility(View.VISIBLE);
         article.setCount(article.getCount() + 1);
+        article.saveInBackground();
         Share share = new Share(ParseUser.getCurrentUser(), article, caption);
         share.saveInBackground(new SaveCallback() {
             @Override
@@ -366,6 +378,7 @@ public class CreateFragment extends Fragment {
 
     private Source matchUrlToSource(String sourceUrl) throws ParseException {
         ParseQuery<Source> query = ParseQuery.getQuery(Source.class);
+        query.setLimit(120);
         List<Source> sources = query.find();
         for (Source s : sources) {
             if (s.getUrlMatch() != null) {
@@ -532,10 +545,11 @@ public class CreateFragment extends Fragment {
             Log.d(TAG, "TITLE: " + jSoupResult.getTitle());
             Source articleSource = null;
             try {
-                if (jSoupResult.getSourceName() != null)
+                if (jSoupResult.getSourceName() != null) {
                     articleSource = fragment.querySource(jSoupResult.getSourceName());
-                if (articleSource == null && jSoupResult.getSourceUrl() != null)
-                    articleSource = fragment.matchUrlToSource(jSoupResult.getSourceUrl());
+                    if (articleSource == null && jSoupResult.getSourceUrl() != null)
+                        articleSource = fragment.matchUrlToSource(jSoupResult.getSourceUrl());
+                }
                 else if (jSoupResult.getSourceUrl() != null)
                     articleSource = fragment.matchUrlToSource(jSoupResult.getSourceUrl());
                 else

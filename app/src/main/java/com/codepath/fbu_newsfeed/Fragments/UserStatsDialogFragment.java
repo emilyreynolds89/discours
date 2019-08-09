@@ -1,5 +1,6 @@
 package com.codepath.fbu_newsfeed.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import com.codepath.fbu_newsfeed.Models.Bias;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.User;
+import com.codepath.fbu_newsfeed.QuizActivity;
 import com.codepath.fbu_newsfeed.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -42,6 +44,7 @@ public class UserStatsDialogFragment extends DialogFragment {
     @BindView(R.id.tvTagFavorite) TextView tvTagFavorite;
     @BindView(R.id.tvFactAverage) TextView tvFactAverage;
     @BindView(R.id.tvSocialBubble) TextView tvSocialBubble;
+    @BindView(R.id.tvClickHere) TextView tvClickHere;
 
     public UserStatsDialogFragment() {}
 
@@ -89,6 +92,14 @@ public class UserStatsDialogFragment extends DialogFragment {
         }
 
         tvSocialBubble.setText(getSocialBubble(friends));
+
+        tvClickHere.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), QuizActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private ParseUser getUser(String user_id) throws ParseException {

@@ -326,11 +326,16 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showUserStats() {
-        progressBarHolder.setVisibility(View.VISIBLE);
+        /*progressBarHolder.setVisibility(View.VISIBLE);
         FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
         UserStatsDialogFragment userStatsDialog = UserStatsDialogFragment.newInstance();
         userStatsDialog.setTargetFragment(ProfileFragment.this, 1337);
-        userStatsDialog.show(fm, "fragment_user_stats");
+        userStatsDialog.show(fm, "fragment_user_stats");*/
+
+        FragmentTransaction ft = ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
+        UserStatsDialogDemoFragment userStatsDialogDemo = UserStatsDialogDemoFragment.newInstance();
+        userStatsDialogDemo.show(ft, "fragment_user_stats_demo");
     }
 
     private void editUser() {
@@ -343,6 +348,7 @@ public class ProfileFragment extends Fragment {
             public void onDismiss(DialogInterface dialog) {
                 getFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout)
                         .detach(ProfileFragment.this)
                         .attach(ProfileFragment.this)
                         .commit();

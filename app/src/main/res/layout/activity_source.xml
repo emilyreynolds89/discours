@@ -60,8 +60,8 @@
 
         <ImageView
             android:id="@+id/ivSourceLogo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:adjustViewBounds="true"
@@ -93,8 +93,8 @@
 
         <ImageView
             android:id="@+id/ivBias"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_marginStart="12dp"
             android:foreground="?selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="@+id/tvFactRating"

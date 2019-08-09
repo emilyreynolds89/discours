@@ -39,6 +39,7 @@ import com.codepath.fbu_newsfeed.Adapters.CommentAdapter;
 import com.codepath.fbu_newsfeed.Fragments.ReportArticleFragment;
 import com.codepath.fbu_newsfeed.Models.Annotation;
 import com.codepath.fbu_newsfeed.Models.Article;
+import com.codepath.fbu_newsfeed.Models.Bookmark;
 import com.codepath.fbu_newsfeed.Models.Comment;
 import com.codepath.fbu_newsfeed.Models.Friendship;
 import com.codepath.fbu_newsfeed.Models.Notification;
@@ -212,13 +213,27 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
         miBookmark.setVisibility(View.VISIBLE);
         miReportArticle.setVisibility(View.VISIBLE);
 
+        if (getBookmark() == null) {
+            miBookmark.setSelected(false);
+
+        } else {
+            miBookmark.setSelected(true);
+        }
+
         miBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: bookmark articles
+                Bookmark bookmark = getBookmark();
+                if (bookmark == null) {
+                    Bookmark newBookmark = new Bookmark(ParseUser.getCurrentUser(), article);
+                    newBookmark.saveInBackground();
+                    miBookmark.setSelected(true);
+                } else {
+                    bookmark.deleteInBackground();
+                    miBookmark.setSelected(false);
+                }
             }
         });
-
 
         miReportArticle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -452,6 +467,19 @@ public class BrowserActivity extends AppCompatActivity implements View.OnClickLi
             Log.d(TAG, "Error retrieving friends: " + e.getMessage());
 
         }
+    }
+
+    private Bookmark getBookmark() {
+        ParseQuery<Bookmark> query = ParseQuery.getQuery("Bookmark");
+        query.whereEqualTo(Bookmark.KEY_ARTICLE, article);
+        query.whereEqualTo(Bookmark.KEY_USER, ParseUser.getCurrentUser());
+        try {
+            return query.getFirst();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     private void createNotification(String type, Share share, String typeText) {
