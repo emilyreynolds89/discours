@@ -332,9 +332,10 @@ public class ProfileFragment extends Fragment {
         userStatsDialog.setTargetFragment(ProfileFragment.this, 1337);
         userStatsDialog.show(fm, "fragment_user_stats");*/
 
-        FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        FragmentTransaction ft = ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
         UserStatsDialogDemoFragment userStatsDialogDemo = UserStatsDialogDemoFragment.newInstance();
-        userStatsDialogDemo.show(fm, "fragment_user_stats_demo");
+        userStatsDialogDemo.show(ft, "fragment_user_stats_demo");
     }
 
     private void editUser() {
