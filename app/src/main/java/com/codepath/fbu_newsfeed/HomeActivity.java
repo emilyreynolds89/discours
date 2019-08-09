@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,6 +43,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
 
     public @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
     public @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.miBookmark)
+    ImageButton miBookmark;
 
     static boolean isSinglePane = true;
 
@@ -205,8 +208,23 @@ public class HomeActivity extends AppCompatActivity implements FragmentManager.O
     public boolean onCreateOptionsMenu(Menu menu) {
         if (getSupportFragmentManager().findFragmentById(R.id.flContainer) instanceof FeedFragment) {
             getMenuInflater().inflate(R.menu.menu_feed, menu);
+            miBookmark.setVisibility(View.GONE);
+
+        } else if ((getSupportFragmentManager().findFragmentById(R.id.flContainer) instanceof TrendsFragment)) {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            miBookmark.setVisibility(View.VISIBLE);
+
+            miBookmark.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(HomeActivity.this, BookmarksActivity.class);
+                    startActivity(i);
+                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                }
+            });
         } else {
             getMenuInflater().inflate(R.menu.menu_main, menu);
+            miBookmark.setVisibility(View.GONE);
         }
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
