@@ -344,6 +344,7 @@ public class ProfileFragment extends Fragment {
             public void onDismiss(DialogInterface dialog) {
                 getFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout)
                         .detach(ProfileFragment.this)
                         .attach(ProfileFragment.this)
                         .commit();
