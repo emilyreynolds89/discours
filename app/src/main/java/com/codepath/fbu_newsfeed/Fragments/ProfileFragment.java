@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
+import com.codepath.fbu_newsfeed.BookmarksActivity;
 import com.codepath.fbu_newsfeed.FriendsListActivity;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.HomeActivity;
@@ -62,6 +63,7 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvFullName) TextView tvFullName;
     @BindView(R.id.tvBio) TextView tvBio;
+    @BindView(R.id.tvBookmarks) TextView tvBookmarks;
     @BindView(R.id.tvFriends) TextView tvFriends;
     @BindView(R.id.btnLogout) Button btnLogout;
     @BindView(R.id.btnRequest) Button btnRequest;
@@ -168,6 +170,7 @@ public class ProfileFragment extends Fragment {
             btnUnfriend.setVisibility(View.GONE);
             btnReport.setVisibility(View.GONE);
             ivBadge.setVisibility(View.VISIBLE);
+            tvBookmarks.setVisibility(View.VISIBLE);
 
             btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -193,6 +196,15 @@ public class ProfileFragment extends Fragment {
                     showUserStats();
                 }
             });
+            tvBookmarks.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(getContext(), BookmarksActivity.class);
+                    startActivity(i);
+                    getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                }
+            });
+
 
         } else {
             btnEdit.setVisibility(View.INVISIBLE);
@@ -202,6 +214,7 @@ public class ProfileFragment extends Fragment {
             btnUnfriend.setVisibility(View.GONE);
             tvFriends.setVisibility(View.GONE);
             ivBadge.setVisibility(View.GONE);
+            tvBookmarks.setVisibility(View.GONE);
 
             btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
