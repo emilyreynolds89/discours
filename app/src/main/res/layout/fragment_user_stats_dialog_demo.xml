@@ -45,7 +45,7 @@
         android:layout_width="100dp"
         android:layout_height="80dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="240dp"
+        android:layout_marginBottom="236dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/pbBiasAverage"
         app:srcCompat="@drawable/newspaper_icon" />
@@ -86,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="42dp"
         android:fontFamily="@font/lato"
         android:gravity="center"
         android:text="AVERAGE\nTRUTH"
@@ -110,12 +110,12 @@
         android:id="@+id/tvArticleTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="12dp"
         android:fontFamily="@font/lato"
         android:text="ARTICLES"
         app:layout_constraintBottom_toTopOf="@+id/ivNewspaper"
         app:layout_constraintEnd_toEndOf="@+id/ivNewspaper"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="@+id/ivNewspaper" />
 
     <TextView
