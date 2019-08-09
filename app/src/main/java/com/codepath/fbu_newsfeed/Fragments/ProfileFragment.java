@@ -30,7 +30,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.fbu_newsfeed.Adapters.ShareAdapter;
-import com.codepath.fbu_newsfeed.BookmarksActivity;
 import com.codepath.fbu_newsfeed.FriendsListActivity;
 import com.codepath.fbu_newsfeed.Helpers.EndlessRecyclerViewScrollListener;
 import com.codepath.fbu_newsfeed.HomeActivity;
@@ -327,11 +326,16 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showUserStats() {
-        progressBarHolder.setVisibility(View.VISIBLE);
+        /*progressBarHolder.setVisibility(View.VISIBLE);
         FragmentManager fm = ((AppCompatActivity) getContext()).getSupportFragmentManager();
         UserStatsDialogFragment userStatsDialog = UserStatsDialogFragment.newInstance();
         userStatsDialog.setTargetFragment(ProfileFragment.this, 1337);
-        userStatsDialog.show(fm, "fragment_user_stats");
+        userStatsDialog.show(fm, "fragment_user_stats");*/
+
+        FragmentTransaction ft = ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.right_in, R.anim.left_out);
+        UserStatsDialogDemoFragment userStatsDialogDemo = UserStatsDialogDemoFragment.newInstance();
+        userStatsDialogDemo.show(ft, "fragment_user_stats_demo");
     }
 
     private void editUser() {
