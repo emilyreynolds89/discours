@@ -29,9 +29,9 @@ public class OnboardingActivity extends AhoyOnboarderActivity {
             finish();
         }
 
-        AhoyOnboarderCard ahoyOnboarderCard1 = new AhoyOnboarderCard("Fake News", "More Americans think fake news is a bigger problem than racism, climate change, and illegal immigration.", R.drawable.shareimg5);
-        AhoyOnboarderCard ahoyOnboarderCard2 = new AhoyOnboarderCard("Solution", "Our app is designed for promoting healthy discussions with friends about news.", R.drawable.boards13);
-        AhoyOnboarderCard ahoyOnboarderCard3 = new AhoyOnboarderCard("Sharing", "Post any article from the web instantly using Web Share.", R.drawable.boards3);
+        AhoyOnboarderCard ahoyOnboarderCard1 = new AhoyOnboarderCard("Fake News", "The rise of fake news not only proliferates misinformation, but also makes it more difficult to see the truth.", R.drawable.shareimg5);
+        AhoyOnboarderCard ahoyOnboarderCard2 = new AhoyOnboarderCard("Solution", "Discours displays the bias and credibilty of sources in order to promote healthy and informed discussions about news.", R.drawable.boards13);
+        AhoyOnboarderCard ahoyOnboarderCard3 = new AhoyOnboarderCard("Sharing", "Post any article directly from the web using Web Share.", R.drawable.boards3);
 
         ahoyOnboarderCard1.setBackgroundColor(R.color.white);
         ahoyOnboarderCard2.setBackgroundColor(R.color.white);
